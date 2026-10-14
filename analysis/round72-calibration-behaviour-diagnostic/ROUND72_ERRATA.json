@@ -1,0 +1,278 @@
+{
+ "kind": "round72-errata/1",
+ "supersedes": "specific claims in ROUND72_REPORT.md and ROUND72_MACHINE_VERDICT.json at commit 6d28f40; the original delivery is preserved unchanged",
+ "evidence_head": "fe53d476efb56baaae194d68d7f749a546b14389",
+ "correction_1_mode_split": {
+  "note": "PRIMARY 1098 free decisions = greedy(549) + sampled(549); it is NOT 'greedy 1098'. 192 is the total eval matrix (96 greedy + 96 sampled); sampled is genuinely different.",
+  "greedy": {
+   "cells": 96,
+   "steps_equal": 96,
+   "features_equal": 96,
+   "actions_equal": 96,
+   "n_free": 549,
+   "early": 402,
+   "late": 147,
+   "action_flips": 0,
+   "argmax_flips": 0,
+   "late_changed": 147,
+   "early_max_abs_dp": 0.0,
+   "late_max_abs_dp": 0.1132,
+   "late_max_encroachment_ratio": 0.4865
+  },
+  "sampled": {
+   "cells": 96,
+   "steps_equal": 90,
+   "features_equal": 83,
+   "actions_equal": 83,
+   "n_free": 549,
+   "early": 402,
+   "late": 147,
+   "action_flips": 14,
+   "argmax_flips": 0,
+   "late_changed": 147,
+   "early_max_abs_dp": 0.0,
+   "late_max_abs_dp": 0.1143,
+   "late_max_encroachment_ratio": 0.4865
+  },
+  "corrected": [
+   "greedy alone has 549 free decisions (early 402, late 147) over 96 cells that are fully identical (steps/features/actions 96/96)",
+   "greedy task/cost is identical to R68 on its 96 greedy cells",
+   "sampled differs: 83/96 features_equal, 90/96 steps_equal, 14 action flips",
+   "sampled features are not all equal, so sampled dp is not purely same-state parameter change and sampling variance is not quantitatively excluded"
+  ],
+  "preserved": [
+   "probabilities did change on 147/147 visited late states in each mode",
+   "sampled behaviour did differ: 14 late action flips"
+  ]
+ },
+ "correction_2_budget": {
+  "budget_bytes": 29300,
+  "evidence_basis": "measured from real episode rows: spent_bytes, budget_bytes, budget_used_fraction, refusal_sequence, cost_stream.budget_refused_sends/capacity_refused_sends, collector_summary mask counts; both the executor-refusal channel and the collector pre-mask channel were checked",
+  "splits": {
+   "dev_eval_learned": {
+    "rows": 192,
+    "budget_bytes": [
+     29300
+    ],
+    "spent_min": 0,
+    "spent_max": 10374,
+    "spent_mean": 3645.1,
+    "budget_used_fraction_max": 0.354061,
+    "budget_refused_sends": 0,
+    "capacity_refused_sends": 0,
+    "rows_with_refusal_sequence": 0,
+    "collector_masked_budget_or_capacity": 0,
+    "budget_masked_first_reports": 0,
+    "capacity_masked_first_reports": 0,
+    "missing_fields": []
+   },
+   "dev_eval_immediate": {
+    "rows": 33,
+    "budget_bytes": [
+     29300
+    ],
+    "spent_min": 10272,
+    "spent_max": 15876,
+    "spent_mean": 14402.5,
+    "budget_used_fraction_max": 0.541843,
+    "budget_refused_sends": 0,
+    "capacity_refused_sends": 0,
+    "rows_with_refusal_sequence": 0,
+    "collector_masked_budget_or_capacity": 0,
+    "budget_masked_first_reports": 0,
+    "capacity_masked_first_reports": 0,
+    "missing_fields": []
+   },
+   "training": {
+    "rows": 384,
+    "budget_bytes": [
+     29300
+    ],
+    "spent_min": 0,
+    "spent_max": 9984,
+    "spent_mean": 2781.8,
+    "budget_used_fraction_max": 0.340751,
+    "budget_refused_sends": 0,
+    "capacity_refused_sends": 0,
+    "rows_with_refusal_sequence": 0,
+    "collector_masked_budget_or_capacity": 0,
+    "budget_masked_first_reports": 0,
+    "capacity_masked_first_reports": 0,
+    "missing_fields": []
+   }
+  },
+  "downgrade": "the previous 'NOT binding' inferred from spent<29300 is replaced by measured zero refusals and zero masks in every split; no hidden refusal or pre-mask exists in these originals",
+  "measured_zero_not_missing": true,
+  "training_block_note": "training rows (block 1300000..1300047) were located via r72_paths and the frozen jobs index; they DO carry the budget/refusal fields, so the training block is now evidenced, not asserted"
+ },
+ "correction_3_teacher_billing": {
+  "offline_billing_rows": {
+   "value": 70693,
+   "meaning": "R71 offline-fit forward billing total (includes gate/diagnostic forwards), cap 72000; NOT the teacher/fit dataset"
+  },
+  "teacher_original_scale": {
+   "joint": 32046,
+   "target": 58928,
+   "source": "delegation-provided; not independently re-derived from a located numeric field"
+  },
+  "attribution_gap": {
+   "value": 11765,
+   "meaning": "historical per-call attribution gap preserved as-is; not fabricated"
+  },
+  "r70_fit_source": "1300000..1300047"
+ },
+ "correction_4_margin_framing": {
+  "corrected": "'the mechanism is margin, not saturation' is too strong",
+  "restated": "this actual update did not cross p=0.5 (a boundary-margin description); by itself it does not rule out saturation, gradient noise, or observation limits; late probabilities reach as high as ~0.99",
+  "prior": "beta=1.00 prior is confirmed only in the training loss; inference has no additional prior logit (real path)"
+ },
+ "r71_per_seed_primary_task_cost": {
+  "greedy": {
+   "11/greedy": {
+    "on_time": 183,
+    "bytes_per_scene": 4066.5,
+    "task_delta": 0.0,
+    "cost_delta_B_per_scene": 0.0,
+    "cost_ci95": [
+     0.0,
+     0.0
+    ],
+    "targets_lost": 0
+   },
+   "22/greedy": {
+    "on_time": 183,
+    "bytes_per_scene": 4066.5,
+    "task_delta": 0.0,
+    "cost_delta_B_per_scene": 0.0,
+    "cost_ci95": [
+     0.0,
+     0.0
+    ],
+    "targets_lost": 0
+   },
+   "33/greedy": {
+    "on_time": 183,
+    "bytes_per_scene": 4066.5,
+    "task_delta": 0.0,
+    "cost_delta_B_per_scene": 0.0,
+    "cost_ci95": [
+     0.0,
+     0.0
+    ],
+    "targets_lost": 0
+   }
+  },
+  "sampled": {
+   "11/sampled": {
+    "on_time": 180,
+    "bytes_per_scene": 3152.625,
+    "task_delta": 0.0,
+    "cost_delta_B_per_scene": -155.8125,
+    "cost_ci95": [
+     -389.625,
+     0.0
+    ],
+    "targets_lost": 0
+   },
+   "22/sampled": {
+    "on_time": 183,
+    "bytes_per_scene": 3669.375,
+    "task_delta": 0.0,
+    "cost_delta_B_per_scene": 331.125,
+    "cost_ci95": [
+     78.375,
+     662.625
+    ],
+    "targets_lost": 0
+   },
+   "33/sampled": {
+    "on_time": 180,
+    "bytes_per_scene": 2848.875,
+    "task_delta": -0.03125,
+    "cost_delta_B_per_scene": -642.1875,
+    "cost_ci95": [
+     -1133.8125,
+     -239.625
+    ],
+    "targets_lost": 1
+   }
+  }
+ },
+ "rule_arms": {
+  "IMMEDIATE": {
+   "on_time": 183,
+   "bytes_per_scene_mean": 14356.5
+  },
+  "LATE_DISCOVERY_GATE": {
+   "on_time": 183,
+   "bytes_per_scene_mean": 3897.9375
+  },
+  "ALWAYS_HOLD": {
+   "on_time": 170,
+   "bytes_per_scene_mean": 0.0
+  }
+ },
+ "consumption_this_session": {
+  "environment": 0,
+  "model_loads": 0,
+  "forward": 0,
+  "rng": 0,
+  "optimizer_or_ppo": 0,
+  "checkpoint_writes": 0,
+  "new_claims": 0
+ },
+ "source_hashes": {
+  "ROUND72_BOUNDARY_AUDIT.json": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\analysis\\round72-calibration-behaviour-diagnostic\\ROUND72_BOUNDARY_AUDIT.json",
+   "sha256": "73a3a109bd1c98ac1cefea20dc41460d57974a3f1c68a150219e3da8d07d97cf"
+  },
+  "ROUND72_VALIDATION.json": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\analysis\\round72-calibration-behaviour-diagnostic\\ROUND72_VALIDATION.json",
+   "sha256": "7085c571ce65c6d37de21fb1adf088f7c137ea6882f36cf3ce43a938f9168828"
+  },
+  "ROUND72_TRAINING_SIGNAL_AUDIT.json": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\analysis\\round72-calibration-behaviour-diagnostic\\ROUND72_TRAINING_SIGNAL_AUDIT.json",
+   "sha256": "321cb009f7f7fb10d2f877c05de5faa9464b9c1c92caea0cf4781c53eabfba51"
+  },
+  "ROUND71_STATISTICS.json": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\raw\\ROUND71_STATISTICS.json",
+   "sha256": "2da8d0bed0f75cc2f8d603de8c12b561180770447242af2b402db4e46fa59eb9"
+  },
+  "ROUND68_RULE_CONTEXT.json": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round68_late_initial_confidence_ablation\\raw\\ROUND68_RULE_CONTEXT.json",
+   "sha256": "816768b4aff423ffc2ba7497aafab64dc5fe7c9cc4c8d77f79f840ba296585b8"
+  },
+  "ROUND71_CHECKPOINT_INDEX.json": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\ROUND71_CHECKPOINT_INDEX.json",
+   "sha256": "0c027d4817325bf4e02186d658ac52b0ccf6d9917a458380f72b8de8ea2a5009"
+  },
+  "ROUND71_RESOURCE_LEDGER.json": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\ROUND71_RESOURCE_LEDGER.json",
+   "sha256": "946858e93ba41b86d9108f2bb4704fb3c63507b532b5978c74e322c2ff565c13"
+  },
+  "r42_one_shot.py": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\raw\\r42_one_shot.py",
+   "sha256": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d"
+  },
+  "r40_train_resume_adapter.py": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\raw\\r40_train_resume_adapter.py",
+   "sha256": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca"
+  },
+  "r66_frozen.py": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round66_bc_early_path_preserving_late_adaptation\\r66_frozen.py",
+   "sha256": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10"
+  },
+  "canonical_v2_trainer.py": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round51_frozen_source_gradient_close\\frozen_sources\\canonical_v2_trainer.py",
+   "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
+  },
+  "comm_budget.py": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm_budget.py",
+   "sha256": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929"
+  },
+  "comm_learning.py": {
+   "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm_learning.py",
+   "sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f"
+  }
+ }
+}
