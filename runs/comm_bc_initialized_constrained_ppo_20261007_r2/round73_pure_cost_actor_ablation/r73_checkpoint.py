@@ -266,12 +266,11 @@ def r73_load_init_read_only(path, *, registered: dict):
     if summary["parameter_object_count"] != 12:
         raise RuntimeError(f"{path.name}: the INIT controller is not the five-module schema")
     cal = registered["calibration"]
-    module_sha = {name: _module_sha(controller, name)
-                  for name in ("trunk", "early_head", "late_head", "value_task_head", "cost_head")}
+    module_sha = _registered_module_sha(controller)
     for key, want in (("trunk", cal["trunk_sha256"]), ("early_head", cal["early_head_sha256"]),
                       ("late_head", cal["late_head_sha256"]),
                       ("value_task_head", cal["value_task_head_sha256"]),
-                      ("cost_head", cal["value_cost_head_sha256"])):
+                      ("value_cost_head", cal["value_cost_head_sha256"])):
         if module_sha[key] != want:
             raise RuntimeError(f"{path.name}: INIT module {key} != the registered identity")
     identity = {"load_mode": "model_only_init", "optimizer_restored": False, "rng_restored": False,
@@ -283,6 +282,15 @@ def r73_load_init_read_only(path, *, registered: dict):
     return controller, training_state, identity
 
 
-def _module_sha(controller, name: str) -> str:
-    import r68_frozen as r68
-    return r68._module_sha(controller, name)
+def _registered_module_sha(controller) -> dict:
+    """Per-module digests under the SAME helper that produced the registered identity.
+
+    The registered per-module digests are copied verbatim from the ROUND71 checkpoint
+    index, which was written by ``readiness.module_parameter_digest``.  ``r68._module_sha``
+    serialises the same parameters in a different order and byte encoding, so it cannot
+    verify them: measured on the seed-11 INIT it matches NONE of the five registered
+    digests while ``module_parameter_digest`` matches all five.  The model, the ROUND71
+    index and the registered identity are unchanged; only the verification helper is.
+    """
+    digest = readiness.module_parameter_digest(controller)
+    return {name: digest.get(name) for name in MODULES}

@@ -614,8 +614,7 @@ def _first_batch_gate(cfg, controller, state, record, episodes, *, init_identity
     # heads are trainable and move during the first update); the load is parameter-hashing only.
     _init_ctrl, _init_state, _init_id = ckpt.r73_load_init_read_only(
         init_paths(cfg, int(state["training_seed"]))["init"], registered=init_identity)
-    module_sha = {name: r68._module_sha(_init_ctrl, name)
-                  for name in ("trunk", "early_head", "late_head", "value_task_head", "cost_head")}
+    module_sha = ckpt._registered_module_sha(_init_ctrl)
     checks["init_trunk_is_r71_ep0_trunk"] = (module_sha["trunk"] == cal["trunk_sha256"])
     checks["init_early_head_is_r71_ep0"] = (module_sha["early_head"] == cal["early_head_sha256"])
     checks["init_late_head_is_r71_post_scale"] = (module_sha["late_head"] == cal["late_head_sha256"])
@@ -623,7 +622,7 @@ def _first_batch_gate(cfg, controller, state, record, episodes, *, init_identity
         before_sha == init_identity["init_parameter_sha256"])
     checks["critic_heads_are_calibrated"] = (
         module_sha["value_task_head"] == cal["value_task_head_sha256"]
-        and module_sha["cost_head"] == cal["value_cost_head_sha256"])
+        and module_sha["value_cost_head"] == cal["value_cost_head_sha256"])
     checks["init_cursor_zero"] = (int(init_identity.get("parameter_object_count", -1)) == 12)
     # ---- the ONE intervention, proven on the committed batch through the live path ----
     checks["actor_objective_live"] = (getattr(trainer, "R73_ACTOR_OBJECTIVE", None)
