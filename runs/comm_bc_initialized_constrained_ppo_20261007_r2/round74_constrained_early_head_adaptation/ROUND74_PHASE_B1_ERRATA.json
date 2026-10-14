@@ -1,0 +1,63 @@
+{
+  "kind": "round74-phase-b1-errata/1",
+  "authority": "decision-end READ-ONLY close-out continuation; zero new model load / forward / backward / optimizer / PPO / gate execution",
+  "appends_to": [
+    "ROUND74_PHASE_B1_DEVIATION_AUDIT.json",
+    "ROUND74_PHASE_B1_READONLY_CLOSEOUT.md"
+  ],
+  "head_at_errata": "9f38c87035fab857c80abe84b81435e9b7dfe06e",
+  "corrections": [
+    {
+      "id": "dev-lower-bound",
+      "retracts": "dev scripts >= 4 real Adam.step with exact count UNKNOWN (deviation audit A-dev row)",
+      "corrected": "dev = 5 real Adam.step, recovered by the decision-end from cached source-writes and captured stdout of the deleted raw scripts",
+      "dev_breakdown": [
+        {"script": "_dev_loss_check.py", "attempt": 1, "real_adam_step": 1, "exit_code": 0},
+        {"script": "_dev_restore_check.py", "attempt": 1, "real_adam_step": 1, "exit_code": 1, "note": "pre-save; the checkpoint save itself failed"},
+        {"script": "_dev_restore_check.py", "attempt": 2, "real_adam_step": 3, "exit_code": 0, "note": "internal exit 0"}
+      ],
+      "evidence_class": "decision-end recovered cache (source-writes + stdout); NOT restored bytes; the original scripts remain deleted and cannot be re-verified",
+      "unrecovered_residue": [
+        "_dev_wiring_check.py is listed in the deviation audit but has no recovered step count; it may have performed additional real steps, so the true total is >= 16 and exhaustiveness is NOT provable"
+      ]
+    },
+    {
+      "id": "total-physical-step",
+      "retracts": "total real Adam.step lower bound >= 11, plausibly >= 15",
+      "corrected": "total real Adam.step lower bound >= 16 = toy 2 + B1 fixture/production runs 9 (3 runs x 3 steps) + dev 5, which reaches the synthetic physical-step hard cap 16 exactly",
+      "note_on_retracted_framing": "even the previously disclosed dev >= 4 alone implies >= 15; the >= 11 / possibly >= 15 framing is withdrawn",
+      "overflow_risk": "because _dev_wiring_check.py and any other unrecovered dev work cannot be reconstructed, the true total may EXCEED the hard cap 16; this is disclosed, not hidden, and no retroactive exemption, reclassification, or cap edit is applied"
+    }
+  ],
+  "central_ledger_preserved": {
+    "synthetic_steps_used_normal": 5,
+    "offline_rows_used_normal": 28,
+    "env_used": 0,
+    "real_ppo_update_calls": 0,
+    "undercount_vs_canonical_steps": ">= 11 (fixture runs 6 + dev 5)",
+    "note": "raw/runtime counters and r74_total_ledger.jsonl are NOT rewritten by this errata; the under-count remains an audit finding, not a ledger edit"
+  },
+  "dev_category": {
+    "status": "UNKNOWN / not pre-registered / no retroactive allocation",
+    "detail": "the dev scripts were never registered in any claim/slot and were never charged; this errata records their real physical consumption as a lower bound only and does not allocate them to normal or reserve categories after the fact"
+  },
+  "consumable_quota": {
+    "statement": "with the physical-step lower bound at the hard cap 16 and unrecovered dev residue possible, consumable remaining is treated as 0 until the decision-end re-baselines; this errata spends nothing",
+    "all_new_nn_forbidden": true
+  },
+  "session_scope": {
+    "new_model_load": 0,
+    "new_forward": 0,
+    "new_backward": 0,
+    "new_optimizer_step": 0,
+    "new_ppo_update": 0,
+    "new_env_construction": 0,
+    "new_checkpoint_write": 0,
+    "operations": "file reads, SHA-256 hashes, JSON manifest parsing, ripgrep searches only"
+  },
+  "protection": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b (verified intact this session)",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18 (verified intact this session)",
+    "r59_analysis_run.log": "untracked, never staged, untouched"
+  }
+}
