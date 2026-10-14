@@ -1,0 +1,48 @@
+{
+  "kind": "round74-phase-b1-gate-plan/1",
+  "task": "ROUND74 PHASE B1 only: real model/CLI/controller/collector/batch/PPO qualification gates, then STOP for decision-end verification",
+  "branch": "exp/round74-constrained-early-head-adaptation",
+  "round_dir": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round74_constrained_early_head_adaptation",
+  "canonical_runtime_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round74_constrained_early_head_adaptation/raw/runtime",
+  "control": {"round": 71, "commit": "fe53d476efb56baaae194d68d7f749a546b14389", "role": "read-only CONTROL, never an R74 resume source"},
+  "init_source": {
+    "round": 71, "kind": "calibration INIT, model-only (5 modules bit-identical)",
+    "registered_param_sha256": {
+      "s11": "6f6581cff959dc027dfe5e771d963ef4b27b5a2f9d6847bf3d1bc6328c5de32f",
+      "s22": "29dbecdb9eaeae5ba346d8a68d03a13ca4ebb56680e28b4fff288032acfd1aa9",
+      "s33": "3685f4aa30367276e2cc4f9cb6cad23773350fa084476cd249ae1f11be62f0ca"
+    }
+  },
+  "env_constructions_planned": 0,
+  "real_or_synthetic_optimizer_updates_planned": 0,
+  "synthetic_gate_optimizer_steps": {"planned_normal": 3, "planned_reserve": 0, "note": "G4=1 establish-nonempty-Adam; G5=2 source-vs-full-restore same-subsequent-update determinism"},
+  "offline_trunk_target_rows_planned_conservative": 32,
+  "offline_row_breakdown_estimate": {"G1": 0, "G2_routing": 8, "G3_gradprobe_plus_oldlogprob": 8, "G4_step": 4, "G5_two_subsequent_steps": 8, "design_total": 28, "conservative_plan": 32},
+  "ppo_full_update_calls_planned": 0,
+  "joint_records_planned": 0,
+  "gates": [
+    {"id": "B1-G1", "name": "model_identity_and_mask", "seeds": [11, 22, 33],
+     "checks": ["INIT param sha == registered R71 INIT", "INIT file sha == registered", "mask 8 trainable / 4 frozen / 12 total / 5830 scalars (390+5440)", "early_head trainable + trunk frozen", "R74 identity constants present"],
+     "forward_calls": 0, "offline_rows": 0, "physical_steps": 0},
+    {"id": "B1-G2", "name": "routed_forward_boundary", "seeds": [11],
+     "checks": ["ready<=147 -> early head, ready>147 -> late head, bit-exact on a mixed out-of-order batch (8 rows); offline trunk meter fires and charges the 8 rows"],
+     "forward_calls": 1, "offline_rows": 8, "physical_steps": 0},
+    {"id": "B1-G3", "name": "gradient_routing_and_critic_isolation", "seeds": [11],
+     "checks": ["critic_input_detached isolates critic->trunk on a throwaway module (0 metered rows)", "EARLY sample -> early grad>0 & late grad==0 & critics>0", "LATE sample -> late grad>0 & early grad==0 & critics>0", "actor advantage == lambda*A_task - A_cost"],
+     "forward_calls": 4, "offline_rows": 8, "physical_steps": 0},
+    {"id": "B1-G4", "name": "controlled_real_adam_step", "seeds": [11],
+     "checks": ["one controlled legal real Adam step establishes non-empty Adam (charged to the synthetic-step guard)", "trunk digest unchanged; early/late/task/cost moved", "trunk params grad None (frozen), 8 trainable grads present", "optimizer owns exactly 8 trainable objects (2 per module x 4)"],
+     "forward_calls": 1, "offline_rows": 4, "physical_steps": 1},
+    {"id": "B1-G5", "name": "full_restore_and_resume_contract", "seeds": [11],
+     "checks": ["save payload is R74 schema/tag/structure, optimizer_param_groups [2,2,2,2]", "full restore param/Adam/RNG per-value match; lambda==1; state_schema R74", "source vs full-restore of the SAME subsequent update: identical param+Adam (2 charged steps)", "foreign R71 INIT full resume REFUSED; self R74 accepted"],
+     "forward_calls": 2, "offline_rows": 8, "physical_steps": 2}
+  ],
+  "quota_fit": {
+    "synthetic_steps": {"normal_cap": 12, "reserve_cap": 4, "hard_cap": 16, "used_before": 2, "planned_charge": 3, "used_after": 5, "remaining_normal": 7, "remaining_hard": 11, "fit": true},
+    "offline_rows": {"normal_cap": 3000, "reserve_cap": 3000, "hard_cap": 6000, "per_batch_cap": 1024, "used_before": 0, "planned_charge_conservative": 32, "used_after_conservative": 32, "remaining_normal": 2968, "fit": true},
+    "env_slots": {"normal_cap": 579, "reserve_cap": 21, "hard_cap": 600, "used_before": 0, "planned_charge": 0, "used_after": 0, "fit": true}
+  },
+  "fixture_preflight": {"planned": true, "production_charge": 0, "note": "the same 5 gates run once on a throwaway fixture root + throwaway counters (simulated consumption only); it can never act as production or reset production quota"},
+  "no_refund": true,
+  "written_before_production_charge": true
+}

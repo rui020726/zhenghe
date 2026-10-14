@@ -1,0 +1,20 @@
+{
+  "kind": "round74-phase-b1-freeze/1",
+  "task": "ROUND74 PHASE B1 qualification gates (model/CLI/controller/batch/PPO), zero env, then STOP",
+  "branch": "exp/round74-constrained-early-head-adaptation",
+  "pre_run_commit_parent": "a87d5280df63710d5e0c55d93aff748f742c5692",
+  "code_committed_before_production_run": true,
+  "control_commit": "fe53d476efb56baaae194d68d7f749a546b14389",
+  "code_files_sha256": {
+    "r74_model.py": "dfd1c4744053a83d43727a9107e2fb3acdab86b5dcbe51484464cbff39b54260",
+    "r74_phase_b1.py": "660c51137607b057c88a021e80e48695bd22da5461dd1c2270047da558856afa",
+    "r74_guard_prod.py": "623b9ec6cd243d27321e8c745a0247c97126c9028141cb0ed4760dd90c0796db"
+  },
+  "gate_plan_sha256": "a074b80b6d7b8adb93e727f5f81b375e57b05d97216a77bf21dd662bb80889d4",
+  "budget_freeze": {
+    "synthetic_steps": {"normal_cap": 12, "reserve_cap": 4, "hard_cap": 16, "used_before": 2, "planned_charge": 3},
+    "offline_rows": {"normal_cap": 3000, "reserve_cap": 3000, "hard_cap": 6000, "per_batch_cap": 1024, "used_before": 0, "planned_charge_conservative": 32},
+    "env_slots": {"normal_cap": 579, "reserve_cap": 21, "hard_cap": 600, "used_before": 0, "planned_charge": 0}
+  },
+  "not_authorized": ["384 training", "192 eval", "3 focal scene", "full multi-epoch ppo_update", "any environment construction"]
+}
