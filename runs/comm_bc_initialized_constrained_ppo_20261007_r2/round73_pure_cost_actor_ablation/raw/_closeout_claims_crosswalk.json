@@ -1,0 +1,475 @@
+{
+ "claims": {
+  "attempts": {
+   "1": 574
+  },
+  "claimed_at_unix_max": 1791961323.7912974,
+  "claimed_at_unix_min": 1791954023.4528472,
+  "distinct_logical_jobs": 574,
+  "field_completed_steps": {
+   "distinct_values": {
+    "0": 1,
+    "1000": 573
+   },
+   "missing": 0,
+   "present": 574,
+   "sum": 573000,
+   "types": {
+    "int": 574
+   }
+  },
+  "field_environment_constructor_calls": {
+   "distinct_values": {
+    "1": 574
+   },
+   "missing": 0,
+   "present": 574,
+   "sum": 574,
+   "types": {
+    "int": 574
+   }
+  },
+  "field_joint_run_build_failures": {
+   "distinct_values": {
+    "0": 574
+   },
+   "missing": 0,
+   "present": 574,
+   "sum": 0,
+   "types": {
+    "int": 574
+   }
+  },
+  "field_joint_run_constructed_calls": {
+   "distinct_values": {
+    "1": 574
+   },
+   "missing": 0,
+   "present": 574,
+   "sum": 574,
+   "types": {
+    "int": 574
+   }
+  },
+  "field_joint_run_method_calls": {
+   "distinct_values": {
+    "1": 574
+   },
+   "missing": 0,
+   "present": 574,
+   "sum": 574,
+   "types": {
+    "int": 574
+   }
+  },
+  "field_run_failure_calls": {
+   "distinct_values": {
+    "0": 574
+   },
+   "missing": 0,
+   "present": 574,
+   "sum": 0,
+   "types": {
+    "int": 574
+   }
+  },
+  "field_run_invocation_calls": {
+   "distinct_values": {
+    "1": 574
+   },
+   "missing": 0,
+   "present": 574,
+   "sum": 574,
+   "types": {
+    "int": 574
+   }
+  },
+  "field_run_return_calls": {
+   "distinct_values": {
+    "0": 1,
+    "1": 573
+   },
+   "missing": 0,
+   "present": 574,
+   "sum": 573,
+   "types": {
+    "int": 574
+   }
+  },
+  "scope_status": {
+   "model_eval|claimed_before_environment": 1,
+   "model_eval|complete": 189,
+   "train|complete": 384
+  },
+  "scopes": {
+   "model_eval": 190,
+   "train": 384
+  },
+  "statuses": {
+   "claimed_before_environment": 1,
+   "complete": 573
+  },
+  "total": 574
+ },
+ "constructor_accounting": {
+  "booked_environment_constructor_calls": 574,
+  "booked_joint_run_constructed_calls": 574,
+  "claims_with_any_construction_evidence": 574,
+  "claims_with_row": 573,
+  "note": "booked = the two claim counter fields; proven = permit consumed+returned, constructor timestamp, or >0 completed steps"
+ },
+ "eval_coverage": {
+  "s11|greedy": {
+   "claimed_not_row": [
+    1800000,
+    1800001,
+    1800002,
+    1800003,
+    1800004,
+    1800005,
+    1800006,
+    1800007,
+    1800008,
+    1800009,
+    1800010,
+    1800011,
+    1800012,
+    1800013,
+    1800014,
+    1800015,
+    1800016,
+    1800017,
+    1800018,
+    1800019,
+    1800020,
+    1800021,
+    1800022,
+    1800023,
+    1800024,
+    1800025,
+    1800026,
+    1800027,
+    1800028,
+    1800029,
+    1800030,
+    1800031
+   ],
+   "claimed_scenes": 32,
+   "missing_from_1800000_1800031": [],
+   "row_not_claimed": [],
+   "row_scenes": 0
+  },
+  "s11|sampled": {
+   "claimed_not_row": [
+    1800000,
+    1800001,
+    1800002,
+    1800003,
+    1800004,
+    1800005,
+    1800006,
+    1800007,
+    1800008,
+    1800009,
+    1800010,
+    1800011,
+    1800012,
+    1800013,
+    1800014,
+    1800015,
+    1800016,
+    1800017,
+    1800018,
+    1800019,
+    1800020,
+    1800021,
+    1800022,
+    1800023,
+    1800024,
+    1800025,
+    1800026,
+    1800027,
+    1800028,
+    1800029,
+    1800030,
+    1800031
+   ],
+   "claimed_scenes": 32,
+   "missing_from_1800000_1800031": [],
+   "row_not_claimed": [],
+   "row_scenes": 0
+  },
+  "s22|greedy": {
+   "claimed_not_row": [
+    1800000,
+    1800001,
+    1800002,
+    1800003,
+    1800004,
+    1800005,
+    1800006,
+    1800007,
+    1800008,
+    1800009,
+    1800010,
+    1800011,
+    1800012,
+    1800013,
+    1800014,
+    1800015,
+    1800016,
+    1800017,
+    1800018,
+    1800019,
+    1800020,
+    1800021,
+    1800022,
+    1800023,
+    1800024,
+    1800025,
+    1800026,
+    1800027,
+    1800028,
+    1800029,
+    1800030,
+    1800031
+   ],
+   "claimed_scenes": 32,
+   "missing_from_1800000_1800031": [],
+   "row_not_claimed": [],
+   "row_scenes": 0
+  },
+  "s22|sampled": {
+   "claimed_not_row": [
+    1800000,
+    1800001,
+    1800002,
+    1800003,
+    1800004,
+    1800005,
+    1800006,
+    1800007,
+    1800008,
+    1800009,
+    1800010,
+    1800011,
+    1800012,
+    1800013,
+    1800014,
+    1800015,
+    1800016,
+    1800017,
+    1800018,
+    1800019,
+    1800020,
+    1800021,
+    1800022,
+    1800023,
+    1800024,
+    1800025,
+    1800026,
+    1800027,
+    1800028,
+    1800029,
+    1800030,
+    1800031
+   ],
+   "claimed_scenes": 32,
+   "missing_from_1800000_1800031": [],
+   "row_not_claimed": [],
+   "row_scenes": 0
+  },
+  "s33|greedy": {
+   "claimed_not_row": [
+    1800000,
+    1800001,
+    1800002,
+    1800003,
+    1800004,
+    1800005,
+    1800006,
+    1800007,
+    1800008,
+    1800009,
+    1800010,
+    1800011,
+    1800012,
+    1800013,
+    1800014,
+    1800015,
+    1800016,
+    1800017,
+    1800018,
+    1800019,
+    1800020,
+    1800021,
+    1800022,
+    1800023,
+    1800024,
+    1800025,
+    1800026,
+    1800027,
+    1800028,
+    1800029,
+    1800030,
+    1800031
+   ],
+   "claimed_scenes": 32,
+   "missing_from_1800000_1800031": [],
+   "row_not_claimed": [],
+   "row_scenes": 0
+  },
+  "s33|sampled": {
+   "claimed_not_row": [
+    1800000,
+    1800001,
+    1800002,
+    1800003,
+    1800004,
+    1800005,
+    1800006,
+    1800007,
+    1800008,
+    1800009,
+    1800010,
+    1800011,
+    1800012,
+    1800013,
+    1800014,
+    1800015,
+    1800016,
+    1800017,
+    1800018,
+    1800019,
+    1800020,
+    1800021,
+    1800022,
+    1800023,
+    1800024,
+    1800025,
+    1800026,
+    1800027,
+    1800028,
+    1800029
+   ],
+   "claimed_scenes": 30,
+   "missing_from_1800000_1800031": [
+    1800030,
+    1800031
+   ],
+   "row_not_claimed": [],
+   "row_scenes": 0
+  }
+ },
+ "permits": {
+  "claims_without_any_permit_file": [],
+  "constructor_returned": {
+   "None": 574,
+   "True": 574
+  },
+  "jobs_with_consumed_permit": 574,
+  "kinds": {
+   "round68-construction-permit-token/1": 574,
+   "round68-construction-permit/1": 574
+  },
+  "states": {
+   "consumed": 574,
+   "null": 574
+  },
+  "total_files": 1148
+ },
+ "row_crosswalk": {
+  "complete_claims_matched_to_a_row": 573,
+  "complete_claims_without_row": [],
+  "duplicate_row_keys": [],
+  "row_kinds": {
+   "eval": 189,
+   "train": 384
+  },
+  "rows_on_disk": 573,
+  "rows_without_complete_claim": []
+ },
+ "same_timepoint_snapshot": {
+  "ROUND73_ACCOUNTING_AUDIT.json": {
+   "bytes": 8861,
+   "exists": true,
+   "sha256": "79447b05f5485614ea62e9c98fb4418b0a00cfc6f1ee37dc991a33b5a3e1c270"
+  },
+  "ROUND73_FREEZE.json": {
+   "bytes": 5073,
+   "exists": true,
+   "sha256": "1cd83bc88f0ffbc74cc6d9c9f40416f5a0b7437680bff2969dfff73c69fc78b4"
+  },
+  "ROUND73_LEDGER.json": {
+   "bytes": 978,
+   "exists": true,
+   "sha256": "94d25de9f5b821f17ce634d026963410ad1df1ecfb1ac82ba01e0a4b93695ec0"
+  },
+  "ROUND73_LICENCE.json": {
+   "bytes": 1264,
+   "exists": true,
+   "sha256": "a800f5840d4990e3f0e79380ff227c274aa1cd6a2900f72ec9c104150b9776de"
+  },
+  "ROUND73_MACHINE_VERDICT.json": {
+   "bytes": 2640,
+   "exists": true,
+   "sha256": "83f29dd73fdb9306cc2c0918d3ee9c108942ca5faed86f31b39ad59bd49ebccc"
+  },
+  "counts": {
+   "attempt_files": 574,
+   "claim_dirs": 574,
+   "launch_slot_files": 574,
+   "log_files": 1720,
+   "row_files": 573
+  },
+  "read_at_unix": 1791964111.9957101,
+  "runtime/ROUND73_LEDGER.json": {
+   "bytes": 1231,
+   "exists": true,
+   "sha256": "6c0a6e58c3b097d1d8e6c41eadffa753145c459d34116b8173f753a24e9b4e3c"
+  },
+  "runtime/r73_forward_ledger.json": {
+   "bytes": 144,
+   "exists": true,
+   "sha256": "2f90a35dc89b22a4fb7dc37551f26046c0f9f5913257eae61ef3730a289aa176"
+  },
+  "runtime/synthetic_gates/R73_QUALIFICATION_SUITE_RUN.json": {
+   "bytes": 1147,
+   "exists": true,
+   "sha256": "c804b952853e509ad810d25faf5bb714ec65030463d7edcbd8a10e2b92884a4f"
+  },
+  "runtime/synthetic_gates/r73_synthetic_optimizer_steps.json": {
+   "bytes": 1537,
+   "exists": true,
+   "sha256": "0bbd16f2f187d0349a2a0049c696946c42a27af2ec47ad6058d17f8c4402e766"
+  }
+ },
+ "slots": {
+  "categories": {
+   "normal": 574
+  },
+  "claimed_at_unix_max": 1791961323.8562515,
+  "claimed_at_unix_min": 1791954023.4538724,
+  "contiguous_1_to_max": true,
+  "slot_numbers_max": 574,
+  "slot_numbers_min": 1,
+  "total": 574
+ },
+ "train_coverage": {
+  "11": {
+   "claimed_episodes": 128,
+   "contiguous_0_127": true,
+   "row_episodes": 128
+  },
+  "22": {
+   "claimed_episodes": 128,
+   "contiguous_0_127": true,
+   "row_episodes": 128
+  },
+  "33": {
+   "claimed_episodes": 128,
+   "contiguous_0_127": true,
+   "row_episodes": 128
+  }
+ }
+}

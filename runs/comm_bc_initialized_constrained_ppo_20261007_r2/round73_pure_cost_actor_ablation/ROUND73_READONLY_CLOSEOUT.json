@@ -1,0 +1,2666 @@
+{
+ "kind": "round73-readonly-closeout/1",
+ "task_id": "ROUND73-PURE-COST-ACTOR-ABLATION",
+ "branch": "exp/round73-pure-cost-actor-ablation",
+ "head_at_this_closeout": "da0b1e0ae6d87439b674f902cd11e60a82802ae3",
+ "nature": "READ-ONLY CLOSE-OUT. No environment construction, no model load, no forward/backward, no optimizer step, no PPO replay, no RNG restore, no checkpoint write, no new claim, no test, no re-run. Existing files were parsed and hashed only; every number below is either read from a durable original (labelled ORIGINAL) or derived by stdlib parsing of those originals (labelled DERIVED).",
+ "generated_at_unix": 1791966750.0245337,
+ "errata_1_accounting_audit": {
+  "target": "raw/ROUND73_ACCOUNTING_AUDIT.json",
+  "target_sha256_unchanged": "79447b05f5485614ea62e9c98fb4418b0a00cfc6f1ee37dc991a33b5a3e1c270",
+  "original_preserved": true,
+  "corrections": [
+   {
+    "field": "run_attribution.scratch_totals.runs",
+    "was": 7,
+    "now": 8,
+    "why": "the audit's own 9-run list contains 8 scratch runs (runs 1-7 plus run 9, the post-fix scratch verification); only run 8 is the REAL-ledger run. The run COUNT was miscounted; the calls and steps were not."
+   },
+   {
+    "field": "run_attribution.scratch_totals.ppo_update_calls",
+    "was": 60,
+    "now": 60,
+    "why": "unchanged and re-derived from the archive: 6+6+8+8+8+8+8+8 = 60"
+   },
+   {
+    "field": "run_attribution.scratch_totals.physical_optimizer_steps",
+    "was": 240,
+    "now": 240,
+    "why": "unchanged and re-derived from the archive: 60 calls x 4 physical steps = 240"
+   },
+   {
+    "field": "run_attribution.all_runs_including_scratch",
+    "was": {
+     "runs": 9,
+     "ppo_update_calls": 68,
+     "physical_optimizer_steps": 272
+    },
+    "now": {
+     "runs": 9,
+     "ppo_update_calls": 68,
+     "physical_optimizer_steps": 272
+    },
+    "why": "unchanged and re-derived: 1 real run (8 calls / 32 steps) + 8 scratch runs (60 calls / 240 steps)"
+   },
+   {
+    "field": "the_unit_defect.evidence",
+    "was": "every one of the 68 archived gate journal lines carries optimizer_steps = 4",
+    "now": "CONFIRMED by direct re-parse: all 68 archived records carry line.optimizer_steps = 4 (the field is nested under 'line', not at the top level), so 68 x 4 = 272 physical steps."
+   }
+  ],
+  "attribution_limits": [
+   "the 9-run grouping is INFERRED from archive order and the fixed alphabetical label sequence; it is not an independent log",
+   "which ledger each of the 8 scratch runs charged is NOT verified (the real guard's 8 events prove only the real-ledger run charged it)",
+   "wall-clock timestamps of the scratch runs are NOT recorded (journal lines carry no time)",
+   "the archive is an append-only quarantine of diverted journal lines; it records what was diverted, not the guard charges of each run"
+  ],
+  "archive_measured_separately": {
+   "file": "raw/synthetic_test_fixtures/diverted_real_journal_lines/ppo_update_calls.jsonl.synthetic.jsonl",
+   "sha256_whole_file": "55a95a1c084fb0a98178beae340f9a6dac714d10e1d2dfe3839358df67821d93",
+   "bytes": 23596,
+   "lines": 68,
+   "optimizer_steps_field_values": {
+    "4": 68
+   },
+   "physical_steps_sum_from_the_field": 272,
+   "prefix_20818_bytes": {
+    "calls": 60,
+    "lines": 60,
+    "physical_steps": 240,
+    "sha256": "950f380746ef7808ba4cdd227b4079af0b37b25828d546d5892222dab6b9d7a9"
+   },
+   "suffix_after_boundary": {
+    "lines": 8,
+    "physical_steps": 32
+   },
+   "note": "the 20818-byte prefix sha256 950f3807... matches what the real run's own receipt recorded; it proves the byte boundary only, not that qualification passed"
+  }
+ },
+ "consumption_and_cap_accounting": {
+  "caps_from_licence": {
+   "hard_cap": 600,
+   "normal_cap": 579,
+   "reserve_cap": 21,
+   "offline_input_row_cap": 6000,
+   "synthetic_optimizer_step_cap": 8
+  },
+  "booked": {
+   "launch_slots": 574,
+   "slot_categories": {
+    "normal": 574
+   },
+   "slot_numbers_contiguous_1_to_max": true,
+   "claim_attempt_files": 574,
+   "distinct_logical_jobs": 574,
+   "statuses": {
+    "claimed_before_environment": 1,
+    "complete": 573
+   },
+   "scopes": {
+    "model_eval": 190,
+    "train": 384
+   },
+   "booked_environment_constructor_calls": 574,
+   "booked_joint_run_constructed_calls": 574
+  },
+  "proven": {
+   "claims_with_consumed_permit_and_constructor_returned": 574,
+   "claims_with_row_on_disk": 573,
+   "claims_with_1000_completed_steps": 573,
+   "claims_with_0_completed_steps": 1,
+   "completed_steps_sum": 573000,
+   "note": "booked (claim counters) and proven (permit consumed + constructor_returned + row + steps) agree at 574; every booked claim constructed an environment exactly once"
+  },
+  "constructor_field_audit": {
+   "environment_constructor_calls": {
+    "distinct_values": {
+     "1": 574
+    },
+    "missing": 0,
+    "present": 574,
+    "sum": 574,
+    "types": {
+     "int": 574
+    }
+   },
+   "joint_run_constructed_calls": {
+    "distinct_values": {
+     "1": 574
+    },
+    "missing": 0,
+    "present": 574,
+    "sum": 574,
+    "types": {
+     "int": 574
+    }
+   },
+   "run_invocation_calls": {
+    "distinct_values": {
+     "1": 574
+    },
+    "missing": 0,
+    "present": 574,
+    "sum": 574,
+    "types": {
+     "int": 574
+    }
+   },
+   "run_return_calls": {
+    "distinct_values": {
+     "0": 1,
+     "1": 573
+    },
+    "missing": 0,
+    "present": 574,
+    "sum": 573,
+    "types": {
+     "int": 574
+    }
+   },
+   "run_failure_calls": {
+    "distinct_values": {
+     "0": 574
+    },
+    "missing": 0,
+    "present": 574,
+    "sum": 0,
+    "types": {
+     "int": 574
+    }
+   },
+   "joint_run_build_failures": {
+    "distinct_values": {
+     "0": 574
+    },
+    "missing": 0,
+    "present": 574,
+    "sum": 0,
+    "types": {
+     "int": 574
+    }
+   },
+   "completed_steps": {
+    "distinct_values": {
+     "0": 1,
+     "1000": 573
+    },
+    "missing": 0,
+    "present": 574,
+    "sum": 573000,
+    "types": {
+     "int": 574
+    }
+   }
+  },
+  "interrupted_cell": {
+   "logical_job": "r73eval_model_new_ep128_s33_sampled_scene1800029",
+   "launch_slot": 574,
+   "status_label": "claimed_before_environment",
+   "environment_constructor_calls": 1,
+   "joint_run_constructed_calls": 1,
+   "permit_state": "consumed",
+   "constructor_returned": true,
+   "constructor_called_at_unix": 1791961323.8945768,
+   "completed_steps": 0,
+   "simulation_started": false,
+   "run_return_calls": 0,
+   "refunded": false,
+   "note": "the status label 'claimed_before_environment' must NOT be read as zero consumption: the permit was consumed, the constructor returned, one environment construction is booked and never refunded; only the simulation never started, so no result exists for this cell"
+  },
+  "failed_technical_attempts": [
+   {
+    "attempt": "20261014-120504",
+    "scope": "train --seed 11 --first-gate-only",
+    "outcome": "failed_technical (before any environment construction)",
+    "environment_constructions": 0,
+    "claims": 0,
+    "slots": 0,
+    "optimizer_steps": 0
+   },
+   {
+    "attempt": "20261014-120503b",
+    "scope": "train --seed 11 --first-gate-only",
+    "outcome": "failed_technical (before any environment construction)",
+    "environment_constructions": 0,
+    "claims": 0,
+    "slots": 0,
+    "optimizer_steps": 0
+   }
+  ],
+  "historical_non_plan_probe": 0,
+  "gate_phase_environment_constructions": 0,
+  "hard_cap_accounting": {
+   "environment_constructions_consumed": 574,
+   "hard_cap": 600,
+   "hard_headroom": 26,
+   "normal_cap": 579,
+   "normal_headroom": 5,
+   "reserve_used": 0,
+   "reserve_headroom": 21,
+   "within_cap": true,
+   "attempts_including_the_two_zero_construction_failures": 576
+  },
+  "planned_but_not_run": {
+   "model_eval_cells_without_result": 3,
+   "focal_cells_without_result": 3,
+   "detail": "192 model_eval planned: 189 complete + 1 interrupted (slot 574) + 2 never claimed; 3 focal (scene 1700027) never claimed; stats phase never run"
+  }
+ },
+ "offline_trunk_and_synthetic_steps": {
+  "forward_ledger_durable_ORIGINAL": {
+   "calls": 130,
+   "cap": 6000,
+   "identity": "round71-critic-calibration-offline-trunk-input-ledger/1",
+   "joint_rows": 0,
+   "refusals": 0,
+   "rows": 1030
+  },
+  "forward_ledger_scratch_copy_ORIGINAL": {
+   "calls": 124,
+   "cap": 6000,
+   "identity": "round71-critic-calibration-offline-trunk-input-ledger/1",
+   "joint_rows": 0,
+   "refusals": 0,
+   "rows": 1018
+  },
+  "forward_ledger_cap_probe_fixture_ORIGINAL": {
+   "calls": 2,
+   "cap": 4,
+   "identity": "round71-critic-calibration-offline-trunk-input-ledger/1",
+   "joint_rows": 0,
+   "refusals": 2,
+   "rows": 4
+  },
+  "billing_unit": "19-D trunk input-vector rows handed to the trunk (ForwardLedger, R71 seam); 'calls' counts debit() invocations, 'rows' the charged rows, 'refusals' refused charges, 'joint_rows' informational only",
+  "itemised_charges_DERIVED_from_the_reconstructed_receipt": {
+   "source": "raw/synthetic_test_fixtures/R73_SYNTHETIC_PPO_JOURNAL_RECEIPT.json",
+   "reconstructed": true,
+   "charge_entries": 124,
+   "charge_rows_sum": 1018,
+   "recorded_single_row_forwards": 110,
+   "recorded_single_row_rows": 110,
+   "aggregate_precharge_entries": [
+    {
+     "rows": 2,
+     "what": "gap1 seed 11: identity forward + cost head"
+    },
+    {
+     "rows": 2,
+     "what": "gap1 seed 11: identity forward + cost head"
+    },
+    {
+     "rows": 2,
+     "what": "gap1 seed 22: identity forward + cost head"
+    },
+    {
+     "rows": 2,
+     "what": "gap1 seed 22: identity forward + cost head"
+    },
+    {
+     "rows": 2,
+     "what": "gap1 seed 33: identity forward + cost head"
+    },
+    {
+     "rows": 2,
+     "what": "gap1 seed 33: identity forward + cost head"
+    },
+    {
+     "rows": 8,
+     "what": "gap2 task/lambda invariance, arm A: trunk rows forwarded by the update"
+    },
+    {
+     "rows": 8,
+     "what": "gap2 task/lambda invariance, arm B: trunk rows forwarded by the update"
+    },
+    {
+     "rows": 800,
+     "what": "gap3 hand cost example through the real path: trunk rows forwarded by the update"
+    },
+    {
+     "rows": 16,
+     "what": "gap3 prior/entropy separation, arm A: trunk rows forwarded by the update"
+    },
+    {
+     "rows": 16,
+     "what": "gap3 prior/entropy separation, arm B: trunk rows forwarded by the update"
+    },
+    {
+     "rows": 16,
+     "what": "gap4 roundtrip first synthetic update: trunk rows forwarded by the update"
+    },
+    {
+     "rows": 16,
+     "what": "gap4 in-memory reference continuation: trunk rows forwarded by the update"
+    },
+    {
+     "rows": 16,
+     "what": "gap4 resumed continuation through the load entry: trunk rows forwarded by the update"
+    }
+   ],
+   "aggregate_precharge_rows": 908,
+   "scratch_copy_receipt_same_figures": {
+    "charge_entries": 124,
+    "charge_rows_sum": 1018,
+    "single_row_forwards_recorded": 110,
+    "aggregate_precharge_rows": 908
+   }
+  },
+  "unexplained_gap": {
+   "durable_rows": 1030,
+   "itemised_rows": 1018,
+   "difference_rows": 12,
+   "durable_calls": 130,
+   "itemised_calls": 124,
+   "difference_calls": 6,
+   "status": "UNKNOWN attribution: 12 rows / 6 calls are charged to the persisted ledger but itemised in no surviving file"
+  },
+  "q5_charge_model": "the per-update charge is an AGGREGATE PRE-CHARGE of 2 * n_records * EPOCHS_PER_BATCH rows debited before the update runs; it is a formula, not a measured forward count",
+  "actual_measured_trunk_rows_and_calls": "UNKNOWN / bounds only - no durable record measures them",
+  "bounds": {
+   "lower_bound_rows": 110,
+   "lower_bound_note": "the explicitly recorded single-row forwards, from a derived (reconstructed) receipt",
+   "upper_bound_rows": 1030,
+   "upper_bound_note": "everything ever charged to the persisted ledger, including aggregate pre-charges",
+   "scratch_closure": "the debug_scratch ledger copy reads 1018 rows / 124 calls, i.e. 12 rows / 6 calls less than the durable 1030 / 130; per-run attribution between the real run and the 8 scratch runs is NOT recorded"
+  },
+  "synthetic_optimizer_steps": {
+   "guard_durable_ORIGINAL": {
+    "cap": 8,
+    "events": [
+     {
+      "n": 1,
+      "unix": 1791953662.849435,
+      "used_after": 1,
+      "what": "gap2 task/lambda invariance, arm A: one synthetic PPO update, charged before the call"
+     },
+     {
+      "n": 1,
+      "unix": 1791953662.9007258,
+      "used_after": 2,
+      "what": "gap2 task/lambda invariance, arm B: one synthetic PPO update, charged before the call"
+     },
+     {
+      "n": 1,
+      "unix": 1791953663.799228,
+      "used_after": 3,
+      "what": "gap3 hand cost example through the real path: one synthetic PPO update, charged before the call"
+     },
+     {
+      "n": 1,
+      "unix": 1791953664.0209959,
+      "used_after": 4,
+      "what": "gap3 prior/entropy separation, arm A: one synthetic PPO update, charged before the call"
+     },
+     {
+      "n": 1,
+      "unix": 1791953664.0574484,
+      "used_after": 5,
+      "what": "gap3 prior/entropy separation, arm B: one synthetic PPO update, charged before the call"
+     },
+     {
+      "n": 1,
+      "unix": 1791953664.1090574,
+      "used_after": 6,
+      "what": "gap4 roundtrip first synthetic update: one synthetic PPO update, charged before the call"
+     },
+     {
+      "n": 1,
+      "unix": 1791953664.1781754,
+      "used_after": 7,
+      "what": "gap4 in-memory reference continuation: one synthetic PPO update, charged before the call"
+     },
+     {
+      "n": 1,
+      "unix": 1791953664.236207,
+      "used_after": 8,
+      "what": "gap4 resumed continuation through the load entry: one synthetic PPO update, charged before the call"
+     }
+    ],
+    "kind": "r68-synthetic-optimizer-step-guard/1",
+    "used": 8
+   },
+   "charged_units": 8,
+   "charged_units_meaning": "one unit per trainer.ppo_update call (the defect), NOT one unit per optimizer.step",
+   "cap": 8,
+   "physical_steps_real_ledger_run": 32,
+   "physical_steps_all_archived_runs": 272,
+   "compliance_against_cap_8_physical_steps": false,
+   "overrun_real_run": 24,
+   "overrun_all_runs": 264,
+   "fixtures": {
+    "cap_probe": {
+     "cap": 8,
+     "events": [
+      {
+       "n": 1,
+       "unix": 1791953883.9223516,
+       "used_after": 1,
+       "what": "synthetic step 1"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.9295955,
+       "used_after": 2,
+       "what": "synthetic step 2"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.936652,
+       "used_after": 3,
+       "what": "synthetic step 3"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.9427457,
+       "used_after": 4,
+       "what": "synthetic step 4"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.9490635,
+       "used_after": 5,
+       "what": "synthetic step 5"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.9550989,
+       "used_after": 6,
+       "what": "synthetic step 6"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.9631877,
+       "used_after": 7,
+       "what": "synthetic step 7"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.9692178,
+       "used_after": 8,
+       "what": "synthetic step 8"
+      }
+     ],
+     "kind": "r68-synthetic-optimizer-step-guard/1",
+     "used": 8
+    },
+    "contention": {
+     "cap": 1,
+     "events": [
+      {
+       "n": 1,
+       "unix": 1791953883.5862412,
+       "used_after": 1,
+       "what": "last slot"
+      }
+     ],
+     "kind": "r68-synthetic-optimizer-step-guard/1",
+     "used": 1
+    },
+    "debug_scratch_copy": {
+     "cap": 8,
+     "events": [
+      {
+       "n": 1,
+       "unix": 1791953882.7799757,
+       "used_after": 1,
+       "what": "gap2 task/lambda invariance, arm A: one synthetic PPO update, charged before the call"
+      },
+      {
+       "n": 1,
+       "unix": 1791953882.8225129,
+       "used_after": 2,
+       "what": "gap2 task/lambda invariance, arm B: one synthetic PPO update, charged before the call"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.2139473,
+       "used_after": 3,
+       "what": "gap3 hand cost example through the real path: one synthetic PPO update, charged before the call"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.3841805,
+       "used_after": 4,
+       "what": "gap3 prior/entropy separation, arm A: one synthetic PPO update, charged before the call"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.4083052,
+       "used_after": 5,
+       "what": "gap3 prior/entropy separation, arm B: one synthetic PPO update, charged before the call"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.4384809,
+       "used_after": 6,
+       "what": "gap4 roundtrip first synthetic update: one synthetic PPO update, charged before the call"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.4890747,
+       "used_after": 7,
+       "what": "gap4 in-memory reference continuation: one synthetic PPO update, charged before the call"
+      },
+      {
+       "n": 1,
+       "unix": 1791953883.5237026,
+       "used_after": 8,
+       "what": "gap4 resumed continuation through the load entry: one synthetic PPO update, charged before the call"
+      }
+     ],
+     "kind": "r68-synthetic-optimizer-step-guard/1",
+     "used": 8
+    }
+   }
+  },
+  "freeze_and_licence_identity": {
+   "note": "ROUND73_FREEZE.json and ROUND73_LICENCE.json live in the ROUND73 ROOT directory, not under raw/; the earlier _full_shas.py MISSING entries were a wrong-path lookup",
+   "ROUND73_FREEZE.json_sha256": "1cd83bc88f0ffbc74cc6d9c9f40416f5a0b7437680bff2969dfff73c69fc78b4",
+   "ROUND73_LICENCE.json_sha256": "a800f5840d4990e3f0e79380ff227c274aa1cd6a2900f72ec9c104150b9776de",
+   "licence_source_freeze_sha256_expected": "56e99083f5b5da306554467b837a20d38df9d4ac9d6dd54e71fc3a83685d9f97",
+   "licence_source_freeze_sha256_actual": "56e99083f5b5da306554467b837a20d38df9d4ac9d6dd54e71fc3a83685d9f97",
+   "licence_input_identity_sha256_expected": "0c027d4817325bf4e02186d658ac52b0ccf6d9917a458380f72b8de8ea2a5009",
+   "licence_input_identity_sha256_actual": "0c027d4817325bf4e02186d658ac52b0ccf6d9917a458380f72b8de8ea2a5009"
+  }
+ },
+ "greedy_96_paired_comparison": {
+  "scope": "descriptive primary comparison only (NEW_EP128 - R71_EP128), greedy mode, same seed, same 32 scenes",
+  "not_done": [
+   "no bootstrap",
+   "no new significance method",
+   "no pooled seeds",
+   "no overall verdict",
+   "no mode selection",
+   "sampled and focal cells NOT mixed in"
+  ],
+  "identity_audit": {
+   "r71": {
+    "cells": 96,
+    "files_missing": [],
+    "param_sha_by_seed": {
+     "11": [
+      "5542407fa1a23ef4f1a4a02c19ae40fb8898b52fdb301011e4df011111cfca57"
+     ],
+     "22": [
+      "feada8b8673661a4720fab10ce6153b2f5365a10816eeeefbe60e25ad6a5d1ee"
+     ],
+     "33": [
+      "542f940a78ee0ff7ec42b727297667bfb3bcc449c3aead466561f9b12179e1c1"
+     ]
+    },
+    "problems": [
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800003,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800007,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800008,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800012,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800013,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800019,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800022,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800029,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800003,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800007,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800008,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800012,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800013,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800019,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800022,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800029,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800003,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800007,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800008,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800012,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800013,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800019,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800022,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800029,
+      "seed": 33
+     }
+    ]
+   },
+   "r73": {
+    "cells": 96,
+    "files_missing": [],
+    "param_sha_by_seed": {
+     "11": [
+      "186f35babf8a04b4dfd8abb0f9aba6b92654b4467aeef283dad516b07efc6398"
+     ],
+     "22": [
+      "1a17020464d78cbd9c364a30ab13184b4a5c8849878538064225ebdaa3031888"
+     ],
+     "33": [
+      "c09c0b966de02a0f7114d70f0120480428f4ea007218049bbf081140963c5319"
+     ]
+    },
+    "problems": [
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800003,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800007,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800008,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800012,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800013,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800019,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800022,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800029,
+      "seed": 11
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800003,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800007,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800008,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800012,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800013,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800019,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800022,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800029,
+      "seed": 22
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800003,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800007,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800008,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800012,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800013,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800019,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800022,
+      "seed": 33
+     },
+     {
+      "issues": [
+       "discovered_not_6"
+      ],
+      "scene": 1800029,
+      "seed": 33
+     }
+    ]
+   }
+  },
+  "per_seed": {
+   "11": {
+    "cells": 32,
+    "r73_on_time_total": 170,
+    "r71_on_time_total": 183,
+    "on_time_delta_total": -13,
+    "r73_bytes_mean": 168.5625,
+    "r71_bytes_mean": 4066.5,
+    "bytes_delta_mean": -3897.9375,
+    "scenes_cost_down_equal_up": [
+     21,
+     11,
+     0
+    ],
+    "scenes_with_task_loss": [
+     1800011,
+     1800012,
+     1800013,
+     1800014,
+     1800018,
+     1800019,
+     1800020,
+     1800021,
+     1800024,
+     1800025,
+     1800030
+    ],
+    "scenes_with_task_gain": [],
+    "targets_lost_vs_r71": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "targets_gained_vs_r71": [],
+    "lost_detail": [
+     {
+      "scene": 1800011,
+      "targets": [
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800012,
+      "targets": [
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800013,
+      "targets": [
+       "piloc-e1-target-2"
+      ]
+     },
+     {
+      "scene": 1800014,
+      "targets": [
+       "piloc-e1-target-2",
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800018,
+      "targets": [
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800019,
+      "targets": [
+       "piloc-e1-target-0",
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800020,
+      "targets": [
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800021,
+      "targets": [
+       "piloc-e1-target-3"
+      ]
+     },
+     {
+      "scene": 1800024,
+      "targets": [
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800025,
+      "targets": [
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800030,
+      "targets": [
+       "piloc-e1-target-2"
+      ]
+     }
+    ],
+    "gained_detail": [],
+    "send_skip_early_late": {
+     "r71": {
+      "early_send": 2,
+      "early_skip": 132,
+      "late_send": 49,
+      "late_skip": 0
+     },
+     "r73": {
+      "early_send": 2,
+      "early_skip": 132,
+      "late_send": 0,
+      "late_skip": 49
+     }
+    },
+    "send_skip_delta": {
+     "early_send": 0,
+     "early_skip": 0,
+     "late_send": -49,
+     "late_skip": 49
+    },
+    "bytes_delta_per_scene": [
+     -2682,
+     -5202,
+     -7674,
+     0,
+     0,
+     -2490,
+     -2322,
+     0,
+     0,
+     0,
+     0,
+     -5028,
+     -5388,
+     -5184,
+     -7494,
+     -5016,
+     0,
+     -2508,
+     -5100,
+     -7920,
+     -10140,
+     -10374,
+     0,
+     0,
+     -4800,
+     -7884,
+     -7674,
+     0,
+     -2508,
+     0,
+     -9828,
+     -7518
+    ],
+    "lost_targets_were_late_sends_in_r71": true,
+    "lost_targets_are_late_skips_in_r73": true,
+    "training_chain": {
+     "actor_objective": "pure-cost/1",
+     "batch0_before_matches_registered_init": true,
+     "batch0_before_sha": "6f6581cff959dc027dfe5e771d963ef4b27b5a2f9d6847bf3d1bc6328c5de32f",
+     "batch31_after_matches_eval": true,
+     "batch31_after_sha": "186f35babf8a04b4dfd8abb0f9aba6b92654b4467aeef283dad516b07efc6398",
+     "batch_records": 32,
+     "chain_contiguous_0_to_31": true,
+     "episodes_done_after_final": 128,
+     "eval_param_sha": "186f35babf8a04b4dfd8abb0f9aba6b92654b4467aeef283dad516b07efc6398",
+     "lambda_final": 2.625,
+     "lambda_path": [
+      1.0,
+      1.0,
+      1.125,
+      1.25,
+      1.25,
+      1.375,
+      1.375,
+      1.375,
+      1.375,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.625,
+      1.625,
+      1.75,
+      1.75,
+      1.75,
+      1.75,
+      1.75,
+      1.75,
+      1.75,
+      1.875,
+      1.875,
+      1.875,
+      2.125,
+      2.125,
+      2.125,
+      2.125,
+      2.375,
+      2.5,
+      2.625
+     ],
+     "lambda_start": 1.0,
+     "optimizer_steps_after_final": 296,
+     "optimizer_steps_after_set": [
+      8,
+      12,
+      32,
+      44,
+      52,
+      72,
+      76,
+      80,
+      84,
+      96,
+      104,
+      108,
+      112,
+      132,
+      140,
+      152,
+      156,
+      160,
+      164,
+      168,
+      172,
+      176,
+      196,
+      204,
+      212,
+      236,
+      240,
+      248,
+      256,
+      272,
+      284,
+      296
+     ],
+     "problems": [],
+     "registered_init_param_sha": "6f6581cff959dc027dfe5e771d963ef4b27b5a2f9d6847bf3d1bc6328c5de32f",
+     "structure": "partitioned-early-late-actor-head/1+frozen-early-path-late-adaptation/1+late-initial-confidence-alpha0.10/1+r71-critic-calibration-heads/1+r73-pure-cost-actor-objective/1"
+    }
+   },
+   "22": {
+    "cells": 32,
+    "r73_on_time_total": 170,
+    "r71_on_time_total": 183,
+    "on_time_delta_total": -13,
+    "r73_bytes_mean": 168.5625,
+    "r71_bytes_mean": 4066.5,
+    "bytes_delta_mean": -3897.9375,
+    "scenes_cost_down_equal_up": [
+     21,
+     11,
+     0
+    ],
+    "scenes_with_task_loss": [
+     1800011,
+     1800012,
+     1800013,
+     1800014,
+     1800018,
+     1800019,
+     1800020,
+     1800021,
+     1800024,
+     1800025,
+     1800030
+    ],
+    "scenes_with_task_gain": [],
+    "targets_lost_vs_r71": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "targets_gained_vs_r71": [],
+    "lost_detail": [
+     {
+      "scene": 1800011,
+      "targets": [
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800012,
+      "targets": [
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800013,
+      "targets": [
+       "piloc-e1-target-2"
+      ]
+     },
+     {
+      "scene": 1800014,
+      "targets": [
+       "piloc-e1-target-2",
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800018,
+      "targets": [
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800019,
+      "targets": [
+       "piloc-e1-target-0",
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800020,
+      "targets": [
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800021,
+      "targets": [
+       "piloc-e1-target-3"
+      ]
+     },
+     {
+      "scene": 1800024,
+      "targets": [
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800025,
+      "targets": [
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800030,
+      "targets": [
+       "piloc-e1-target-2"
+      ]
+     }
+    ],
+    "gained_detail": [],
+    "send_skip_early_late": {
+     "r71": {
+      "early_send": 2,
+      "early_skip": 132,
+      "late_send": 49,
+      "late_skip": 0
+     },
+     "r73": {
+      "early_send": 2,
+      "early_skip": 132,
+      "late_send": 0,
+      "late_skip": 49
+     }
+    },
+    "send_skip_delta": {
+     "early_send": 0,
+     "early_skip": 0,
+     "late_send": -49,
+     "late_skip": 49
+    },
+    "bytes_delta_per_scene": [
+     -2682,
+     -5202,
+     -7674,
+     0,
+     0,
+     -2490,
+     -2322,
+     0,
+     0,
+     0,
+     0,
+     -5028,
+     -5388,
+     -5184,
+     -7494,
+     -5016,
+     0,
+     -2508,
+     -5100,
+     -7920,
+     -10140,
+     -10374,
+     0,
+     0,
+     -4800,
+     -7884,
+     -7674,
+     0,
+     -2508,
+     0,
+     -9828,
+     -7518
+    ],
+    "lost_targets_were_late_sends_in_r71": true,
+    "lost_targets_are_late_skips_in_r73": true,
+    "training_chain": {
+     "actor_objective": "pure-cost/1",
+     "batch0_before_matches_registered_init": true,
+     "batch0_before_sha": "29dbecdb9eaeae5ba346d8a68d03a13ca4ebb56680e28b4fff288032acfd1aa9",
+     "batch31_after_matches_eval": true,
+     "batch31_after_sha": "1a17020464d78cbd9c364a30ab13184b4a5c8849878538064225ebdaa3031888",
+     "batch_records": 32,
+     "chain_contiguous_0_to_31": true,
+     "episodes_done_after_final": 128,
+     "eval_param_sha": "1a17020464d78cbd9c364a30ab13184b4a5c8849878538064225ebdaa3031888",
+     "lambda_final": 3.0,
+     "lambda_path": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.25,
+      1.25,
+      1.375,
+      1.375,
+      1.375,
+      1.375,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.625,
+      1.75,
+      1.75,
+      2.0,
+      2.0,
+      2.25,
+      2.25,
+      2.25,
+      2.375,
+      2.75,
+      2.875,
+      3.0
+     ],
+     "lambda_start": 1.0,
+     "optimizer_steps_after_final": 288,
+     "optimizer_steps_after_set": [
+      8,
+      12,
+      16,
+      24,
+      32,
+      40,
+      44,
+      48,
+      52,
+      60,
+      76,
+      80,
+      88,
+      96,
+      104,
+      112,
+      124,
+      128,
+      132,
+      136,
+      148,
+      164,
+      172,
+      196,
+      204,
+      220,
+      224,
+      228,
+      236,
+      264,
+      276,
+      288
+     ],
+     "problems": [],
+     "registered_init_param_sha": "29dbecdb9eaeae5ba346d8a68d03a13ca4ebb56680e28b4fff288032acfd1aa9",
+     "structure": "partitioned-early-late-actor-head/1+frozen-early-path-late-adaptation/1+late-initial-confidence-alpha0.10/1+r71-critic-calibration-heads/1+r73-pure-cost-actor-objective/1"
+    }
+   },
+   "33": {
+    "cells": 32,
+    "r73_on_time_total": 170,
+    "r71_on_time_total": 183,
+    "on_time_delta_total": -13,
+    "r73_bytes_mean": 168.5625,
+    "r71_bytes_mean": 4066.5,
+    "bytes_delta_mean": -3897.9375,
+    "scenes_cost_down_equal_up": [
+     21,
+     11,
+     0
+    ],
+    "scenes_with_task_loss": [
+     1800011,
+     1800012,
+     1800013,
+     1800014,
+     1800018,
+     1800019,
+     1800020,
+     1800021,
+     1800024,
+     1800025,
+     1800030
+    ],
+    "scenes_with_task_gain": [],
+    "targets_lost_vs_r71": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "targets_gained_vs_r71": [],
+    "lost_detail": [
+     {
+      "scene": 1800011,
+      "targets": [
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800012,
+      "targets": [
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800013,
+      "targets": [
+       "piloc-e1-target-2"
+      ]
+     },
+     {
+      "scene": 1800014,
+      "targets": [
+       "piloc-e1-target-2",
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800018,
+      "targets": [
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800019,
+      "targets": [
+       "piloc-e1-target-0",
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800020,
+      "targets": [
+       "piloc-e1-target-4"
+      ]
+     },
+     {
+      "scene": 1800021,
+      "targets": [
+       "piloc-e1-target-3"
+      ]
+     },
+     {
+      "scene": 1800024,
+      "targets": [
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800025,
+      "targets": [
+       "piloc-e1-target-5"
+      ]
+     },
+     {
+      "scene": 1800030,
+      "targets": [
+       "piloc-e1-target-2"
+      ]
+     }
+    ],
+    "gained_detail": [],
+    "send_skip_early_late": {
+     "r71": {
+      "early_send": 2,
+      "early_skip": 132,
+      "late_send": 49,
+      "late_skip": 0
+     },
+     "r73": {
+      "early_send": 2,
+      "early_skip": 132,
+      "late_send": 0,
+      "late_skip": 49
+     }
+    },
+    "send_skip_delta": {
+     "early_send": 0,
+     "early_skip": 0,
+     "late_send": -49,
+     "late_skip": 49
+    },
+    "bytes_delta_per_scene": [
+     -2682,
+     -5202,
+     -7674,
+     0,
+     0,
+     -2490,
+     -2322,
+     0,
+     0,
+     0,
+     0,
+     -5028,
+     -5388,
+     -5184,
+     -7494,
+     -5016,
+     0,
+     -2508,
+     -5100,
+     -7920,
+     -10140,
+     -10374,
+     0,
+     0,
+     -4800,
+     -7884,
+     -7674,
+     0,
+     -2508,
+     0,
+     -9828,
+     -7518
+    ],
+    "lost_targets_were_late_sends_in_r71": true,
+    "lost_targets_are_late_skips_in_r73": true,
+    "training_chain": {
+     "actor_objective": "pure-cost/1",
+     "batch0_before_matches_registered_init": true,
+     "batch0_before_sha": "3685f4aa30367276e2cc4f9cb6cad23773350fa084476cd249ae1f11be62f0ca",
+     "batch31_after_matches_eval": true,
+     "batch31_after_sha": "c09c0b966de02a0f7114d70f0120480428f4ea007218049bbf081140963c5319",
+     "batch_records": 32,
+     "chain_contiguous_0_to_31": true,
+     "episodes_done_after_final": 128,
+     "eval_param_sha": "c09c0b966de02a0f7114d70f0120480428f4ea007218049bbf081140963c5319",
+     "lambda_final": 3.125,
+     "lambda_path": [
+      1.0,
+      1.0,
+      1.0,
+      1.125,
+      1.125,
+      1.25,
+      1.25,
+      1.25,
+      1.25,
+      1.25,
+      1.25,
+      1.25,
+      1.25,
+      1.375,
+      1.625,
+      1.625,
+      1.75,
+      1.875,
+      1.875,
+      1.875,
+      2.0,
+      2.0,
+      2.125,
+      2.25,
+      2.25,
+      2.625,
+      2.625,
+      2.625,
+      2.75,
+      2.75,
+      2.875,
+      3.125
+     ],
+     "lambda_start": 1.0,
+     "optimizer_steps_after_final": 308,
+     "optimizer_steps_after_set": [
+      8,
+      12,
+      16,
+      36,
+      44,
+      64,
+      68,
+      72,
+      76,
+      84,
+      92,
+      96,
+      100,
+      120,
+      136,
+      144,
+      156,
+      168,
+      172,
+      176,
+      188,
+      192,
+      212,
+      224,
+      232,
+      256,
+      260,
+      268,
+      276,
+      280,
+      292,
+      308
+     ],
+     "problems": [],
+     "registered_init_param_sha": "3685f4aa30367276e2cc4f9cb6cad23773350fa084476cd249ae1f11be62f0ca",
+     "structure": "partitioned-early-late-actor-head/1+frozen-early-path-late-adaptation/1+late-initial-confidence-alpha0.10/1+r71-critic-calibration-heads/1+r73-pure-cost-actor-objective/1"
+    }
+   }
+  },
+  "rule_arms_read_only": {
+   "ALWAYS_HOLD": {
+    "bytes_per_scene": 0.0,
+    "bytes_total": 0,
+    "distinct_on_time_target_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "duplicate_rows_dropped": [],
+    "files": [
+     "v2_r66eval2_rule_always_hold_a1_s1800000_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800001_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800002_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800003_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800004_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800005_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800006_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800007_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800008_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800009_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800010_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800011_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800012_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800013_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800014_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800015_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800016_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800017_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800018_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800019_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800020_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800021_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800022_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800023_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800024_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800025_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800026_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800027_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800028_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800029_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800030_a1.json",
+     "v2_r66eval2_rule_always_hold_a1_s1800031_a1.json"
+    ],
+    "on_time_total": 170,
+    "scenes": 32
+   },
+   "IMMEDIATE": {
+    "bytes_per_scene": 14356.5,
+    "bytes_total": 459408,
+    "distinct_on_time_target_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "duplicate_rows_dropped": [
+     {
+      "dropped": "v2_r66eval2_rule_immediate_a2_s1800000_a1.json",
+      "dropped_attempt": 1,
+      "kept": "v2_r66eval2_rule_immediate_a1_s1800000_a1.json",
+      "kept_attempt": 1,
+      "note": "attempt-1 row kept; later duplicate dropped from the mean",
+      "scene": 1800000
+     }
+    ],
+    "files": [
+     "v2_r66eval2_rule_immediate_a1_s1800000_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800001_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800002_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800003_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800004_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800005_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800006_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800007_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800008_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800009_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800010_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800011_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800012_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800013_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800014_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800015_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800016_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800017_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800018_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800019_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800020_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800021_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800022_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800023_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800024_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800025_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800026_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800027_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800028_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800029_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800030_a1.json",
+     "v2_r66eval2_rule_immediate_a1_s1800031_a1.json"
+    ],
+    "on_time_total": 183,
+    "scenes": 32
+   },
+   "LATE_DISCOVERY_GATE": {
+    "bytes_per_scene": 3897.9375,
+    "bytes_total": 124734,
+    "distinct_on_time_target_ids": [
+     "piloc-e1-target-0",
+     "piloc-e1-target-1",
+     "piloc-e1-target-2",
+     "piloc-e1-target-3",
+     "piloc-e1-target-4",
+     "piloc-e1-target-5"
+    ],
+    "duplicate_rows_dropped": [],
+    "files": [
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800000_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800001_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800002_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800003_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800004_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800005_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800006_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800007_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800008_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800009_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800010_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800011_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800012_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800013_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800014_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800015_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800016_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800017_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800018_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800019_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800020_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800021_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800022_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800023_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800024_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800025_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800026_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800027_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800028_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800029_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800030_a1.json",
+     "v2_r66eval2_rule_late_discovery_gate_a1_s1800031_a1.json"
+    ],
+    "on_time_total": 183,
+    "scenes": 32
+   }
+  },
+  "cross_seed_observation": {
+   "per_scene_results_identical_across_the_three_seeds_in_both_arms": true,
+   "note": "the three models are NOT identical (different parameter digests and different frozen-module digests), yet every per-scene on-time set and byte total coincides across seeds in BOTH arms; the three seeds therefore do not provide independent replication on this block"
+  },
+  "discovered_ceiling": {
+   "scenes_with_fewer_than_6_discovered": [
+    1800003,
+    1800007,
+    1800008,
+    1800012,
+    1800013,
+    1800019,
+    1800022,
+    1800029
+   ],
+   "identical_in_both_arms": true,
+   "note": "in these 8 scenes the search module discovers 5 (or 4) goals, so the on-time ceiling is below 6 for BOTH arms"
+  },
+  "gaps": {
+   "focal_cells_on_disk": 0,
+   "focal_present_cells": [],
+   "note": "sampled and focal cells are reported separately and never mixed into the greedy primary comparison",
+   "sampled_cells_on_disk": 93,
+   "sampled_missing_cells": [
+    [
+     "s33",
+     1800029
+    ],
+    [
+     "s33",
+     1800030
+    ],
+    [
+     "s33",
+     1800031
+    ]
+   ],
+   "sampled_present_cells": [
+    [
+     "s11",
+     1800000
+    ],
+    [
+     "s11",
+     1800001
+    ],
+    [
+     "s11",
+     1800002
+    ],
+    [
+     "s11",
+     1800003
+    ],
+    [
+     "s11",
+     1800004
+    ],
+    [
+     "s11",
+     1800005
+    ],
+    [
+     "s11",
+     1800006
+    ],
+    [
+     "s11",
+     1800007
+    ],
+    [
+     "s11",
+     1800008
+    ],
+    [
+     "s11",
+     1800009
+    ],
+    [
+     "s11",
+     1800010
+    ],
+    [
+     "s11",
+     1800011
+    ],
+    [
+     "s11",
+     1800012
+    ],
+    [
+     "s11",
+     1800013
+    ],
+    [
+     "s11",
+     1800014
+    ],
+    [
+     "s11",
+     1800015
+    ],
+    [
+     "s11",
+     1800016
+    ],
+    [
+     "s11",
+     1800017
+    ],
+    [
+     "s11",
+     1800018
+    ],
+    [
+     "s11",
+     1800019
+    ],
+    [
+     "s11",
+     1800020
+    ],
+    [
+     "s11",
+     1800021
+    ],
+    [
+     "s11",
+     1800022
+    ],
+    [
+     "s11",
+     1800023
+    ],
+    [
+     "s11",
+     1800024
+    ],
+    [
+     "s11",
+     1800025
+    ],
+    [
+     "s11",
+     1800026
+    ],
+    [
+     "s11",
+     1800027
+    ],
+    [
+     "s11",
+     1800028
+    ],
+    [
+     "s11",
+     1800029
+    ],
+    [
+     "s11",
+     1800030
+    ],
+    [
+     "s11",
+     1800031
+    ],
+    [
+     "s22",
+     1800000
+    ],
+    [
+     "s22",
+     1800001
+    ],
+    [
+     "s22",
+     1800002
+    ],
+    [
+     "s22",
+     1800003
+    ],
+    [
+     "s22",
+     1800004
+    ],
+    [
+     "s22",
+     1800005
+    ],
+    [
+     "s22",
+     1800006
+    ],
+    [
+     "s22",
+     1800007
+    ],
+    [
+     "s22",
+     1800008
+    ],
+    [
+     "s22",
+     1800009
+    ],
+    [
+     "s22",
+     1800010
+    ],
+    [
+     "s22",
+     1800011
+    ],
+    [
+     "s22",
+     1800012
+    ],
+    [
+     "s22",
+     1800013
+    ],
+    [
+     "s22",
+     1800014
+    ],
+    [
+     "s22",
+     1800015
+    ],
+    [
+     "s22",
+     1800016
+    ],
+    [
+     "s22",
+     1800017
+    ],
+    [
+     "s22",
+     1800018
+    ],
+    [
+     "s22",
+     1800019
+    ],
+    [
+     "s22",
+     1800020
+    ],
+    [
+     "s22",
+     1800021
+    ],
+    [
+     "s22",
+     1800022
+    ],
+    [
+     "s22",
+     1800023
+    ],
+    [
+     "s22",
+     1800024
+    ],
+    [
+     "s22",
+     1800025
+    ],
+    [
+     "s22",
+     1800026
+    ],
+    [
+     "s22",
+     1800027
+    ],
+    [
+     "s22",
+     1800028
+    ],
+    [
+     "s22",
+     1800029
+    ],
+    [
+     "s22",
+     1800030
+    ],
+    [
+     "s22",
+     1800031
+    ],
+    [
+     "s33",
+     1800000
+    ],
+    [
+     "s33",
+     1800001
+    ],
+    [
+     "s33",
+     1800002
+    ],
+    [
+     "s33",
+     1800003
+    ],
+    [
+     "s33",
+     1800004
+    ],
+    [
+     "s33",
+     1800005
+    ],
+    [
+     "s33",
+     1800006
+    ],
+    [
+     "s33",
+     1800007
+    ],
+    [
+     "s33",
+     1800008
+    ],
+    [
+     "s33",
+     1800009
+    ],
+    [
+     "s33",
+     1800010
+    ],
+    [
+     "s33",
+     1800011
+    ],
+    [
+     "s33",
+     1800012
+    ],
+    [
+     "s33",
+     1800013
+    ],
+    [
+     "s33",
+     1800014
+    ],
+    [
+     "s33",
+     1800015
+    ],
+    [
+     "s33",
+     1800016
+    ],
+    [
+     "s33",
+     1800017
+    ],
+    [
+     "s33",
+     1800018
+    ],
+    [
+     "s33",
+     1800019
+    ],
+    [
+     "s33",
+     1800020
+    ],
+    [
+     "s33",
+     1800021
+    ],
+    [
+     "s33",
+     1800022
+    ],
+    [
+     "s33",
+     1800023
+    ],
+    [
+     "s33",
+     1800024
+    ],
+    [
+     "s33",
+     1800025
+    ],
+    [
+     "s33",
+     1800026
+    ],
+    [
+     "s33",
+     1800027
+    ],
+    [
+     "s33",
+     1800028
+    ]
+   ]
+  }
+ },
+ "claim_row_bijection_re_derived": {
+  "method": "regex over the 574 claim attempt files and the 573 row files; train claims matched on logical_job r73_new_training_(s\\d+)_e(\\d+) against row file name v2_r73_train_..._e(\\d+)_...; eval claims matched on logical_job r73eval_model_new_ep128_(s\\d+)_(greedy|sampled)_scene(\\d+) against row file name v2_r73eval_model_new_ep128_..._s(\\d+)_...",
+  "claims_total": 574,
+  "claims_complete": 573,
+  "claims_not_complete": 1,
+  "rows_on_disk": 573,
+  "complete_claims_without_a_row": 0,
+  "rows_without_a_complete_claim": 0,
+  "the_single_not_complete_claim": {
+   "logical_job": "r73eval_model_new_ep128_s33_sampled_scene1800029",
+   "status": "claimed_before_environment"
+  },
+  "train_rows_by_seed": {
+   "s11": 128,
+   "s22": 128,
+   "s33": 128
+  },
+  "train_episodes_contiguous_0_127_per_seed": true,
+  "eval_rows_by_seed_mode": {
+   "s11|greedy": 32,
+   "s11|sampled": 32,
+   "s22|greedy": 32,
+   "s22|sampled": 32,
+   "s33|greedy": 32,
+   "s33|sampled": 29
+  },
+  "eval_scenes_contiguous_1800000_1800031": {
+   "s11|greedy": true,
+   "s11|sampled": true,
+   "s22|greedy": true,
+   "s22|sampled": true,
+   "s33|greedy": true,
+   "s33|sampled": false
+  },
+  "conclusion": "a perfect 1:1 bijection between the 573 complete claims and the 573 result rows; the audit field complete_claims_without_row = 573 and the crosswalk field eval_coverage.row_scenes = 0 are both label-normalisation artefacts, NOT missing rows"
+ },
+ "interrupted_cell_measured_evidence": {
+  "logical_job": "r73eval_model_new_ep128_s33_sampled_scene1800029",
+  "launch_slot": 574,
+  "booked_counters": {
+   "environment_constructor_calls": 1,
+   "joint_run_constructed_calls": 1,
+   "joint_run_method_calls": 1,
+   "run_invocation_calls": 1,
+   "run_return_calls": 0,
+   "run_failure_calls": 0,
+   "joint_run_build_failures": 0,
+   "completed_steps": 0
+  },
+  "status_label": "claimed_before_environment",
+  "status_label_is_factually_wrong": true,
+  "why": "the label says 'before environment', but the constructor was called at unix 1791961323.8945768 and returned, the permit is consumed with constructor_returned = true, and one environment construction is booked and never refunded",
+  "partial_artefacts_on_disk": {
+   "relay_policy_log": "raw/logs/v2_r73eval_model_new_ep128_s33_sampled_s1800029_a1_rp.jsonl",
+   "relay_policy_log_lines": 972,
+   "complete_s33_sampled_relay_policy_log_line_range": [
+    1355,
+    1447
+   ],
+   "controller_log_present": false,
+   "tape_log_present": false,
+   "result_row_present": false
+  },
+  "interpretation": "a partial episode was executed (972 relay-policy log lines versus 1355-1447 for the 29 complete s33-sampled cells) and then interrupted; no controller log, no tape and no result row were produced. The booked completed_steps = 0 and simulation_started = false flags were never updated because the run never returned, so they must NOT be read as proof that zero simulation work happened",
+  "exact_simulation_step_count": "UNKNOWN - not recorded by any durable file",
+  "consumption_charged": 1,
+  "refunded": false
+ },
+ "stale_files_needing_correction": {
+  "policy": "these files are left EXACTLY as they are. They are pre-launch snapshots whose numbers were overtaken by the run; the claim files are the source of truth. Listing them here is the correction; overwriting them would destroy the visible difference",
+  "files": [
+   {
+    "path": "ROUND73_MACHINE_VERDICT.json",
+    "sha256": "83f29dd73fdb9306cc2c0918d3ee9c108942ca5faed86f31b39ad59bd49ebccc",
+    "says": "status 'fixed_training_and_eval_NOT_started'; every consumption field 0; scientific_conclusion DEFERRED",
+    "actually": "384 training + 189 model_eval completed, 573 rows on disk, 574 booked",
+    "note": "root-level verdict written before launch; never refreshed"
+   },
+   {
+    "path": "ROUND73_LEDGER.json",
+    "sha256": "94d25de9f5b821f17ce634d026963410ad1df1ecfb1ac82ba01e0a4b93695ec0",
+    "says": "every consumption field 0; headroom hard 600 / normal 579 / reserve 21",
+    "actually": "574 booked; hard headroom 26, normal headroom 5, reserve 0",
+    "note": "root-level pre-launch ledger"
+   },
+   {
+    "path": "raw/runtime/ROUND73_LEDGER.json",
+    "sha256": "6c0a6e58c3b097d1d8e6c41eadffa753145c459d34116b8173f753a24e9b4e3c",
+    "says": "real_environment_constructions 384; headroom hard 216 / normal 195",
+    "actually": "stale by 190: it was last written at the end of the training phase, before eval booked anything",
+    "note": "the last written ledger file; the claim files supersede it"
+   },
+   {
+    "path": "raw/runtime/ROUND73_EVAL_QUOTA_GUARD.json",
+    "sha256": "b23d71b100066258d592978794da1a20663ec298a96e24e92feea2e2edb85c85",
+    "says": "booked_normal 384, booked_total 384, hard_headroom 216",
+    "actually": "booked_total is 574; hard_headroom 26",
+    "note": "eval-phase guard snapshot taken at eval start"
+   },
+   {
+    "path": "ROUND73_FREEZE.json",
+    "sha256": "1cd83bc88f0ffbc74cc6d9c9f40416f5a0b7437680bff2969dfff73c69fc78b4",
+    "says": "phases_completed train false, eval false, stats false",
+    "actually": "train and eval ran (with 6 planned cells not run); stats never ran",
+    "note": "the freeze identity fields themselves are correct and unchanged; only phases_completed is stale"
+   }
+  ],
+  "numbers_that_must_not_be_quoted_as_current": [
+   "600 hard headroom (actual 26)",
+   "579 normal headroom (actual 5)",
+   "21 reserve headroom (actual 0 used, 21 available)",
+   "384 booked (actual 574)",
+   "0 environment constructions (actual 574)",
+   "8 synthetic optimizer steps respected (actual: 8 charged UNITS = 8 ppo_update calls; 32 physical optimizer steps in the real-ledger run and 272 across all 9 archived runs)"
+  ]
+ },
+ "rule_arm_pairing_descriptive": {
+  "scope": "read-only reuse of the frozen R66 rule-context rows on the SAME 32 scenes 1800000..1800031; no new environment construction; descriptive only, no bootstrap, no significance claim",
+  "per_scene_on_time": {
+   "IMMEDIATE": 183,
+   "LATE_DISCOVERY_GATE": 183,
+   "ALWAYS_HOLD": 170,
+   "R71_EP128_control": 183,
+   "R73_EP128_new": 170
+  },
+  "billed_bytes_per_scene": {
+   "IMMEDIATE": 14356.5,
+   "LATE_DISCOVERY_GATE": 3897.9375,
+   "ALWAYS_HOLD": 0.0,
+   "R71_EP128_control": 4066.5,
+   "R73_EP128_new": 168.5625
+  },
+  "billed_bytes_total": {
+   "IMMEDIATE": 459408,
+   "LATE_DISCOVERY_GATE": 124734,
+   "ALWAYS_HOLD": 0
+  },
+  "duplicate_rows_dropped": {
+   "IMMEDIATE": [
+    {
+     "dropped": "v2_r66eval2_rule_immediate_a2_s1800000_a1.json",
+     "dropped_attempt": 1,
+     "kept": "v2_r66eval2_rule_immediate_a1_s1800000_a1.json",
+     "kept_attempt": 1,
+     "note": "attempt-1 row kept; later duplicate dropped from the mean",
+     "scene": 1800000
+    }
+   ],
+   "LATE_DISCOVERY_GATE": [],
+   "ALWAYS_HOLD": []
+  },
+  "reading": [
+   "R73 matches ALWAYS_HOLD on task count (170 on-time) but is NOT zero-billing (168.5625 B/scene); it is 13 below the IMMEDIATE / LATE_DISCOVERY_GATE / R71 arms (183 on-time)",
+   "R71 matches IMMEDIATE and LATE_DISCOVERY_GATE on task (183) at 4066.5 B/scene, i.e. 168.5625 B/scene above the LATE rule arm and 10290 B/scene below IMMEDIATE",
+   "the 13-target loss is therefore a move from the 183-task regime to the 170-task regime, not a partial degradation inside one regime"
+  ],
+  "caution": "ALWAYS_HOLD billing 0 B is a rule arm with a different action space, not a cost-optimal learned policy; equating R73 with ALWAYS_HOLD is a descriptive coincidence on this block only"
+ },
+ "per_seed_training_chain_eligibility": {
+  "seeds": {
+   "11": {
+    "seed": 11,
+    "batch_records": 32,
+    "chain_contiguous_0_to_31": true,
+    "batch0_parameters_before_equals_registered_init": true,
+    "registered_init_param_sha256": "6f6581cff959dc027dfe5e771d963ef4b27b5a2f9d6847bf3d1bc6328c5de32f",
+    "batch31_parameters_after_equals_eval_model": true,
+    "eval_param_sha256": "186f35babf8a04b4dfd8abb0f9aba6b92654b4467aeef283dad516b07efc6398",
+    "episodes_done_after_final": 128,
+    "optimizer_steps_after_final": 296,
+    "lambda_start": 1.0,
+    "lambda_final": 2.625,
+    "actor_objective": "pure-cost/1",
+    "problems": [],
+    "first_batch_gate": "passed",
+    "init_file_sha256": "fc25ead19bce38d00ae3bf619971ab717084711bdd2b5eb0431d1dda720a952f",
+    "ep128_file_sha256": "0f9319df29c1e8c08f5083b6805a7f3662e28a2fb378a329e108c8028165b493"
+   },
+   "22": {
+    "seed": 22,
+    "batch_records": 32,
+    "chain_contiguous_0_to_31": true,
+    "batch0_parameters_before_equals_registered_init": true,
+    "registered_init_param_sha256": "29dbecdb9eaeae5ba346d8a68d03a13ca4ebb56680e28b4fff288032acfd1aa9",
+    "batch31_parameters_after_equals_eval_model": true,
+    "eval_param_sha256": "1a17020464d78cbd9c364a30ab13184b4a5c8849878538064225ebdaa3031888",
+    "episodes_done_after_final": 128,
+    "optimizer_steps_after_final": 288,
+    "lambda_start": 1.0,
+    "lambda_final": 3.0,
+    "actor_objective": "pure-cost/1",
+    "problems": [],
+    "first_batch_gate": "passed",
+    "init_file_sha256": "d95b9a27d5c28c8cd0b80c63b3539c78763bbaf53b79734a522e8e5a59cd8f81",
+    "ep128_file_sha256": "f88d134dc8017c18193e4b04227296eabef2f1ee66f269fb11661a3052c62d11"
+   },
+   "33": {
+    "seed": 33,
+    "batch_records": 32,
+    "chain_contiguous_0_to_31": true,
+    "batch0_parameters_before_equals_registered_init": true,
+    "registered_init_param_sha256": "3685f4aa30367276e2cc4f9cb6cad23773350fa084476cd249ae1f11be62f0ca",
+    "batch31_parameters_after_equals_eval_model": true,
+    "eval_param_sha256": "c09c0b966de02a0f7114d70f0120480428f4ea007218049bbf081140963c5319",
+    "episodes_done_after_final": 128,
+    "optimizer_steps_after_final": 308,
+    "lambda_start": 1.0,
+    "lambda_final": 3.125,
+    "actor_objective": "pure-cost/1",
+    "problems": [],
+    "first_batch_gate": "passed",
+    "init_file_sha256": "27baa262443a5ca6c6fb15bd60e0b294f6313324fe84cf386a2ac24377a874a9",
+    "ep128_file_sha256": "91a7925f6a86494d5e07a57d5f9bcb1fac2720a0bf495b806c05e43b95ffae69"
+   }
+  },
+  "verified_for_all_three_seeds": [
+   "the INIT of every seed is the frozen R71 calibrated INIT, model-only (init file sha256 matches ROUND73_FREEZE.json)",
+   "batch 0 parameters_before equals the registered INIT parameter digest",
+   "the before/after parameter chain is contiguous across all 32 committed batch records",
+   "batch 31 parameters_after equals the parameter digest of the ep128 model that was actually evaluated",
+   "episodes_done_after_final = 128 for every seed",
+   "the actor objective is pure-cost/1 on the live path (first-batch gate check actor_advantage_is_minus_a_cost)",
+   "lambda starts at 1.0 and is updated and reported"
+  ],
+  "optimizer_steps_sum_across_seeds": 892,
+  "real_ppo_journal": {
+   "path": "raw/runtime/ppo_update_calls.jsonl",
+   "lines": 96,
+   "optimizer_steps_sum": 892,
+   "sha256": "616b20f55a6ccab5123973d01c3e7390ac61e6fc8c491e04d1eed1762edcbf65"
+  },
+  "real_optimizer_journal": {
+   "path": "raw/runtime/optimizer_step_calls.jsonl",
+   "lines": 892,
+   "sha256": "769f3a57d228bbdf5d6c1badf153cde0ea60c70c4d1332f4698192fbca678236"
+  },
+  "journal_matches_chain": true,
+  "checkpoint_writes_journal": {
+   "path": "raw/runtime/checkpoint_writes.jsonl",
+   "bytes": 0,
+   "lines": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "note": "the checkpoint-write journal is EMPTY although 201 checkpoint files exist under raw/checkpoints (67 per seed). The write events are evidenced by the files themselves and by the parameter chain, but NOT by this journal; the journal is a bookkeeping gap, not evidence of zero writes"
+  },
+  "checkpoint_files_on_disk": {
+   "total_pt_files": 204,
+   "under_raw_checkpoints": 201,
+   "per_seed": {
+    "init": 1,
+    "final": 1,
+    "ep128": 1,
+    "before_b": 32,
+    "after_b": 32
+   },
+   "synthetic_pt_files_outside_checkpoints": 3,
+   "synthetic_pt_all_under_synthetic_test_fixtures": true,
+   "ep128_equals_after_b31_equals_final_on_disk": true,
+   "file_level_after_b0_differs_from_before_b1": true,
+   "file_level_note": "after_b0 and before_b1 differ as FILE BYTES (the payload carries batch metadata), while the parameter-level chain is verified contiguous by the batch records; re-deriving the parameter equality would need a torch load, which this close-out does not perform"
+  },
+  "qualification_budget_compliance": false,
+  "qualification_ruling": "the decision-end ruled the synthetic optimizer-step cap is denominated in physical optimizer.step calls, so run 32 (the real-ledger gate run) and the 272 archived scratch steps are NOT retroactively approved. The three trained models and their results are not discarded on that basis; the non-compliance is recorded, the remaining 6 cells are not resumed and no new quota is granted"
+ },
+ "held_actions": [
+  "the 6 remaining planned cells are NOT resumed: s33 sampled scenes 1800029 (interrupted, slot 574), 1800030 and 1800031, plus the 3 focal scene-1700027 cells",
+  "--phase stats is NOT run; no bootstrap, no paired interval, no overall verdict",
+  "no new claim, slot, permit or environment construction is created",
+  "no model is loaded, no forward/backward, no optimizer step, no PPO replay, no RNG restore, no checkpoint write",
+  "ROUND73_LEDGER.json, ROUND73_MACHINE_VERDICT.json and ROUND73_FREEZE.json are NOT rewritten; they stay visibly stale",
+  "no re-tuning, no extra training, no seed selection, no checkpoint selection, no re-run for performance"
+ ],
+ "conclusions": {
+  "may_be_kept": [
+   "the pure-cost actor objective (A = -A_cost) was live on the real training path for all 384 episodes: the first-batch gate of every seed records actor_advantage_is_minus_a_cost and actor_objective pure-cost/1",
+   "the three ep128 models come from a verified chain: frozen R71 INIT -> 32 contiguous committed batches -> 128 episodes -> the exact model that was evaluated",
+   "on the 32-scene development block, greedy, the intervention moved the policy onto the no-report regime: on-time 183 -> 170 (-13) and billed bytes 4066.5 -> 168.5625 B/scene (-3897.9375), with 21 scenes cheaper, 11 equal and 0 dearer",
+   "the task loss is fully mechanistically explained: every one of the 13 lost targets per seed was a LATE first report that R71 SENT and R73 SKIPPED; the early path is bit-identical (2 SEND / 132 SKIP in both arms)",
+   "the three seeds produce identical per-scene results in both arms, so they do not provide independent replication on this block"
+  ],
+  "must_be_deferred": [
+   "any claim that the synthetic optimizer-step cap was respected: it was charged in PPO-update-call units, not the physical optimizer.step units the guard and licence declare",
+   "any claim that qualification budget compliance holds: run 32 and the 272 archived scratch steps are not approved",
+   "the sampled-mode reading: 3 of 96 sampled cells have no result (s33 scenes 1800029/1800030/1800031), so the sampled arm is incomplete and is not reported as a paired comparison",
+   "the 3 focal scene-1700027 cells: never claimed, no result",
+   "any statistical inference: the stats phase never ran, so there is no interval, no significance statement and no non-inferiority claim",
+   "any generalisation, deployment or production claim",
+   "any attribution of the -13 task change to the actor objective alone rather than to the whole R73 configuration delta"
+  ]
+ },
+ "zero_side_effect_counts": {
+  "scope": "counts for THIS read-only close-out only",
+  "environment_constructions": 0,
+  "environment_runs": 0,
+  "simulation_steps": 0,
+  "model_loads": 0,
+  "cpu_forwards": 0,
+  "backward_passes": 0,
+  "real_optimizer_steps": 0,
+  "synthetic_optimizer_steps": 0,
+  "ppo_replays": 0,
+  "rng_restores": 0,
+  "checkpoint_writes": 0,
+  "new_claims": 0,
+  "new_slots": 0,
+  "new_permits": 0,
+  "tests_run": 0,
+  "processes_started_for_the_experiment": 0,
+  "files_written_inside_the_round_directory": [
+   "ROUND73_READONLY_CLOSEOUT.json",
+   "ROUND73_READONLY_CLOSEOUT.md"
+  ],
+  "originals_modified": 0,
+  "originals_deleted": 0,
+  "note": "only stdlib JSON/text parsing and sha256 hashing of existing files was performed; no torch import, no model file was opened as a model, no ledger or journal was written"
+ },
+ "key_originals_and_hashes": {
+  "protected_round46_files": {
+   "ROUND46_CURRENT_TASK.json": {
+    "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "expected": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "match": true
+   },
+   "ROUND46_R2_V6_STOP_STATE.json": {
+    "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "expected": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "match": true
+   },
+   "modified_or_staged": false
+  },
+  "freeze_and_licence": {
+   "ROUND73_FREEZE.json": "1cd83bc88f0ffbc74cc6d9c9f40416f5a0b7437680bff2969dfff73c69fc78b4",
+   "ROUND73_LICENCE.json": "a800f5840d4990e3f0e79380ff227c274aa1cd6a2900f72ec9c104150b9776de",
+   "ROUND73_EXECUTION_BASIS.md": "0478ae16940cfdbaf34da7948d77b3d33bc7cbfa53f0b6fed59d7a93b6c536e1"
+  },
+  "init_checkpoints": {
+   "s11": "fc25ead19bce38d00ae3bf619971ab717084711bdd2b5eb0431d1dda720a952f",
+   "s22": "d95b9a27d5c28c8cd0b80c63b3539c78763bbaf53b79734a522e8e5a59cd8f81",
+   "s33": "27baa262443a5ca6c6fb15bd60e0b294f6313324fe84cf386a2ac24377a874a9"
+  },
+  "ep128_checkpoints": {
+   "s11": "0f9319df29c1e8c08f5083b6805a7f3662e28a2fb378a329e108c8028165b493",
+   "s22": "f88d134dc8017c18193e4b04227296eabef2f1ee66f269fb11661a3052c62d11",
+   "s33": "91a7925f6a86494d5e07a57d5f9bcb1fac2720a0bf495b806c05e43b95ffae69"
+  },
+  "journals": {
+   "raw/runtime/ppo_update_calls.jsonl": "616b20f55a6ccab5123973d01c3e7390ac61e6fc8c491e04d1eed1762edcbf65",
+   "raw/runtime/optimizer_step_calls.jsonl": "769f3a57d228bbdf5d6c1badf153cde0ea60c70c4d1332f4698192fbca678236",
+   "raw/runtime/r73_forward_ledger.json": "2f90a35dc89b22a4fb7dc37551f26046c0f9f5913257eae61ef3730a289aa176",
+   "raw/runtime/checkpoint_writes.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "synthetic_gate_material": {
+   "diverted_archive": "55a95a1c084fb0a98178beae340f9a6dac714d10e1d2dfe3839358df67821d93",
+   "diverted_archive_debug_scratch_copy": "0418ee705fdf5b8dc07c28649ab07d0f376c5d3affdd3d28c1e0edf0eedd8ccc",
+   "reconstructed_receipt": "cb43969313607a9ffa2ed0f1033e579ef72eae080d05224d14db66b829889e67",
+   "preserved_scratch_receipt": "972cb920cfcfe0ff68b00c2c5f6205db75fe2d2f505b58a59a30b091722ee273",
+   "durable_synthetic_guard": "0bbd16f2f187d0349a2a0049c696946c42a27af2ec47ad6058d17f8c4402e766"
+  },
+  "git": {
+   "branch": "exp/round73-pure-cost-actor-ablation",
+   "head_at_this_closeout": "da0b1e0ae6d87439b674f902cd11e60a82802ae3",
+   "base_head": "00a7a5151739ac88f04ad1defa28ecda2d8bcdda",
+   "r71_science_start": "fe53d476efb56baaae194d68d7f749a546b14389",
+   "pushed": false,
+   "merged": false,
+   "deployed": false
+  }
+ },
+ "frozen_module_identity_across_arms": {
+  "claim_under_test": "the early path (frozen trunk + early head) is untouched by the R73 intervention",
+  "evidence_type": "sha256 of the frozen module set recorded by each round own first-batch gate",
+  "per_seed": {
+   "11": {
+    "r71_frozen_sha256": "fe9c0082a95a2744af067a14dceec44c0beb14933adacde1458529978dac3551",
+    "r73_frozen_sha256": "fe9c0082a95a2744af067a14dceec44c0beb14933adacde1458529978dac3551",
+    "match": true
+   },
+   "22": {
+    "r71_frozen_sha256": "b8a59378c2ffeb122bf8707677a0d469d23c8071cb9a952956d5dbff00d358aa",
+    "r73_frozen_sha256": "b8a59378c2ffeb122bf8707677a0d469d23c8071cb9a952956d5dbff00d358aa",
+    "match": true
+   },
+   "33": {
+    "r71_frozen_sha256": "568bea7923efdd746f4a86bbdf2137b1b02f7180940fb935fea3af7e791b7384",
+    "r73_frozen_sha256": "568bea7923efdd746f4a86bbdf2137b1b02f7180940fb935fea3af7e791b7384",
+    "match": true
+   }
+  },
+  "observed_early_first_reports_identical_in_both_arms": true,
+  "observed_early_send_skip": {
+   "r71": {
+    "early_send": 2,
+    "early_skip": 132
+   },
+   "r73": {
+    "early_send": 2,
+    "early_skip": 132
+   }
+  },
+  "note": "the frozen-module digests match per seed across the two arms and the measured early first-report behaviour is identical (2 SEND / 132 SKIP); together these support that the early path is unchanged, but they do not prove that no gradient ever reached a trainable module through the early head",
+  "all_three_seeds_match": true
+ }
+}
