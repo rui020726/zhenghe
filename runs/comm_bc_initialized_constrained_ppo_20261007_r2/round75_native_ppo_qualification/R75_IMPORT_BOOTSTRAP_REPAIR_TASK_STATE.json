@@ -100,4 +100,8 @@
       ],
       "honored": "the goal was read first and was null, no goal was created or closed, all existing changes were kept, the close-out was completed on top of them, and the old receipt history was not re-opened"
     }
+,
+    "close_out_development_failures": [
+      "one close-out scripting defect inside the final close-out turn: the block() helper that re-indents a json.dumps fragment joined only lines[1:] and dropped the key line, so the appended verdict lost its \"goal_audit\": { opener and failed json.loads; the verdict had already been written once in that broken state and was restored byte-identical to its pre-edit sha256 b530dd4a12a363c85bdedb354901686292327e1190765953e7ceb4fe5f00d0c9 before the corrected helper was re-applied and the verdict, task-state and manifest were rewritten and re-validated; the broken intermediate state was never committed and never executed"
+    ]
 }

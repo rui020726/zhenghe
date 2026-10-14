@@ -111,7 +111,8 @@
   "development_failures_disclosed": [
     "a self-inflicted placeholder digest in EXPECT_FIRST_ATTEMPT_FILES, together with the changed r75_frozen digest, made the first real prepare refuse (exit 3); pure development failure, no child, no consumption; corrected against the digests read from disk",
     "an early guard test installed its record_wrapper_failure spy before executing the module head, so the real definition overwrote it and a fake-child wrapper exception wrote raw/s1_revised/r75_s1_outer_v2_wrapper_failure.json (request id R75_TEST_GUARD_ID); the file is kept and registered, and the test now installs the spy after the head",
-    "one PowerShell bulk replacement placed the new verification function after its module-level call; caught by a line-number re-read and rebuilt in the same working sequence; the intermediate state was never committed and never executed"
+    "one PowerShell bulk replacement placed the new verification function after its module-level call; caught by a line-number re-read and rebuilt in the same working sequence; the intermediate state was never committed and never executed",
+    "one close-out scripting defect inside the final close-out turn: the block() helper that re-indents a json.dumps fragment joined only lines[1:] and dropped the key line, so the appended verdict lost its \"goal_audit\": { opener and failed json.loads; the verdict had already been written once in that broken state and was restored byte-identical to its pre-edit sha256 b530dd4a12a363c85bdedb354901686292327e1190765953e7ceb4fe5f00d0c9 before the corrected helper was re-applied and the verdict, task-state and manifest were rewritten and re-validated; the broken intermediate state was never committed and never executed"
   ],
   "zero_environment_this_round": {
     "torch_imported": false,

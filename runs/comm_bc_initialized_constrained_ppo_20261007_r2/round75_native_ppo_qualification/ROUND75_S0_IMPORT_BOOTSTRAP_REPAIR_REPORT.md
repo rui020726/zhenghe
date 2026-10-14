@@ -166,3 +166,9 @@
 ### 10.5 本地提交
 
 显式点名 `git add -f` 后单次本地提交。最终 HEAD/parent 以提交后 `git rev-parse` 实读为准，本文件不内嵌自称。不 push、不 merge、不 deploy。
+
+### 10.6 本收口回合自身的一处开发失败（如实登记）
+
+写 verdict/task-state/manifest 时，`block()` 辅助函数只拼接了 `lines[1:]`，丢掉了首行键名，导致追加进去的 verdict 丢失 `"goal_audit": {` 开头行、`json.loads` 失败。该次 verdict 已被写出为损坏状态，随后按**修改前 SHA256 `b530dd4a12a363c85bdedb354901686292327e1190765953e7ceb4fe5f00d0c9` 逐字节恢复**，再以修正后的函数重写 verdict、task-state 与 manifest 并重新做 JSON 校验。损坏中间态从未提交、从未执行。同一回合还发生一次"文件尾部无换行符"导致的断言失败（`assert v.endswith("}\n")`），只读复核尾部字节后改为按实际尾部形态切片，未产生任何写入。
+
+上述失败不消耗任何额度：0 torch、0 模型、0 optimizer/PPO、0 环境、0 checkpoint 写、0 账本事件、0 生产 runner 启动。
