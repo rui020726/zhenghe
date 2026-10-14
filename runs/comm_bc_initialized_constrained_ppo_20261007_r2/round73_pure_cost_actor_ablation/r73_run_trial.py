@@ -147,22 +147,146 @@ class R73Ledger:
         return ledger
 
 
-def phase_gates(raw_root: Path) -> dict:
-    """The zero-environment gate suite (pure-cost objective + binding + init identity)."""
+# The gate suites.  The first two are pure computation (no guard charge at all); the third
+# drives the LIVE trainer.ppo_update path and therefore spends the round's whole synthetic
+# optimizer-step budget, which is why it runs at most once against the real ledgers.
+ZERO_ENV_SUITES = ("test_r73_pure_cost_gates.py", "test_r73_binding_gates.py")
+QUALIFICATION_SUITE = "test_r73_qualification_gates.py"
+QUALIFICATION_RUN_RECORD = ("runtime/synthetic_gates/"
+                            "R73_QUALIFICATION_SUITE_RUN.json")
+
+
+def _run_gate_script(script: str) -> dict:
+    """Run one gate suite in its own interpreter and capture its verdict tail."""
     import subprocess
+    proc = subprocess.run([sys.executable, str(HERE / script)], capture_output=True, text=True)
+    combined = ((proc.stdout or "") + (proc.stderr or "")).strip().splitlines()
+    tail = [line for line in combined
+            if line.startswith(("OK", "FAILED", "Ran ", "ERROR"))
+            or "module loaded" in line][-4:]
+    return {"returncode": int(proc.returncode), "tail": tail,
+            "stderr_tail": (proc.stderr or "")[-2000:]}
+
+
+def _qualification_run_record(raw_root: Path) -> Path:
+    return Path(raw_root) / QUALIFICATION_RUN_RECORD
+
+
+def _qualification_prior_run(raw_root: Path) -> dict:
+    """Whether the REAL-path qualification suite already ran green on THIS raw root.
+
+    That suite charges the round's ENTIRE 8-charge synthetic optimizer-step budget: one charge
+    per live ``trainer.ppo_update`` call, booked BEFORE the call and never refunded.  It may
+    therefore run against the real persisted ledgers exactly once.  Re-running it is not merely
+    wasteful - the guard refuses the first charge and the gate would fail on a budget that is
+    already spent.  The durable proof is the run record this phase writes after a green run,
+    cross-checked against the persisted guard state; nothing here is hard-coded.
+    """
+    import r73_trial_gates as gates
+    record_path = _qualification_run_record(raw_root)
+    synth = gates.synthetic_guard(raw_root)
+    guard = {"synthetic_optimizer_steps_used": int(synth.used()),
+             "synthetic_optimizer_steps_cap": int(synth.cap)}
+    if not record_path.is_file():
+        return {"already_run": False,
+                "reason": "no durable qualification run record for this raw root yet",
+                "guard": guard}
+    record = _read_json(record_path)
+    if int(record.get("returncode", -1)) != 0:
+        return {"already_run": False,
+                "reason": "the recorded qualification run did not pass",
+                "record": record, "guard": guard}
+    if int(synth.used()) < int(synth.cap):
+        return {"already_run": False,
+                "reason": (f"the persisted synthetic guard reads {synth.used()} of "
+                           f"{synth.cap} charges, so the recorded run is not the run that "
+                           f"spent the budget"),
+                "record": record, "guard": guard}
+    return {"already_run": True,
+            "reason": ("a green qualification run is durably recorded and this round's "
+                       "synthetic optimizer-step budget is spent, so the suite is reused "
+                       "rather than re-run"),
+            "record": record, "guard": guard}
+
+
+def _persisted_gate_consumption(raw_root: Path) -> dict:
+    """Read this round's OWN persisted ledgers.  No number here is hard-filled."""
+    import r73_trial_gates as gates
+    forward = gates.forward_ledger(raw_root)
+    synth = gates.synthetic_guard(raw_root)
+    counts = R73Ledger(raw_root).counts()
+    runtime = Path(raw_root) / "runtime"
+
+    def _journal_lines(name: str) -> int:
+        path = runtime / name
+        if not path.is_file():
+            return 0
+        return len([ln for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()])
+
+    return {
+        "environment_constructions": int(counts["actual_environment_constructions"]),
+        "environment_constructions_note": ("normal + reserve launch claims booked under THIS "
+                                           "round's claim root plus the historical non-plan "
+                                           "probe, read from the claim files themselves"),
+        "model_forwards": int(forward.rows),
+        "offline_trunk_forward_rows": {"rows": int(forward.rows), "calls": int(forward.calls),
+                                       "joint_rows": int(forward.joint_rows),
+                                       "cap": int(forward.cap),
+                                       "remaining": int(forward.remaining())},
+        "optimizer_steps": int(synth.used()),
+        "optimizer_steps_note": ("synthetic gate steps only; a real training optimizer step "
+                                 "is never charged to this guard"),
+        "ppo_updates": _journal_lines("ppo_update_calls.jsonl"),
+        "ppo_updates_note": ("committed real PPO update calls appended to this round's PPO "
+                             "journal; synthetic gate lines are quarantined out of it"),
+        "checkpoint_writes": _journal_lines("checkpoint_writes.jsonl"),
+    }
+
+
+def phase_gates(raw_root: Path) -> dict:
+    """The zero-environment gate suite: objective, binding, and the REAL-path qualification.
+
+    The qualification suite is idempotent against the real ledgers: once it has run green and
+    spent the round's synthetic optimizer-step budget, a later ``--phase gates`` reuses that
+    durable record instead of re-charging a budget that is already gone.
+    """
     out = {}
-    for script in ("test_r73_pure_cost_gates.py", "test_r73_binding_gates.py"):
-        proc = subprocess.run([sys.executable, str(HERE / script)], capture_output=True, text=True)
-        combined = ((proc.stdout or "") + (proc.stderr or "")).strip().splitlines()
-        tail = [line for line in combined if line.startswith(("OK", "FAILED", "Ran ", "ERROR"))
-                or "module loaded" in line][-4:]
-        out[script] = {"returncode": proc.returncode, "tail": tail}
-        if proc.returncode != 0:
-            raise RuntimeError(f"ROUND73 gate {script} failed: {proc.stderr[-2000:]}")
-    receipt = {"kind": "round73-prelaunch-gates/1", "task_id": TASK_ID,
-               "consumption": {"environment_constructions": 0, "model_forwards": 0,
-                               "optimizer_steps": 0, "ppo_updates": 0},
-               "suites": out, "status": "passed"}
+    for script in ZERO_ENV_SUITES:
+        result = _run_gate_script(script)
+        out[script] = {"returncode": result["returncode"], "tail": result["tail"]}
+        if result["returncode"] != 0:
+            raise RuntimeError(f"ROUND73 gate {script} failed: {result['stderr_tail']}")
+    prior = _qualification_prior_run(raw_root)
+    if prior["already_run"]:
+        out[QUALIFICATION_SUITE] = {
+            "returncode": 0,
+            "tail": ["reused the durable green qualification run; this round's synthetic "
+                     "optimizer-step budget is already spent"],
+            "reused_prior_run": True,
+            "prior_run": prior,
+        }
+    else:
+        result = _run_gate_script(QUALIFICATION_SUITE)
+        out[QUALIFICATION_SUITE] = {"returncode": result["returncode"],
+                                     "tail": result["tail"],
+                                     "reused_prior_run": False}
+        if result["returncode"] != 0:
+            raise RuntimeError(
+                f"ROUND73 gate {QUALIFICATION_SUITE} failed: {result['stderr_tail']}"
+                f" | persisted guard {prior['guard']} - charges are booked before execution "
+                f"and never refunded, so a failure here still spent them")
+        _write_json(_qualification_run_record(raw_root), {
+            "kind": "round73-qualification-suite-run/1", "task_id": TASK_ID,
+            "branch": BRANCH, "script": QUALIFICATION_SUITE,
+            "returncode": 0, "tail": result["tail"],
+            "consumption": _persisted_gate_consumption(raw_root)})
+        prior = _qualification_prior_run(raw_root)
+    receipt = {"kind": "round73-prelaunch-gates/1", "task_id": TASK_ID, "branch": BRANCH,
+               "run_id": trial.TRIAL_RUN_ID,
+               "training_version": ckpt.R73_TRAINING_VERSION,
+               "actor_objective": ckpt.R73_ACTOR_OBJECTIVE,
+               "consumption": _persisted_gate_consumption(raw_root),
+               "suites": out, "qualification": prior, "status": "passed"}
     _write_json(raw_root / "ROUND73_PRELAUNCH_GATES.json", receipt)
     print(json.dumps(receipt, indent=1))
     return receipt
