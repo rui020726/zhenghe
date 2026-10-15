@@ -17,21 +17,25 @@
     "physical_optimizer_step": {
       "used_normal": 5,
       "cap": 9,
-      "detail": "A1=1 critic-only + A2=4 native update0; A3=0"
+      "remaining": 4,
+      "detail": "A1=1 critic-only + A2=4 minibatch steps; A3=0"
     },
     "offline_trunk_target_row": {
       "used_normal": 840,
       "cap": 1680,
-      "detail": "70 trunk calls x 12 rows"
+      "remaining": 840,
+      "detail": "70 trunk calls (charged events), rows are the guard sum of per-call n; calls 1-4 n=4, 5-9 n=5, 10-19 n=4, ..., 67-70 n=168"
     },
     "joint_record": {
       "used_normal": 1,
-      "detail": "one batch-read; the A2 read"
+      "detail": "one batch-read (A2); 66 unique candidates exposed once; A3 never reached its batch-read so exposure is 66, not 132"
     },
     "environment_construction": 0,
     "controllers": 2,
     "optimizers": 2,
     "checkpoint_file_loads": 3,
+    "native_ppo_update_attempts": 1,
+    "optimizer_step_attempts": 5,
     "total_ledger": {
       "events": 88,
       "bytes": 19980,
@@ -81,5 +85,13 @@
     "merged": false,
     "deployed": false,
     "commit_scope": "explicit named local commit of report/verdict/manifest/task-state only; no weights, no raw runtime, no attempt-dir originals, no protected files"
+  },
+  "audit": {
+    "alignment_readings": "not durably recorded in the failure receipt or counters; the in-memory A2 alignment gate passed (0 failed/0 refused, all steps completed) but the value is missing",
+    "a2_terminal_state": "NOT durably persisted; only the pre-A2 A1 bundle exists on disk; no A2 full-state bundle; a future A3 comparison lacks the necessary durable original",
+    "a3_done": "2nd controller built, 2nd optimizer built, A1 bundle loaded from disk (3rd checkpoint load), restore_full_state entered",
+    "a3_not_done": "A3 native update (0 attempts), A3 optimizer steps (0), A3 trunk calls (0), A3 batch-read",
+    "rng_error_meaning": "only proves the verifier failed; does not assert the restored state is actually different or the same",
+    "outcome_used_normal_caveat": "the outcome's per_unit_last_known.used_normal=0 is a wrapper summary-reading defect; the guard JSONs and per-event n fields are authoritative"
   }
 }

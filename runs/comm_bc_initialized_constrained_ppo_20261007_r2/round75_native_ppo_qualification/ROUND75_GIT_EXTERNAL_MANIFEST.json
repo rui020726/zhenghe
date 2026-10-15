@@ -96,17 +96,17 @@
       },
       {
         "role": "canonical trainer",
-        "path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
+        "path": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
         "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
       },
       {
         "role": "canonical common",
-        "path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_common.py",
+        "path": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_common.py",
         "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a"
       },
       {
         "role": "canonical controller",
-        "path": "D:/code/\u6574\u5408/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_controller.py",
+        "path": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_controller.py",
         "sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1"
       },
       {
@@ -308,21 +308,90 @@
   },
   "committed_final_prep_revision": {
     "request_id": "R75_S0_GIT_FINALIZE_20261015",
-    "continues": ["R75_S0_FINAL_PREP_20261014", "R75_S0_DRIVER_CLOSEOUT_20261015"],
+    "continues": [
+      "R75_S0_FINAL_PREP_20261014",
+      "R75_S0_DRIVER_CLOSEOUT_20261015"
+    ],
     "parent_head": "c16ce9362f93993192cf9a1ec3330cba90d25f30",
     "parent_head_note": "read from git before this commit; the final HEAD is deliberately NOT written into this file (no self-hash, no claimed success) and is read from git after the commit",
     "final_content_identity": [
-      {"file": "r75_frozen.py", "sha256": "a4b556a687c3aff9650404d11149cb387879a4b4009c85502fc970d7bbe27996", "bytes": 32160, "lines": 536, "role": "native PPO update path; carries the two prior-session fixes (KL return key totals[kl] at :482; alignment_end phase split at :293/:294/:468), byte-verified, unchanged in the closeout round"},
-      {"file": "r75_s1_runner.py", "sha256": "d3f7e9a9a4c476ac13d3b14d57a135c45cc47ea6ac83ac69146338716914bc68", "bytes": 50219, "lines": 899, "role": "paid S1 driver after the seven seam-gap repairs (recursive _clone_value preserving container types, _optimizer_payload + real optimizer.load_state_dict, 14-field disk bundle, four-state comparator, _fixed_rng_triple, per-minibatch early/late + gradient observers, 13-item failure gate); lazy torch import inside the run path only; no-argument run prints the frozen plan and exits 0"},
-      {"file": "r75_s1_precheck.py", "sha256": "20a1b81fbe7bc8f9e3e6e6e546bcbb0316a96b48192e60f73b16c27a3dd071e9", "bytes": 20328, "lines": 368, "role": "pure-file zero-charge freeze precheck; fixed to resolve paths against the repo root and to take per_charge_cap 1024 from two verified sources (guard attribute + frozen contract), never compared to None; 68/68 exit 0 from repo root, the R75 dir and C:\\"},
-      {"file": "r75_guard.py", "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f", "bytes": 25100, "lines": 459, "role": "central resource guard; mechanism and source pin untouched"},
-      {"file": "r75_replay_adapter.py", "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2", "bytes": 6904, "lines": 144, "role": "qualified replay adapter; bytes pinned; CWD independence is provided by the callers resolving absolute paths"},
-      {"file": "ROUND75_S1_RUN_PLAN.json", "sha256": "34024113349cdb2f774b9d2751ec0e1f46800ae2fb5720470254432b16ae26c6", "bytes": 18109, "lines": 332, "role": "historical frozen data / budget / comparison contract; status PREPARED_NOT_AUTHORIZED_NOT_EXECUTED; byte-unchanged; its source_identity binds only the upstream canonical sources and r66_frozen, NOT the current driver"},
-      {"file": "test_r75_s0_driver_closeout.py", "sha256": "6edeb9cf4d74afca429b7cbe5c0875598c78933c6cde1a697952e1654f833e94", "bytes": 43572, "lines": 849, "role": "40 counterexample tests (pure stdlib + fakes): 40 OK exit 0 against the repaired runner; 4 failures + 30 errors exit 1 against the old runner; includes the betas tuple-type regression asserts at lines 405/407/412"},
-      {"file": "test_r75_s0_final_prep.py", "sha256": "3d721caa487ccef4b2714b01d49647b902031c7584ca4ce18132e1d7ecacbb35", "bytes": 16300, "lines": 344, "role": "final-prep counterexamples for the two r75_frozen.py defects (KL key, non-zero pre_meter), run in the prior session and reused as evidence, not re-run"},
-      {"file": "r75_s1_plan_gen_archived.py", "sha256": "ba884cb85322b535fcf71aa5a090b8fb8fc283fc271c7d1cd8f51be68789bfb", "bytes": 19784, "lines": 283, "role": "one-shot plan generator renamed for explicit archival; byte-identical before and after the rename"},
-      {"file": "ROUND75_S0_FINAL_PREP_REPORT.md", "sha256": "b85dec5a3f3c9bc40da56d15205c760f19d00f92118484048b0f5d9d6e54153d", "bytes": 14808, "lines": 135, "role": "closeout report including the section-9 errata of R75_S0_GIT_FINALIZE_20261015"},
-      {"file": "ROUND75_S0_FINAL_PREP_VERDICT.json", "sha256": "33b73490c4315cffa9802c4b2a65e629363e2084d495c7feff529de3239d762f", "bytes": 16842, "lines": 233, "role": "machine verdict including erratum_r75_s0_git_finalize_20261015"}
+      {
+        "file": "r75_frozen.py",
+        "sha256": "a4b556a687c3aff9650404d11149cb387879a4b4009c85502fc970d7bbe27996",
+        "bytes": 32160,
+        "lines": 536,
+        "role": "native PPO update path; carries the two prior-session fixes (KL return key totals[kl] at :482; alignment_end phase split at :293/:294/:468), byte-verified, unchanged in the closeout round"
+      },
+      {
+        "file": "r75_s1_runner.py",
+        "sha256": "d3f7e9a9a4c476ac13d3b14d57a135c45cc47ea6ac83ac69146338716914bc68",
+        "bytes": 50219,
+        "lines": 899,
+        "role": "paid S1 driver after the seven seam-gap repairs (recursive _clone_value preserving container types, _optimizer_payload + real optimizer.load_state_dict, 14-field disk bundle, four-state comparator, _fixed_rng_triple, per-minibatch early/late + gradient observers, 13-item failure gate); lazy torch import inside the run path only; no-argument run prints the frozen plan and exits 0"
+      },
+      {
+        "file": "r75_s1_precheck.py",
+        "sha256": "20a1b81fbe7bc8f9e3e6e6e546bcbb0316a96b48192e60f73b16c27a3dd071e9",
+        "bytes": 20328,
+        "lines": 368,
+        "role": "pure-file zero-charge freeze precheck; fixed to resolve paths against the repo root and to take per_charge_cap 1024 from two verified sources (guard attribute + frozen contract), never compared to None; 68/68 exit 0 from repo root, the R75 dir and C:\\"
+      },
+      {
+        "file": "r75_guard.py",
+        "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+        "bytes": 25100,
+        "lines": 459,
+        "role": "central resource guard; mechanism and source pin untouched"
+      },
+      {
+        "file": "r75_replay_adapter.py",
+        "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+        "bytes": 6904,
+        "lines": 144,
+        "role": "qualified replay adapter; bytes pinned; CWD independence is provided by the callers resolving absolute paths"
+      },
+      {
+        "file": "ROUND75_S1_RUN_PLAN.json",
+        "sha256": "34024113349cdb2f774b9d2751ec0e1f46800ae2fb5720470254432b16ae26c6",
+        "bytes": 18109,
+        "lines": 332,
+        "role": "historical frozen data / budget / comparison contract; status PREPARED_NOT_AUTHORIZED_NOT_EXECUTED; byte-unchanged; its source_identity binds only the upstream canonical sources and r66_frozen, NOT the current driver"
+      },
+      {
+        "file": "test_r75_s0_driver_closeout.py",
+        "sha256": "6edeb9cf4d74afca429b7cbe5c0875598c78933c6cde1a697952e1654f833e94",
+        "bytes": 43572,
+        "lines": 849,
+        "role": "40 counterexample tests (pure stdlib + fakes): 40 OK exit 0 against the repaired runner; 4 failures + 30 errors exit 1 against the old runner; includes the betas tuple-type regression asserts at lines 405/407/412"
+      },
+      {
+        "file": "test_r75_s0_final_prep.py",
+        "sha256": "3d721caa487ccef4b2714b01d49647b902031c7584ca4ce18132e1d7ecacbb35",
+        "bytes": 16300,
+        "lines": 344,
+        "role": "final-prep counterexamples for the two r75_frozen.py defects (KL key, non-zero pre_meter), run in the prior session and reused as evidence, not re-run"
+      },
+      {
+        "file": "r75_s1_plan_gen_archived.py",
+        "sha256": "ba884cb85322b535fcf71aa5a090b8fb8fc283fc271c7d1cd8f51be68789bfb",
+        "bytes": 19784,
+        "lines": 283,
+        "role": "one-shot plan generator renamed for explicit archival; byte-identical before and after the rename"
+      },
+      {
+        "file": "ROUND75_S0_FINAL_PREP_REPORT.md",
+        "sha256": "b85dec5a3f3c9bc40da56d15205c760f19d00f92118484048b0f5d9d6e54153d",
+        "bytes": 14808,
+        "lines": 135,
+        "role": "closeout report including the section-9 errata of R75_S0_GIT_FINALIZE_20261015"
+      },
+      {
+        "file": "ROUND75_S0_FINAL_PREP_VERDICT.json",
+        "sha256": "33b73490c4315cffa9802c4b2a65e629363e2084d495c7feff529de3239d762f",
+        "bytes": 16842,
+        "lines": 233,
+        "role": "machine verdict including erratum_r75_s0_git_finalize_20261015"
+      }
     ],
     "test_evidence_reused_not_rerun": {
       "driver_closeout_suite": "40 OK / exit 0 on the repaired runner; 4 failures + 30 errors / exit 1 on the old runner (old runner SHA d68153da...)",
@@ -331,8 +400,14 @@
       "note": "these results support pure preparation only; they do not prove real Adam, disk restore, PPO eligibility or any policy effect; the old 7 / historical 31 / 20 suites were not re-run"
     },
     "old_originals_missing": {
-      "pre_fix_runner": {"sha256": "d68153dacb5b1023688ca67bb253a5410d0847e3396b13e76cda80ec8bdc3bd5", "status": "MISSING on disk and in every git ref (git log --all empty for the path; the c16ce936 tree lacks it; recursive hash sweep found no copy); evidence layer = recorded SHA + prior-session tool record"},
-      "pre_fix_precheck": {"sha256": null, "status": "MISSING on disk and in every git ref; its then-SHA was never recorded (unknown)"},
+      "pre_fix_runner": {
+        "sha256": "d68153dacb5b1023688ca67bb253a5410d0847e3396b13e76cda80ec8bdc3bd5",
+        "status": "MISSING on disk and in every git ref (git log --all empty for the path; the c16ce936 tree lacks it; recursive hash sweep found no copy); evidence layer = recorded SHA + prior-session tool record"
+      },
+      "pre_fix_precheck": {
+        "sha256": null,
+        "status": "MISSING on disk and in every git ref; its then-SHA was never recorded (unknown)"
+      },
       "rule": "nothing was recreated; no rebuilt copy is passed off as an original"
     },
     "plan_scope_note": "ROUND75_S1_RUN_PLAN.json stays byte-unchanged as a frozen data/budget/comparison contract; the current driver/precheck/native binding lives in final_content_identity above and in this commit, not inside the plan",
@@ -357,29 +432,116 @@
   },
   "committed_restore_failfast_revision": {
     "request_id": "R75_S0_RESTORE_FAILFAST_20261015",
-    "continues": ["R75_S0_FINAL_PREP_20261014", "R75_S0_DRIVER_CLOSEOUT_20261015"],
+    "continues": [
+      "R75_S0_FINAL_PREP_20261014",
+      "R75_S0_DRIVER_CLOSEOUT_20261015"
+    ],
     "parent_head": "7eff4a4218f275e2090ec2d9f42604b42bb6e7e9",
     "parent_head_note": "read from git before this commit; the delivered HEAD is deliberately NOT written into this file (no self-hash, no claimed success) and is read from git after the commit",
     "content_identity": [
-      {"file": "r75_s1_runner.py", "sha256": "2a3586f17ba36ffbde9686d06c9278a0699c5c936fb94d12bede2b6a5f216b91", "bytes": 82497, "lines": 1439, "role": "paid S1 driver: adds the three fail-fast gates (_gate_a1 / _gate_loaded_bundle / _gate_a3_start), the durable failure-receipt writer under raw/s1/ (append + fsync), the real-entry counters with explicit units beside conservative bounds, and the phase registration; one terminal step record per attempt"},
-      {"file": "test_r75_s0_driver_closeout.py", "sha256": "c6eeffaca04e6778e535ec47bf8ed70df6d5b82ed5755f4c3f906b2e2698ab28", "bytes": 45340, "lines": 876, "role": "40 counterexamples; 40 OK exit 0; five affected selectors rewritten to the refuse-before-delegation contract and disclosed as affected; normalized to pure LF before commit (2 stray CRLF removed, bytes 45342 -> 45340, content otherwise identical)"},
-      {"file": "test_r75_s0_restore_failfast.py", "sha256": "de7d0c5320e99206680cd005009e6b785e24a86c244a69fdef5fbc9ac051386e", "bytes": 30310, "lines": 568, "role": "NEW this round: 34 counterexamples for the complete-bundle bridge, the payload-derived RNG expectation, the permit refusal contract, the three fail-fast gates with source-order proof, and the durable receipt contents"},
-      {"file": "R75_RESTORE_FAILFAST_TASK_STATE.json", "sha256": "6bc01b2a3c50c79cf9b5a58243e09dc0db444ab8613b4c42568a249c55883190", "bytes": 6101, "lines": 120, "role": "continuation note only: request id, actual HEAD, zero-NN permission, completed and remaining items, evidence paths; changes no ledger and is not an experiment authorization; carries the appended post_commit_correction recording the delivered HEAD cc0d3a29089bc361890e20520ad9800906184a24 and the pure-LF normalization, the original fields being preserved"},
-      {"file": "ROUND75_S0_RESTORE_FAILFAST_REPORT.md", "sha256": "84475c141411e46ae800dee73eb7771b161b7ec2bf49b7faa9231c971b0b2b78", "bytes": 11924, "lines": 111, "role": "closeout report: the three implemented items, the two real driver defects found and fixed, the affected old selectors, the disclosed development failures, the comparison-method statement and the unresolved boundaries"},
-      {"file": "ROUND75_S0_RESTORE_FAILFAST_VERDICT.json", "sha256": "f428e77b327f2a7c40db48de95f41ef0be511eb48dd594439b38c51fc69f522c", "bytes": 10984, "lines": 214, "role": "machine verdict for this revision"}
+      {
+        "file": "r75_s1_runner.py",
+        "sha256": "2a3586f17ba36ffbde9686d06c9278a0699c5c936fb94d12bede2b6a5f216b91",
+        "bytes": 82497,
+        "lines": 1439,
+        "role": "paid S1 driver: adds the three fail-fast gates (_gate_a1 / _gate_loaded_bundle / _gate_a3_start), the durable failure-receipt writer under raw/s1/ (append + fsync), the real-entry counters with explicit units beside conservative bounds, and the phase registration; one terminal step record per attempt"
+      },
+      {
+        "file": "test_r75_s0_driver_closeout.py",
+        "sha256": "c6eeffaca04e6778e535ec47bf8ed70df6d5b82ed5755f4c3f906b2e2698ab28",
+        "bytes": 45340,
+        "lines": 876,
+        "role": "40 counterexamples; 40 OK exit 0; five affected selectors rewritten to the refuse-before-delegation contract and disclosed as affected; normalized to pure LF before commit (2 stray CRLF removed, bytes 45342 -> 45340, content otherwise identical)"
+      },
+      {
+        "file": "test_r75_s0_restore_failfast.py",
+        "sha256": "de7d0c5320e99206680cd005009e6b785e24a86c244a69fdef5fbc9ac051386e",
+        "bytes": 30310,
+        "lines": 568,
+        "role": "NEW this round: 34 counterexamples for the complete-bundle bridge, the payload-derived RNG expectation, the permit refusal contract, the three fail-fast gates with source-order proof, and the durable receipt contents"
+      },
+      {
+        "file": "R75_RESTORE_FAILFAST_TASK_STATE.json",
+        "sha256": "6bc01b2a3c50c79cf9b5a58243e09dc0db444ab8613b4c42568a249c55883190",
+        "bytes": 6101,
+        "lines": 120,
+        "role": "continuation note only: request id, actual HEAD, zero-NN permission, completed and remaining items, evidence paths; changes no ledger and is not an experiment authorization; carries the appended post_commit_correction recording the delivered HEAD cc0d3a29089bc361890e20520ad9800906184a24 and the pure-LF normalization, the original fields being preserved"
+      },
+      {
+        "file": "ROUND75_S0_RESTORE_FAILFAST_REPORT.md",
+        "sha256": "84475c141411e46ae800dee73eb7771b161b7ec2bf49b7faa9231c971b0b2b78",
+        "bytes": 11924,
+        "lines": 111,
+        "role": "closeout report: the three implemented items, the two real driver defects found and fixed, the affected old selectors, the disclosed development failures, the comparison-method statement and the unresolved boundaries"
+      },
+      {
+        "file": "ROUND75_S0_RESTORE_FAILFAST_VERDICT.json",
+        "sha256": "f428e77b327f2a7c40db48de95f41ef0be511eb48dd594439b38c51fc69f522c",
+        "bytes": 10984,
+        "lines": 214,
+        "role": "machine verdict for this revision"
+      }
     ],
     "byte_unchanged_reverified_this_round": [
-      {"file": "r75_frozen.py", "sha256": "a4b556a687c3aff9650404d11149cb387879a4b4009c85502fc970d7bbe27996", "bytes": 32160, "lines": 536, "status": "unchanged; carries the two prior-session fixes (KL return key totals[kl] at :482; alignment_end phase split at :293/:294/:468)"},
-      {"file": "r75_guard.py", "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f", "bytes": 25100, "lines": 459, "status": "unchanged; mechanism and source pin untouched"},
-      {"file": "r75_s1_precheck.py", "sha256": "20a1b81fbe7bc8f9e3e6e6e546bcbb0316a96b48192e60f73b16c27a3dd071e9", "bytes": 20328, "lines": 368, "status": "unchanged; 68/68 exit 0 re-run this round against the revised runner"},
-      {"file": "r75_replay_adapter.py", "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2", "bytes": 6904, "lines": 144, "status": "unchanged; bytes pinned"},
-      {"file": "ROUND75_S1_RUN_PLAN.json", "sha256": "34024113349cdb2f774b9d2751ec0e1f46800ae2fb5720470254432b16ae26c6", "bytes": 18109, "lines": 332, "status": "unchanged; the frozen data / budget / comparison contract is not edited by a driver revision"},
-      {"file": "test_r75_s0_final_prep.py", "sha256": "3d721caa487ccef4b2714b01d49647b902031c7584ca4ce18132e1d7ecacbb35", "bytes": 16300, "lines": 344, "status": "unchanged; prior-session evidence reused, not re-run"},
-      {"file": "r75_s1_plan_gen_archived.py", "sha256": "ba884cb85322b535fcfe71aa5a090b8fb8fc283fc271c7d1cd8f51be68789bfb", "bytes": 19784, "lines": 283, "status": "unchanged; explicitly archived"}
+      {
+        "file": "r75_frozen.py",
+        "sha256": "a4b556a687c3aff9650404d11149cb387879a4b4009c85502fc970d7bbe27996",
+        "bytes": 32160,
+        "lines": 536,
+        "status": "unchanged; carries the two prior-session fixes (KL return key totals[kl] at :482; alignment_end phase split at :293/:294/:468)"
+      },
+      {
+        "file": "r75_guard.py",
+        "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+        "bytes": 25100,
+        "lines": 459,
+        "status": "unchanged; mechanism and source pin untouched"
+      },
+      {
+        "file": "r75_s1_precheck.py",
+        "sha256": "20a1b81fbe7bc8f9e3e6e6e546bcbb0316a96b48192e60f73b16c27a3dd071e9",
+        "bytes": 20328,
+        "lines": 368,
+        "status": "unchanged; 68/68 exit 0 re-run this round against the revised runner"
+      },
+      {
+        "file": "r75_replay_adapter.py",
+        "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+        "bytes": 6904,
+        "lines": 144,
+        "status": "unchanged; bytes pinned"
+      },
+      {
+        "file": "ROUND75_S1_RUN_PLAN.json",
+        "sha256": "34024113349cdb2f774b9d2751ec0e1f46800ae2fb5720470254432b16ae26c6",
+        "bytes": 18109,
+        "lines": 332,
+        "status": "unchanged; the frozen data / budget / comparison contract is not edited by a driver revision"
+      },
+      {
+        "file": "test_r75_s0_final_prep.py",
+        "sha256": "3d721caa487ccef4b2714b01d49647b902031c7584ca4ce18132e1d7ecacbb35",
+        "bytes": 16300,
+        "lines": 344,
+        "status": "unchanged; prior-session evidence reused, not re-run"
+      },
+      {
+        "file": "r75_s1_plan_gen_archived.py",
+        "sha256": "ba884cb85322b535fcfe71aa5a090b8fb8fc283fc271c7d1cd8f51be68789bfb",
+        "bytes": 19784,
+        "lines": 283,
+        "status": "unchanged; explicitly archived"
+      }
     ],
     "real_defects_found_and_fixed_this_round": [
-      {"defect": "ObservedStepEntry appended TWO records per successful step (a delegated marker plus the completed record), so run_s1 total_real_steps would read 18 against the frozen 9 and a perfect run would trip the frozen step-count gate", "fix": "exactly ONE terminal record per real step attempt; the delegation is carried by the delegated boolean; the failed record also carries delegated=True"},
-      {"defect": "a hardcoded expected trainable-object count in the A1 gate would decouple from the live object mapping", "fix": "the expected count is parsed from PLAN[gate_only_controller][r71_research_config_unchanged] and the mapping must be unique and equal to it"}
+      {
+        "defect": "ObservedStepEntry appended TWO records per successful step (a delegated marker plus the completed record), so run_s1 total_real_steps would read 18 against the frozen 9 and a perfect run would trip the frozen step-count gate",
+        "fix": "exactly ONE terminal record per real step attempt; the delegation is carried by the delegated boolean; the failed record also carries delegated=True"
+      },
+      {
+        "defect": "a hardcoded expected trainable-object count in the A1 gate would decouple from the live object mapping",
+        "fix": "the expected count is parsed from PLAN[gate_only_controller][r71_research_config_unchanged] and the mapping must be unique and equal to it"
+      }
     ],
     "affected_old_selectors_disclosed": [
       "test_a_step_without_a_new_permit_is_a_failure_not_a_note",
@@ -399,7 +561,10 @@
     "canonical_ledger_state": {
       "root": "raw/runtime",
       "r75_total_ledger_jsonl_sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
-      "events": 12, "charged": 0, "four_counters": "all zero", "residual_lock": false,
+      "events": 12,
+      "charged": 0,
+      "four_counters": "all zero",
+      "residual_lock": false,
       "raw_s1_created_by_tests": false,
       "note": "the tests redirect S1_DIR to a scratch directory inside the output root and remove it; raw/ still contains only raw/runtime/"
     },
@@ -409,10 +574,17 @@
       "head_split_equivalence": "forward equivalence of the split heads does NOT imply equal gradient norms, equal global clipping or an identical Adam trajectory; the clip algorithm was not modified to manufacture equivalence"
     },
     "zero_environment_this_revision": {
-      "torch_imported": false, "model_load_or_construction": 0, "forward_backward": 0,
-      "optimizer_step_real_or_synthetic": 0, "ppo_update_or_replay": 0,
-      "environment_construction": 0, "sampling": 0, "checkpoint_write": 0,
-      "training_resume": 0, "rng_restore": 0, "ledger_charged_events": 0,
+      "torch_imported": false,
+      "model_load_or_construction": 0,
+      "forward_backward": 0,
+      "optimizer_step_real_or_synthetic": 0,
+      "ppo_update_or_replay": 0,
+      "environment_construction": 0,
+      "sampling": 0,
+      "checkpoint_write": 0,
+      "training_resume": 0,
+      "rng_restore": 0,
+      "ledger_charged_events": 0,
       "canonical_raw_runtime_bytes_changed": false
     },
     "disclosed_development_failures": [
@@ -431,16 +603,29 @@
       "the weights_only=False compatibility is argued at the documentation and fake-object level only; it was NOT verified against real torch, which this round forbids importing"
     ],
     "protected_untouched": [
-      {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json", "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b", "status": "untouched, unstaged, re-hashed this round"},
-      {"path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json", "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18", "status": "untouched, unstaged, re-hashed this round"}
+      {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+        "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+        "status": "untouched, unstaged, re-hashed this round"
+      },
+      {
+        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+        "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+        "status": "untouched, unstaged, re-hashed this round"
+      }
     ],
-    "never_staged": ["analysis/round59-communication-decision-density/r59_analysis_run.log", "__pycache__", "raw/runtime", "model weights", "raw rows/tape/logs"],
+    "never_staged": [
+      "analysis/round59-communication-decision-density/r59_analysis_run.log",
+      "__pycache__",
+      "raw/runtime",
+      "model weights",
+      "raw rows/tape/logs"
+    ],
     "commit_scope": "explicit git add -f of the named runner / tests / state / report / verdict / manifest; NO weights, NO raw runtime originals, NO R59 analysis log, NO protected files, NO __pycache__",
     "s1_authorized": false,
     "s1_executed": false
-  }
-,
-    "s1_native_qualification_execution": {
+  },
+  "s1_native_qualification_execution": {
     "request_id": "R75_S1_NATIVE_QUALIFICATION_20261015",
     "authorization": "decision-side release of the paid S1 path for this ONE fixed matrix only; it supersedes the S0 not-yet-authorized boundary for this request and is not a new effect experiment, not environment training, and not an extension of any R74 quota",
     "supersedes_note": "committed_restore_failfast_revision.s1_authorized=false and s1_executed=false recorded the state at that revision; they are preserved unchanged and are superseded for this request only",
@@ -490,9 +675,8 @@
     "registered_at": "2026-10-15T01:56:45+08:00",
     "runner_launched_at_registration_time": false,
     "note": "the outcome of the single attempt is recorded separately in raw/s1/r75_s1_outer_outcome.json and is NOT written into this registration"
-  }
-,
-    "s1_native_qualification_outcome": {
+  },
+  "s1_native_qualification_outcome": {
     "request_id": "R75_S1_NATIVE_QUALIFICATION_20261015",
     "qualification_passed": false,
     "attempt": {
@@ -593,20 +777,68 @@
       "ROUND75_S1_RUN_PLAN.json: source_identity gains canonical_cost_math and the r75_frozen sha256/revision entry is updated; data, budget, matrix and exclusion list untouched"
     ],
     "content_identity": [
-      {"file": "r75_frozen.py", "sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80", "bytes": 41689},
-      {"file": "r75_s1_runner.py", "sha256": "0d773a54b201f08bb02e075d763dc720e87f8e652b02a6e3bf2b9079f69b893f", "bytes": 86613},
-      {"file": "r75_s1_outer_exec_v2.py", "sha256": "84b81cad3d4d22763a2c4bced2a0d81ba85ba5870ff0a2cd327699990d322fc6", "bytes": 25056},
-      {"file": "r75_s1_precheck.py", "sha256": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c", "bytes": 23423},
-      {"file": "ROUND75_S1_RUN_PLAN.json", "sha256": "ab7120d5c469f2936ea7162023ad70b1d04dc3d50955c4e6535c46e6480ce735", "bytes": 20451},
-      {"file": "test_r75_s0_import_bootstrap.py", "sha256": "c36a2939e17c539f110912e5db2cca5c83893bed16176200c0dca15f5f3b6ba8", "bytes": 38192},
-      {"file": "R75_IMPORT_BOOTSTRAP_REPAIR_TASK_STATE.json", "sha256": "5e38dae792405bc841d2dfa1371bc83ae185156e1e1e1a8c93586c38a2ae581a", "bytes": 9925, "note": "hash and size re-read from disk after the append-only failure disclosure and before the second commit"},
-      {"file": "ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_REPORT.md", "sha256": "d74ea319022a8d1b72b8283ff261b66d5f1a1072083d713c94ce3330418086c1", "bytes": 20864, "note": "hash and size re-read from disk after the append-only failure disclosure and before the second commit"},
-      {"file": "ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_VERDICT.json", "sha256": "53376cbcbd8ab3c00a0fdf95929569f93ec38d5c18f444030a6443fe3b551021", "bytes": 18240, "note": "hash and size re-read from disk after the append-only failure disclosure and before the second commit"}
+      {
+        "file": "r75_frozen.py",
+        "sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+        "bytes": 41689
+      },
+      {
+        "file": "r75_s1_runner.py",
+        "sha256": "0d773a54b201f08bb02e075d763dc720e87f8e652b02a6e3bf2b9079f69b893f",
+        "bytes": 86613
+      },
+      {
+        "file": "r75_s1_outer_exec_v2.py",
+        "sha256": "84b81cad3d4d22763a2c4bced2a0d81ba85ba5870ff0a2cd327699990d322fc6",
+        "bytes": 25056
+      },
+      {
+        "file": "r75_s1_precheck.py",
+        "sha256": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c",
+        "bytes": 23423
+      },
+      {
+        "file": "ROUND75_S1_RUN_PLAN.json",
+        "sha256": "ab7120d5c469f2936ea7162023ad70b1d04dc3d50955c4e6535c46e6480ce735",
+        "bytes": 20451
+      },
+      {
+        "file": "test_r75_s0_import_bootstrap.py",
+        "sha256": "c36a2939e17c539f110912e5db2cca5c83893bed16176200c0dca15f5f3b6ba8",
+        "bytes": 38192
+      },
+      {
+        "file": "R75_IMPORT_BOOTSTRAP_REPAIR_TASK_STATE.json",
+        "sha256": "5e38dae792405bc841d2dfa1371bc83ae185156e1e1e1a8c93586c38a2ae581a",
+        "bytes": 9925,
+        "note": "hash and size re-read from disk after the append-only failure disclosure and before the second commit"
+      },
+      {
+        "file": "ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_REPORT.md",
+        "sha256": "d74ea319022a8d1b72b8283ff261b66d5f1a1072083d713c94ce3330418086c1",
+        "bytes": 20864,
+        "note": "hash and size re-read from disk after the append-only failure disclosure and before the second commit"
+      },
+      {
+        "file": "ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_VERDICT.json",
+        "sha256": "53376cbcbd8ab3c00a0fdf95929569f93ec38d5c18f444030a6443fe3b551021",
+        "bytes": 18240,
+        "note": "hash and size re-read from disk after the append-only failure disclosure and before the second commit"
+      }
     ],
     "unchanged_byte_identical": [
-      {"file": "r75_guard.py", "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f"},
-      {"file": "r75_replay_adapter.py", "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2"},
-      {"file": "r75_s1_outer_exec.py", "sha256": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115"}
+      {
+        "file": "r75_guard.py",
+        "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f"
+      },
+      {
+        "file": "r75_replay_adapter.py",
+        "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2"
+      },
+      {
+        "file": "r75_s1_outer_exec.py",
+        "sha256": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115"
+      }
     ],
     "new_pins": {
       "EXPECTED_COST_MATH_SHA256": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
@@ -633,53 +865,51 @@
     "zero_environment": "0 torch imports, 0 model loads or constructions, 0 forward, 0 backward, 0 optimizer steps, 0 PPO updates, 0 environment constructions, 0 sampling, 0 checkpoint writes, 0 ledger charged events, 0 production runner launches",
     "s1_authorized": false,
     "s1_executed": false
-  }
-,
-    "import_bootstrap_repair_delivery": {
-      "request_id": "R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015",
-      "closed_out_note": "appended in the close-out turn; the delivered HEAD and its parent are read from git after the commit and are deliberately not written here",
-      "parent_head_before_commit": "464cb95076bb69cebde74e9a07a07a4670c128ed",
-      "internal_goal_at_close_out": null,
-      "items_completed": [
-        "1. r75_frozen.py: the _verify_canonical_bindings self-comparison replaced by real object-identity, sys.modules, __file__, sha256 and live GAE/ETA/GAMMA checks over the bindings actually used, plus the cost_math read-back with its own path and digest pin",
-        "2. r75_s1_outer_exec_v2.py: the raw/s1-nonempty blanket refusal replaced by per-original digest registration with a duplicate-request-id refusal across any output directory; EXPECT_SIBLING removed with no replacement claim",
-        "3. test_r75_s0_import_bootstrap.py: 30 narrow stdlib/AST/fake-module/fake-subprocess counterexamples, 30 passed, exit 0",
-        "4. r75_s1_precheck.py rerun of the affected checks 74/74 with checks_failed empty and exit 0; report, verdict, task-state and manifest append written; one explicit named local commit",
-        "additional. parent-to-child output routing and execution identity: S1_DIR bindable, --request-id and --attempt-dir required and bound before the precheck and before any paid import, receipts and durable counters carry the execution id plus plan_request_id and attempt_dir, the single central ledger at raw/runtime untouched"
-      ],
-      "reused_without_rerun": [
-        "the 30/30 narrow suite output and exit code from the prior turn, re-verified this turn only by byte identity and AST parsing",
-        "the 74/74 precheck output and exit code from the prior turn",
-        "the old 40/34 suites and the earlier 68-check precheck run, registered as reused evidence"
-      ],
-      "byte_identity_reverified": {
-        "r75_frozen_py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
-        "r75_s1_runner_py": "0d773a54b201f08bb02e075d763dc720e87f8e652b02a6e3bf2b9079f69b893f",
-        "r75_s1_outer_exec_v2_py": "84b81cad3d4d22763a2c4bced2a0d81ba85ba5870ff0a2cd327699990d322fc6",
-        "r75_s1_precheck_py": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c",
-        "ROUND75_S1_RUN_PLAN_json": "ab7120d5c469f2936ea7162023ad70b1d04dc3d50955c4e6535c46e6480ce735",
-        "test_r75_s0_import_bootstrap_py": "c36a2939e17c539f110912e5db2cca5c83893bed16176200c0dca15f5f3b6ba8",
-        "unchanged_r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
-        "unchanged_r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
-        "unchanged_r75_s1_outer_exec_py": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115",
-        "ast_parse": "all five source files parse cleanly this turn"
-      },
-      "paid_prohibition_held": "0 torch imports, 0 numpy real NN path, 0 model load or construction, 0 forward, 0 backward, 0 real or synthetic optimizer step, 0 PPO update or replay, 0 environment construction, 0 sampling, 0 checkpoint write, 0 production runner launch (no --launch), 0 ledger charged events",
-      "commit_scope": "explicit git add -f of r75_frozen.py, r75_s1_runner.py, r75_s1_outer_exec_v2.py, r75_s1_precheck.py, ROUND75_S1_RUN_PLAN.json, test_r75_s0_import_bootstrap.py, R75_IMPORT_BOOTSTRAP_REPAIR_TASK_STATE.json, ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_REPORT.md, ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_VERDICT.json and ROUND75_GIT_EXTERNAL_MANIFEST.json; no weights, no raw runtime, no raw/s1 originals, no raw/s1_revised, no protected files, no build artifacts",
-      "not_staged": [
-        "raw/s1 originals",
-        "raw/s1_revised",
-        "raw/runtime",
-        "model weights",
-        "raw rows/tape/logs",
-        "the R59 analysis log",
-        "the ROUND46 protected files",
-        "__pycache__"
-      ],
-      "s1_authorized": false,
-      "s1_executed": false
-    }
-,
+  },
+  "import_bootstrap_repair_delivery": {
+    "request_id": "R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015",
+    "closed_out_note": "appended in the close-out turn; the delivered HEAD and its parent are read from git after the commit and are deliberately not written here",
+    "parent_head_before_commit": "464cb95076bb69cebde74e9a07a07a4670c128ed",
+    "internal_goal_at_close_out": null,
+    "items_completed": [
+      "1. r75_frozen.py: the _verify_canonical_bindings self-comparison replaced by real object-identity, sys.modules, __file__, sha256 and live GAE/ETA/GAMMA checks over the bindings actually used, plus the cost_math read-back with its own path and digest pin",
+      "2. r75_s1_outer_exec_v2.py: the raw/s1-nonempty blanket refusal replaced by per-original digest registration with a duplicate-request-id refusal across any output directory; EXPECT_SIBLING removed with no replacement claim",
+      "3. test_r75_s0_import_bootstrap.py: 30 narrow stdlib/AST/fake-module/fake-subprocess counterexamples, 30 passed, exit 0",
+      "4. r75_s1_precheck.py rerun of the affected checks 74/74 with checks_failed empty and exit 0; report, verdict, task-state and manifest append written; one explicit named local commit",
+      "additional. parent-to-child output routing and execution identity: S1_DIR bindable, --request-id and --attempt-dir required and bound before the precheck and before any paid import, receipts and durable counters carry the execution id plus plan_request_id and attempt_dir, the single central ledger at raw/runtime untouched"
+    ],
+    "reused_without_rerun": [
+      "the 30/30 narrow suite output and exit code from the prior turn, re-verified this turn only by byte identity and AST parsing",
+      "the 74/74 precheck output and exit code from the prior turn",
+      "the old 40/34 suites and the earlier 68-check precheck run, registered as reused evidence"
+    ],
+    "byte_identity_reverified": {
+      "r75_frozen_py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+      "r75_s1_runner_py": "0d773a54b201f08bb02e075d763dc720e87f8e652b02a6e3bf2b9079f69b893f",
+      "r75_s1_outer_exec_v2_py": "84b81cad3d4d22763a2c4bced2a0d81ba85ba5870ff0a2cd327699990d322fc6",
+      "r75_s1_precheck_py": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c",
+      "ROUND75_S1_RUN_PLAN_json": "ab7120d5c469f2936ea7162023ad70b1d04dc3d50955c4e6535c46e6480ce735",
+      "test_r75_s0_import_bootstrap_py": "c36a2939e17c539f110912e5db2cca5c83893bed16176200c0dca15f5f3b6ba8",
+      "unchanged_r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+      "unchanged_r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+      "unchanged_r75_s1_outer_exec_py": "b1c4fa4c3be0f2983fb3baf10e16c1e8d9c18a37c0b0736bbdc693c436c45115",
+      "ast_parse": "all five source files parse cleanly this turn"
+    },
+    "paid_prohibition_held": "0 torch imports, 0 numpy real NN path, 0 model load or construction, 0 forward, 0 backward, 0 real or synthetic optimizer step, 0 PPO update or replay, 0 environment construction, 0 sampling, 0 checkpoint write, 0 production runner launch (no --launch), 0 ledger charged events",
+    "commit_scope": "explicit git add -f of r75_frozen.py, r75_s1_runner.py, r75_s1_outer_exec_v2.py, r75_s1_precheck.py, ROUND75_S1_RUN_PLAN.json, test_r75_s0_import_bootstrap.py, R75_IMPORT_BOOTSTRAP_REPAIR_TASK_STATE.json, ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_REPORT.md, ROUND75_S0_IMPORT_BOOTSTRAP_REPAIR_VERDICT.json and ROUND75_GIT_EXTERNAL_MANIFEST.json; no weights, no raw runtime, no raw/s1 originals, no raw/s1_revised, no protected files, no build artifacts",
+    "not_staged": [
+      "raw/s1 originals",
+      "raw/s1_revised",
+      "raw/runtime",
+      "model weights",
+      "raw rows/tape/logs",
+      "the R59 analysis log",
+      "the ROUND46 protected files",
+      "__pycache__"
+    ],
+    "s1_authorized": false,
+    "s1_executed": false
+  },
   "startup_handshake_fix_revision": {
     "request_id": "R75_S0_STARTUP_HANDSHAKE_FIX_20261015",
     "parent_head": "3803dad0468a24e0c78589c557aace00085e2b60",
@@ -755,8 +985,7 @@
     "commit_scope": "explicit git add -f of the named wrapper / runner / test / report / verdict / task-state / manifest; NO weights, NO raw runtime originals, NO raw/s1 originals, NO R59 analysis log, NO protected files, NO __pycache__, NO scratch logs",
     "s1_authorized": false,
     "s1_executed": false
-  }
-,
+  },
   "s1b_execution": {
     "request_id": "R75_S1B_20261015",
     "head": "5ee9f2d9effb3bb6773688bf2f51fa33522bb346",
@@ -802,6 +1031,19 @@
       "ROUND75_S1B_REPORT.md",
       "ROUND75_S1B_VERDICT.json"
     ],
-    "note": "real paid consumption recorded; no retry, no refund; A1/A2 completed, A3 failed at the restore start gate before any update"
+    "note": "real paid consumption recorded; no retry, no refund; A1/A2 completed, A3 failed at the restore start gate before any update",
+    "consumption_correction": {
+      "trunk_70_is_calls_not_rows": true,
+      "rows_actual": 840,
+      "joint_record_batch_reads": 1,
+      "exposure_unique_candidates": 66,
+      "physical_steps": 5,
+      "env": 0,
+      "outcome_used_normal_zero_is_wrapper_defect": true,
+      "a2_alignment_readings": "not durably recorded",
+      "a2_terminal_state_durable": false,
+      "a3_updates": 0,
+      "rng_error_proves": "verifier failure only; restored state neither proven same nor different"
+    }
   }
 }

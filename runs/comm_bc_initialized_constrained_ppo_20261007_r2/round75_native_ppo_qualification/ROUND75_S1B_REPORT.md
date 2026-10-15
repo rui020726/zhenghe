@@ -41,3 +41,21 @@ attempt 目录：raw/s1_revised/R75_S1B_20261015/
 - r75_s1_outer_v2_attempt_marker_R75_S1B_20261015.json / r75_s1_outer_v2_license_consumed_R75_S1B_20261015.json
 - r75_s1_outer_v2_prepared.json / r75_s1_outer_v2_outcome.json
 - r75_s1_outer_v2_stdout.bin / r75_s1_outer_v2_stderr.bin（权威）/ .txt（有损副本）
+## 6. 单位审计更正（依据四个 guard 原件与 ledger 逐事件字段）
+- 70 是 offline_trunk_target_row 的 charged 事件数（即 trunk 调用次数），不是行数；实际行数是 guard used_normal=840（70 次调用的 n 逐项累计 used_after 到 840；calls 1-4 n=4、5-9 n=5、10-19 n=4、...、67-70 n=168，全部 category=normal）。outcome 的 per_unit_last_known.used_normal=0 是 wrapper 汇总读取缺陷，不代表零消费。
+- joint_record：实际 1 次 batch-read（r75_native_update_0_batch_read，A2 的），66 个 unique 候选暴露一次；A3 未到达其 batch-read，故不是 132 暴露。
+- physical_optimizer_step：5 步（A1 critic-only 1 步 + A2 minibatch_0..3 各 1 步；A3 = 0），guard used_normal=5, reserve=0, refusals=0。
+- environment_construction：0（guard events 空）。
+- 未来余量由真实累计扣除：physical 余 4（9-5）、trunk target rows 余 840（1680-840）、trunk calls 余 70（140-70）；不退款、不清零、不转移。
+
+## 7. A1/A2 完成证据与耐久性缺口
+- A1：1 次 critic-only 控制步 completed（guard 事件 used_after=1），A1 bundle 已写盘（r75_s1_A1_full_state.pt，SHA 23f34508...）。这是 A2 更新前状态，不是 A2 终态。
+- A2：1 次 r75_native_ppo_update（update_index 0）completed；4 个 optimizer 步（minibatch_0..3）completed；meter A2 calls_attempted=70, calls_charged=70, rows_charged=840, calls_completed=70, rows_completed=840, refused=0, failed=0。
+- alignment/π_old 具体读数：failure receipt 与 attempt counters 中均无 alignment/pi_old/approx_kl/surrogate/entropy 或 a2_return/scientific 字段。A2 的 alignment 门禁在内存中通过（0 failed/0 refused、全部步 completed 是间接证据），但具体读数未耐久化。
+- A2 终态全量（模型五模块、全部 Adam/param groups/对象映射、RNG、lambda/config/cursor/data/source、科学 returns）：无耐久原件。attempt 目录只有 A1 更新前 bundle；没有 A2 终态 bundle。后续 A3 对照所需的 A2 终态耐久原件缺失，未用新 load/forward/PPO 补造。
+
+## 8. A3 已发生与未发生
+- 已发生：第 2 个 gate-only controller 构造（seed 11）、第 2 个 optimizer 构造（lr 0.0003）、A1 bundle 从磁盘 load（第 3 次 checkpoint load，phase A3_bundle_load）。
+- 已进入：restore_full_state 被调用（runner line 1248），在 verify_restore 的 RNG 载荷比较处崩溃（line 167）。
+- 未发生：A3 native update（native_ppo_update_attempts 仅 A2 一条）；A3 optimizer 步（optimizer_step_attempts 仅 5 条 A1_A2）；A3 trunk 调用（meter A3 全 0）；A3 batch-read。
+- RNG 比较报错只证明验证器失败；不能断言恢复状态实际不同或实际相同。
