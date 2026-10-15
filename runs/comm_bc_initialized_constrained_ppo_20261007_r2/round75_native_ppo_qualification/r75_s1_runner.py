@@ -1061,7 +1061,7 @@ def _execution_identity() -> dict[str, Any]:
         return completed.stdout.decode("utf-8", "replace").strip(), None
     head, head_error = git_value("rev-parse", "HEAD")
     parent, parent_error = git_value("rev-parse", "HEAD^")
-    branch, branch_error = git_value("--abbrev-ref", "HEAD")
+    branch, branch_error = git_value("rev-parse", "--abbrev-ref", "HEAD")
     return {"head": head, "parent_head": parent, "branch": branch, "source": "git rev-parse",
             "errors": {"head": head_error, "parent_head": parent_error, "branch": branch_error}}
 

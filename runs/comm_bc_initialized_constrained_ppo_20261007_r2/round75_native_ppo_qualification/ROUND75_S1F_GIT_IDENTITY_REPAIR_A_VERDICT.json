@@ -1,0 +1,58 @@
+{
+  "kind": "round75-s1f-git-identity-repair-a-verdict/1",
+  "request_id": "R75_S1F_GIT_IDENTITY_REPAIR_DRAFT_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "start_head": "70339f7efd57be07946cf8665815534675787517",
+  "start_parent_head": "d57e93bbd1990eb5c162adb3f276435a0f35b8fb",
+  "status": "PHASE_A_FROZEN_AWAITING_DECISION_REVIEW_B_NOT_STARTED",
+  "phase_a_passed": true,
+  "phase_b_started": false,
+  "runner_change": {
+    "semantic_line_before": "branch, branch_error = git_value(\"--abbrev-ref\", \"HEAD\")",
+    "semantic_line_after": "branch, branch_error = git_value(\"rev-parse\", \"--abbrev-ref\", \"HEAD\")",
+    "other_semantic_changes": 0,
+    "final_sha256": "2bb718f7500afa316aee701e0a23c2d56eb89833a9d03d548d686026ca39fb66",
+    "start_sha256": "872f8bcd6c6c7d92c699e7887cf81d39fbf1f6218b31bf713160d907a148eae7"
+  },
+  "frozen_sources": {
+    "r75_s1f_fixture_receipt_repair_py": {"bytes": 22405, "sha256": "8bf6fec7c7af584dfa6ac29da711cd72e98c573bac75328a127f43c615294de5"},
+    "r75_s1f_parent_capture_ps1": {"bytes": 8179, "sha256": "690a2aef6fccda3dd0fe11382fe1bc43ae3eb0d286c447f5e8dbe54eb05aae37"},
+    "test_r75_s1f_git_identity_repair_py": {"bytes": 4954, "sha256": "ab8b58e4938e5632cd42edad7f23163c6e96ced8a8ef6fb5570fe62f76617e3c"}
+  },
+  "unchanged_identities": {
+    "r75_s1e_fixture_receipt_repair_py": "21f0105295fe5880565316e625f06d58e2757a38131aa7f5517fdc9c7159af40",
+    "r75_s1e_parent_capture_ps1": "50f555ef717e82f0b00ab0fb4dad0ea72771546724b5881835b5aa75bec49471",
+    "r75_s1_outer_exec_v2_py": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+    "r75_frozen_py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+    "r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+    "r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+    "central_ledger": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+  },
+  "tests": {
+    "top_level_case_count": 3,
+    "new_top_level_cases": 3,
+    "max_allowed": 3,
+    "pure_python_processes_used": 3,
+    "pure_python_processes_max": 3,
+    "attempts": [
+      {"attempt": 1, "cases": 3, "passed": 2, "failed": 0, "errors": 1, "exit_code": 1, "cause": "sandbox default temp directory PermissionError; failure retained", "log": "raw/s1f_probe/a_test_run_attempt1.log", "log_sha256": "62dae89eba1b1f1916ad5e2bdb139fb84f4af61fa9ce7c8b29aeb281caac50db"},
+      {"attempt": 2, "cases": 3, "passed": 3, "failed": 0, "errors": 0, "exit_code": 0, "log": "raw/s1f_probe/a_test_run_attempt2.log", "log_sha256": "ab85af13eb78708482d7a3cc44c3581617328000ddc006e0b6f3f452e75dd52d"},
+      {"attempt": 3, "cases": 3, "passed": 3, "failed": 0, "errors": 0, "exit_code": 0, "log": "raw/s1f_probe/a_test_run_attempt3.log", "log_sha256": "6969868684b859bd5b8eef6f8d5b779d046bfa46c91c69c468627105347626bd"}
+    ],
+    "identity_helper_replaced": false
+  },
+  "consumption": {
+    "real_s1f_b_processes": 0,
+    "parent_launch_attempts": 0,
+    "numpy_or_torch_imports": 0,
+    "fixture_saves_loads_reads": 0,
+    "scientific_checkpoint_or_model_loads": 0,
+    "forward": 0,
+    "backward": 0,
+    "optimizer_or_ppo_operations": 0,
+    "environments": 0,
+    "cuda_operations": 0,
+    "ledger_charges": 0
+  },
+  "boundary": "A source freeze only; B remains separately gated and does not prove the real Torch weights-only fixture flow."
+}

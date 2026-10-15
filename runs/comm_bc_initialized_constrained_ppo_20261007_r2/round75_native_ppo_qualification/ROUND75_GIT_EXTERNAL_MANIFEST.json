@@ -1569,5 +1569,44 @@
       "b_failed_cases": 1,
       "b_retries": 0
     }
+  },
+  "s1f_git_identity_repair_phase_a": {
+    "request_id": "R75_S1F_GIT_IDENTITY_REPAIR_DRAFT_20261015",
+    "status": "PHASE_A_FROZEN_AWAITING_DECISION_REVIEW_B_NOT_STARTED",
+    "start_head": "70339f7efd57be07946cf8665815534675787517",
+    "start_parent_head": "d57e93bbd1990eb5c162adb3f276435a0f35b8fb",
+    "output_root": "raw/s1f_probe",
+    "runner_change": {
+      "before": "git_value(\"--abbrev-ref\", \"HEAD\")",
+      "after": "git_value(\"rev-parse\", \"--abbrev-ref\", \"HEAD\")",
+      "start_sha256": "872f8bcd6c6c7d92c699e7887cf81d39fbf1f6218b31bf713160d907a148eae7",
+      "final_sha256": "2bb718f7500afa316aee701e0a23c2d56eb89833a9d03d548d686026ca39fb66"
+    },
+    "source": {
+      "r75_s1f_fixture_receipt_repair_py": {"bytes": 22405, "sha256": "8bf6fec7c7af584dfa6ac29da711cd72e98c573bac75328a127f43c615294de5"},
+      "r75_s1f_parent_capture_ps1": {"bytes": 8179, "sha256": "690a2aef6fccda3dd0fe11382fe1bc43ae3eb0d286c447f5e8dbe54eb05aae37"},
+      "test_r75_s1f_git_identity_repair_py": {"bytes": 4954, "sha256": "ab8b58e4938e5632cd42edad7f23163c6e96ced8a8ef6fb5570fe62f76617e3c"}
+    },
+    "tests": {
+      "top_level_cases": 3,
+      "pure_python_processes_used": 3,
+      "pure_python_processes_max": 3,
+      "identity_helper_replaced": false,
+      "attempt_1": {"exit_code": 1, "cases": 3, "passed": 2, "errors": 1, "log": "raw/s1f_probe/a_test_run_attempt1.log", "log_sha256": "62dae89eba1b1f1916ad5e2bdb139fb84f4af61fa9ce7c8b29aeb281caac50db", "exit_receipt": "raw/s1f_probe/a_test_run_attempt1.exitcode", "exit_receipt_sha256": "f1b2f662800122bed0ff255693df89c4487fbdcf453d3524a42d4ec20c3d9c04"},
+      "attempt_2": {"exit_code": 0, "cases": 3, "passed": 3, "errors": 0, "log": "raw/s1f_probe/a_test_run_attempt2.log", "log_sha256": "ab85af13eb78708482d7a3cc44c3581617328000ddc006e0b6f3f452e75dd52d", "exit_receipt": "raw/s1f_probe/a_test_run_attempt2.exitcode", "exit_receipt_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"},
+      "attempt_3": {"exit_code": 0, "cases": 3, "passed": 3, "errors": 0, "log": "raw/s1f_probe/a_test_run_attempt3.log", "log_sha256": "6969868684b859bd5b8eef6f8d5b779d046bfa46c91c69c468627105347626bd", "exit_receipt": "raw/s1f_probe/a_test_run_attempt3.exitcode", "exit_receipt_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"}
+    },
+    "consumption": {
+      "real_s1f_b_processes": 0,
+      "parent_launch_attempts": 0,
+      "numpy_or_torch_imports": 0,
+      "fixture_saves_loads_reads": 0,
+      "scientific_checkpoint_or_model_loads": 0,
+      "optimizer_or_ppo_operations": 0,
+      "environments": 0,
+      "cuda_operations": 0,
+      "ledger_charges": 0
+    },
+    "note": "A is frozen for decision review; B does not auto-start from this commit."
   }
 }

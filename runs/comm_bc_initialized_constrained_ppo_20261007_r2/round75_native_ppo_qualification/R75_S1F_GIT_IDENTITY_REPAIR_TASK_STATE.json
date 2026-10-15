@@ -1,0 +1,35 @@
+{
+  "request_id": "R75_S1F_GIT_IDENTITY_REPAIR_DRAFT_20261015",
+  "phase": "A_FROZEN_AWAITING_DECISION_REVIEW",
+  "branch": "exp/round75-native-ppo-qualification",
+  "start_head": "70339f7efd57be07946cf8665815534675787517",
+  "start_parent": "d57e93bbd1990eb5c162adb3f276435a0f35b8fb",
+  "phase_a_complete": true,
+  "phase_b_started": false,
+  "phase_b_complete": false,
+  "runner_semantic_change": "branch call changed from git_value(\"--abbrev-ref\", \"HEAD\") to git_value(\"rev-parse\", \"--abbrev-ref\", \"HEAD\")",
+  "runner_final_sha256": "2bb718f7500afa316aee701e0a23c2d56eb89833a9d03d548d686026ca39fb66",
+  "tests": {
+    "top_level_cases": 3,
+    "pure_python_process_limit": 3,
+    "pure_python_processes_used": 3,
+    "final_passed": 3,
+    "final_failed": 0,
+    "final_exit_code": 0,
+    "final_log": "raw/s1f_probe/a_test_run_attempt3.log",
+    "final_log_sha256": "6969868684b859bd5b8eef6f8d5b779d046bfa46c91c69c468627105347626bd"
+  },
+  "consumption": {
+    "real_s1f_b_processes": 0,
+    "parent_launch_attempts": 0,
+    "numpy_or_torch_imports": 0,
+    "fixture_saves_loads_reads": 0,
+    "scientific_checkpoint_or_model_loads": 0,
+    "optimizer_or_ppo_operations": 0,
+    "environments": 0,
+    "ledger_charges": 0
+  },
+  "next_action": "Stop for decision-side source review; only a separately issued same-task continuation may start the one S1F B.",
+  "old_s1e_evidence_changed": false,
+  "protected_files_changed": false
+}
