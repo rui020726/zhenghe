@@ -19,6 +19,22 @@
     "observed": "head_identity_consistent=false",
     "exception": false
   },
+  "case_jsonl_reconciliation": {
+    "lines": 15,
+    "compared_by": ["case_id", "name", "passed", "got_type"],
+    "matched_with_result": 15,
+    "case_15_passed": false
+  },
+  "diagnostic_erratum": {
+    "runner_line": "r75_s1_runner.py:1064",
+    "invalid_command": "git -C <repo> --abbrev-ref HEAD",
+    "invalid_exit_code": 129,
+    "valid_command": "git -C <repo> rev-parse --abbrev-ref HEAD",
+    "valid_branch": "exp/round75-native-ppo-qualification",
+    "runner_nonzero_behavior": "returns branch=unknown",
+    "boundary": "source and Git-interface inference; no runtime branch field was saved in case 15",
+    "case_15_result": "FAILED"
+  },
   "consumption": {
     "parent_launch_attempts": 1,
     "python_b_processes": 1,

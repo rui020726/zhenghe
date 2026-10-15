@@ -120,12 +120,54 @@
     "r75_s1_outer_exec_v2_py": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
     "r75_frozen_py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
     "r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
-    "r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc2",
+    "r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
     "central_ledger": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
   },
   "protected_files": {
     "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
     "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
   },
-  "interpretation": "A passing authorized only this single B. Case 15 failed the frozen identity gate, so no real Torch weights-only fixture qualification is granted. No general backend defect is asserted and no S1/PPO/model/environment conclusion is permitted."
+  "interpretation": "A passing authorized only this single B. Case 15 failed the frozen identity gate, so no real Torch weights-only fixture qualification is granted. No general backend defect is asserted and no S1/PPO/model/environment conclusion is permitted.",
+  "phase_b_erratum": {
+    "case_jsonl_reconciliation": {
+      "lines": 15,
+      "compared_by": ["case_id", "name", "passed", "got_type"],
+      "matched_with_result": 15,
+      "case_15_passed": false
+    },
+    "runtime_branch_diagnosis": {
+      "runner_source_line": "r75_s1_runner.py:1064 calls git_value(\"--abbrev-ref\", \"HEAD\")",
+      "effective_command": "git -C <repo> --abbrev-ref HEAD",
+      "effective_command_exit_code": 129,
+      "effective_command_stderr_prefix": "unknown option: --abbrev-ref",
+      "correct_command": "git -C <repo> rev-parse --abbrev-ref HEAD",
+      "correct_command_exit_code": 0,
+      "correct_command_output": "exp/round75-native-ppo-qualification",
+      "runner_nonzero_behavior": "returns branch=unknown",
+      "boundary": "source and Git-interface inference; the runtime branch was not saved in case 15 and was not re-acquired by a Python probe",
+      "case_15_result": "FAILED"
+    },
+    "adapter_sha_correction": {
+      "from": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc2",
+      "to": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2"
+    },
+    "central_before_after_scope": [
+      "r75_s1e_fixture_receipt_repair.py",
+      "r75_s1e_parent_capture.ps1",
+      "test_r75_s1e_fixture_receipt_repair.py",
+      "r75_s1_runner.py",
+      "r75_s1_outer_exec_v2.py",
+      "r75_frozen.py",
+      "r75_guard.py",
+      "r75_replay_adapter.py",
+      "raw/runtime/r75_total_ledger.jsonl"
+    ],
+    "no_complete_before_inventory_claim": [
+      "broader old raw/runtime set",
+      "every old S1 original",
+      "every old S1B original",
+      "every old S1C original",
+      "every old S1D original"
+    ]
+  }
 }

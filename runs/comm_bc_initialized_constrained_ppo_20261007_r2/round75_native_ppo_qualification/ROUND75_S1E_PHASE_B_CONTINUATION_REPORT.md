@@ -114,3 +114,13 @@ Old A evidence remains in place. Committed logs for attempts 1 and 7-11 have the
 ## Boundary
 
 Because case 15 failed, this run does **not** qualify the real Torch weights-only fixture flow. It does not imply a general Torch backend defect, and it says nothing about S1, PPO, models, training, environments or scientific qualification. No optimizer/trunk/environment quota was used; the historical S1B counts remain unchanged.
+
+## Post-close erratum
+
+Read-only PowerShell reconciliation of `phase_b_cases.jsonl` with `phase_b_result.json` compared all 15 durable records by `case_id`, `name`, `passed` and `got_type`. All 15 matched. Case 15 remains the single normal `False`; `case_failed=0` remains only the exception counter.
+
+The unexplained phrase in the earlier section is now bounded by source and Git-interface evidence. Frozen `r75_s1_runner.py` at line 1064 calls `git_value("--abbrev-ref", "HEAD")`; because `git_value` inserts the repository option before the arguments, this becomes the invalid command `git -C <repo> --abbrev-ref HEAD`. A direct read-only check returned exit 129 with `unknown option: --abbrev-ref`. The correct command, `git -C <repo> rev-parse --abbrev-ref HEAD`, returned exit 0 and `exp/round75-native-ppo-qualification`. Since runner `git_value` returns `"unknown"` on a nonzero Git result, the B's runtime branch would have been `unknown` while the parent marker had the real branch. That explains the observed `head_identity_consistent=false` without asserting that the runtime branch was separately saved: it was not in case 15. This is evidence-based diagnosis, not a reclassification to pass.
+
+Scope erratum: the unchanged central set verified before and after B was exactly three S1E source files, five scientific source files, and the central ledger. This report does not claim a complete before/after inventory for the broader old `raw/runtime` set or every old S1/S1B/S1C/S1D original; no such complete before list was taken for B. Historical evidence is retained, not reconstructed.
+
+Evidence erratum: the verdict's replay adapter SHA was initially truncated and is corrected to `0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2`. No original B output was changed, and no retry or test was run.
