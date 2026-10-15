@@ -135,7 +135,8 @@
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
-    "actual_parent_record": "phase_b_parent_capture_actual.json"
+    "actual_parent_record": "phase_b_parent_capture_actual.json",
+    "actual_parent_record_correction": "phase_b_parent_capture_actual_correction.json"
   },
   "actual_consumption": {
     "real_cpu_numpy_torch_processes": 1,
@@ -193,5 +194,19 @@
     "merged": false,
     "deployed": false,
     "final_head": "read from git after commit"
+  },
+  "evidence_boundary_erratum": {
+    "correction_file": "raw/s1d_probe/phase_b_parent_capture_actual_correction.json",
+    "correction_sha256": "17fccfda0a3909573a8bbfdb4c48548e2ddbf59f5999e5e102eea352f40ccf9e",
+    "node_eperm_record": "phase_b_parent_capture.json; failed launcher attempt, no Python start evidence",
+    "actual_process_record": "phase_b_parent_capture_actual.json; one Start-Process Python child, exit 1",
+    "child_pid": "unknown",
+    "exact_start_end_times": "unknown; only redirected-file timestamps were available",
+    "stdio_fidelity": "PowerShell-redirected files are evidence by existence, length and SHA; native OS byte-level fidelity is not proven",
+    "first_14_cases": "not individually durably recorded; no pass/fail claim",
+    "complete_rng_identity": "not proven",
+    "case_15": "save completed, load attempt failed; case not completed",
+    "scientific_checkpoint_or_model_loads": 0,
+    "no_source_test_or_process_change": true
   }
 }

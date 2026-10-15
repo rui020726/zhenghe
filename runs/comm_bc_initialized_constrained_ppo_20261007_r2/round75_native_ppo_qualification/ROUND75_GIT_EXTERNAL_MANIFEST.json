@@ -1215,6 +1215,19 @@
       "all_unchanged": true,
       "ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
     },
-    "note": "No second real process or repair/retry followed the failure; S1 remains unauthorized."
+    "note": "No second real process or repair/retry followed the failure; S1 remains unauthorized.",
+    "evidence_boundary_erratum": {
+      "correction_file": "raw/s1d_probe/phase_b_parent_capture_actual_correction.json",
+      "correction_sha256": "17fccfda0a3909573a8bbfdb4c48548e2ddbf59f5999e5e102eea352f40ccf9e",
+      "node_eperm": "failed launcher attempt; no Python start evidence",
+      "actual_process": "one Start-Process Python child, exit 1",
+      "child_pid": "unknown",
+      "exact_start_end_times": "unknown",
+      "stdio": "length/SHA only; native byte-level fidelity not proven",
+      "first_14_cases": "not individually durably recorded",
+      "complete_rng_identity": "not proven",
+      "case_15": "not completed",
+      "no_source_test_or_process_change": true
+    }
   }
 }

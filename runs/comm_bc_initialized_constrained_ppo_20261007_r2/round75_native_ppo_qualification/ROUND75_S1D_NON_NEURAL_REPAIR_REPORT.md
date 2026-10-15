@@ -33,3 +33,13 @@ Probe originals: phase_b_manifest.json SHA 88aced73697d8478a1751fdaa46a3661ad4f6
 All 18 B-before central runtime and S1B attempt files remained byte-identical after B. The ledger remains 19980 bytes, SHA fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d. A1 bundle remains 54708 bytes, SHA 23f34508357d0bfaa7b51a6f0ec34dc6462dfab603f402477c813f6e60596de0. ROUND46 protected files remain cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b and 93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18.
 
 The comparator and stage-save wiring are not backend-qualified. S1B A3 restore qualification remains unproven. This task does not authorize S1, additional physical steps, technical reserve use, automatic rerun of the original qualification matrix, or any policy/deployment claim. The weights-only fixture incompatibility is a separate future repair decision.
+
+## Evidence-boundary erratum
+
+A correction record was appended at raw/s1d_probe/phase_b_parent_capture_actual_correction.json with SHA 17fccfda0a3909573a8bbfdb4c48548e2ddbf59f5999e5e102eea352f40ccf9e. The original Node EPERM record remains phase_b_parent_capture.json; it is a failed launcher attempt with no evidence that Python started, and it is not the actual child parent capture. The actual PowerShell Start-Process capture is phase_b_parent_capture_actual.json.
+
+The actual process evidence is limited to: one CPU Python process, exit 1, one completed save of the self-created RNG fixture, and one failed torch.load attempt at case 15. Scientific checkpoint/model loads remained zero by actual call boundary. The child PID, exact process start/end timestamps and native OS byte-level stdio fidelity are not proven. The redirected files are evidence only by existence, length and SHA: stdout 0 bytes and stderr 2014 bytes with SHA aafbbd64bc7170f7ee5cf0fb299f081294f2073b92278a40453abbbe84a7fc4e.
+
+Because main wrote phase_b_result.json only after case 15, the first 14 comparator cases are not individually durably recorded and no 14-pass claim is made. Complete before/after RNG identity is not proven. The pre-run manifest process_consumed=false is not evidence of non-consumption.
+
+Current core source excerpts and identities remain: r75_s1_runner.py SHA 872f8bcd6c6c7d92c699e7887cf81d39fbf1f6218b31bf713160d907a148eae7, r75_s1d_non_neural_probe.py SHA ee4ebb410ff0ed88886587f32133238f57f17cb1d484c7b88191dad3bd6b4224, test_r75_s1d_non_neural_repair.py SHA e291a3f6ab7c0ba1cff89ab2699f020cbbb0399130aadcfbd6d317f04036e35a, r75_s1_outer_exec_v2.py SHA bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff. No source, test, case or process was changed or rerun for this erratum.
