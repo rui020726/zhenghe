@@ -4,8 +4,10 @@
   "branch": "exp/round75-native-ppo-qualification",
   "start_head": "50feb386dd15af593b6e016c6a300d4af413b35c",
   "parent_head": "bffb6b15e8525bc7fa8711aa78cc31e0ab23799c",
-  "status": "PHASE_A_FROZEN_AWAITING_DECISION_REVIEW_B_NOT_STARTED",
+  "status": "PHASE_A_REVISION_3_FROZEN_AWAITING_DECISION_REVIEW_B_NOT_STARTED",
   "phase_a_passed": true,
+  "phase_a_revision_2_passed": true,
+  "phase_a_revision_3_passed": true,
   "phase_b_executed": false,
   "authorization": {
     "phase_a": true,
@@ -54,6 +56,107 @@
       {"file": "raw/s1e_probe/a_test_run_attempt7.log", "bytes": 2715, "sha256": "7df6900010b20cf91ef5ee47e8ab2dc9b1afd219a1048471a17a99e8e85f9054", "outcome": "23 cases, all passed after NumPy-scalar guard addition"}
     ],
     "real_torch_or_numpy_imports": 0
+  },
+  "phase_a_revision_2": {
+    "review_released_b": false,
+    "final_tests": 24,
+    "final_passed": 24,
+    "final_failed": 0,
+    "final_exit_code": 0,
+    "final_attempt": 11,
+    "final_log": "raw/s1e_probe/a_test_run_attempt11.log",
+    "final_log_sha256": "9d7d4ea3bd090a2b7cddd36d1ff4cdda97009e1d738c80940eebfc818dcf3471",
+    "final_exit_receipt_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+    "attempts_total_including_revision_1": 11,
+    "revision_2_attempt_logs": [
+      {"file": "raw/s1e_probe/a_test_run_attempt8.log", "sha256": "94a2491073e9507d743452561a852dda7566306a462b08a9a2dcaa122ef63a81", "outcome": "25 cases, 2 failures"},
+      {"file": "raw/s1e_probe/a_test_run_attempt9.log", "sha256": "bb81acc752e6b6166a7c5f41d3932463ed23ad5b638bcdbda3246525b415979e", "outcome": "24 cases, 1 failure"},
+      {"file": "raw/s1e_probe/a_test_run_attempt10.log", "sha256": "1c7ec4440bf96cd6595f67b1a07888fa2b906354c19619d227f12531104d03e2", "outcome": "24 cases, 1 selftest collision"},
+      {"file": "raw/s1e_probe/a_test_run_attempt11.log", "sha256": "9d7d4ea3bd090a2b7cddd36d1ff4cdda97009e1d738c80940eebfc818dcf3471", "outcome": "24 cases, all passed"}
+    ],
+    "frozen_sources": {
+      "r75_s1e_fixture_receipt_repair_py": {"bytes": 22297, "sha256": "c7b651fe468a59869da6c5d45e5ecf491efa8d821d95975892fcc2e753fc7d7b"},
+      "r75_s1e_parent_capture_ps1": {"bytes": 8100, "sha256": "978334789c76e7b5b5b79417af892eb652049b139a1499e5ca37481f0e09f44c"},
+      "test_r75_s1e_fixture_receipt_repair_py": {"bytes": 20243, "sha256": "83b2069febaa0334d015d7a1ac1b6d186cfdd1333abede962ca4f9ddcfcc9bf0"}
+    },
+    "fixes": [
+      "15 lazy case factories with main-loop run_case protection",
+      "exact native types plus explicitly allowed CPU Tensor type",
+      "complete default torch.save object guarded once before forwarding",
+      "case-15 compares loaded, snapshot, live git and parent-marker identity",
+      "parent marks child started before fault-tolerant metadata reads and never fakes ExitTime",
+      "complete Python/script/flags argv and actual cwd recorded",
+      "PowerShell version/OS/Windows file-handle basis recorded",
+      "NUL/non-UTF-8 BinaryArtifact selftest without starting a child"
+    ],
+    "operations_added": {
+      "pure_python_test_processes": 4,
+      "powershell_binary_selftest_processes": 3,
+      "real_s1e_b_processes": 0,
+      "numpy_or_torch_imports": 0,
+      "fixture_saves_loads_reads": 0,
+      "scientific_checkpoint_or_model_loads": 0,
+      "ledger_charges": 0
+    }
+  },
+  "phase_a_revision_2_errata": {
+    "attempt_8_actual_case_count": 25,
+    "attempt_8_failures": 2,
+    "powershell_selftest_attempts": [8, 10, 11],
+    "attempt_8_residue_erased": false,
+    "attempts_1_7_python_exit_receipts": "unknown/uncaught, not zero"
+  },
+  "phase_a_revision_3": {
+    "review_released_b": false,
+    "start_head": "bafc9191823af87fe31663bb86cd2564ef04026b",
+    "final_attempt": 12,
+    "final_cases": 3,
+    "final_passed": 3,
+    "final_failed": 0,
+    "final_exit_code": 0,
+    "top_level_test_method_count": 24,
+    "new_top_level_test_cases": 0,
+    "log": "raw/s1e_probe/a_test_run_attempt12.log",
+    "log_sha256": "a310257e29bd8209b7552a60461f072da58fc883fe97eefe7ef1574343fe73b2",
+    "exit_receipt_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+    "frozen_sources": {
+      "r75_s1e_fixture_receipt_repair_py": {"bytes": 22393, "sha256": "21f0105295fe5880565316e625f06d58e2757a38131aa7f5517fdc9c7159af40"},
+      "r75_s1e_parent_capture_ps1": {"bytes": 8176, "sha256": "50f555ef717e82f0b00ab0fb4dad0ea72771546724b5881835b5aa75bec49471"},
+      "test_r75_s1e_fixture_receipt_repair_py": {"bytes": 21375, "sha256": "75cf51cc160739c65af0d79595f495d4afc3355380080492b972515f129dbc67"}
+    },
+    "fixes": [
+      "_stage_case performs exactly one runner._save_stage_snapshot call",
+      "_guarded_default_torch_save validates the complete default backend object before one forward",
+      "independent metadata-rejection exercise proves the original backend count remains 1",
+      "parent branch uses git -C $Here rev-parse --abbrev-ref HEAD",
+      "ActualChild is set immediately after Start-Process success before PID/StartTime reads",
+      "the single child is always awaited with no retry and no kill"
+    ],
+    "operations_added": {
+      "pure_python_test_processes": 1,
+      "powershell_binary_selftest_processes": 1,
+      "real_s1e_b_processes": 0,
+      "numpy_or_torch_imports": 0,
+      "fixture_saves_loads_reads": 0,
+      "scientific_checkpoint_or_model_loads": 0,
+      "ledger_charges": 0
+    }
+  },
+  "cumulative_process_ledger": {
+    "pure_python_test_attempt_processes": 12,
+    "powershell_selftest_processes": 4,
+    "selftest_attempt_ids": [8, 10, 11, 12],
+    "attempts_1_7_python_exit_receipts": "unknown/uncaught, not zero",
+    "attempts_8_12_python_exit_receipts": "durable",
+    "json_validation_python_invocations": "separate bookkeeping, not test attempts",
+    "real_s1e_b_processes": 0,
+    "parent_launch_attempts": 0,
+    "numpy_or_torch_imports": 0,
+    "fixture_saves_loads_reads": 0,
+    "scientific_checkpoint_or_model_loads": 0,
+    "optimizer_or_ppo_operations": 0,
+    "environments": 0,
+    "ledger_charges": 0
   },
   "phase_a_consumption": {
     "real_s1e_b_processes": 0,

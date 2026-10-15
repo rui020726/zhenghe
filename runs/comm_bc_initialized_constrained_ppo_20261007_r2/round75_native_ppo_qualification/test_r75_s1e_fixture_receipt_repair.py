@@ -7,6 +7,7 @@ import json
 import os
 import random
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -98,6 +99,7 @@ class FakeTorchModule:
     def __init__(self):
         self.state = FakeTensor(b"torch-rng")
         self.last_saved = None
+        self.save_count = 0
         self.__version__ = "fake-2"
         self.int16 = "torch.int16"
         self.int32 = "numpy.int32"
@@ -107,6 +109,7 @@ class FakeTorchModule:
 
     def save(self, obj, file_obj):
         self.last_saved = obj
+        self.save_count += 1
         if hasattr(file_obj, "write"):
             file_obj.write(b"fake-serialized")
         else:
@@ -140,6 +143,20 @@ class Scratch(unittest.TestCase):
         original = probe.OUTPUT_ROOT
         probe.OUTPUT_ROOT = self.tmp
         self.addCleanup(setattr, probe, "OUTPUT_ROOT", original)
+
+    def patch_stage_identity(self, head="s1e-test-head"):
+        original = runner._execution_identity
+        runner._execution_identity = lambda: {"head": head, "parent_head": head + "-parent",
+                                              "branch": "test", "source": "fake", "errors": {}}
+        self.addCleanup(setattr, runner, "_execution_identity", original)
+
+    def write_parent_attempt(self, head="s1e-test-head"):
+        parent = probe.OUTPUT_ROOT / "phase_b_parent_attempt.json"
+        parent.parent.mkdir(parents=True, exist_ok=True)
+        parent.write_text(json.dumps({
+            "kind": "round75-s1e-parent-attempt/1",
+            "head": head, "parent_head": head + "-parent", "branch": "test"
+        }), encoding="utf-8")
 
 
 class CodecTests(Scratch):
@@ -181,6 +198,20 @@ class CodecTests(Scratch):
         with self.assertRaises(TypeError):
             probe._assert_supported_payload({"path": self.tmp}, "path")
 
+    def test_exact_type_guard_rejects_subclasses_and_duck_tensors(self):
+        class FakeDict(dict): pass
+        class FakeList(list): pass
+        class FakeFloat(float): pass
+        class FakeStr(str): pass
+        class DuckTensor:
+            dtype = "torch.uint8"
+            shape = (1,)
+            device = "cpu"
+        allowed = (FakeTensor,)
+        for value in (FakeDict(), FakeList(), FakeFloat(1.0), FakeStr("x"), DuckTensor()):
+            with self.assertRaises(TypeError):
+                probe._assert_supported_payload({"value": value}, "strict", allowed)
+
     def test_numpy_scalar_subclasses_are_rejected_before_python_builtins(self):
         class FakeNumpyFloat(float):
             pass
@@ -190,7 +221,7 @@ class CodecTests(Scratch):
 
     def test_stage_fixture_keeps_torch_and_removes_numpy_objects(self):
         state = probe.build_stage_full_state(FakeNumpyModule(), FakeTorchModule())
-        probe._assert_supported_payload(state, "fixture")
+        probe._assert_supported_payload(state, "fixture", (type(state["torch_rng_state"]),))
         self.assertTrue(hasattr(state["torch_rng_state"], "dtype"))
         self.assertIn("numpy_rng_state", state)
         self.assertNotIsInstance(state["numpy_rng_state"], FakeKeys)
@@ -198,7 +229,7 @@ class CodecTests(Scratch):
     def test_supported_payload_contract_covers_scalars_containers_and_tensor(self):
         value = {"a": [1, 2.0, None, True], "b": (b"raw", "text"),
                  "c": FakeTensor(b"bytes"), "d": {"nested": []}}
-        probe._assert_supported_payload(value, "contract")
+        probe._assert_supported_payload(value, "contract", (FakeTensor,))
 
 
 class SaveAndStageTests(Scratch):
@@ -245,6 +276,8 @@ class SaveAndStageTests(Scratch):
 
     def test_fake_weights_only_stage_case_saves_and_loads_once(self):
         self.patch_output_root()
+        self.patch_stage_identity()
+        self.write_parent_attempt()
         fake_torch = FakeTorchModule()
         original = sys.modules.get("torch")
         sys.modules["torch"] = fake_torch
@@ -263,10 +296,34 @@ class SaveAndStageTests(Scratch):
         self.assertTrue(result["passed"])
         self.assertEqual(result["got_type"], "bool")
         self.assertEqual(result["weights_only"], True)
+        self.assertEqual(result["head_identity_consistent"], True)
+        self.assertIsNotNone(fake_torch.last_saved)
+        saved = fake_torch.last_saved
+        self.assertEqual(set(saved), {"kind", "stage", "label", "request_id", "plan_frozen_head",
+                                      "plan_frozen_head_is_not_execution_head", "execution_identity",
+                                      "code_identity", "data_identity", "counters", "unread",
+                                      "record", "full_state"})
+        self.assertIn("full_state", saved)
         self.assertEqual(counters["fixture_save_attempt"], 1)
         self.assertEqual(counters["fixture_save_completed"], 1)
+        self.assertEqual(fake_torch.save_count, 1)
         self.assertEqual(counters["fixture_load_completed"], 1)
         self.assertEqual(counters["fixture_read_completed"], 1)
+        complete_like = {
+            "kind": "round75-s1-stage-snapshot/1", "stage": "test", "label": "whole-object",
+            "request_id": probe.REQUEST_ID, "plan_frozen_head": "plan",
+            "plan_frozen_head_is_not_execution_head": True,
+            "execution_identity": {"head": "test-head"}, "code_identity": {},
+            "data_identity": {}, "counters": {}, "unread": [], "record": {},
+            "full_state": {}, "unknown_metadata": object(),
+        }
+        original_backend = probe._guarded_default_torch_save(fake_torch, (FakeTensor,))
+        try:
+            with self.assertRaises(TypeError):
+                fake_torch.save(complete_like, self.tmp / "must-not-write")
+        finally:
+            fake_torch.save = original_backend
+        self.assertEqual(fake_torch.save_count, 1)
 
     def test_stage_case_refuses_existing_fixture(self):
         self.patch_output_root()
@@ -281,6 +338,8 @@ class SaveAndStageTests(Scratch):
 
     def test_stage_case_handles_load_failure_and_counts_it(self):
         self.patch_output_root()
+        self.patch_stage_identity()
+        self.write_parent_attempt()
         fake_torch = FakeTorchModule()
         def fail_load(path, map_location, weights_only):
             raise RuntimeError("weights-only fixture rejected")
@@ -306,17 +365,29 @@ class ReceiptTests(Scratch):
     def make_recorder(self):
         return probe.CaseRecorder(self.tmp / "cases.jsonl")
 
-    def test_recorder_appends_each_case_immediately(self):
-        recorder = self.make_recorder()
-        first = recorder.append({"case_id": 1, "passed": True})
-        self.assertTrue((self.tmp / "cases.jsonl").is_file())
-        second = recorder.append({"case_id": 2, "passed": False})
-        lines = (self.tmp / "cases.jsonl").read_text(encoding="utf-8").splitlines()
+    def test_execute_specs_stops_after_failure_without_creating_case_three(self):
+        calls = []
+        counters = {"case_attempt": 0, "case_completed": 0, "case_failed": 0}
+        recorder = probe.CaseRecorder(self.tmp / "main-path-cases.jsonl")
+        fake_runner = type("R", (), {"_rng_identity_full": staticmethod(lambda np, torch: {"ok": True})})()
+        def factory(case_id):
+            def run():
+                calls.append(case_id)
+                if case_id == 2:
+                    raise ValueError("second case failed")
+                return {"passed": True}
+            return run
+        specs = [{"case_id": case_id, "name": f"case-{case_id}", "kind": "lazy",
+                  "factory": factory(case_id)} for case_id in (1, 2, 3)]
+        results = probe._execute_case_specs(specs, recorder, counters, fake_runner, None, None)
+        recorder.close()
+        self.assertEqual(calls, [1, 2])
+        self.assertEqual(len(results), 2)
+        self.assertTrue(results[0]["passed"])
+        self.assertFalse(results[1]["passed"])
+        lines = (self.tmp / "main-path-cases.jsonl").read_text(encoding="utf-8").splitlines()
         self.assertEqual(len(lines), 2)
         self.assertEqual(json.loads(lines[0])["case_id"], 1)
-        self.assertEqual(json.loads(lines[1])["case_id"], 2)
-        recorder.close()
-        self.assertEqual([first, second][0]["case_id"], 1)
 
     def test_run_case_success_is_durable_and_counts_completed(self):
         counters = {"case_attempt": 0, "case_completed": 0, "case_failed": 0}
@@ -395,13 +466,28 @@ class ParentAndConsumptionTests(Scratch):
         self.assertIn("-PassThru", text)
         self.assertNotIn("spawnSync", text)
         self.assertIn("refuses a second launch", text)
+        self.assertIn("$Branch = (& git -C $Here rev-parse --abbrev-ref HEAD)", text)
+        self.assertLess(text.index("$ActualChild = $true"),
+                        text.index("$ChildPid = $Process.Id"))
 
     def test_parent_captures_stdio_as_binary_file_hashes(self):
         text = PARENT_SCRIPT.read_text(encoding="utf-8")
         self.assertIn("-RedirectStandardOutput", text)
         self.assertIn("-RedirectStandardError", text)
-        self.assertIn("Get-FileHash -Algorithm SHA256", text)
+        self.assertIn("$ChildArgv = @($Python, $ChildScript, \"--run-b\")", text)
+        self.assertIn("-WorkingDirectory $Here", text)
+        self.assertIn("[System.Security.Cryptography.SHA256]::Create()", text)
+        self.assertIn("$Sha256.ComputeHash($FileStream)", text)
         self.assertNotIn("StreamReader", text)
+        completed = subprocess.run(
+            ["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass",
+             "-File", str(PARENT_SCRIPT), "-SelfTest"],
+            capture_output=True, timeout=20)
+        self.assertEqual(completed.returncode, 0, completed.stderr.decode("utf-8", "replace"))
+        payload = json.loads(completed.stdout.decode("utf-8"))
+        self.assertTrue(payload["passed"])
+        self.assertFalse(payload["child_started"])
+        self.assertIn("file handles", payload["stdio_implementation_basis"])
 
 
 if __name__ == "__main__":

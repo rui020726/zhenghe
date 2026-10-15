@@ -76,24 +76,31 @@ class CaseRecorder:
             self.handle = None
 
 
-def _assert_supported_payload(value, where: str = "payload") -> None:
-    """Reject every object outside the pinned weights-only fixture contract."""
+def _assert_supported_payload(value, where: str = "payload",
+                              allowed_tensor_types: tuple = ()) -> None:
+    """Accept only exact native types and an explicitly provided Tensor type."""
     module = type(value).__module__
     if module == "numpy" or module.startswith("numpy."):
         raise TypeError(f"{where} contains forbidden {module}.{type(value).__name__}")
-    if value is None or isinstance(value, (bool, int, float, complex, str, bytes, bytearray)):
+    if type(value) in (type(None), bool, int, float, complex, str, bytes, bytearray):
         return
-    if isinstance(value, (list, tuple)):
+    if type(value) is list or type(value) is tuple:
         for index, item in enumerate(value):
-            _assert_supported_payload(item, f"{where}[{index}]")
+            _assert_supported_payload(item, f"{where}[{index}]", allowed_tensor_types)
         return
-    if isinstance(value, dict):
+    if type(value) is dict:
         for key, item in value.items():
-            if not isinstance(key, str):
+            if type(key) is not str:
                 raise TypeError(f"{where} has a non-string key {type(key).__name__}")
-            _assert_supported_payload(item, f"{where}.{key}")
+            _assert_supported_payload(item, f"{where}.{key}", allowed_tensor_types)
         return
-    if hasattr(value, "dtype") and hasattr(value, "shape"):
+    if type(value) in allowed_tensor_types:
+        if not hasattr(value, "dtype") or not hasattr(value, "shape"):
+            raise TypeError(f"{where} is a permitted tensor type without pinned dtype/shape")
+        device = getattr(value, "device", None)
+        if device is not None and not (str(device) == "cpu" or
+                                       getattr(device, "type", None) == "cpu"):
+            raise TypeError(f"{where} tensor is not a CPU tensor")
         return
     raise TypeError(f"{where} contains unsupported {type(value).__module__}.{type(value).__name__}")
 
@@ -142,7 +149,7 @@ def build_stage_full_state(np_mod, torch_mod) -> dict:
         "python_random_state_repr": repr(random.getstate()),
         "data_identity": {"fixture": "self-created non-neural only"},
     }
-    _assert_supported_payload(full_state, "fixture.full_state")
+    _assert_supported_payload(full_state, "fixture.full_state", (type(torch_state),))
     return full_state
 
 
@@ -154,6 +161,23 @@ class ProbeState:
         return {"non_neural_fixture": {"counted": 1}}
 
 
+def _parent_frozen_identity() -> dict:
+    path = OUTPUT_ROOT / "phase_b_parent_attempt.json"
+    if not path.is_file():
+        return {"status": "missing", "head": "missing", "parent_head": "missing",
+                "branch": "missing", "error": "parent attempt marker is missing"}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exception:
+        return {"status": "missing", "head": "missing", "parent_head": "missing",
+                "branch": "missing", "error": _exception_record(exception)}
+    if not isinstance(payload, dict) or payload.get("kind") != "round75-s1e-parent-attempt/1":
+        return {"status": "invalid", "head": "missing", "parent_head": "missing",
+                "branch": "missing", "error": "invalid parent attempt marker kind"}
+    return {"status": "present", "head": payload.get("head"),
+            "parent_head": payload.get("parent_head"), "branch": payload.get("branch")}
+
+
 def _stage_case(runner, np_mod, torch_mod, counters):
     directory = OUTPUT_ROOT / "non_neural_fixture"
     path = directory / "rng_fixture_stage.pt"
@@ -163,10 +187,15 @@ def _stage_case(runner, np_mod, torch_mod, counters):
                 "kind": "stage_save", "passed": False,
                 "error": "fixture already exists; refusing reuse"}
     full_state = build_stage_full_state(np_mod, torch_mod)
+    allowed_tensor_types = (type(full_state["torch_rng_state"]),)
+    original_torch_save = _guarded_default_torch_save(torch_mod, allowed_tensor_types)
     counters["fixture_save_attempt"] += 1
-    identity = runner._save_stage_snapshot(
-        path, stage="S1E_non_neural_fixture", label="weights_only_safe_fixture",
-        state=ProbeState(), full_state=full_state)
+    try:
+        identity = runner._save_stage_snapshot(
+            path, stage="S1E_non_neural_fixture", label="weights_only_safe_fixture",
+            state=ProbeState(), full_state=full_state)
+    finally:
+        torch_mod.save = original_torch_save
     counters["fixture_save_completed"] += 1
     size = path.stat().st_size
     if size > 1024 * 1024:
@@ -178,18 +207,30 @@ def _stage_case(runner, np_mod, torch_mod, counters):
     loaded = torch_mod.load(path, map_location="cpu", weights_only=True)
     counters["fixture_load_completed"] += 1
     counters["fixture_read_completed"] += 1
-    _assert_supported_payload(loaded, "fixture.loaded_payload")
+    _assert_supported_payload(loaded, "fixture.loaded_payload", allowed_tensor_types)
     loaded_state = loaded["full_state"]
     rebuilt_numpy = decode_numpy_mt19937_state(loaded_state["numpy_rng_state"], np_mod)
     same_torch = runner._raw_equal(full_state["torch_rng_state"],
                                    loaded_state["torch_rng_state"])
     same_numpy = runner._raw_equal(np_mod.random.get_state(), rebuilt_numpy)
     same_python = full_state["python_random_state_repr"] == loaded_state["python_random_state_repr"]
+    runtime_identity = runner._execution_identity()
+    parent_identity = _parent_frozen_identity()
+    head_consistent = bool(
+        parent_identity["status"] == "present" and
+        identity["execution_head"] == runtime_identity.get("head") and
+        identity["execution_head"] == parent_identity.get("head") and
+        identity["execution_head"] not in (None, "", "unknown", "missing") and
+        parent_identity.get("parent_head") == runtime_identity.get("parent_head") and
+        parent_identity.get("branch") == runtime_identity.get("branch")
+    )
     passed = bool(
         size == identity["bytes"] and
         loaded["stage"] == "S1E_non_neural_fixture" and
         loaded["request_id"] == REQUEST_ID and
         loaded["plan_frozen_head_is_not_execution_head"] is True and
+        loaded["execution_identity"]["head"] == identity["execution_head"] and
+        head_consistent and
         loaded["data_identity"]["fixture"] == "self-created non-neural only" and
         isinstance(same_torch, bool) and same_torch and
         isinstance(same_numpy, bool) and same_numpy and
@@ -200,11 +241,26 @@ def _stage_case(runner, np_mod, torch_mod, counters):
             "wanted": True, "passed": passed, "path": str(path), "bytes": size,
             "sha256": identity["sha256"], "torch_save": 1, "torch_load": 1,
             "weights_only": True, "checkpoint_loads": 0, "rng_fixture_reads": 1,
-            "execution_head": identity["execution_head"]}
+            "execution_head": identity["execution_head"],
+            "runtime_head": runtime_identity.get("head"),
+            "parent_frozen_head": parent_identity.get("head"),
+            "parent_frozen_parent_head": parent_identity.get("parent_head"),
+            "parent_frozen_branch": parent_identity.get("branch"),
+            "head_identity_consistent": head_consistent}
 
 
-def _build_cases(np_mod, torch_mod, runner):
-    """The S1D fourteen fixed comparison cases, in their original order."""
+def _guarded_default_torch_save(torch_mod, allowed_tensor_types: tuple):
+    """Install a one-shot whole-object guard over the real default backend."""
+    original_torch_save = torch_mod.save
+    def guarded_torch_save(obj, file_obj):
+        _assert_supported_payload(obj, "default_torch_save.object", allowed_tensor_types)
+        return original_torch_save(obj, file_obj)
+    torch_mod.save = guarded_torch_save
+    return original_torch_save
+
+
+def _build_case_specs(np_mod, torch_mod, runner):
+    """Build 15 lazy case closures; no comparator runs at construction time."""
     torch_state = torch_mod.get_rng_state()
     numpy_state = np_mod.random.get_state()
     python_state = random.getstate()
@@ -244,31 +300,44 @@ def _build_cases(np_mod, torch_mod, runner):
         ("mixed_payload_same", mixed_same, copy.deepcopy(mixed_same), True),
         ("mixed_payload_different", mixed_same, mixed_diff, False),
     ]
-    cases = []
-    for name, live, expected, wanted in direct:
-        got = runner._raw_equal(live, expected)
-        cases.append({"name": name, "kind": "direct", "got": bool(got),
-                      "got_type": type(got).__name__, "wanted": bool(wanted),
-                      "passed": isinstance(got, bool) and bool(got) == bool(wanted)})
     saved_same = {"_numpy_state": copy.deepcopy(numpy_state),
                   "_torch_state": torch_state.clone(),
                   "_python_state": copy.deepcopy(python_state)}
-    problems_same = runner._rng_payload_differences(saved_same, np_mod, torch_mod)
-    cases.append({"name": "rng_differences_all_same", "kind": "integration",
-                  "got": problems_same, "got_type": type(problems_same).__name__,
-                  "wanted": [], "passed": isinstance(problems_same, list) and problems_same == []})
     saved_torch_diff = {"_numpy_state": copy.deepcopy(numpy_state),
                         "_torch_state": torch_diff.clone(),
                         "_python_state": copy.deepcopy(python_state)}
-    problems_torch = runner._rng_payload_differences(saved_torch_diff, np_mod, torch_mod)
-    passed_torch = (isinstance(problems_torch, list) and len(problems_torch) == 1 and
-                    problems_torch[0].get("where") == "rng_payload:torch_rng_state")
-    cases.append({"name": "rng_differences_torch_one_byte", "kind": "integration",
-                  "got": problems_torch, "got_type": type(problems_torch).__name__,
-                  "wanted": [{"where": "rng_payload:torch_rng_state"}], "passed": passed_torch})
-    for case_id, case in enumerate(cases, start=1):
-        case["case_id"] = case_id
+    cases = []
+    for case_id, (name, live, expected, wanted) in enumerate(direct, start=1):
+        def factory(live=live, expected=expected, wanted=wanted):
+            got = runner._raw_equal(live, expected)
+            return {"got": bool(got), "got_type": type(got).__name__,
+                    "wanted": bool(wanted),
+                    "passed": isinstance(got, bool) and bool(got) == bool(wanted)}
+        cases.append({"case_id": case_id, "name": name, "kind": "direct",
+                      "factory": factory})
+
+    def same_factory():
+        got = runner._rng_payload_differences(saved_same, np_mod, torch_mod)
+        return {"got": got, "got_type": type(got).__name__, "wanted": [],
+                "passed": isinstance(got, list) and got == []}
+    cases.append({"case_id": 13, "name": "rng_differences_all_same",
+                  "kind": "integration", "factory": same_factory})
+
+    def torch_diff_factory():
+        got = runner._rng_payload_differences(saved_torch_diff, np_mod, torch_mod)
+        passed = (isinstance(got, list) and len(got) == 1 and
+                  got[0].get("where") == "rng_payload:torch_rng_state")
+        return {"got": got, "got_type": type(got).__name__,
+                "wanted": [{"where": "rng_payload:torch_rng_state"}], "passed": passed}
+    cases.append({"case_id": 14, "name": "rng_differences_torch_one_byte",
+                  "kind": "integration", "factory": torch_diff_factory})
     return cases
+
+
+def _stage_case_spec(runner, np_mod, torch_mod, counters):
+    return {"case_id": 15, "name": "default_torch_save_load_fixture",
+            "kind": "stage_save",
+            "factory": lambda: _stage_case(runner, np_mod, torch_mod, counters)}
 
 
 def _exception_record(exception: BaseException) -> dict:
@@ -301,6 +370,19 @@ def run_case(case_id: int, name: str, kind: str, function, recorder: CaseRecorde
     else:
         counters["case_completed"] += 1
     return recorder.append(record)
+
+
+def _execute_case_specs(case_specs, recorder: CaseRecorder, counters: dict,
+                        runner, np_mod, torch_mod):
+    """Run the fixed cases one by one through the protected receipt path."""
+    results = []
+    for spec in case_specs:
+        result = run_case(spec["case_id"], spec["name"], spec["kind"],
+                          spec["factory"], recorder, counters, runner, np_mod, torch_mod)
+        results.append(result)
+        if not result["passed"]:
+            break
+    return results
 
 
 def _write_result(payload: dict) -> None:
@@ -350,18 +432,10 @@ def main(argv=None) -> int:
         torch_mod = importlib.import_module("torch")
         counters["torch_import_completed"] += 1
         before = {"status": "present", "identity": runner._rng_identity_full(np_mod, torch_mod)}
-        for case in _build_cases(np_mod, torch_mod, runner):
-            result = run_case(case["case_id"], case["name"], case["kind"],
-                              lambda item=case: item, recorder, counters, runner,
-                              np_mod, torch_mod)
-            cases.append(result)
-            if not result["passed"]:
-                break
-        if len(cases) == 14 and cases[-1]["passed"]:
-            case = _stage_case(runner, np_mod, torch_mod, counters)
-            cases.append(run_case(case["case_id"], case["name"], case["kind"],
-                                  lambda: case, recorder, counters, runner,
-                                  np_mod, torch_mod))
+        case_specs = _build_case_specs(np_mod, torch_mod, runner)
+        case_specs.append(_stage_case_spec(runner, np_mod, torch_mod, counters))
+        cases = _execute_case_specs(case_specs, recorder, counters, runner,
+                                    np_mod, torch_mod)
     except BaseException as exception:
         cases.append(recorder.append({"case_id": max([len(cases) + 1, 1]), "name": "process_setup",
                                       "kind": "setup", "passed": False,

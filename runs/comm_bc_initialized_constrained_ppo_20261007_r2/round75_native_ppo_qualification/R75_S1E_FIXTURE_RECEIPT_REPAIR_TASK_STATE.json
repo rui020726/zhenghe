@@ -1,11 +1,14 @@
 {
   "request_id": "R75_S1E_FIXTURE_RECEIPT_REPAIR_20261015",
   "task": "S1E fixture and failure-receipt repair",
-  "phase": "A_FROZEN_AWAITING_DECISION_REVIEW",
+  "phase": "A_REVISION_3_FROZEN_AWAITING_DECISION_REVIEW",
   "branch": "exp/round75-native-ppo-qualification",
   "start_head": "50feb386dd15af593b6e016c6a300d4af413b35c",
   "start_parent": "bffb6b15e8525bc7fa8711aa78cc31e0ab23799c",
   "phase_a_complete": true,
+  "phase_a_revision_2_complete": true,
+  "phase_a_revision_3_start_head": "bafc9191823af87fe31663bb86cd2564ef04026b",
+  "phase_a_revision_3_complete": true,
   "phase_b_complete": false,
   "phase_b_started": false,
   "phase_b_license": {
@@ -22,6 +25,37 @@
     "attempts_total": 7,
     "final_log": "raw/s1e_probe/a_test_run_attempt7.log",
     "final_log_sha256": "7df6900010b20cf91ef5ee47e8ab2dc9b1afd219a1048471a17a99e8e85f9054"
+  },
+  "phase_a_revision_2_tests": {
+    "cases": 24,
+    "passed": 24,
+    "failed": 0,
+    "exit_code": 0,
+    "final_attempt": 11,
+    "final_log": "raw/s1e_probe/a_test_run_attempt11.log",
+    "final_log_sha256": "9d7d4ea3bd090a2b7cddd36d1ff4cdda97009e1d738c80940eebfc818dcf3471",
+    "final_exit_receipt_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354",
+    "pure_python_test_processes_added": 4,
+    "powershell_selftest_processes_added": 3
+  },
+  "phase_a_revision_2_process_errata": {
+    "authoritative_revision_2_powershell_selftests": 3,
+    "selftest_attempts": [8, 10, 11],
+    "attempt8_case_count": 25,
+    "attempt8_failures": 2,
+    "attempt8_residue_erased": false
+  },
+  "phase_a_revision_3_tests": {
+    "cases": 3,
+    "passed": 3,
+    "failed": 0,
+    "exit_code": 0,
+    "attempt": 12,
+    "top_level_test_method_count": 24,
+    "new_top_level_test_cases": 0,
+    "log": "raw/s1e_probe/a_test_run_attempt12.log",
+    "log_sha256": "a310257e29bd8209b7552a60461f072da58fc883fe97eefe7ef1574343fe73b2",
+    "exit_receipt_sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
   },
   "new_files": [
     "r75_s1e_fixture_receipt_repair.py",
@@ -41,6 +75,22 @@
     "phase_a_fixture_loads": 0,
     "phase_a_fixture_reads": 0,
     "phase_a_test_processes": 7,
+    "ledger_charges": 0
+  },
+  "cumulative_process_ledger": {
+    "pure_python_test_attempt_processes": 12,
+    "powershell_selftest_processes": 4,
+    "selftest_attempt_ids": [8, 10, 11, 12],
+    "attempts_1_7_python_exit_receipts": "unknown/uncaught, not zero",
+    "attempts_8_12_python_exit_receipts": "durable",
+    "json_validation_python_invocations": "separate bookkeeping, not test attempts",
+    "real_s1e_b_processes": 0,
+    "parent_launch_attempts": 0,
+    "numpy_or_torch_imports": 0,
+    "fixture_saves_loads_reads": 0,
+    "scientific_checkpoint_or_model_loads": 0,
+    "optimizer_or_ppo_operations": 0,
+    "environments": 0,
     "ledger_charges": 0
   },
   "next_action": "Stop for decision-side source review; on same-task B continuation, launch r75_s1e_parent_capture.ps1 exactly once.",
