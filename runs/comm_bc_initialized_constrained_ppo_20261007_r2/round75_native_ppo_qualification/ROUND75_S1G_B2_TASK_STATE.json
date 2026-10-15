@@ -1,0 +1,65 @@
+{
+  "kind": "round75-s1g-b2-task-state/1",
+  "task_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
+  "phase": "B2_COMPLETED_WITH_LEDGER_RECONCILIATION_DIAGNOSTIC",
+  "authorization": {
+    "human_scope": "approved_full_draft_source_then_test",
+    "b2_released_by_current_instruction": true,
+    "b2_started": true,
+    "b2_parent_started": true,
+    "b2_nn_child_started": true,
+    "a1_critic_only_normal_completed": true,
+    "a2_native_update0_four_normal_completed": true,
+    "a3_same_update0_replay_four_technical_completed": true,
+    "parent_start_attempts_allowed": 1,
+    "parent_start_attempts_used": 1,
+    "pure_stdlib_parent_allowed": 1,
+    "pure_stdlib_parent_used": 1,
+    "cpu_nn_child_allowed": 1,
+    "cpu_nn_child_used": 1
+  },
+  "execution_identity": {
+    "repo": "D:/code/整合/zhenghe-round42",
+    "branch": "exp/round75-native-ppo-qualification",
+    "python": "D:/project_env/python.exe",
+    "b2_start_head": "83b19fba4fd8ebf0e7a0fe1e32b42147c1071d06",
+    "b2_parent_head": "af77a805b0032dfa49d6dc4ac85d9dab899c661a",
+    "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"
+  },
+  "stop_contract": {
+    "on_any_identity_or_gate_failure": "stop immediately; read-only diagnosis, derived docs and explicit local closeout only; no source repair, no test, no second B2, no remaining-normal retry",
+    "old_b1_parent_attempts": 1,
+    "b1_b2_outer_history_limit": 2,
+    "outer_attempts_used_before_this_b2": 1
+  },
+  "actual_b2_execution": {
+    "parent_pid": 27496,
+    "parent_os_exit_code": 0,
+    "parent_started_utc": "2026-10-15T14:25:45.0462827Z",
+    "parent_ended_utc": "2026-10-15T14:25:56.2174156Z",
+    "nn_child_pid": 66384,
+    "nn_child_os_returncode": 0,
+    "child_timed_out": false,
+    "child_stdout_bytes": 3997,
+    "child_stdout_sha256": "afb72d7de595586451dad4fd8dc3a98b2698e38fb26106c43d779de356e1de88",
+    "child_stderr_bytes": 0,
+    "child_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "a1_gate_passed": true,
+    "a2_optimizer_steps": 4,
+    "a3_optimizer_steps": 4,
+    "real_steps_observed": 9,
+    "restore_differences": 0,
+    "end_state_differences": 0,
+    "scientific_return_differences": 0,
+    "runner_failure_count": 0,
+    "outer_guard_ledger_reconciliation_ok": false,
+    "ledger_reconciliation_status": "disclosed_diagnostic_mismatch_not_runner_failure"
+  },
+  "new_consumption_delta": {
+    "physical_optimizer_step_normal": 5,
+    "physical_optimizer_step_reserve_technical": 4,
+    "offline_trunk_target_row_normal": 1680,
+    "joint_record_normal": 2,
+    "environment_construction": 0
+  }
+}

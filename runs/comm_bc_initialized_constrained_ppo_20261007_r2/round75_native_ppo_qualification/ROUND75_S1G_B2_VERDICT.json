@@ -1,0 +1,47 @@
+{
+  "kind": "round75-s1g-b2-verdict/1",
+  "task_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
+  "status": "B2_COMPLETED_SCIENCE_GATES_PASSED_WITH_LEDGER_RECONCILIATION_DIAGNOSTIC",
+  "execution": {
+    "head": "83b19fba4fd8ebf0e7a0fe1e32b42147c1071d06",
+    "parent": "af77a805b0032dfa49d6dc4ac85d9dab899c661a",
+    "parent_pid": 27496,
+    "parent_os_exit_code": 0,
+    "child_pid": 66384,
+    "child_returncode": 0,
+    "child_timed_out": false,
+    "child_stdout_sha256": "afb72d7de595586451dad4fd8dc3a98b2698e38fb26106c43d779de356e1de88",
+    "child_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "gates": {
+    "a1_gate_passed": true,
+    "a2_optimizer_steps": 4,
+    "a3_optimizer_steps": 4,
+    "likelihood_alignment_tolerance": 1e-6,
+    "likelihood_alignment_passed": true,
+    "restore_differences": 0,
+    "end_state_differences": 0,
+    "scientific_return_differences": 0,
+    "meter_additivity": {"A2": true, "A3": true},
+    "runner_failure_count": 0
+  },
+  "consumption_delta": {
+    "physical_optimizer_step_normal": 5,
+    "physical_optimizer_step_reserve_technical": 4,
+    "offline_trunk_target_row_normal": 1680,
+    "joint_record_normal": 2,
+    "environment_construction": 0
+  },
+  "cumulative_runtime_after": {
+    "physical_optimizer_step": {"used_normal": 10, "used_reserve": 4, "used": 14},
+    "offline_trunk_target_row": {"used_normal": 2520, "used_reserve": 0},
+    "joint_record": {"used_normal": 3},
+    "environment_construction": {"used_normal": 0, "used_reserve": 0}
+  },
+  "ledger_reconciliation": {
+    "outer_ok": false,
+    "mismatch_unit": "physical_optimizer_step",
+    "classification": "disclosed_diagnostic_mismatch_not_runner_failure"
+  },
+  "meaning": "The frozen native update and disk-restore equivalence qualification completed. This is not a communication-benefit claim and does not authorize additional training."
+}
