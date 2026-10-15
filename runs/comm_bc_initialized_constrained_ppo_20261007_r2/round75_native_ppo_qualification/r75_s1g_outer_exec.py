@@ -52,7 +52,7 @@ WRAPPER_FAILURE_RECORD = "r75_s1g_outer_v2_wrapper_failure.json"
 
 EXPECT_CODE = {
     "r75_s1_runner.py": "4f84184a25d9058df97abf04fb00febe1d6b8c123944fcc9814e78651d3835d4",
-    "r75_s1_precheck.py": "ad14206200b8786fea5f09a0cc5ffe838a57255cb9d844313c7b3fc45da38703",
+    "r75_s1_precheck.py": "88b88c3854f25f81a1398d37066b5d62f4941a7529b349fe5a9d20361733625b",
     "r75_frozen.py": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
     "r75_guard.py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
     "r75_replay_adapter.py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",

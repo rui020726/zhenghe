@@ -189,8 +189,21 @@ def check_active_production_baseline(plan: dict, report: Report) -> None:
     contract = plan["active_production_baseline"]
     root = resolve_path(contract["root"])
     snapshot = ledger_snapshot(root, contract["files"])
+    declared_total_sha = contract.get("total_ledger_sha256")
+    report.check("ledger:baseline_total_ledger_sha256_declared",
+                 isinstance(declared_total_sha, str) and len(declared_total_sha) == 64,
+                 "active_production_baseline declares the total ledger SHA256")
+    ledger_contract = contract.get("files", {}).get("r75_total_ledger.jsonl")
+    declared_file_sha = (ledger_contract.get("sha256")
+                         if isinstance(ledger_contract, dict) else None)
+    report.check("ledger:baseline_total_ledger_sha256_contract_consistent",
+                 declared_total_sha == declared_file_sha,
+                 "declared total ledger SHA256 equals the r75_total_ledger.jsonl contract")
     report.check("ledger:baseline_files", snapshot["frozen_snapshot_match"] is True,
                  "the nine runtime files match the active S1G baseline byte-for-byte")
+    report.check("ledger:baseline_total_ledger_sha256_actual",
+        sha256_file(root / "r75_total_ledger.jsonl") == declared_total_sha,
+                 "the on-disk total ledger matches the declared SHA256")
     report.check("ledger:baseline_event_count",
                  snapshot["total_ledger_events"] == contract["total_ledger_events"],
                  f"{snapshot['total_ledger_events']} events, expected "
@@ -224,8 +237,8 @@ def check_active_production_baseline(plan: dict, report: Report) -> None:
         event_sum = sums.get(kinds[unit], {})
         report.check(f"ledger:baseline:{unit}:event_sums",
                      event_sum.get("charged_events") == want["charged_events"]
-                     and event_sum.get("sum_normal") == want.get("sum_normal", 0)
-                     and event_sum.get("sum_reserve") == want.get("sum_reserve", 0),
+                     and event_sum.get("sum_normal") == want["sum_normal"]
+                     and event_sum.get("sum_reserve") == want["sum_reserve"],
                      f"event sums {event_sum!r}, expected {want!r}")
     locks = sorted(path.name for path in root.glob("*.lock"))
     report.check("ledger:baseline_no_residual_lock", not locks, f"lock files: {locks}")

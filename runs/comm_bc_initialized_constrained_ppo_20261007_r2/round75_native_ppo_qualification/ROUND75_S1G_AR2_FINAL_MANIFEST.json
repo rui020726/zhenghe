@@ -1,0 +1,71 @@
+{
+  "kind": "round75-s1g-ar2-final-manifest/1",
+  "task_id": "R75_S1G_AR2_FIXTURE_HASH_REPAIR_20261015",
+  "status": "A_R2_TECHNICAL_PREPARATION_PASSED",
+  "python_consumption": {
+    "used": 2,
+    "cap": 2,
+    "remaining": 0,
+    "attempt1": {"pid": 73416, "os_exit_code": 1, "verified": true},
+    "attempt2": {"pid": 23816, "os_exit_code": 0, "verified": true}
+  },
+  "source_work_sha256": {
+    "r75_s1_precheck.py": "88b88c3854f25f81a1398d37066b5d62f4941a7529b349fe5a9d20361733625b",
+    "r75_s1g_outer_exec.py": "24693d8818ea5e99d7f0f80941f8258fe1ab0b5d07b05d13ec14908c0c619223",
+    "test_r75_s1g_phase_a.py": "ff81446f3c12558870cea589cdf4b8671c4fb3ae53a2b63f745d8e6aef358474"
+  },
+  "frozen_identity_unchanged": {
+    "r75_s1_runner.py": "4f84184a25d9058df97abf04fb00febe1d6b8c123944fcc9814e78651d3835d4",
+    "r75_frozen.py": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
+    "r75_guard.py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+    "r75_replay_adapter.py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+    "ROUND75_S1G_AR1_RUN_PLAN.json": "6303c093d0e19d71081e5c1c5d6393f21733d8f7c9c9fb87ec6fd21eecd7ebab"
+  },
+  "attempt_originals": [
+    {
+      "name": "test_r75_s1g_phase_a_ar2_attempt1_stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "test_r75_s1g_phase_a_ar2_attempt1_stderr.log",
+      "bytes": 1168,
+      "sha256": "f38eafe9e1623e5b9b8ad0a469c26adfcbea84acabf4e525e372ab8a880d29b"
+    },
+    {
+      "name": "ROUND75_S1G_AR2_ATTEMPT1_RECEIPT.json",
+      "bytes": 3942,
+      "sha256": "7f9eda658ec58f15ec89998adbc90321ae45eccfb30b2a57f36c3e34d2f21aed"
+    },
+    {
+      "name": "test_r75_s1g_phase_a_ar2_attempt2_stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "test_r75_s1g_phase_a_ar2_attempt2_stderr.log",
+      "bytes": 109,
+      "sha256": "0e67ff07d88b3f658d71a95a662811b3d99a24d80ec00753d29982c89026128f"
+    },
+    {
+      "name": "ROUND75_S1G_AR2_ATTEMPT2_RECEIPT.json",
+      "bytes": 8216,
+      "sha256": "59ee439774bdf067c4ea28446ad97f62a165dd48b68dcc223d3fdeb6f813b692"
+    }
+  ],
+  "raw_runtime_nine_file_identity": {
+    "r75_environment_construction.json": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6",
+    "r75_environment_construction_guard.json": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b",
+    "r75_joint_record.json": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3",
+    "r75_joint_record_guard.json": "eb004d98cd0689e16f678856be7bae95df99b8b168a4ce1dec9d82aec39bc567",
+    "r75_offline_trunk_target_row.json": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527",
+    "r75_offline_trunk_target_row_guard.json": "6ac36b9182a0d14f82b7fe645c67fb8b7389282326f5b3cae353d6da5edea8e9",
+    "r75_physical_optimizer_step.json": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa",
+    "r75_physical_optimizer_step_guard.json": "5d4c65c6de6b4d2c753854fbd4117abd0ab4032220a2f91d56ddb2eb76e9c168",
+    "r75_total_ledger.jsonl": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+  },
+  "protected_files_unchanged": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}
