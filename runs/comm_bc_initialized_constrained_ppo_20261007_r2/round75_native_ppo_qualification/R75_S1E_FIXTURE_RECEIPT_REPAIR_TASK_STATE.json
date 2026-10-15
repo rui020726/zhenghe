@@ -1,0 +1,54 @@
+{
+  "request_id": "R75_S1E_FIXTURE_RECEIPT_REPAIR_20261015",
+  "task": "S1E fixture and failure-receipt repair",
+  "phase": "A_FROZEN_AWAITING_DECISION_REVIEW",
+  "branch": "exp/round75-native-ppo-qualification",
+  "start_head": "50feb386dd15af593b6e016c6a300d4af413b35c",
+  "start_parent": "bffb6b15e8525bc7fa8711aa78cc31e0ab23799c",
+  "phase_a_complete": true,
+  "phase_b_complete": false,
+  "phase_b_started": false,
+  "phase_b_license": {
+    "authorized_by_human": true,
+    "decision_gate_required": true,
+    "parent_launch_attempts_max": 1,
+    "real_cpu_python_processes_max": 1
+  },
+  "phase_a_tests": {
+    "cases": 23,
+    "passed": 23,
+    "failed": 0,
+    "exit_code": 0,
+    "attempts_total": 7,
+    "final_log": "raw/s1e_probe/a_test_run_attempt7.log",
+    "final_log_sha256": "7df6900010b20cf91ef5ee47e8ab2dc9b1afd219a1048471a17a99e8e85f9054"
+  },
+  "new_files": [
+    "r75_s1e_fixture_receipt_repair.py",
+    "r75_s1e_parent_capture.ps1",
+    "test_r75_s1e_fixture_receipt_repair.py",
+    "ROUND75_S1E_FIXTURE_RECEIPT_REPAIR_REPORT.md",
+    "ROUND75_S1E_FIXTURE_RECEIPT_REPAIR_VERDICT.json",
+    "R75_S1E_FIXTURE_RECEIPT_REPAIR_TASK_STATE.json"
+  ],
+  "scientific_runner_changed": false,
+  "s1d_originals_changed": false,
+  "raw_runtime_changed": false,
+  "protected_files_changed": false,
+  "consumption": {
+    "phase_a_real_b_processes": 0,
+    "phase_a_fixture_saves": 0,
+    "phase_a_fixture_loads": 0,
+    "phase_a_fixture_reads": 0,
+    "phase_a_test_processes": 7,
+    "ledger_charges": 0
+  },
+  "next_action": "Stop for decision-side source review; on same-task B continuation, launch r75_s1e_parent_capture.ps1 exactly once.",
+  "invariants": {
+    "r75_s1_runner_py_sha256": "872f8bcd6c6c7d92c699e7887cf81d39fbf1f6218b31bf713160d907a148eae7",
+    "r75_s1_outer_exec_v2_py_sha256": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+    "r75_frozen_py_sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+    "r75_guard_py_sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+    "central_ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+  }
+}

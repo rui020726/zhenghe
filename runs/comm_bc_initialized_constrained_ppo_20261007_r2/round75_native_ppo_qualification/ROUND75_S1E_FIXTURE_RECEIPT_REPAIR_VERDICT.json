@@ -1,0 +1,118 @@
+{
+  "kind": "round75-s1e-fixture-receipt-repair-verdict/1",
+  "request_id": "R75_S1E_FIXTURE_RECEIPT_REPAIR_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "start_head": "50feb386dd15af593b6e016c6a300d4af413b35c",
+  "parent_head": "bffb6b15e8525bc7fa8711aa78cc31e0ab23799c",
+  "status": "PHASE_A_FROZEN_AWAITING_DECISION_REVIEW_B_NOT_STARTED",
+  "phase_a_passed": true,
+  "phase_b_executed": false,
+  "authorization": {
+    "phase_a": true,
+    "phase_b_preauthorized_but_decision_gated": true,
+    "b_auto_start_allowed": false,
+    "b_max_parent_launch_attempts": 1,
+    "b_max_real_cpu_python_processes": 1,
+    "note": "This A freeze is the decision source; B starts only through the separately issued same-task continuation."
+  },
+  "frozen_sources": {
+    "r75_s1e_fixture_receipt_repair_py": {
+      "bytes": 18688,
+      "sha256": "40e3dd2bf3fb2da9d5b5576ef12c62e7a91d4427eff68d0f4e2d378b462b8b98"
+    },
+    "r75_s1e_parent_capture_ps1": {
+      "bytes": 4280,
+      "sha256": "eb8964079eb63e7a2eb562f3886283a63c2b68b68d93a53ccfae9ea4a3a4d6b1"
+    },
+    "test_r75_s1e_fixture_receipt_repair_py": {
+      "bytes": 16755,
+      "sha256": "59abcb315fc539a632b3e3043c2f0e39995f1bbc7fa67858ccdef079f675b876"
+    }
+  },
+  "unchanged_identities": {
+    "r75_s1_runner_py": "872f8bcd6c6c7d92c699e7887cf81d39fbf1f6218b31bf713160d907a148eae7",
+    "r75_s1_outer_exec_v2_py": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+    "r75_frozen_py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+    "r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+    "r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+    "central_ledger": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+  },
+  "phase_a_tests": {
+    "final_attempt": 7,
+    "final_cases": 23,
+    "final_passed": 23,
+    "final_failed": 0,
+    "final_exit_code": 0,
+    "attempts_total": 7,
+    "attempt_logs": [
+      {"file": "raw/s1e_probe/a_test_run.log", "bytes": 726, "sha256": "1ac3163f2053faeb6f5873080aa5106425c13bbc99ef014c20d822a37a66b8d4", "outcome": "1 unittest discovery error; no implementation case reached"},
+      {"file": "raw/s1e_probe/a_test_run_attempt2.log", "bytes": 17483, "sha256": "6dc9840bcd88aabf7ea619be71d569549661fe97fa0ddeeee4adcbc2d3386104", "outcome": "22 cases, 14 passed, 1 failure, 7 errors"},
+      {"file": "raw/s1e_probe/a_test_run_attempt3.log", "bytes": 6686, "sha256": "5e9f415d2683099af50a963e11b1465f76a887322dfe8abdd43679a7cebbb343", "outcome": "22 cases, 18 passed, 1 failure, 3 errors"},
+      {"file": "raw/s1e_probe/a_test_run_attempt4.log", "bytes": 5060, "sha256": "197a490096129c05bd591b4c88b5147ad9d3234286e6e8c37de820a75f31afda", "outcome": "22 cases, 19 passed, 2 failures, 1 error"},
+      {"file": "raw/s1e_probe/a_test_run_attempt5.log", "bytes": 3227, "sha256": "df0e2a4b591b74713bf5e3f56df9a2afd618a1a00497161ab3f768f5e58cb444", "outcome": "22 cases, 21 passed, 1 failure"},
+      {"file": "raw/s1e_probe/a_test_run_attempt6.log", "bytes": 2593, "sha256": "b54a1bdebe87bbc676f2cfffec55cd02a74284f9fdad605ba214d71f571e1a38", "outcome": "22 cases, all passed"},
+      {"file": "raw/s1e_probe/a_test_run_attempt7.log", "bytes": 2715, "sha256": "7df6900010b20cf91ef5ee47e8ab2dc9b1afd219a1048471a17a99e8e85f9054", "outcome": "23 cases, all passed after NumPy-scalar guard addition"}
+    ],
+    "real_torch_or_numpy_imports": 0
+  },
+  "phase_a_consumption": {
+    "real_s1e_b_processes": 0,
+    "parent_launch_attempts": 0,
+    "fixture_saves": 0,
+    "fixture_loads": 0,
+    "fixture_reads": 0,
+    "scientific_checkpoint_or_model_loads": 0,
+    "optimizer_steps": 0,
+    "ppo_updates": 0,
+    "environments": 0,
+    "ledger_charges": 0
+  },
+  "fixture_contract": {
+    "output_root": "raw/s1e_probe",
+    "fixture_path": "raw/s1e_probe/non_neural_fixture/rng_fixture_stage.pt",
+    "max_bytes": 1048576,
+    "save_abi": "runner._save_stage_snapshot default torch.save(payload, file_obj)",
+    "load_abi": "torch.load(path, map_location='cpu', weights_only=True)",
+    "save_budget": 1,
+    "load_budget": 1,
+    "fixture_read_budget": 1,
+    "numpy_state_codec": "r75_numpy_mt19937_state/1",
+    "torch_state": "CPU Tensor retained",
+    "forbidden_payload_types": ["np.ndarray", "np scalar", "Path", "custom objects"],
+    "allowlist_fallback": false,
+    "weights_only_false": false
+  },
+  "receipt_contract": {
+    "per_case_file": "raw/s1e_probe/phase_b_cases.jsonl",
+    "append_flush_fsync": true,
+    "failure_stops_remaining_cases": true,
+    "missing_rng_after": true,
+    "before_substitution": false
+  },
+  "parent_capture_contract": {
+    "script": "r75_s1e_parent_capture.ps1",
+    "launcher": "PowerShell Start-Process",
+    "node_spawn_sync": false,
+    "stdio_capture": "redirected files; binary SHA via Get-FileHash",
+    "text_stream_reader": false,
+    "result_copy_as_stdout": false,
+    "retry_count": 0
+  },
+  "b_matrix": {
+    "case_count": 15,
+    "comparison_cases": 14,
+    "stage_fixture_case": 15,
+    "numpy_imports": 1,
+    "torch_imports": 1,
+    "rng_reads": "complete",
+    "rng_set_state_or_seed": 0,
+    "scientific_model_or_checkpoint_loads": 0
+  },
+  "git": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "commit_scope": "A source, tests and derived docs only; no raw fixture, logs or weights"
+  },
+  "boundary": "A passing proves only frozen non-neural wiring and contract. It does not prove the real Torch weights-only backend or any scientific S1 qualification."
+}

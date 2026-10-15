@@ -1229,5 +1229,83 @@
       "case_15": "not completed",
       "no_source_test_or_process_change": true
     }
+  },
+  "s1e_fixture_receipt_repair_phase_a": {
+    "request_id": "R75_S1E_FIXTURE_RECEIPT_REPAIR_20261015",
+    "start_head": "50feb386dd15af593b6e016c6a300d4af413b35c",
+    "parent_head": "bffb6b15e8525bc7fa8711aa78cc31e0ab23799c",
+    "status": "PHASE_A_FROZEN_AWAITING_DECISION_REVIEW_B_NOT_STARTED",
+    "output_root": "raw/s1e_probe",
+    "phase_a": {
+      "cases": 23,
+      "passed": 23,
+      "failed": 0,
+      "exit_code": 0,
+      "attempts_total": 7,
+      "final_log": "raw/s1e_probe/a_test_run_attempt7.log",
+      "final_log_sha256": "7df6900010b20cf91ef5ee47e8ab2dc9b1afd219a1048471a17a99e8e85f9054"
+    },
+    "source": {
+      "r75_s1e_fixture_receipt_repair_py": {
+        "bytes": 18688,
+        "sha256": "40e3dd2bf3fb2da9d5b5576ef12c62e7a91d4427eff68d0f4e2d378b462b8b98"
+      },
+      "r75_s1e_parent_capture_ps1": {
+        "bytes": 4280,
+        "sha256": "eb8964079eb63e7a2eb562f3886283a63c2b68b68d93a53ccfae9ea4a3a4d6b1"
+      },
+      "test_r75_s1e_fixture_receipt_repair_py": {
+        "bytes": 16755,
+        "sha256": "59abcb315fc539a632b3e3043c2f0e39995f1bbc7fa67858ccdef079f675b876"
+      }
+    },
+    "delivered_files": {
+      "report": {
+        "file": "ROUND75_S1E_FIXTURE_RECEIPT_REPAIR_REPORT.md",
+        "bytes": 7348,
+        "sha256": "2dd4f993fa8bec6a35b6f4de1ea27890782e249d96d01463ba5288d6cf86c8a9"
+      },
+      "verdict": {
+        "file": "ROUND75_S1E_FIXTURE_RECEIPT_REPAIR_VERDICT.json",
+        "bytes": 5590,
+        "sha256": "4abe16d0fa17d6d9574cc36a94aa55b7c135eb8973be757304cad5d87cd920f0"
+      },
+      "task_state": {
+        "file": "R75_S1E_FIXTURE_RECEIPT_REPAIR_TASK_STATE.json",
+        "bytes": 2171,
+        "sha256": "4efa703708d8cb5ec86bbbd296c7cb06808fd90d77039b6069b64baa9a671bcf"
+      }
+    },
+    "unchanged_identities": {
+      "r75_s1_runner_py": "872f8bcd6c6c7d92c699e7887cf81d39fbf1f6218b31bf713160d907a148eae7",
+      "r75_s1_outer_exec_v2_py": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+      "r75_frozen_py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+      "r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+      "r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+      "central_ledger": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+    },
+    "phase_a_consumption": {
+      "test_processes": 7,
+      "real_b_processes": 0,
+      "parent_launch_attempts": 0,
+      "fixture_saves": 0,
+      "fixture_loads": 0,
+      "fixture_reads": 0,
+      "scientific_checkpoint_or_model_loads": 0,
+      "ledger_charges": 0
+    },
+    "phase_b_contract": {
+      "max_parent_launch_attempts": 1,
+      "max_real_cpu_python_processes": 1,
+      "cases": 15,
+      "numpy_imports": 1,
+      "torch_imports": 1,
+      "torch_save": 1,
+      "torch_load": 1,
+      "fixture_reads": 1,
+      "scientific_model_or_checkpoint_loads": 0,
+      "started": false
+    },
+    "note": "A is frozen for decision review; B does not auto-start from this commit."
   }
 }
