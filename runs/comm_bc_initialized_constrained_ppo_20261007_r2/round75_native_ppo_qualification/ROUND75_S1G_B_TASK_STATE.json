@@ -1,0 +1,101 @@
+{
+  "kind": "round75-s1g-b-task-state/1",
+  "task_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
+  "status": "B_UNIQUE_ATTEMPT_FAILED_BEFORE_CHILD",
+  "authorization": "full_s1g_first_a_then_single_b",
+  "branch": "exp/round75-native-ppo-qualification",
+  "execution_start_head": "3e416e63603b13a464c8a2c208dbcdc5cd079e8e",
+  "execution_start_parent": "b808a5f02c64dc1ea9987460890d3d7337a649c4",
+  "python": "D:\\project_env\\python.exe",
+  "outer": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py",
+  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
+  "output_root": "raw/s1g_native_retry",
+  "attempt_dir": "raw/s1g_native_retry/R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
+  "technical_attempt_prefix": "r75_s1g_A3_technical_retry_20261015",
+  "source_identity": {
+    "r75_s1_runner.py": "4f84184a25d9058df97abf04fb00febe1d6b8c123944fcc9814e78651d3835d4",
+    "r75_s1_precheck.py": "88b88c3854f25f81a1398d37066b5d62f4941a7529b349fe5a9d20361733625b",
+    "r75_s1g_outer_exec.py": "24693d8818ea5e99d7f0f80941f8258fe1ab0b5d07b05d13ec14908c0c619223",
+    "r75_frozen.py": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
+    "r75_guard.py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+    "r75_replay_adapter.py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+    "test_r75_s1g_phase_a.py": "ff81446f3c12558870cea589cdf4b8671c4fb3ae53a2b63f745d8e6aef358474",
+    "ROUND75_S1G_AR1_RUN_PLAN.json": "6303c093d0e19d71081e5c1c5d6393f21733d8f7c9c9fb87ec6fd21eecd7ebab"
+  },
+  "prior_consumption": {
+    "total_ledger_bytes": 19980,
+    "total_ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
+    "total_ledger_events": 88,
+    "physical_optimizer_step": {
+      "used_normal": 5,
+      "used_reserve": 0,
+      "refusals": 0,
+      "charged_events": 5
+    },
+    "offline_trunk_target_row": {
+      "used_normal": 840,
+      "used_reserve": 0,
+      "refusals": 0,
+      "charged_events": 70
+    },
+    "joint_record": {
+      "used_normal": 1,
+      "used_reserve": 0,
+      "refusals": 0,
+      "charged_events": 1
+    },
+    "environment_construction": {
+      "used_normal": 0,
+      "used_reserve": 0,
+      "refusals": 0,
+      "charged_events": 0
+    }
+  },
+  "planned_consumption": {
+    "a1": {
+      "physical_steps": 1,
+      "category": "normal",
+      "offline_rows": 0,
+      "joint_records": 0
+    },
+    "a2": {
+      "physical_steps": 4,
+      "category": "normal",
+      "offline_rows": 840,
+      "trunk_calls": 70,
+      "joint_records": 1
+    },
+    "a3": {
+      "physical_steps": 4,
+      "category": "technical",
+      "offline_rows": 840,
+      "trunk_calls": 70,
+      "joint_records": 1
+    }
+  },
+  "attempt_contract": {
+    "outer_launch_attempts": 1,
+    "outer_parent_python": 1,
+    "real_cpu_nn_child": 1,
+    "additional_a_python_processes": 0,
+    "no_restart": 1,
+    "no_recover": 1
+  },
+  "a_python_processes": {
+    "used": 2,
+    "cap": 2,
+    "remaining": 0
+  },
+  "b_python_processes": {
+    "outer_parent_used": 1,
+    "outer_parent_cap": 1,
+    "real_child_used": 0,
+    "real_child_cap": 1
+  },
+  "b_released": true,
+  "b_executed": true,
+  "started_at_utc": "2026-10-15T13:38:09.2611141Z",
+  "finished_at_utc": "2026-10-15T13:38:30.1610768Z"
+}
+
+

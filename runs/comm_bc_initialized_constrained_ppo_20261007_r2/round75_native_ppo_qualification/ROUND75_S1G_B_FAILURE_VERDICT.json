@@ -1,0 +1,33 @@
+{
+  "kind": "round75-s1g-b-failure-verdict/1",
+  "task_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
+  "status": "B_UNIQUE_ATTEMPT_FAILED_BEFORE_CHILD",
+  "parent": {
+    "pid": 68688,
+    "os_exit_code": 2,
+    "os_exit_code_verified": true,
+    "started_at_utc": "2026-10-15T13:38:30.0191393Z",
+    "finished_at_utc": "2026-10-15T13:38:30.1610768Z"
+  },
+  "child": {
+    "launched": false,
+    "pid": null,
+    "returncode": null,
+    "returncode_status": "missing"
+  },
+  "failure": {
+    "reason": "frozen outer placeholder request-id guard rejected --launch",
+    "stderr_line": "S1 OUTER V2 REFUSED: --launch requires an explicit --request-id; the placeholder follow-up id is not a run permission"
+  },
+  "consumption": {
+    "outer_parent_python": 1,
+    "real_cpu_nn_child": 0,
+    "a_python_processes": 2,
+    "additional_retry_allowed": false
+  },
+  "runtime_unchanged": true,
+  "protected_files": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}
