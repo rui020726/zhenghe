@@ -1,0 +1,197 @@
+{
+  "kind": "round75-s1d-non-neural-repair-verdict/1",
+  "request_id": "R75_S1D_NON_NEURAL_REPAIR_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "start_head": "b0e04baf764b77987094dbe4bc49b0218066e07f",
+  "parent_head": "328225980bfa6f0483f4914b5c7be3aa7da246dd",
+  "status": "PHASE_B_FAILED_AT_WEIGHTS_ONLY_FIXTURE_LOAD_AND_STOPPED",
+  "meaning": "The comparator/stage-save/identity repairs are implemented and pure-tested, but the one real backend process failed at the authorized weights-only fixture load. No repair or retry followed. S1 remains unauthorized.",
+  "source_identity": {
+    "runner": {
+      "sha256": "872f8bcd6c6c7d92c699e7887cf81d39fbf1f6218b31bf713160d907a148eae7",
+      "bytes": 98722
+    },
+    "wrapper": {
+      "sha256": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+      "bytes": 36166
+    },
+    "probe": {
+      "sha256": "ee4ebb410ff0ed88886587f32133238f57f17cb1d484c7b88191dad3bd6b4224",
+      "bytes": 10152
+    },
+    "test": {
+      "sha256": "e291a3f6ab7c0ba1cff89ab2699f020cbbb0399130aadcfbd6d317f04036e35a",
+      "bytes": 12901
+    }
+  },
+  "implementation": {
+    "rng_identity": {
+      "anchors": {
+        "_numpy_rng_state_fingerprint": 108,
+        "_rng_identity_full": 130
+      },
+      "covers": [
+        "algorithm",
+        "keys dtype/shape/bytes/value-hash",
+        "position",
+        "has_gauss",
+        "cached_gaussian",
+        "python repr identity",
+        "torch dtype/shape/bytes identity"
+      ]
+    },
+    "comparator": {
+      "anchors": {
+        "_raw_equal": 152,
+        "_first_raw_difference": 192,
+        "_rng_payload_differences": 222
+      },
+      "torch_without_tobytes": true,
+      "concrete_type_required": true,
+      "returns_python_bool": true
+    },
+    "stage_save": {
+      "anchor": 1069,
+      "save_abi": "save_fn(payload, temporary)",
+      "execution_identity_anchor": 1055,
+      "stage_order": {
+        "A2_update_then_snapshot": 1372,
+        "A3_start_gate_then_snapshot_before_update": 1421
+      }
+    }
+  },
+  "phase_a": {
+    "cases": 16,
+    "final": {
+      "passed": 16,
+      "failed": 0,
+      "exit_code": 0
+    },
+    "history": [
+      {
+        "run": 1,
+        "failures": 1,
+        "errors": 4
+      },
+      {
+        "run": 2,
+        "failures": 2
+      },
+      {
+        "run": 3,
+        "failures": 1
+      },
+      {
+        "run": 4,
+        "failures": 0
+      }
+    ],
+    "real_numpy_torch_imports": 0,
+    "production_precheck_or_prepare": false
+  },
+  "phase_b": {
+    "real_python_processes_used": 1,
+    "allowed_real_processes": 1,
+    "exit_code": 1,
+    "stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "bytes": 2014,
+      "sha256": "aafbbd64bc7170f7ee5cf0fb299f081294f2073b92278a40453abbbe84a7fc4e"
+    },
+    "failed_case": "default_torch_save_load_fixture",
+    "failure": "UnpicklingError from torch.load(..., weights_only=True): unsupported global numpy._core.multiarray._reconstruct",
+    "torch_save_successful": 1,
+    "torch_load_successful": 0,
+    "torch_load_attempts": 1,
+    "rng_fixture_read_attempts": 1,
+    "rng_fixture_read_successful": 0,
+    "scientific_checkpoint_loads": 0,
+    "result_json_written": false,
+    "comparator_case_outcomes": "not durably recorded; no pass/fail claim",
+    "full_rng_before_after_record": "missing because process failed before result write",
+    "fixture": {
+      "path": "raw/s1d_probe/non_neural_fixture/rng_fixture_stage.pt",
+      "bytes": 19625,
+      "sha256": "675297f549808b2a2ecbc088ae9b6662a46f31441e218f62be3ef6b179c53b74"
+    },
+    "manifest": {
+      "file": "raw/s1d_probe/phase_b_manifest.json",
+      "sha256": "88aced73697d8478a1751fdaa46a3661ad4f63b83cc072771cd77993b726aac1",
+      "pre_run_process_consumed_field": false,
+      "rewritten": false
+    },
+    "consumption_record": {
+      "file": "raw/s1d_probe/phase_b_consumed.json",
+      "sha256": "484816591055fceae69659b8d9d17fe2f53e9dec61e1b4cbc2d271b607ec1198",
+      "o_excl": true
+    },
+    "launcher_eperm": {
+      "actual_python_process": false,
+      "retained": true,
+      "parent_record": "phase_b_parent_capture.json",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "actual_parent_record": "phase_b_parent_capture_actual.json"
+  },
+  "actual_consumption": {
+    "real_cpu_numpy_torch_processes": 1,
+    "pure_stdlib_python_invocations_including_py_compile": 8,
+    "torch_imports": 1,
+    "numpy_imports": 1,
+    "model_load_or_construction": 0,
+    "forward": 0,
+    "backward": 0,
+    "optimizer_step_real_or_synthetic": 0,
+    "ppo_update_or_replay": 0,
+    "environment_construction": 0,
+    "cuda_operations": 0,
+    "set_state_seed_or_sampling": 0,
+    "s1_runs": 0,
+    "checkpoint_write_of_real_model_state": 0,
+    "self_created_non_neural_fixture_saves": 1,
+    "ledger_charged_events": 0
+  },
+  "prior_consumption_unchanged": {
+    "s1b_physical_optimizer_step_normal": 5,
+    "s1b_offline_trunk_target_row_normal": 840,
+    "s1b_trunk_calls": 70,
+    "s1b_joint_record": 1,
+    "environment": 0,
+    "a2_terminal_state": "still not durably persisted",
+    "remaining_history_only": "physical normal 7 + technical 4; target rows normal 4160 + technical 1000; no borrowing or reserve use"
+  },
+  "invariants_after_b": {
+    "files_compared": 18,
+    "all_unchanged": true,
+    "total_ledger": {
+      "events": 88,
+      "bytes": 19980,
+      "sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+    },
+    "A1_bundle": {
+      "bytes": 54708,
+      "sha256": "23f34508357d0bfaa7b51a6f0ec34dc6462dfab603f402477c813f6e60596de0"
+    },
+    "protected": [
+      {
+        "path": "ROUND46_CURRENT_TASK.json",
+        "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b"
+      },
+      {
+        "path": "ROUND46_R2_V6_STOP_STATE.json",
+        "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+      }
+    ]
+  },
+  "boundary": "Comparator and stage-save ABI are not backend-qualified. A3 restore remains unproven. No S1 or deployment authorization is granted. Future weights-only fixture handling is a separate decision.",
+  "git": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "final_head": "read from git after commit"
+  }
+}

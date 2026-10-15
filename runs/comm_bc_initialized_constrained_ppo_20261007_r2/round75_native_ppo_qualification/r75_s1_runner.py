@@ -38,6 +38,7 @@ import hashlib
 import json
 import os
 import random
+import subprocess
 import sys
 import time
 import traceback
@@ -103,6 +104,47 @@ def _rng_report_from_payloads(numpy_state, torch_state, python_state) -> dict[st
             "torch_rng_state_sha256": _sha256_bytes(_payload_bytes(torch_state))}
 
 
+
+def _numpy_rng_state_fingerprint(state) -> dict[str, Any]:
+    """Complete structural fingerprint for a legacy NumPy MT19937 state tuple.
+
+    Key values are hashed from their full raw bytes; position and cache flags are compared as
+    scalar fields. This deliberately does not seed, draw or restore anything.
+    """
+    if not isinstance(state, tuple) or len(state) != 5:
+        return {"kind": "invalid_numpy_state", "type": type(state).__name__,
+                "length": len(state) if hasattr(state, "__len__") else "unknown"}
+    keys = state[1]
+    key_bytes = _payload_bytes(keys)
+    return {"algorithm": state[0],
+            "keys": {"dtype": str(getattr(keys, "dtype", None)),
+                     "shape": tuple(getattr(keys, "shape", ()) or ()),
+                     "bytes_len": len(key_bytes),
+                     "values_sha256": _sha256_bytes(key_bytes)},
+            "position": state[2], "position_type": type(state[2]).__name__,
+            "has_gauss": state[3], "has_gauss_type": type(state[3]).__name__,
+            "cached_gaussian": state[4],
+            "cached_gaussian_type": type(state[4]).__name__}
+
+
+def _rng_identity_full(np_mod, torch_mod) -> dict[str, Any]:
+    """Field-complete read-only fingerprints of the three current RNG states."""
+    python_state = random.getstate()
+    python_repr = repr(python_state)
+    numpy_state = np_mod.random.get_state()
+    torch_state = torch_mod.get_rng_state()
+    torch_bytes = _payload_bytes(torch_state)
+    return {"python": {"type": type(python_state).__name__,
+                       "repr_len": len(python_repr),
+                       "repr_sha256": _sha256_bytes(python_repr.encode("utf-8"))},
+            "numpy": _numpy_rng_state_fingerprint(numpy_state),
+            "torch": {"type": type(torch_state).__name__,
+                      "dtype": str(getattr(torch_state, "dtype", None)),
+                      "shape": tuple(getattr(torch_state, "shape", ()) or ()),
+                      "bytes_len": len(torch_bytes),
+                      "values_sha256": _sha256_bytes(torch_bytes)}}
+
+
 def _rng_tensor_meta(obj) -> tuple:
     return (str(getattr(obj, "dtype", None)), tuple(getattr(obj, "shape", ()) or ()))
 
@@ -110,9 +152,9 @@ def _rng_tensor_meta(obj) -> tuple:
 def _raw_equal(live, expected) -> bool:
     """Strict, non-ambiguous equality over raw RNG payloads.
 
-    Only known scalar/container/tensor-like payload shapes are compared. Unknown objects are
-    equal only by identity; their custom __eq__ is never invoked. Tensor-like payloads must
-    have the same dtype, shape and FULL raw bytes. The return value is always a Python bool.
+    Tensors without ``tobytes`` are read through the existing detach-free, CPU-safe view path
+    used by ``_payload_bytes``. Tensor-like objects require the same concrete type, dtype, shape
+    and FULL raw bytes. Unknown objects compare by identity only. The result is always a bool.
     """
     if live is expected:
         return True
@@ -126,8 +168,12 @@ def _raw_equal(live, expected) -> bool:
         if type(live) is not type(expected) or set(live) != set(expected):
             return False
         return all(bool(_raw_equal(live[key], expected[key])) for key in live)
-    if hasattr(live, "tobytes") or hasattr(expected, "tobytes"):
-        if not (hasattr(live, "tobytes") and hasattr(expected, "tobytes")):
+    live_has_payload = hasattr(live, "tobytes") or hasattr(live, "numpy")
+    expected_has_payload = hasattr(expected, "tobytes") or hasattr(expected, "numpy")
+    if live_has_payload or expected_has_payload:
+        if not (live_has_payload and expected_has_payload):
+            return False
+        if type(live) is not type(expected):
             return False
         if _rng_tensor_meta(live) != _rng_tensor_meta(expected):
             return False
@@ -152,8 +198,12 @@ def _first_raw_difference(live, expected, path: str):
             if not _raw_equal(left, right):
                 return _first_raw_difference(left, right, path + "[" + str(index) + "]")
         return {"where": path, "note": "no element difference found"}
-    if ((hasattr(live, "tobytes") or hasattr(live, "numpy")) and
-            (hasattr(expected, "tobytes") or hasattr(expected, "numpy"))):
+    live_has_payload = hasattr(live, "tobytes") or hasattr(live, "numpy")
+    expected_has_payload = hasattr(expected, "tobytes") or hasattr(expected, "numpy")
+    if live_has_payload and expected_has_payload:
+        if type(live) is not type(expected):
+            return {"where": path, "live_type": type(live).__name__,
+                    "expected_type": type(expected).__name__}
         left, right = _payload_bytes(live), _payload_bytes(expected)
         if left == right:
             return {"where": path, "note": "bytes equal"}
@@ -168,13 +218,9 @@ def _first_raw_difference(live, expected, path: str):
             "live": repr(live)[:120], "expected": repr(expected)[:120]}
 
 
-def _rng_payload_differences(saved, np_mod, torch_mod) -> list[dict[str, Any]]:
-    """Value-by-value comparison of the THREE RAW RNG payloads against the loaded bundle.
 
-    Every comparison returns a Python bool, so a multi-element torch RNG tensor is compared byte
-    for byte rather than reduced to a boolean. Read-only: nothing is drawn, forwarded or stepped
-    here.
-    """
+def _rng_payload_differences(saved, np_mod, torch_mod) -> list[dict[str, Any]]:
+    """Value-by-value comparison of the THREE RAW RNG payloads against the loaded bundle."""
     problems: list[dict[str, Any]] = []
     live_numpy, expected_numpy = np_mod.random.get_state(), saved["_numpy_state"]
     if not _raw_equal(live_numpy, expected_numpy):
@@ -189,7 +235,6 @@ def _rng_payload_differences(saved, np_mod, torch_mod) -> list[dict[str, Any]]:
         problems.append({"where": "rng_payload:python_random_state",
                          "detail": _first_raw_difference(live_python, expected_python, "python")})
     return problems
-
 
 def _head_input_dim(module) -> int:
     """The critic input width WITHOUT a trunk forward (so the A1 control step costs 0 rows)."""
@@ -1007,24 +1052,46 @@ def _write_failure_receipt(state: _RunState, error: BaseException) -> Path:
     return path
 
 
+def _execution_identity() -> dict[str, Any]:
+    """Read the actual git identity. PLAN head is historical and is never substituted here."""
+    def git_value(*args):
+        completed = subprocess.run(["git", "-C", str(HERE), *args], capture_output=True)
+        if completed.returncode != 0:
+            return "unknown", completed.stderr.decode("utf-8", "replace").strip()
+        return completed.stdout.decode("utf-8", "replace").strip(), None
+    head, head_error = git_value("rev-parse", "HEAD")
+    parent, parent_error = git_value("rev-parse", "HEAD^")
+    branch, branch_error = git_value("--abbrev-ref", "HEAD")
+    return {"head": head, "parent_head": parent, "branch": branch, "source": "git rev-parse",
+            "errors": {"head": head_error, "parent_head": parent_error, "branch": branch_error}}
+
+
 def _save_stage_snapshot(path: Path, *, stage: str, label: str, state, full_state,
-                         save_fn=None) -> dict[str, Any]:
+                         save_fn=None, identity_fn=None) -> dict[str, Any]:
     """Durably save a completed-stage scientific and full-state snapshot.
 
-    The default save function is torch.save because the full state contains detached tensors;
-    the call adds no RNG draw, forward, backward or optimizer step. The write is atomic, and the
-    returned identity is what the next stage and any later failure receipt must cite.
+    The default save function is torch.save with its real (obj, file) ABI. The call adds no RNG
+    draw, forward, backward or optimizer step. The write is atomic, and the returned identity is
+    what the next stage and any later failure receipt must cite. PLAN head is retained only as
+    historical provenance beside the actual git execution identity.
     """
     if save_fn is None:
         torch = sys.modules.get("torch")
         if torch is None:
             raise RuntimeError("cannot save a stage snapshot before the paid modules are loaded")
         save_fn = torch.save
+    if identity_fn is None:
+        identity_fn = _execution_identity
+    execution_identity = identity_fn()
+    data_identity = (full_state.get("data_identity") if isinstance(full_state, dict) else None)
     payload = {"kind": "round75-s1-stage-snapshot/1",
                "stage": stage, "label": label,
                "request_id": EXECUTION_REQUEST_ID or PLAN["request_id"],
-               "head_at_writing": PLAN["head_at_writing"],
+               "plan_frozen_head": PLAN["head_at_writing"],
+               "plan_frozen_head_is_not_execution_head": True,
+               "execution_identity": execution_identity,
                "code_identity": _code_identity(),
+               "data_identity": data_identity if data_identity is not None else "missing",
                "counters": state.counter_report(),
                "unread": sorted(set(state.unread)),
                "record": state.record,
@@ -1032,7 +1099,7 @@ def _save_stage_snapshot(path: Path, *, stage: str, label: str, state, full_stat
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp")
     try:
-        save_fn(temporary, payload)
+        save_fn(payload, temporary)
         with open(temporary, "rb+") as handle:
             handle.flush()
             os.fsync(handle.fileno())
@@ -1040,6 +1107,8 @@ def _save_stage_snapshot(path: Path, *, stage: str, label: str, state, full_stat
                     "bytes": temporary.stat().st_size,
                     "stage": stage, "label": label,
                     "unread": payload["unread"],
+                    "execution_head": execution_identity.get("head"),
+                    "data_identity_present": data_identity is not None,
                     "full_state_present": full_state is not None}
         os.replace(temporary, path)
         return identity

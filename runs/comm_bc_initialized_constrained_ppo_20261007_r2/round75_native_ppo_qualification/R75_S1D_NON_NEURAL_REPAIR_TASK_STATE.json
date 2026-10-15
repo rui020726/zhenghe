@@ -1,0 +1,67 @@
+{
+  "kind": "round75-s1d-non-neural-repair-task-state/1",
+  "request_id": "R75_S1D_NON_NEURAL_REPAIR_20261015",
+  "status": "PHASE_B_FAILED_AT_WEIGHTS_ONLY_FIXTURE_LOAD_AND_STOPPED",
+  "start_head": "b0e04baf764b77987094dbe4bc49b0218066e07f",
+  "parent_head": "328225980bfa6f0483f4914b5c7be3aa7da246dd",
+  "branch": "exp/round75-native-ppo-qualification",
+  "prior_s1c_final": {
+    "confirmed": true,
+    "status": "PHASE_C_FAILED_AND_STOPPED_PARTIAL_POST_FAILURE_REVISION_NOT_BACKEND_VERIFIED"
+  },
+  "scope": {
+    "modify": [
+      "r75_s1_runner.py comparator and stage snapshot",
+      "r75_s1_outer_exec_v2.py identity/report wiring if needed",
+      "S1D narrow tests",
+      "non-neural B probe",
+      "S1D report/verdict/task-state/manifest"
+    ],
+    "forbidden": [
+      "S1",
+      "controller/optimizer/native/canonical/R66/guard import",
+      "model load/construction",
+      "forward/backward",
+      "optimizer/PPO",
+      "environment",
+      "set_state/seed/random sampling",
+      "CUDA",
+      "changing quotas/history"
+    ]
+  },
+  "invariants": {
+    "ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
+    "a1_bundle_sha256": "23f34508357d0bfaa7b51a6f0ec34dc6462dfab603f402477c813f6e60596de0",
+    "prior_consumption": {
+      "physical_normal_used": 5,
+      "offline_rows_normal_used": 840,
+      "joint_record": 1,
+      "environment": 0
+    }
+  },
+  "phases": {
+    "A": "pure stdlib tests <=24",
+    "B": "one real CPU process <=15 cases; torch.save/load only on <=1MiB self-created fixture"
+  },
+  "next_action": "implement comparator/stage save/identity, run A, freeze B, execute B once, close out",
+  "outcome": {
+    "phase_a": {
+      "cases": 16,
+      "passed": 16,
+      "failed": 0
+    },
+    "phase_b": {
+      "real_process_used": 1,
+      "exit_code": 1,
+      "failed_case": "default_torch_save_load_fixture",
+      "result_json": false,
+      "backend_qualified": false
+    },
+    "next_action": "STOPPED; weights-only fixture handling and any S1 are separate decisions"
+  },
+  "deliverables": [
+    "ROUND75_S1D_NON_NEURAL_REPAIR_REPORT.md",
+    "ROUND75_S1D_NON_NEURAL_REPAIR_VERDICT.json",
+    "ROUND75_GIT_EXTERNAL_MANIFEST.json"
+  ]
+}

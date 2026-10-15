@@ -1152,5 +1152,69 @@
         "status": "disclosed only; no implementation change"
       }
     ]
+  },
+  "s1d_non_neural_repair": {
+    "request_id": "R75_S1D_NON_NEURAL_REPAIR_20261015",
+    "start_head": "b0e04baf764b77987094dbe4bc49b0218066e07f",
+    "parent_head": "328225980bfa6f0483f4914b5c7be3aa7da246dd",
+    "status": "PHASE_B_FAILED_AT_WEIGHTS_ONLY_FIXTURE_LOAD_AND_STOPPED",
+    "delivered_files": {
+      "report": {
+        "file": "ROUND75_S1D_NON_NEURAL_REPAIR_REPORT.md",
+        "sha256": "fa62c397154bf9d675cf760ad9a00e62182c1e7c48ae58ea930e450cee6cbfcc"
+      },
+      "verdict": {
+        "file": "ROUND75_S1D_NON_NEURAL_REPAIR_VERDICT.json",
+        "sha256": "02e66ff479e4d4f3e7e414f8bac356fccd65cd6a9610fcd9cbf2fe0265c80f33"
+      },
+      "task_state": {
+        "file": "R75_S1D_NON_NEURAL_REPAIR_TASK_STATE.json",
+        "sha256": "430430bd3b837385252ff2b18bdc57f127bc6535583c1fc34a9bbd74844c2b2d"
+      }
+    },
+    "source": {
+      "r75_s1_runner_py": {
+        "sha256": "872f8bcd6c6c7d92c699e7887cf81d39fbf1f6218b31bf713160d907a148eae7",
+        "bytes": 98722
+      },
+      "r75_s1_outer_exec_v2_py": {
+        "sha256": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+        "bytes": 36166
+      },
+      "r75_s1d_non_neural_probe_py": {
+        "sha256": "ee4ebb410ff0ed88886587f32133238f57f17cb1d484c7b88191dad3bd6b4224",
+        "bytes": 10152
+      },
+      "test_r75_s1d_non_neural_repair_py": {
+        "sha256": "e291a3f6ab7c0ba1cff89ab2699f020cbbb0399130aadcfbd6d317f04036e35a",
+        "bytes": 12901
+      }
+    },
+    "phase_a": {
+      "cases": 16,
+      "final_passed": 16,
+      "final_failed": 0,
+      "final_exit_code": 0
+    },
+    "phase_b": {
+      "real_process_used": 1,
+      "exit_code": 1,
+      "torch_save_successful": 1,
+      "torch_load_successful": 0,
+      "failed_error": "UnpicklingError weights_only rejected numpy._core.multiarray._reconstruct",
+      "result_json": false,
+      "full_rng_before_after": "missing",
+      "manifest_sha256": "88aced73697d8478a1751fdaa46a3661ad4f63b83cc072771cd77993b726aac1",
+      "consumption_sha256": "484816591055fceae69659b8d9d17fe2f53e9dec61e1b4cbc2d271b607ec1198",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "aafbbd64bc7170f7ee5cf0fb299f081294f2073b92278a40453abbbe84a7fc4e",
+      "fixture_sha256": "675297f549808b2a2ecbc088ae9b6662a46f31441e218f62be3ef6b179c53b74"
+    },
+    "invariants_after_b": {
+      "runtime_and_attempt_files_compared": 18,
+      "all_unchanged": true,
+      "ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+    },
+    "note": "No second real process or repair/retry followed the failure; S1 remains unauthorized."
   }
 }
