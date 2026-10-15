@@ -282,6 +282,38 @@
     "pushed": false,
     "merged": false,
     "deployed": false,
-    "final_head": "read from git after local commit; not self-reported in this file"
+    "final_head": "read from git after local commit; not self-reported in this file",
+    "first_local_commit": "3282259"
+  },
+  "final_read_only_disclosures": {
+    "registered_after": "first local delivery commit",
+    "code_or_test_changed": false,
+    "real_probe_or_test_run": false,
+    "items": [
+      {
+        "id": "stage_save_abi",
+        "defect": "default torch.save is called as save_fn(temporary, payload), but PyTorch 2.9 expects torch.save(obj, f)",
+        "exercised": false,
+        "covered_by_fake_tests": false,
+        "status": "disclosed failure mode only"
+      },
+      {
+        "id": "stage_head_identity",
+        "defect": "stage payload head_at_writing is the old PLAN head, not actual execution HEAD",
+        "mitigation": "keep actual outer identity and source SHA separate"
+      },
+      {
+        "id": "phase_c_stdout",
+        "defect": "phase_c_stdout.txt is a self-written result JSON copy, not complete original stdout/stderr",
+        "actual_command_stdout": "short summary only",
+        "complete_capture_proven": false
+      },
+      {
+        "id": "manifest_process_consumed",
+        "defect": "phase_c_manifest.json process_consumed=false is a pre-run field",
+        "actual_process_consumed": true,
+        "basis_for_rerun": false
+      }
+    ]
   }
 }

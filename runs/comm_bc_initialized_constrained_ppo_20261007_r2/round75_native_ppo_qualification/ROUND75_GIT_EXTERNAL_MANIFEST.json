@@ -1054,15 +1054,15 @@
     "delivered_files": {
       "report": {
         "file": "ROUND75_S1C_COMPARATOR_REPAIR_REPORT.md",
-        "sha256": "46528021f341ebc7ec49e78e52fc2d018565482908a18d030a76e2fa4bc85c86"
+        "sha256": "b8aabca96b4a54b18ecbe8c0ec6e083248b697292cf46bf0a90f406563b3c38d"
       },
       "verdict": {
         "file": "ROUND75_S1C_COMPARATOR_REPAIR_VERDICT.json",
-        "sha256": "ec0de5b4f85adf38f4ce3e8973f744ce147e7d129756332d5a0ebd6cb2f7cc90"
+        "sha256": "dbe3920c8419a04258fca200ffb87a1ff6eaed82b7ed1ccdff1535efe44d80f0"
       },
       "task_state": {
         "file": "R75_S1C_COMPARATOR_REPAIR_TASK_STATE.json",
-        "sha256": "2294d1d019cfe056b2023c1efbeca6765dc830a6004fbe41cec190fea7109f96"
+        "sha256": "2ce50a42543ef960b8b4690df0d85ad1577749f1ae2a3e5dfa7bce0fb432df5e"
       }
     },
     "source": {
@@ -1133,6 +1133,24 @@
       "checkpoint_write": 0,
       "ledger_charged_events": 0
     },
-    "note": "No second real process was run. The post-failure source is retained but is not called repaired-complete or backend-verified."
+    "note": "No second real process was run. The post-failure source is retained but is not called repaired-complete or backend-verified.",
+    "final_read_only_disclosures": [
+      {
+        "id": "stage_save_abi",
+        "status": "disclosed only; no implementation change"
+      },
+      {
+        "id": "stage_head_identity",
+        "status": "disclosed only; no implementation change"
+      },
+      {
+        "id": "phase_c_stdout",
+        "status": "disclosed only; no implementation change"
+      },
+      {
+        "id": "manifest_process_consumed",
+        "status": "disclosed only; no implementation change"
+      }
+    ]
   }
 }

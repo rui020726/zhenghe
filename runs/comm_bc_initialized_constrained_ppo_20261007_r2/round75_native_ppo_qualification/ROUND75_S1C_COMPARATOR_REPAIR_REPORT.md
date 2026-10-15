@@ -39,3 +39,15 @@ The prior S1B consumption remains unchanged: physical_optimizer_step 5, offline_
 ## Boundary
 
 This work does not qualify A3 restore, does not authorize or execute S1, and does not support any policy effect claim. The post-failure source is not a completed comparator repair and must not be described as backend-verified or all-pass. Future repair is a separate decision.
+
+## Final read-only disclosures
+
+These items are registered after the first local delivery commit and do not alter code or tests.
+
+1. Real stage-save ABI defect: _save_stage_snapshot uses save_fn = torch.save by default and calls save_fn(temporary, payload). PyTorch 2.9 documents torch.save(obj, f), so the default call would pass Path as obj and the payload dict as the file. This defect was not exercised in a real stage save; no fabricated traceback is claimed. The fake save_fn tests did not cover the real torch.save ABI.
+
+2. Stage payload identity limitation: head_at_writing inside stage snapshots comes from the old PLAN head. It is not the actual execution HEAD. Actual outer request/attempt identity and current source SHA must be kept separate from that PLAN field.
+
+3. Phase C stdout limitation: phase_c_stdout.txt is the probe self-written result JSON copy, with SHA 717e0f361e4cc4383e90384baf3aa1457b3e6dc9f041b818095504317bbb9bd4. The actual command stdout was only the short summary. Complete durable stdout/stderr capture is therefore not proven.
+
+4. Phase C manifest process_consumed=false is a frozen pre-run field. The one real process did run and is authoritative from phase_c_result.json and the report; this field is not a basis for another run.
