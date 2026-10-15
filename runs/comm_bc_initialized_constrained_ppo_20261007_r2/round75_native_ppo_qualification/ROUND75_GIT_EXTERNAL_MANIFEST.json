@@ -1426,5 +1426,95 @@
       "central_ledger": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
     },
     "note": "Revision 3 closes the named A fixes only; B does not auto-start."
+  },
+  "s1e_phase_b_continuation_20261015": {
+    "request_id": "R75_S1E_PHASE_B_CONTINUATION_20261015",
+    "execution_head": "71737f4ece9eed957d1f4e73f8a9169bc6582bd9",
+    "execution_parent_head": "bafc9191823af87fe31663bb86cd2564ef04026b",
+    "status": "PHASE_B_EXECUTED_ONCE_AND_FAILED_CASE_15_IDENTITY_GATE_B_NOT_RETRIED",
+    "phase_b_passed": false,
+    "started": true,
+    "completed": true,
+    "retried": false,
+    "launch": {
+      "parent_pid": 72568,
+      "child_pid": 57336,
+      "parent_exit_code": 1,
+      "child_exit_code": 1,
+      "self_test": false,
+      "retry_count": 0,
+      "powershell_version": "7.6.5",
+      "os_description": "Microsoft Windows 10.0.26200"
+    },
+    "result": {
+      "case_count": 15,
+      "reached": 15,
+      "not_reached": 0,
+      "passed_count": 14,
+      "failed_count": 1,
+      "exception_count": 0,
+      "normal_false_count": 1,
+      "top_level_passed": false,
+      "rng_unchanged": true,
+      "scientific_checkpoint_loads": 0,
+      "python_version": "3.10.19 | packaged by Anaconda, Inc. | (main, Oct 21, 2025, 16:41:31) [MSC v.1929 64 bit (AMD64)]",
+      "numpy_version": "2.2.6",
+      "torch_version": "2.9.0+cu128"
+    },
+    "failed_case": {
+      "case_id": 15,
+      "name": "default_torch_save_load_fixture",
+      "observed": "head_identity_consistent=false",
+      "fixture_bytes": 19881,
+      "fixture_sha256": "d78209a2916f9b5324a47bc004ad0b90cd1cbcdf220c672fe16e9f13683c02de"
+    },
+    "operations": {
+      "real_parent_launch_attempts": 1,
+      "real_python_b_processes": 1,
+      "numpy_imports": 1,
+      "torch_imports": 1,
+      "fixture_save_attempt": 1,
+      "fixture_save_completed": 1,
+      "fixture_load_attempt": 1,
+      "fixture_load_completed": 1,
+      "fixture_read_attempt": 1,
+      "fixture_read_completed": 1,
+      "scientific_checkpoint_or_model_loads": 0,
+      "forward": 0,
+      "backward": 0,
+      "optimizer_or_ppo_operations": 0,
+      "environments": 0,
+      "cuda_operations": 0,
+      "ledger_charges": 0
+    },
+    "evidence": {
+      "report": "ROUND75_S1E_PHASE_B_CONTINUATION_REPORT.md",
+      "verdict": "ROUND75_S1E_PHASE_B_CONTINUATION_VERDICT.json",
+      "task_state": "R75_S1E_PHASE_B_CONTINUATION_TASK_STATE.json",
+      "consumed": {"bytes": 183, "sha256": "8e3ccd7ae88fda2d6eedf11c4095befafbbc1a64361198ad1ab6a0bb0f84144a"},
+      "parent_attempt": {"bytes": 1315, "sha256": "4ea4b23942c7cff96d38ad9459eebf4767c2c570908d7f74489c9a847a8558b8"},
+      "parent_capture": {"bytes": 2815, "sha256": "a40a9dfd1d0922b217ab0c97442c013e74f620a241be6b5f13065b7ce0435515"},
+      "result": {"bytes": 23605, "sha256": "b6d73503ebf0a813fe53656f0c5f7acd13ea764b8477d833a21068c1bc975e21"},
+      "cases": {"bytes": 12187, "sha256": "de8fbcad98a6dff7caccaf6298fcc436d67a854c1a5f402d7aaac1f52462ad8f"},
+      "fixture": {"bytes": 19881, "sha256": "d78209a2916f9b5324a47bc004ad0b90cd1cbcdf220c672fe16e9f13683c02de"},
+      "stdout": {"bytes": 457, "sha256": "000a8b4b488018acbdea366b71a55274300b5a2c5be49ceb6e94ea7deb89c601"},
+      "stderr": {"bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    },
+    "old_fixture_before": {
+      "status": "ABSENT",
+      "sha256": null
+    },
+    "central_identities_unchanged": {
+      "r75_s1e_fixture_receipt_repair_py": "21f0105295fe5880565316e625f06d58e2757a38131aa7f5517fdc9c7159af40",
+      "r75_s1e_parent_capture_ps1": "50f555ef717e82f0b00ab0fb4dad0ea72771546724b5881835b5aa75bec49471",
+      "test_r75_s1e_fixture_receipt_repair_py": "75cf51cc160739c65af0d79595f495d4afc3355380080492b972515f129dbc67",
+      "r75_s1_runner_py": "872f8bcd6c6c7d92c699e7887cf81d39fbf1f6218b31bf713160d907a148eae7",
+      "r75_s1_outer_exec_v2_py": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+      "r75_frozen_py": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+      "r75_guard_py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+      "r75_replay_adapter_py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc2",
+      "central_ledger": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+    },
+    "note": "The failed case blocks formal weights-only fixture qualification; no second B or implementation repair was made."
   }
 }
