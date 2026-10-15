@@ -113,39 +113,181 @@ def git(repo, *args):
 
 
 def ledger_snapshot(runtime_dir, frozen):
+    """Read the guard JSONs and total ledger, then reconcile their real event schemas.
+
+    This is read-only. Charged rows are summed from each event n by category; used_after is a
+    second reading, not a substitute for the sum. Guard top-level cumulative values, guard event
+    lists and total-ledger event sequences must agree. Any missing or bad schema becomes unknown
+    or mismatch and blocks permission; no history is cleared or corrected here.
+    """
+    runtime_dir = Path(runtime_dir)
     files = {}
     for name in sorted(os.listdir(runtime_dir)):
-        path = os.path.join(runtime_dir, name)
-        if os.path.isfile(path):
-            files[name] = {"sha256": sha256_file(path), "bytes": os.path.getsize(path)}
-    events, per_unit = [], {}
-    total = os.path.join(runtime_dir, "r75_total_ledger.jsonl")
-    if os.path.isfile(total):
-        with open(total, "r", encoding="utf-8") as handle:
+        path = runtime_dir / name
+        if path.is_file():
+            files[name] = {"sha256": sha256_file(path), "bytes": path.stat().st_size}
+    total_path = runtime_dir / "r75_total_ledger.jsonl"
+    events: list[dict] = []
+    unparsed: list[int] = []
+    if total_path.is_file():
+        with total_path.open("r", encoding="utf-8") as handle:
             for line in handle:
-                line = line.strip()
-                if not line:
+                stripped = line.strip()
+                if not stripped:
                     continue
                 try:
-                    record = json.loads(line)
+                    events.append(json.loads(stripped))
                 except ValueError:
-                    events.append({"unparsed_line_bytes": len(line)})
-                    continue
-                events.append(record)
-                unit = record.get("unit")
-                if unit:
-                    slot = per_unit.setdefault(unit, {"used_normal": 0, "used_reserve": 0,
-                                                      "refusals": 0, "charged_events": 0})
-                    for key in ("used_normal", "used_reserve", "refusals"):
-                        if key in record:
-                            slot[key] = max(slot[key], int(record[key]))
-                    if record.get("event") != "ledger-opened":
-                        slot["charged_events"] += 1
-    return {"root": str(runtime_dir), "files": files, "total_ledger_events": len(events),
+                    unparsed.append(len(stripped.encode("utf-8")))
+    guard_files = {"physical_optimizer_step": "r75_physical_optimizer_step_guard.json",
+                   "offline_trunk_target_row": "r75_offline_trunk_target_row_guard.json",
+                   "joint_record": "r75_joint_record_guard.json",
+                   "environment_construction": "r75_environment_construction_guard.json"}
+    per_unit: dict[str, dict] = {}
+    mismatches: list[dict] = []
+    for unit, guard_name in sorted(guard_files.items()):
+        unit_ledger = [event for event in events
+                       if event.get("unit") == unit
+                       and event.get("event") in ("charged", "refused")]
+        summary: dict = {"used_normal": 0, "used_reserve": 0, "refusals": 0,
+                         "charged_events": 0, "guard_events": 0, "total_ledger_events": 0,
+                         "used_after_normal": 0, "used_after_reserve": 0,
+                         "schema_ok": False, "guard_ledger_match": False}
+        valid = True
+        problems: list[str] = []
+        guard_path = runtime_dir / guard_name
+        guard = None
+        if not guard_path.is_file():
+            valid = False
+            problems.append("missing guard file: " + guard_name)
+        else:
+            try:
+                guard = json.loads(guard_path.read_text(encoding="utf-8"))
+            except (ValueError, OSError) as error:
+                guard = None
+                valid = False
+                problems.append("unreadable guard " + guard_name + ": " + type(error).__name__)
+        if not isinstance(guard, dict):
+            valid = False
+            problems.append("guard is not a JSON object: " + guard_name)
+        else:
+            required = ("kind", "unit", "used_normal", "used_reserve", "refusals", "events")
+            missing = [key for key in required if key not in guard]
+            if missing:
+                valid = False
+                problems.append("missing guard fields: " + ",".join(missing))
+            if guard.get("unit") != unit:
+                valid = False
+                problems.append("guard unit mismatch")
+            guard_events = guard.get("events")
+            if not isinstance(guard_events, list):
+                valid = False
+                problems.append("guard events is not a list")
+                guard_events = []
+        if valid:
+            for category, key in (("normal", "used_normal"), ("reserve", "used_reserve")):
+                category_events = [event for event in guard_events
+                                   if event.get("event") == "charged"
+                                   and event.get("category") == category]
+                n_sum = 0
+                used_after = 0
+                for index, event in enumerate(category_events):
+                    value = event.get("n")
+                    after = event.get("used_after")
+                    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+                        valid = False
+                        problems.append("guard " + category + " event " + str(index) +
+                                        " has invalid n")
+                        break
+                    if not isinstance(after, int) or isinstance(after, bool):
+                        valid = False
+                        problems.append("guard " + category + " event " + str(index) +
+                                        " has invalid used_after")
+                        break
+                    n_sum += value
+                    used_after = after
+                if valid:
+                    top_value = guard.get(key)
+                    if not isinstance(top_value, int) or isinstance(top_value, bool):
+                        valid = False
+                        problems.append("guard top-level " + key + " is invalid")
+                    elif n_sum != top_value or used_after != top_value:
+                        valid = False
+                        problems.append(
+                            "guard " + key + " mismatch: top=" + str(top_value) +
+                            ", n_sum=" + str(n_sum) + ", used_after=" + str(used_after))
+            refusals = guard.get("refusals")
+            if not isinstance(refusals, int) or isinstance(refusals, bool) or refusals < 0:
+                valid = False
+                problems.append("guard refusals is invalid")
+            elif sum(event.get("event") == "refused" for event in guard_events) != refusals:
+                valid = False
+                problems.append("guard refusal count does not match its refused events")
+        if valid:
+            for event in unit_ledger:
+                kind = event.get("event")
+                category = event.get("category")
+                if kind == "charged":
+                    value = event.get("n")
+                    after = event.get("used_after")
+                    if category not in ("normal", "reserve"):
+                        valid = False
+                        problems.append("ledger charged event has invalid category")
+                        break
+                    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+                        valid = False
+                        problems.append("ledger charged event has invalid n")
+                        break
+                    if not isinstance(after, int) or isinstance(after, bool):
+                        valid = False
+                        problems.append("ledger charged event has invalid used_after")
+                        break
+                    if category == "normal":
+                        summary["used_normal"] += value
+                        summary["used_after_normal"] = after
+                    else:
+                        summary["used_reserve"] += value
+                        summary["used_after_reserve"] = after
+                    summary["charged_events"] += 1
+                elif kind == "refused":
+                    summary["refusals"] += 1
+            if valid:
+                summary["total_ledger_events"] = len(unit_ledger)
+                summary["guard_events"] = len(guard_events)
+                if summary["used_normal"] != guard.get("used_normal"):
+                    valid = False
+                    problems.append("normal n_sum does not match guard used_normal")
+                if summary["used_reserve"] != guard.get("used_reserve"):
+                    valid = False
+                    problems.append("reserve n_sum does not match guard used_reserve")
+                if summary["refusals"] != guard.get("refusals"):
+                    valid = False
+                    problems.append("ledger refusals do not match guard refusals")
+                if summary["charged_events"] + summary["refusals"] != summary["guard_events"]:
+                    valid = False
+                    problems.append("ledger charged-event count does not match guard event count")
+        if valid:
+            summary["schema_ok"] = True
+            summary["guard_ledger_match"] = True
+        else:
+            summary["used_normal"] = "unknown"
+            summary["used_reserve"] = "unknown"
+            summary["refusals"] = "unknown"
+            summary["charged_events"] = "unknown"
+        summary["problems"] = problems
+        per_unit[unit] = summary
+        if not valid:
+            mismatches.append({"unit": unit, "problems": problems})
+    return {"root": str(runtime_dir), "files": files,
+            "total_ledger_events": len(events),
+            "unparsed_total_ledger_lines": unparsed,
             "per_unit_last_known": per_unit,
-            "frozen_snapshot_match": (files == frozen) if frozen else None,
-            "note": ("read-only; used_normal/used_reserve/refusals are the maximum value seen in "
-                     "any ledger event for that unit, charged_events counts non-open events")}
+            "guard_ledger_reconciliation": {"ok": not mismatches,
+                                            "mismatches": mismatches,
+                                            "units": sorted(per_unit)},
+            "frozen_snapshot_match": (files == frozen) if frozen is not None else None,
+            "note": ("read-only; n/category/used_after are reconciled with each guard top-level "
+                     "cumulative and its event list; unknown or mismatch blocks use")}
 
 
 def write_json(path, payload):
@@ -244,6 +386,10 @@ def verify_pre_charge(repo, here, runtime_dir, plan):
     if snapshot["total_ledger_events"] != 12:
         problems.append("canonical ledger has %d events, 12 expected at the zero start"
                         % snapshot["total_ledger_events"])
+    if snapshot["guard_ledger_reconciliation"]["ok"] is not True:
+        problems.append("guard/ledger reconciliation failed: "
+                        + json.dumps(snapshot["guard_ledger_reconciliation"]["mismatches"],
+                                     sort_keys=True))
     nonzero = {unit: value for unit, value in snapshot["per_unit_last_known"].items()
                if value.get("used_normal") or value.get("used_reserve")
                or value.get("refusals") or value.get("charged_events")}

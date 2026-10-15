@@ -1045,5 +1045,94 @@
       "a3_updates": 0,
       "rng_error_proves": "verifier failure only; restored state neither proven same nor different"
     }
+  },
+  "s1c_comparator_repair": {
+    "request_id": "R75_S1C_COMPARATOR_REPAIR_20261015",
+    "start_head": "12e68e6eed33b07b64b2d0e9756d5c612f214e5a",
+    "parent_head": "c2fd48a0cd4ad8fbbc2127c2bb1e7d090863eee4",
+    "status": "PHASE_C_FAILED_AND_STOPPED_PARTIAL_POST_FAILURE_REVISION_NOT_BACKEND_VERIFIED",
+    "delivered_files": {
+      "report": {
+        "file": "ROUND75_S1C_COMPARATOR_REPAIR_REPORT.md",
+        "sha256": "46528021f341ebc7ec49e78e52fc2d018565482908a18d030a76e2fa4bc85c86"
+      },
+      "verdict": {
+        "file": "ROUND75_S1C_COMPARATOR_REPAIR_VERDICT.json",
+        "sha256": "ec0de5b4f85adf38f4ce3e8973f744ce147e7d129756332d5a0ebd6cb2f7cc90"
+      },
+      "task_state": {
+        "file": "R75_S1C_COMPARATOR_REPAIR_TASK_STATE.json",
+        "sha256": "2294d1d019cfe056b2023c1efbeca6765dc830a6004fbe41cec190fea7109f96"
+      }
+    },
+    "source": {
+      "r75_s1_runner_py": {
+        "sha256": "f588c790a4538a16a01daecbc470b1a4506bcae4c9ff83e035bacc1fa335f020",
+        "bytes": 94912
+      },
+      "r75_s1_outer_exec_v2_py": {
+        "sha256": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+        "bytes": 36166
+      },
+      "test_r75_s1c_comparator_repair_py": {
+        "sha256": "35feac1f6eed0ede00ab238925463161d2a7b5f0efd741a4942e9b9cc0e82d7e",
+        "bytes": 15197
+      }
+    },
+    "phase_c_source_at_freeze": {
+      "r75_s1_runner_py": "58de83bb263ae79f45dc52dc6b5d16458dd6a5bfed0075a92041392d9d5f9c25",
+      "r75_s1_outer_exec_v2_py": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+      "test_r75_s1c_comparator_repair_py": "bf15c43b5cb0fcacdf4b3952661cb238afff3af202d6f9df753cbe05ab80b4f2"
+    },
+    "phase_c": {
+      "one_real_process_used": true,
+      "exit_code": 1,
+      "cases": 14,
+      "passed": 11,
+      "failed": 3,
+      "failed_case_names": [
+        "torch_same_clone",
+        "mixed_payload_same",
+        "rng_differences_all_same"
+      ],
+      "result": {
+        "file": "raw/s1c_probe/phase_c_result.json",
+        "sha256": "717e0f361e4cc4383e90384baf3aa1457b3e6dc9f041b818095504317bbb9bd4"
+      },
+      "manifest": {
+        "file": "raw/s1c_probe/phase_c_manifest.json",
+        "sha256": "04f5172c9ee32750d221e57f25608edd4c20df93b348a395347a19735d129425",
+        "note": "frozen pre-run process_consumed remains false; result/report is authoritative for actual consumption"
+      },
+      "runner": {
+        "file": "raw/s1c_probe/phase_c_runner.py",
+        "sha256": "77c5ed39bfa4cbbecf1571837c9c668235cffa1f2ed44c3830e4bef0104549a5"
+      },
+      "stdout": {
+        "file": "raw/s1c_probe/phase_c_stdout.txt",
+        "sha256": "717e0f361e4cc4383e90384baf3aa1457b3e6dc9f041b818095504317bbb9bd4"
+      }
+    },
+    "pure_test_final_after_stop": {
+      "cases": 19,
+      "passed": 18,
+      "failed": 1,
+      "failed_case": "test_torch_like_payload_without_tobytes_is_compared_through_numpy_view",
+      "backend_verified": false
+    },
+    "invariants": {
+      "ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
+      "a1_bundle_sha256": "23f34508357d0bfaa7b51a6f0ec34dc6462dfab603f402477c813f6e60596de0"
+    },
+    "actual_consumption": {
+      "real_cpu_numpy_torch_processes": 1,
+      "pure_stdlib_python_invocations_including_py_compile": 12,
+      "s1": 0,
+      "environment": 0,
+      "optimizer_or_ppo": 0,
+      "checkpoint_write": 0,
+      "ledger_charged_events": 0
+    },
+    "note": "No second real process was run. The post-failure source is retained but is not called repaired-complete or backend-verified."
   }
 }

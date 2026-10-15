@@ -1,0 +1,287 @@
+{
+  "kind": "round75-s1c-comparator-repair-verdict/1",
+  "request_id": "R75_S1C_COMPARATOR_REPAIR_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "start_head": "12e68e6eed33b07b64b2d0e9756d5c612f214e5a",
+  "parent_head": "c2fd48a0cd4ad8fbbc2127c2bb1e7d090863eee4",
+  "status": "PHASE_C_FAILED_AND_STOPPED_PARTIAL_POST_FAILURE_REVISION_NOT_BACKEND_VERIFIED",
+  "meaning": "One authorized real CPU RNG comparator process failed and was not retried. The three repair seams are implemented, but the post-failure comparator revision remains incomplete and real-backend-unverified. This verdict does not authorize S1.",
+  "phase_c": {
+    "real_processes_used": 1,
+    "allowed_real_processes": 1,
+    "exit_code": 1,
+    "case_count": 14,
+    "passed": 11,
+    "failed": 3,
+    "failed_case_names": [
+      "torch_same_clone",
+      "mixed_payload_same",
+      "rng_differences_all_same"
+    ],
+    "common_failure_attribution": "real torch.Tensor has no tobytes; the tested _raw_equal did not use a numpy view in that branch",
+    "imports": [
+      "numpy",
+      "torch",
+      "r75_s1_runner"
+    ],
+    "numpy_version": "2.2.6",
+    "torch_version": "2.9.0+cu128",
+    "forbidden_modules_loaded": [],
+    "rng_identity_claim": "limited unchanged: Python repr SHA, NumPy get_state()[1] key-array SHA only, and torch state bytes were unchanged; complete NumPy RNG state is not proven",
+    "frozen_source": {
+      "runner": "58de83bb263ae79f45dc52dc6b5d16458dd6a5bfed0075a92041392d9d5f9c25",
+      "wrapper": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+      "test": "bf15c43b5cb0fcacdf4b3952661cb238afff3af202d6f9df753cbe05ab80b4f2"
+    },
+    "artifacts": {
+      "manifest": {
+        "sha256": "04f5172c9ee32750d221e57f25608edd4c20df93b348a395347a19735d129425",
+        "bytes": 1427
+      },
+      "runner": {
+        "sha256": "77c5ed39bfa4cbbecf1571837c9c668235cffa1f2ed44c3830e4bef0104549a5",
+        "bytes": 6045
+      },
+      "result": {
+        "sha256": "717e0f361e4cc4383e90384baf3aa1457b3e6dc9f041b818095504317bbb9bd4",
+        "bytes": 4078
+      },
+      "stdout": {
+        "sha256": "717e0f361e4cc4383e90384baf3aa1457b3e6dc9f041b818095504317bbb9bd4",
+        "bytes": 4078
+      }
+    }
+  },
+  "post_failure_revision": {
+    "runner_sha256": "f588c790a4538a16a01daecbc470b1a4506bcae4c9ff83e035bacc1fa335f020",
+    "wrapper_sha256": "bfe999ad3df01329d4cbca0051060f949ac8d747009983d00067df9ae8d1ddff",
+    "test_sha256": "35feac1f6eed0ede00ab238925463161d2a7b5f0efd741a4942e9b9cc0e82d7e",
+    "changed": [
+      "_first_raw_difference now accepts a numpy/tobytes payload view",
+      "one pure FakeTorchTensor counterexample added"
+    ],
+    "not_changed_in_raw_equal": "the production _raw_equal tensor branch still requires hasattr(tobytes)",
+    "pure_suite_after_revision": {
+      "cases": 19,
+      "passed": 18,
+      "failed": 1,
+      "failed_case": "test_torch_like_payload_without_tobytes_is_compared_through_numpy_view",
+      "exit_code": 1
+    },
+    "backend_verified": false,
+    "repaired_claim": false
+  },
+  "implementation": {
+    "comparator": {
+      "path": "r75_s1_runner.py",
+      "anchors": {
+        "_raw_equal": 110,
+        "_first_raw_difference": 146,
+        "_rng_payload_differences": 171
+      }
+    },
+    "ledger_snapshot": {
+      "path": "r75_s1_outer_exec_v2.py",
+      "anchor": 115,
+      "blocks_precharge_on": "guard_ledger_reconciliation.ok is not true"
+    },
+    "stage_durability": {
+      "path": "r75_s1_runner.py",
+      "anchors": {
+        "_save_stage_snapshot": 1010,
+        "_completed_stage_artifacts": 1052,
+        "A2_stage_save": 1303,
+        "A3_start_stage_save": 1352
+      }
+    }
+  },
+  "test_history": [
+    {
+      "suite": "pre_phase_c_18",
+      "first_run": {
+        "cases": 18,
+        "passed": 15,
+        "failures": 2,
+        "errors": 1,
+        "exit_code": 1
+      },
+      "disclosed_code_defects": [
+        "ledger-opened counted as guard event",
+        "charged/refused event count comparison incomplete",
+        "stage identity omitted unread"
+      ],
+      "disclosed_fixture_defect": "one-unit fixture did not satisfy the four-guard schema"
+    },
+    {
+      "suite": "pre_phase_c_18_after_fixes",
+      "cases": 18,
+      "passed": 18,
+      "failed": 0,
+      "exit_code": 0
+    },
+    {
+      "suite": "post_phase_c_19_after_stop",
+      "cases": 19,
+      "passed": 18,
+      "failed": 1,
+      "exit_code": 1,
+      "not_rerun": true
+    }
+  ],
+  "actual_consumption": {
+    "real_s1_runs": 0,
+    "real_cpu_numpy_torch_processes": 1,
+    "pure_stdlib_python_invocations_including_py_compile": 12,
+    "torch_imports": 1,
+    "model_load_or_construction": 0,
+    "forward": 0,
+    "backward": 0,
+    "optimizer_step_real_or_synthetic": 0,
+    "ppo_update_or_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "training_resume": 0,
+    "rng_restore": 0,
+    "torch_load": 0,
+    "ledger_charged_events": 0,
+    "new_claims": 0
+  },
+  "failures": {
+    "pure_suite_first": {
+      "count": 3,
+      "type": "failures/errors",
+      "details": "2 failures plus 1 error"
+    },
+    "phase_c": {
+      "count": 1,
+      "exit_code": 1,
+      "cases_failed": 3
+    },
+    "pure_suite_after_stop": {
+      "count": 1,
+      "case": "test_torch_like_payload_without_tobytes_is_compared_through_numpy_view"
+    }
+  },
+  "prior_s1b_consumption_unchanged": {
+    "physical_optimizer_step": 5,
+    "offline_trunk_target_row": 840,
+    "trunk_calls": 70,
+    "joint_record": 1,
+    "environment_construction": 0
+  },
+  "invariants": {
+    "total_ledger": {
+      "events": 88,
+      "bytes": 19980,
+      "sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+    },
+    "A1_bundle": {
+      "bytes": 54708,
+      "sha256": "23f34508357d0bfaa7b51a6f0ec34dc6462dfab603f402477c813f6e60596de0"
+    },
+    "protected_files": [
+      {
+        "path": "ROUND46_CURRENT_TASK.json",
+        "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b"
+      },
+      {
+        "path": "ROUND46_R2_V6_STOP_STATE.json",
+        "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+      }
+    ]
+  },
+  "attempt_runtime_hash_readings": [
+    {
+      "path": "raw/s1_revised/R75_S1B_20261015/r75_s1_A1_full_state.pt",
+      "sha256": "23f34508357d0bfaa7b51a6f0ec34dc6462dfab603f402477c813f6e60596de0",
+      "bytes": 54708,
+      "last_write_time": "2026-10-15T07:55:23.8632064+08:00"
+    },
+    {
+      "path": "raw/s1_revised/R75_S1B_20261015/r75_s1_attempt_counters.jsonl",
+      "sha256": "ac6ec2b7f2e0bff088113ed3a38ae4a6a7c2705db7f63828b279b6f5e1f1e5be",
+      "bytes": 4369,
+      "last_write_time": "2026-10-15T07:55:25.4181606+08:00"
+    },
+    {
+      "path": "raw/s1_revised/R75_S1B_20261015/r75_s1_failure_receipts.jsonl",
+      "sha256": "ac0335c38f24f64f3067fbe93f7a8b0ac295c42301b024261153e69ab573a324",
+      "bytes": 9430,
+      "last_write_time": "2026-10-15T07:55:25.4166523+08:00"
+    },
+    {
+      "path": "raw/s1_revised/R75_S1B_20261015/r75_s1_outer_v2_attempt_marker_R75_S1B_20261015.json",
+      "sha256": "0225082418293351d85ef87575f9ca5afa9878a0c905378bfc44fcda47cc4b16",
+      "bytes": 1386,
+      "last_write_time": "2026-10-15T07:55:11.9281852+08:00"
+    },
+    {
+      "path": "raw/s1_revised/R75_S1B_20261015/r75_s1_outer_v2_license_consumed_R75_S1B_20261015.json",
+      "sha256": "6dabb61eb8609a88a5679e27746b03592f8d5eb2b8bea78317631548fee1eedc",
+      "bytes": 866,
+      "last_write_time": "2026-10-15T07:55:11.9271768+08:00"
+    },
+    {
+      "path": "raw/s1_revised/R75_S1B_20261015/r75_s1_outer_v2_prepared.json",
+      "sha256": "e2fd6fc60852583b727cde5730a1ab03594e57a24330c05278781b544d21ca28",
+      "bytes": 6057,
+      "last_write_time": "2026-10-15T07:55:11.8337384+08:00"
+    },
+    {
+      "path": "raw/s1_revised/R75_S1B_20261015/r75_s1_outer_v2_outcome.json",
+      "sha256": "884a8b32da643ae1fecbc63ee1393c3f85ed6df63b26a98f4570c2fa51c4522c",
+      "bytes": 7102,
+      "last_write_time": "2026-10-15T07:55:25.8940567+08:00"
+    },
+    {
+      "path": "raw/s1_revised/R75_S1B_20261015/r75_s1_outer_v2_stdout.bin",
+      "sha256": "f6bf588e25e08000549b2b88c3b061ee93d7b7630284c0ce428f65c6648897f1",
+      "bytes": 806,
+      "last_write_time": "2026-10-15T07:55:25.8865287+08:00"
+    },
+    {
+      "path": "raw/s1_revised/R75_S1B_20261015/r75_s1_outer_v2_stderr.bin",
+      "sha256": "2f6ace23d552bab5e66d1c4374442d85eab750505579a40372272d3ad7b8bf53",
+      "bytes": 1812,
+      "last_write_time": "2026-10-15T07:55:25.8865287+08:00"
+    },
+    {
+      "path": "raw/runtime/r75_total_ledger.jsonl",
+      "sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
+      "bytes": 19980,
+      "last_write_time": "2026-10-15T07:55:25.3574022+08:00"
+    },
+    {
+      "path": "raw/runtime/r75_physical_optimizer_step_guard.json",
+      "sha256": "5d4c65c6de6b4d2c753854fbd4117abd0ab4032220a2f91d56ddb2eb76e9c168",
+      "bytes": 1087,
+      "last_write_time": "2026-10-15T07:55:25.3563982+08:00"
+    },
+    {
+      "path": "raw/runtime/r75_offline_trunk_target_row_guard.json",
+      "sha256": "6ac36b9182a0d14f82b7fe645c67fb8b7389282326f5b3cae353d6da5edea8e9",
+      "bytes": 11329,
+      "last_write_time": "2026-10-15T07:55:25.3263845+08:00"
+    },
+    {
+      "path": "raw/runtime/r75_joint_record_guard.json",
+      "sha256": "eb004d98cd0689e16f678856be7bae95df99b8b168a4ce1dec9d82aec39bc567",
+      "bytes": 398,
+      "last_write_time": "2026-10-15T07:55:23.8733011+08:00"
+    },
+    {
+      "path": "raw/runtime/r75_environment_construction_guard.json",
+      "sha256": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b",
+      "bytes": 223,
+      "last_write_time": "2026-10-14T21:07:04.0209416+08:00"
+    }
+  ],
+  "boundary": "A3 restore qualification remains unproven. No policy or deployment claim is made. S1 remains closed for other uses. The post-failure source must not be called backend-verified, repaired-complete, or all-pass.",
+  "git": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "final_head": "read from git after local commit; not self-reported in this file"
+  }
+}

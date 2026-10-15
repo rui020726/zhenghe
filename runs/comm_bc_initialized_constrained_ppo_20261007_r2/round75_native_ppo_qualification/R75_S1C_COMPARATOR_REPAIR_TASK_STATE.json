@@ -1,0 +1,64 @@
+{
+  "kind": "round75-s1c-comparator-repair-task-state/1",
+  "request_id": "R75_S1C_COMPARATOR_REPAIR_20261015",
+  "status": "PHASE_C_FAILED_AND_STOPPED_PARTIAL_POST_FAILURE_REVISION_NOT_BACKEND_VERIFIED",
+  "start_head": "12e68e6eed33b07b64b2d0e9756d5c612f214e5a",
+  "branch": "exp/round75-native-ppo-qualification",
+  "scope": {
+    "modify": [
+      "r75_s1_runner.py comparator payload equality/diagnostics",
+      "r75_s1_runner.py completed-stage durable snapshots and failure receipts",
+      "r75_s1_outer_exec_v2.py ledger_snapshot schema reconciliation",
+      "new pure stdlib S1C tests",
+      "S1C report/verdict/manifest/task-state"
+    ],
+    "forbidden": [
+      "real S1 run",
+      "r75_native/r75_frozen/guard/canonical import in tests",
+      "model load/construction/forward/backward",
+      "optimizer/PPO/environment/seed/sampling/torch.load",
+      "changing guard charging logic, caps, or historical originals"
+    ]
+  },
+  "baseline_invariants": {
+    "ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
+    "a1_bundle_sha256": "23f34508357d0bfaa7b51a6f0ec34dc6462dfab603f402477c813f6e60596de0"
+  },
+  "phase_c": {
+    "allowed_real_processes": 1,
+    "allowed_top_level_cases": 14,
+    "authorized_imports": [
+      "numpy",
+      "torch",
+      "r75_s1_runner comparator entrypoints"
+    ],
+    "forbidden_imports": [
+      "r75_native",
+      "r75_frozen",
+      "r75_guard",
+      "canonical/R66/controller/optimizer"
+    ],
+    "torch_load": false,
+    "model_or_env": false
+  },
+  "next_action": "implement comparator, ledger schema snapshot, stage snapshots; then pure tests; then one RNG-only process; then reports and local commit",
+  "outcome": {
+    "real_process_used": 1,
+    "phase_c_exit_code": 1,
+    "phase_c_cases": 14,
+    "phase_c_passed": 11,
+    "phase_c_failed": 3,
+    "post_failure_pure_suite": {
+      "cases": 19,
+      "passed": 18,
+      "failed": 1,
+      "backend_verified": false
+    },
+    "next_action": "STOPPED; any future comparator repair is a separate decision"
+  },
+  "deliverables": [
+    "ROUND75_S1C_COMPARATOR_REPAIR_REPORT.md",
+    "ROUND75_S1C_COMPARATOR_REPAIR_VERDICT.json",
+    "ROUND75_GIT_EXTERNAL_MANIFEST.json"
+  ]
+}

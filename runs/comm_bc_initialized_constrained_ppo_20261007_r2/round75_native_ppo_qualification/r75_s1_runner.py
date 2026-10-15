@@ -108,37 +108,52 @@ def _rng_tensor_meta(obj) -> tuple:
 
 
 def _raw_equal(live, expected) -> bool:
-    """Structural value equality over raw RNG payloads.
+    """Strict, non-ambiguous equality over raw RNG payloads.
 
-    Tuples and lists are compared element-wise, tensor-like buffers by their FULL raw bytes
-    (with dtype and shape beside them), and everything else by ==. A printed abbreviation can
-    hide a difference; raw bytes cannot.
+    Only known scalar/container/tensor-like payload shapes are compared. Unknown objects are
+    equal only by identity; their custom __eq__ is never invoked. Tensor-like payloads must
+    have the same dtype, shape and FULL raw bytes. The return value is always a Python bool.
     """
+    if live is expected:
+        return True
     if isinstance(live, (tuple, list)) or isinstance(expected, (tuple, list)):
-        if not (isinstance(live, (tuple, list)) and isinstance(expected, (tuple, list))):
+        if type(live) is not type(expected):
             return False
         if len(live) != len(expected):
             return False
-        return all(_raw_equal(left, right) for left, right in zip(live, expected))
+        return all(bool(_raw_equal(left, right)) for left, right in zip(live, expected))
+    if isinstance(live, dict) or isinstance(expected, dict):
+        if type(live) is not type(expected) or set(live) != set(expected):
+            return False
+        return all(bool(_raw_equal(live[key], expected[key])) for key in live)
     if hasattr(live, "tobytes") or hasattr(expected, "tobytes"):
         if not (hasattr(live, "tobytes") and hasattr(expected, "tobytes")):
             return False
         if _rng_tensor_meta(live) != _rng_tensor_meta(expected):
             return False
-        return _payload_bytes(live) == _payload_bytes(expected)
-    return live == expected
+        return bool(_payload_bytes(live) == _payload_bytes(expected))
+    known_scalars = (bool, int, float, complex, str, bytes, bytearray, type(None))
+    if isinstance(live, known_scalars) or isinstance(expected, known_scalars):
+        if type(live) is not type(expected):
+            return False
+        return bool(live == expected)
+    import numbers
+    if isinstance(live, numbers.Number) and isinstance(expected, numbers.Number):
+        return bool(live == expected)
+    return False
 
 
 def _first_raw_difference(live, expected, path: str):
-    """The first differing position inside two raw payloads, for an actionable message."""
+    """The first differing position inside two raw payloads, without boolean ambiguity."""
     if isinstance(live, (tuple, list)) and isinstance(expected, (tuple, list)):
         if len(live) != len(expected):
             return {"where": path, "live_len": len(live), "expected_len": len(expected)}
         for index, (left, right) in enumerate(zip(live, expected)):
             if not _raw_equal(left, right):
-                return _first_raw_difference(left, right, f"{path}[{index}]")
+                return _first_raw_difference(left, right, path + "[" + str(index) + "]")
         return {"where": path, "note": "no element difference found"}
-    if hasattr(live, "tobytes") and hasattr(expected, "tobytes"):
+    if ((hasattr(live, "tobytes") or hasattr(live, "numpy")) and
+            (hasattr(expected, "tobytes") or hasattr(expected, "numpy"))):
         left, right = _payload_bytes(live), _payload_bytes(expected)
         if left == right:
             return {"where": path, "note": "bytes equal"}
@@ -148,15 +163,17 @@ def _first_raw_difference(live, expected, path: str):
                         "live_len": len(left), "expected_len": len(right)}
         return {"where": path, "live_len": len(left), "expected_len": len(right),
                 "note": "one payload is a prefix of the other"}
-    return {"where": path, "live": repr(live)[:120], "expected": repr(expected)[:120]}
+    return {"where": path, "live_type": type(live).__name__,
+            "expected_type": type(expected).__name__,
+            "live": repr(live)[:120], "expected": repr(expected)[:120]}
 
 
 def _rng_payload_differences(saved, np_mod, torch_mod) -> list[dict[str, Any]]:
     """Value-by-value comparison of the THREE RAW RNG payloads against the loaded bundle.
 
-    The repr summary in the record can truncate; this walks the actual objects, so a single
-    differing byte inside the MT19937 state or the torch RNG tensor is reported. Read-only:
-    nothing is drawn, forwarded or stepped here.
+    Every comparison returns a Python bool, so a multi-element torch RNG tensor is compared byte
+    for byte rather than reduced to a boolean. Read-only: nothing is drawn, forwarded or stepped
+    here.
     """
     problems: list[dict[str, Any]] = []
     live_numpy, expected_numpy = np_mod.random.get_state(), saved["_numpy_state"]
@@ -982,11 +999,80 @@ def _write_failure_receipt(state: _RunState, error: BaseException) -> Path:
              "meter_snapshots": state.meter_report(),
              "durable_counters": state.durable_report(),
              "unread": sorted(set(state.unread)),
+             "completed_stage_artifacts": _completed_stage_artifacts(state),
              "note": ("appended and fsynced at the moment of failure; the original exception is "
                       "re-raised unchanged, nothing is retried, refunded or repaired")}
     path = S1_DIR / "r75_s1_failure_receipts.jsonl"
     _append_jsonl(path, event)
     return path
+
+
+def _save_stage_snapshot(path: Path, *, stage: str, label: str, state, full_state,
+                         save_fn=None) -> dict[str, Any]:
+    """Durably save a completed-stage scientific and full-state snapshot.
+
+    The default save function is torch.save because the full state contains detached tensors;
+    the call adds no RNG draw, forward, backward or optimizer step. The write is atomic, and the
+    returned identity is what the next stage and any later failure receipt must cite.
+    """
+    if save_fn is None:
+        torch = sys.modules.get("torch")
+        if torch is None:
+            raise RuntimeError("cannot save a stage snapshot before the paid modules are loaded")
+        save_fn = torch.save
+    payload = {"kind": "round75-s1-stage-snapshot/1",
+               "stage": stage, "label": label,
+               "request_id": EXECUTION_REQUEST_ID or PLAN["request_id"],
+               "head_at_writing": PLAN["head_at_writing"],
+               "code_identity": _code_identity(),
+               "counters": state.counter_report(),
+               "unread": sorted(set(state.unread)),
+               "record": state.record,
+               "full_state": full_state}
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    try:
+        save_fn(temporary, payload)
+        with open(temporary, "rb+") as handle:
+            handle.flush()
+            os.fsync(handle.fileno())
+        identity = {"path": str(path), "sha256": _sha256_bytes(temporary.read_bytes()),
+                    "bytes": temporary.stat().st_size,
+                    "stage": stage, "label": label,
+                    "unread": payload["unread"],
+                    "full_state_present": full_state is not None}
+        os.replace(temporary, path)
+        return identity
+    except BaseException:
+        if temporary.exists():
+            temporary.unlink()
+        raise
+
+
+def _completed_stage_artifacts(state) -> list[dict[str, Any]]:
+    """Verify and cite only completed-stage artifacts already recorded in this attempt."""
+    artifacts: list[dict[str, Any]] = []
+    for key, label in (("A1_baseline_bundle", "A1_baseline"),
+                       ("A2_stage_snapshot", "A2_completed"),
+                       ("A3_start_stage_snapshot", "A3_start_gate_passed")):
+        item = state.record.get(key)
+        if not isinstance(item, dict) or "path" not in item:
+            continue
+        entry = {"record_key": key, "label": label, "path": item["path"],
+                 "recorded_sha256": item.get("sha256")}
+        try:
+            path = Path(item["path"])
+            if not path.is_file():
+                entry["status"] = "missing"
+            else:
+                actual = _sha256_bytes(path.read_bytes())
+                entry["actual_sha256"] = actual
+                entry["status"] = ("verified" if actual == item.get("sha256") else "hash_mismatch")
+        except Exception as error:
+            entry["status"] = "unread"
+            entry["error"] = type(error).__name__ + ": " + str(error)
+        artifacts.append(entry)
+    return artifacts
 
 
 # --------------------------------------------------------------- the fail-fast gates ----------
@@ -1214,6 +1300,9 @@ def run_s1() -> int:
         record["post_meter_a2"] = meter_a2.snapshot()
         a2_end = capture_full_state(controller, observer, np_mod=np_mod, torch_mod=torch,
                                     data_identity=data_identity, configuration=configuration, cursor=1)
+        record["A2_stage_snapshot"] = _save_stage_snapshot(
+            S1_DIR / "r75_s1_A2_stage_snapshot.pt", stage="A2_completed",
+            label="A2_after_native_update_0", state=state, full_state=a2_end)
 
         # --- A3: restore from the ACTUAL SERIALIZED FILE into fresh objects --------------------
         state.phase = "A3_controller_construction"
@@ -1260,6 +1349,9 @@ def run_s1() -> int:
                                  update_index=0, np_mod=np_mod, torch_mod=torch)
         restore_diffs = a3_gate["differences"]
         record["A3_start_gate"] = a3_gate
+        record["A3_start_stage_snapshot"] = _save_stage_snapshot(
+            S1_DIR / "r75_s1_A3_start_stage_snapshot.pt", stage="A3_start_gate_passed",
+            label="A3_after_disk_restore", state=state, full_state=a3_start)
 
         state.phase = "A3_native_update"
         state.count("native_ppo_update_attempts", "r75_native_ppo_update", label="A3",
