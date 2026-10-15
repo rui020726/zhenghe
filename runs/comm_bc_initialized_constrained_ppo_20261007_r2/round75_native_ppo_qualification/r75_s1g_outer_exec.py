@@ -385,7 +385,7 @@ def verify_pre_charge(repo, here, runtime_dir, plan):
         problems.append("canonical ledger has %d events, baseline %d expected"
                         % (snapshot["total_ledger_events"],
                            baseline_contract["total_ledger_events"]))
-    if snapshot["total_ledger_sha256"] != baseline_contract["total_ledger_sha256"]:
+    if sha256_file(Path(runtime_dir) / "r75_total_ledger.jsonl") != baseline_contract["total_ledger_sha256"]:
         problems.append("canonical ledger SHA256 does not match the S1G baseline")
     for unit, want in sorted(baseline_contract["guards"].items()):
         got = snapshot["per_unit_last_known"].get(unit)
