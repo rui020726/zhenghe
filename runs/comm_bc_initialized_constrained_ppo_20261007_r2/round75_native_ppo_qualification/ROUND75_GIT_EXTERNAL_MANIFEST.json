@@ -756,4 +756,52 @@
     "s1_authorized": false,
     "s1_executed": false
   }
+,
+  "s1b_execution": {
+    "request_id": "R75_S1B_20261015",
+    "head": "5ee9f2d9effb3bb6773688bf2f51fa33522bb346",
+    "parent_head": "3803dad0468a24e0c78589c557aace00085e2b60",
+    "status": "EXECUTED_AND_FAILED_AT_A3_RESTORE",
+    "attempt_dir": "raw/s1_revised/R75_S1B_20261015",
+    "wrapper": {
+      "sha256": "c448d465c7b841419427fcf0c0357fe012720b723fc88ef697010fcf0ba0622e",
+      "return_code": 5
+    },
+    "runner": {
+      "sha256": "3ba6ea272942a7f77d65ff6d5922de13395e7149d800972730ca83a8cbd2309d",
+      "child_returncode": 1,
+      "child_pid": 2136,
+      "wall_seconds": 14.051
+    },
+    "consumption": {
+      "physical_optimizer_step": 5,
+      "offline_trunk_target_row": 840,
+      "joint_record": 1,
+      "environment_construction": 0,
+      "controllers": 2,
+      "optimizers": 2,
+      "checkpoint_file_loads": 3
+    },
+    "total_ledger_after": {
+      "events": 88,
+      "bytes": 19980,
+      "sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+    },
+    "A1_bundle": {
+      "file": "r75_s1_A1_full_state.pt",
+      "bytes": 54708,
+      "sha256": "23f34508357d0bfaa7b51a6f0ec34dc6462dfab603f402477c813f6e60596de0",
+      "git_external": true
+    },
+    "failure": {
+      "phase": "A3_restore",
+      "error": "RuntimeError: Boolean value of Tensor with more than one value is ambiguous",
+      "location": "r75_s1_runner.py:167 _rng_payload_differences via verify_restore"
+    },
+    "delivered": [
+      "ROUND75_S1B_REPORT.md",
+      "ROUND75_S1B_VERDICT.json"
+    ],
+    "note": "real paid consumption recorded; no retry, no refund; A1/A2 completed, A3 failed at the restore start gate before any update"
+  }
 }

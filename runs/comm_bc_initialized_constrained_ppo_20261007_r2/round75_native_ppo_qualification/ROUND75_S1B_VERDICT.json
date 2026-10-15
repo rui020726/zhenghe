@@ -1,0 +1,85 @@
+{
+  "kind": "round75-s1b-execution-verdict/1",
+  "request_id": "R75_S1B_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "head": "5ee9f2d9effb3bb6773688bf2f51fa33522bb346",
+  "parent_head": "3803dad0468a24e0c78589c557aace00085e2b60",
+  "status": "EXECUTED_AND_FAILED_AT_A3_RESTORE_REAL_PAID_CONSUMPTION_RECORDED",
+  "meaning": "The authorized S1B matrix ran once for real: the 74-check precheck, the paid module imports, the A1 critic-only Adam step with bundle write and the A2 native update0 all completed; A3 reached the restore start gate and crashed in the RNG payload comparison before any A3 update. Nothing was retried, refunded or repaired; the failure is delivered as the result.",
+  "failure": {
+    "phase": "A3_restore",
+    "error": "RuntimeError: Boolean value of Tensor with more than one value is ambiguous",
+    "location": "r75_s1_runner.py:167 in _rng_payload_differences (called from verify_restore via restore_full_state)",
+    "attribution": "real runner restore-verification defect: _raw_equal performs a boolean evaluation on a multi-element torch RNG tensor; not a test defect, not a budget overrun",
+    "receipt": "raw/s1_revised/R75_S1B_20261015/r75_s1_failure_receipts.jsonl"
+  },
+  "consumption": {
+    "physical_optimizer_step": {
+      "used_normal": 5,
+      "cap": 9,
+      "detail": "A1=1 critic-only + A2=4 native update0; A3=0"
+    },
+    "offline_trunk_target_row": {
+      "used_normal": 840,
+      "cap": 1680,
+      "detail": "70 trunk calls x 12 rows"
+    },
+    "joint_record": {
+      "used_normal": 1,
+      "detail": "one batch-read; the A2 read"
+    },
+    "environment_construction": 0,
+    "controllers": 2,
+    "optimizers": 2,
+    "checkpoint_file_loads": 3,
+    "total_ledger": {
+      "events": 88,
+      "bytes": 19980,
+      "sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+    }
+  },
+  "succeeded": {
+    "precheck": {
+      "checks": 74,
+      "failed": 0,
+      "zero_cost": true
+    },
+    "paid_module_imports": [
+      "numpy",
+      "torch",
+      "r75_frozen",
+      "r75_guard"
+    ],
+    "replay_data_reads": [
+      "qualification_row",
+      "qualification_tape"
+    ],
+    "A1": {
+      "physical_steps": 1,
+      "bundle": "r75_s1_A1_full_state.pt",
+      "bundle_bytes": 54708,
+      "bundle_sha256": "23f34508357d0bfaa7b51a6f0ec34dc6462dfab603f402477c813f6e60596de0"
+    },
+    "A2": {
+      "physical_steps": 4,
+      "trunk_calls": 70,
+      "rows_charged": 840,
+      "calls_completed": 70,
+      "rows_completed": 840,
+      "refused": 0,
+      "failed": 0
+    },
+    "step_observations": "A1_A2 five steps all completed; durable_used_before/after consistent; exactly one new permit per step; step_charged_nothing=true"
+  },
+  "failed": {
+    "A3": "fresh controller built (2nd), optimizer built (2nd), A1 bundle loaded from disk (3rd checkpoint load); restore start-gate RNG comparison crashed before any A3 update; A3 physical steps = 0, A3 trunk calls = 0"
+  },
+  "boundary": "Supports only the A1/A2 path on this fixed R58 replay with real torch/Adam/native PPO and accounting; does not prove real collector, full training restore or policy effect. A3 serialized-restore qualification is unproven. S1 remains closed for other uses.",
+  "zero_retry_no_refund": true,
+  "git": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "commit_scope": "explicit named local commit of report/verdict/manifest/task-state only; no weights, no raw runtime, no attempt-dir originals, no protected files"
+  }
+}
