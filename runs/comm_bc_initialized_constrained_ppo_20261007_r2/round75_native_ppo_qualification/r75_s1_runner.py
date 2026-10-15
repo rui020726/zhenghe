@@ -56,6 +56,10 @@ S1_DIR = HERE / "raw" / "s1"
 # import, so a run that cannot name itself never reaches torch.
 FIRST_ATTEMPT_REQUEST_ID = "R75_S1_NATIVE_QUALIFICATION_20261015"
 EXECUTION_REQUEST_ID = None
+S1G_REQUEST_ID = "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"
+S1G_PLAN_PATH = HERE / "ROUND75_S1G_RUN_PLAN.json"
+S1G_ATTEMPT_DIR = HERE / "raw" / "s1g_native_retry" / S1G_REQUEST_ID
+S1G_TECHNICAL_PREFIX = "r75_s1g_A3_technical_retry_20261015"
 
 SEED = 11
 LR = 3e-4
@@ -1123,7 +1127,8 @@ def _completed_stage_artifacts(state) -> list[dict[str, Any]]:
     artifacts: list[dict[str, Any]] = []
     for key, label in (("A1_baseline_bundle", "A1_baseline"),
                        ("A2_stage_snapshot", "A2_completed"),
-                       ("A3_start_stage_snapshot", "A3_start_gate_passed")):
+                       ("A3_start_stage_snapshot", "A3_start_gate_passed"),
+                       ("A3_end_stage_snapshot", "A3_completed")):
         item = state.record.get(key)
         if not isinstance(item, dict) or "path" not in item:
             continue
@@ -1365,7 +1370,9 @@ def run_s1() -> int:
         state.count("native_ppo_update_attempts", "r75_native_ppo_update", label="A2",
                     update_index=0)
         record["A2"] = r75_frozen.r75_native_ppo_update(
-            controller, observer, [episode], update_index=0, resources=resources)
+            controller, observer, [episode], update_index=0, resources=resources,
+            physical_step_category="normal",
+            physical_step_registration_prefix=None)
         record["post_meter_a2"] = meter_a2.snapshot()
         a2_end = capture_full_state(controller, observer, np_mod=np_mod, torch_mod=torch,
                                     data_identity=data_identity, configuration=configuration, cursor=1)
@@ -1423,15 +1430,38 @@ def run_s1() -> int:
             label="A3_after_disk_restore", state=state, full_state=a3_start)
 
         state.phase = "A3_native_update"
+        if EXECUTION_REQUEST_ID == S1G_REQUEST_ID:
+            resources.pre_register_technical_attempt(S1G_TECHNICAL_PREFIX)
+            record["A3_technical_retry"] = {
+                "request_id": S1G_REQUEST_ID,
+                "pre_registered_attempt_prefix": S1G_TECHNICAL_PREFIX,
+                "physical_step_category": "technical",
+                "physical_steps": 4,
+            }
+            a3_step_category = "technical"
+            a3_step_prefix = S1G_TECHNICAL_PREFIX
+        else:
+            record["A3_technical_retry"] = {
+                "request_id": EXECUTION_REQUEST_ID,
+                "physical_step_category": "normal",
+                "physical_steps": 4,
+            }
+            a3_step_category = "normal"
+            a3_step_prefix = None
         state.count("native_ppo_update_attempts", "r75_native_ppo_update", label="A3",
                     update_index=0)
         record["A3"] = r75_frozen.r75_native_ppo_update(
-            controller3, observer3, [episode], update_index=0, resources=resources)
+            controller3, observer3, [episode], update_index=0, resources=resources,
+            physical_step_category=a3_step_category,
+            physical_step_registration_prefix=a3_step_prefix)
         record["post_meter_a3"] = meter_a3.snapshot()
         a3_end = capture_full_state(controller3, observer3, np_mod=np_mod, torch_mod=torch,
                                     data_identity=bundle["data_identity"],
                                     configuration=bundle["configuration"],
                                     cursor=int(bundle["update_cursor"]) + 1)
+        record["A3_end_stage_snapshot"] = _save_stage_snapshot(
+            S1_DIR / "r75_s1_A3_end_stage_snapshot.pt", stage="A3_completed",
+            label="A3_end_after_native_update", state=state, full_state=a3_end)
 
         # --- the four comparisons the contract demands -----------------------------------------
         state.phase = "comparison"
@@ -1580,10 +1610,12 @@ def _license_is_fresh(recorded, request_id, target):
     A marker without license_state == "issued", without a --run-s1 argv, or whose recorded
     --request-id / --attempt-dir disagree with this child is NOT a consumable license; taking it
     over anyway would let a stale or cross-directory marker authorize a run."""
-    if not isinstance(recorded, dict) or recorded.get("license_state") != "issued":
+        expected_flag = "--run-s1g" if request_id == S1G_REQUEST_ID else "--run-s1"
+        other_flag = "--run-s1" if request_id == S1G_REQUEST_ID else "--run-s1g"
+        if not isinstance(recorded, dict) or recorded.get("license_state") != "issued":
         return False
     argv = recorded.get("argv")
-    if not isinstance(argv, list) or "--run-s1" not in argv:
+        if not isinstance(argv, list) or expected_flag not in argv or other_flag in argv:
         return False
     if _license_flag_value(argv, "--request-id") != request_id:
         return False
@@ -1705,6 +1737,8 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="ROUND75 S1 runner (prepared, not run)")
     parser.add_argument("--run-s1", action="store_true",
                         help="execute the paid S1 path (requires a separate decision-side approval)")
+    parser.add_argument("--run-s1g", action="store_true",
+                        help="execute the S1G retry with its independent plan and attempt directory")
     parser.add_argument("--print-plan", action="store_true", help="print the frozen plan summary")
     parser.add_argument("--request-id", default=None,
                         help="the execution identity of THIS attempt; the historical request id "
@@ -1713,7 +1747,14 @@ def main(argv=None) -> int:
                         help="this attempt's private directory inside the ROUND75 output root; "
                              "raw/s1 keeps the preserved first failure")
     args = parser.parse_args(argv)
-    if args.print_plan or not args.run_s1:
+    if args.run_s1g and args.run_s1:
+        sys.stderr.write("S1 REFUSED: --run-s1 and --run-s1g are mutually exclusive\n")
+        return 2
+    if args.run_s1g:
+        global PLAN, PLAN_PATH
+        PLAN_PATH = S1G_PLAN_PATH
+        PLAN = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
+    if args.print_plan or (not args.run_s1 and not args.run_s1g):
         print(json.dumps({"kind": PLAN["kind"], "request_id": PLAN["request_id"],
                           "status": PLAN["status"], "head_at_writing": PLAN["head_at_writing"],
                           "future_command": PLAN["future_command"],
@@ -1722,9 +1763,12 @@ def main(argv=None) -> int:
                                    "nothing; --run-s1 is the paid path")}, indent=2))
         return 0
     if not args.request_id or not args.attempt_dir:
-        sys.stderr.write("S1 REFUSED: --run-s1 requires --request-id and --attempt-dir; a run "
-                         "that cannot name itself and its own directory never reaches the paid "
-                         "path\n")
+        sys.stderr.write("S1 REFUSED: --run-s1/--run-s1g requires --request-id and --attempt-dir; "
+                         "a run that cannot name itself and its own directory never reaches the "
+                         "paid path\n")
+        return 2
+    if args.run_s1g and args.request_id != S1G_REQUEST_ID:
+        sys.stderr.write("S1 REFUSED: --run-s1g requires its own frozen request id\n")
         return 2
     try:
         _bind_execution_identity(args.request_id, args.attempt_dir)

@@ -1,0 +1,122 @@
+{
+  "kind": "round75-s1g-phase-a-evidence-manifest/1",
+  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "base_head": "ff5a1409812633dfcce00288858576960b77ec39",
+  "base_parent": "d2a634facbc25bea1acd7be3e01474ddca0a5a08",
+  "git_status_at_manifest_write": {
+    "tracked_modified": [
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py",
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py"
+    ],
+    "named_untracked_for_force_add": [
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py",
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_RUN_PLAN.json",
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_phase_a.py",
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_REPORT.md",
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_VERDICT.json",
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_STOP_STATE.json",
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_TASK_STATE.json",
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE_MANIFEST.json",
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE.md"
+    ],
+    "excluded": [
+      "raw/",
+      "test logs",
+      "exit receipts",
+      "checkpoint files",
+      "analysis/round59-communication-decision-density/r59_analysis_run.log",
+      "protected ROUND46 files"
+    ]
+  },
+  "final_unverified_source_identity": {
+    "r75_frozen.py": {"sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e", "bytes": 42530},
+    "r75_s1_runner.py": {"sha256": "5039fd10b08e33e9393f52fdeeba4923587e16596768e6ef6ef5f1153602623e", "bytes": 101109},
+    "r75_s1g_outer_exec.py": {"sha256": "940a273a8199175f933c2e2ef516db42d1acb792d8099063118ecc14ed555d53", "bytes": 37239},
+    "ROUND75_S1G_RUN_PLAN.json": {"sha256": "8d1d46acfe6633d7c02bbeae7377984323e4157f030e1d4e4802a9bbdb1b364e", "bytes": 24248},
+    "test_r75_s1g_phase_a.py": {"sha256": "01c62fb000c9d61db22e324743f76bceeeb42c5528beebc6164bb3a990c374d4", "bytes": 10418}
+  },
+  "tests": {
+    "distinct_top_level_cases": 6,
+    "process_limit": 4,
+    "processes_used": 4,
+    "attempts": [
+      {"attempt": 1, "exit_code": 1, "cases_executed": 6, "test_sha256": "ad4597717e703179eb69746fa64b1355cc5efd0cc1d3e14ff093feb1313e26ca", "receipt_sha256": "512ef9c3ff4533e3fe32e9834dfc896018b8933a7bfca94900eacf0f719f126a", "log_sha256": "9ea37f29098058b271f1fd0547de201d22dba8cd3b257777930037033504905c"},
+      {"attempt": 2, "exit_code": 1, "cases_executed": 6, "test_sha256": "aa26bf25050a5a87b78aad26bf1083c1f85e442b7978cefa7bd12875d78ff785", "receipt_sha256": "38209b21cb304b437f47b28c6d1387f0003edd297f3f2ed72a8d881a24548c24", "log_sha256": "7f1e55e285f89a9764d2118edc2ed605c8e7981412921f1e2d2d24960daae53d"},
+      {"attempt": 3, "exit_code": 0, "cases_executed": 6, "test_sha256": "5f5e87504b59aa324e5ded84b0864d09d8131b1489e1a09a55a43fd7832770ff", "receipt_sha256": "f3771364e534f6c76f1a65bb32325b3e1dddfe6cfc49d45821e66a91857a0376", "log_sha256": "e987e7caaa7745c77aa353fe6ade2dc4551c208c67306ae7cd6a93bca3c9c06d"},
+      {"attempt": 4, "exit_code": 1, "cases_executed": 0, "test_sha256": "01c62fb000c9d61db22e324743f76bceeeb42c5528beebc6164bb3a990c374d4", "receipt_sha256": "cce8713a598e2dface1b418c74eed8f6cb73d25b17e64bdb585ce0fa816b101b", "log_sha256": "98073e8998db562bc235c514814014aef3afe38f2be3c477064d5c3b7f22d41e"}
+    ],
+    "total_case_executions": 18,
+    "final_result": "FAIL_AT_IMPORT",
+    "final_source_verified": false
+  },
+  "production_runtime_nine": {
+    "r75_environment_construction_guard.json": {"sha256": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b", "bytes": 223},
+    "r75_environment_construction.json": {"sha256": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6", "bytes": 288},
+    "r75_joint_record_guard.json": {"sha256": "eb004d98cd0689e16f678856be7bae95df99b8b168a4ce1dec9d82aec39bc567", "bytes": 398},
+    "r75_joint_record.json": {"sha256": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3", "bytes": 273},
+    "r75_offline_trunk_target_row_guard.json": {"sha256": "6ac36b9182a0d14f82b7fe645c67fb8b7389282326f5b3cae353d6da5edea8e9", "bytes": 11329},
+    "r75_offline_trunk_target_row.json": {"sha256": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527", "bytes": 297},
+    "r75_physical_optimizer_step_guard.json": {"sha256": "5d4c65c6de6b4d2c753854fbd4117abd0ab4032220a2f91d56ddb2eb76e9c168", "bytes": 1087},
+    "r75_physical_optimizer_step.json": {"sha256": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa", "bytes": 288},
+    "r75_total_ledger.jsonl": {"sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d", "bytes": 19980}
+  },
+  "production_ledger_actual_summary": {
+    "total_events": 88,
+    "physical_optimizer_step": {"charged_events": 5, "sum_normal": 5, "sum_reserve": 0, "guard_used_normal": 5, "guard_used_reserve": 0, "guard_refusals": 0},
+    "offline_trunk_target_row": {"charged_events": 70, "sum_normal_rows": 840, "sum_reserve_rows": 0, "guard_used_normal": 840, "guard_used_reserve": 0, "guard_refusals": 0},
+    "joint_record": {"charged_events": 1, "sum_normal": 1, "sum_reserve": 0, "guard_used_normal": 1, "guard_used_reserve": 0, "guard_refusals": 0},
+    "environment_construction": {"charged_events": 0, "sum_normal": 0, "sum_reserve": 0, "guard_used_normal": 0, "guard_used_reserve": 0, "guard_refusals": 0}
+  },
+  "baseline_comparison": {
+    "old_baseline_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
+    "old_baseline_events": 88,
+    "old_baseline_physical_normal": 5,
+    "old_baseline_trunk_rows_normal": 840,
+    "old_baseline_trunk_calls_charged": 70,
+    "old_baseline_batch_reads": 1,
+    "matches": true,
+    "phase_b_has_not_been_launched": true,
+    "phase_b_system_is_not_all_zero": true
+  },
+  "read_only_findings": {
+    "s1g_precheck_is_not_bound_to_s1g_plan": true,
+    "precheck_hardcoded_plan_path": "ROUND75_S1_RUN_PLAN.json",
+    "runner_calls_r75_s1_precheck_main_for_s1g": true,
+    "precheck_expected_r75_frozen_sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+    "final_working_r75_frozen_sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
+    "precheck_ledger_contract": "zero ledger",
+    "real_s1g_ledger_contract": "non-zero old production baseline",
+    "final_runner_import_error": "r75_s1_runner.py:1613 IndentationError: unexpected indent",
+    "phase_b_safe_to_launch": false
+  },
+  "code_evidence": {
+    "license_is_fresh": "r75_s1_runner.py:1607",
+    "stage_artifacts": "r75_s1_runner.py:1125",
+    "meter_a2_install": "r75_s1_runner.py:1322",
+    "a1_capture_save": "r75_s1_runner.py:1356",
+    "a2_native_update_and_stage_save": "r75_s1_runner.py:1366",
+    "meter_a3_install": "r75_s1_runner.py:1391",
+    "a3_load_start_stage": "r75_s1_runner.py:1397",
+    "a3_technical_pre_registration_and_update": "r75_s1_runner.py:1432",
+    "a3_end_stage_save_and_compare": "r75_s1_runner.py:1457",
+    "outer_launch_once_failclosed": "r75_s1g_outer_exec.py:452",
+    "outer_record_outcome_missing_exit": "r75_s1g_outer_exec.py:491",
+    "precheck_ledger_check": "r75_s1_precheck.py:154",
+    "precheck_main": "r75_s1_precheck.py:384",
+    "complete_six_case_source": "test_r75_s1g_phase_a.py"
+  },
+  "full_diff_evidence": {
+    "file": "ROUND75_S1G_PHASE_A_FINAL_DIFF.patch",
+    "basis": "git diff --cached against ff5a1409812633dfcce00288858576960b77ec39",
+    "contains": "named source, plan, outer, test and derived docs",
+    "excludes": "raw, receipts, logs, checkpoints, protected files"
+  },
+  "commit_state": {
+    "explicit_local_commit_planned": true,
+    "push": false,
+    "merge": false,
+    "deploy": false,
+    "post_commit_head_self_asserted": false
+  }
+}

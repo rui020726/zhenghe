@@ -377,7 +377,9 @@ def _meter_delta(before: dict[str, int], after: dict[str, int]) -> dict[str, int
 def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]], *,
                           update_index: int, resources,
                           diag_updates: tuple[int, ...] = (0, 15, 31),
-                          gate_beta: float = GATE_BETA) -> dict[str, Any]:
+                          gate_beta: float = GATE_BETA,
+                          physical_step_category: str = "normal",
+                          physical_step_registration_prefix: str | None = None) -> dict[str, Any]:
     """One native PPO update over a real recorded batch; trunk frozen; 8 trainable objects.
 
     Faithful adaptation of ``r66_frozen.frozen_early_ppo_update``. Everything except the freeze
@@ -390,6 +392,11 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
     / charged / completed reported separately). No caller-side aggregate pre-charge exists.
     """
     _require_production_ledger(resources)
+    if physical_step_category not in ("normal", "technical"):
+        raise ValueError("physical_step_category must be 'normal' or 'technical'")
+    if (physical_step_category == "technical") != (physical_step_registration_prefix is not None):
+        raise ValueError("technical physical steps require a registration prefix; normal steps "
+                         "must not carry one")
     frozen_parameters(controller)
     trainable_parameters(controller)
 
@@ -589,8 +596,13 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
             norm = torch.nn.utils.clip_grad_norm_(trainable_parameters(controller),
                                                   common.MAX_GRAD_NORM)
             # Pre-charge BEFORE the physical step; a step failure does not refund.
+            physical_step_what = (
+                f"{physical_step_registration_prefix}:"
+                f"r75_native_update_{update_index}_minibatch_{minibatches}"
+                if physical_step_registration_prefix is not None else
+                f"r75_native_update_{update_index}_minibatch_{minibatches}")
             resources.charge_physical_step(
-                what=f"r75_native_update_{update_index}_minibatch_{minibatches}")
+                what=physical_step_what, category=physical_step_category)
             optimizer.step()
             if not (torch.isfinite(loss) and torch.isfinite(norm)):
                 raise RuntimeError(f"update {update_index}: non-finite loss or gradient norm")

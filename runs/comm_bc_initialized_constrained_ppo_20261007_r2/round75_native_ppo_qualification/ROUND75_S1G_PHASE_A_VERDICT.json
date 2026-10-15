@@ -1,0 +1,140 @@
+{
+  "kind": "round75-s1g-phase-a-verdict/1",
+  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
+  "branch": "exp/round75-native-ppo-qualification",
+  "base_head": "ff5a1409812633dfcce00288858576960b77ec39",
+  "base_parent": "d2a634facbc25bea1acd7be3e01474ddca0a5a08",
+  "status": "PHASE_A_STOPPED_AFTER_TEST_PROCESS_CAP",
+  "phase_b_started": false,
+  "phase_b_authorized_after_source_review": true,
+  "old_s0_prep_head_7eff4a4_is_not_this_request": true,
+  "source_identity": {
+    "r75_frozen.py": "6531152014bf6698b5c474abee1576c8d9cf82ba69f128a553f2f38a90a70f28",
+    "r75_s1_runner.py": "5699fadd6c7fc3eae5a58a3687285938e519f434d6e8cd7a061c193d5d09dfac",
+    "r75_s1g_outer_exec.py": "1f463ff60bea129b2b0fd7001e0ad1bfd3db5bcdbfc27045da14072eb62bf1cb",
+    "ROUND75_S1G_RUN_PLAN.json": "8d1d46acfe6633d7c02bbeae7377984323e4157f030e1d4e4802a9bbdb1b364e",
+    "test_r75_s1g_phase_a.py": "5f5e87504b59aa324e5ded84b0864d09d8131b1489e1a09a55a43fd7832770ff"
+  },
+  "source_wiring": {
+    "native_fee_route": "physical_step_category and registration prefix enter r75_native_ppo_update and r75_resources.charge_physical_step",
+    "technical_prefix": "r75_s1g_A3_technical_retry_20261015",
+    "technical_pre_registration": true,
+    "a1_category": "normal",
+    "a2_category": "normal",
+    "a3_physical_category": "technical",
+    "a3_trunk_row_category": "normal",
+    "batch_read_category": "normal",
+    "scientific_optimizer_steps_per_native_update": 4,
+    "trunk_calls_per_native_update": 70,
+    "trunk_rows_per_native_update": 840
+  },
+  "accounting": {
+    "old_production_baseline": {
+      "physical_optimizer_step": {"used_normal": 5, "used_technical": 0},
+      "offline_trunk_target_row": {"used_normal": 840, "used_technical": 0, "trunk_calls": 70},
+      "joint_record": {"used_normal": 1},
+      "environment_construction": 0,
+      "total_ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
+    },
+    "s1g_attempt_budget": {
+      "a1": {"physical_steps": 1, "category": "normal", "trunk_rows": 0},
+      "a2": {"physical_steps": 4, "category": "normal", "trunk_rows": 840, "trunk_calls": 70, "batch_reads": 1},
+      "a3": {"physical_steps": 4, "category": "technical", "trunk_rows": 840, "trunk_rows_category": "normal", "trunk_calls": 70, "batch_reads": 1}
+    },
+    "s1g_totals": {
+      "physical_optimizer_step": {"normal": 5, "technical": 4, "hard": 9},
+      "offline_trunk_target_row": {"normal": 1680, "technical": 0, "trunk_calls": 140},
+      "joint_record_batch_reads": 2,
+      "environment_construction": 0
+    },
+    "cumulative_after_s1g": {
+      "physical_optimizer_step": {"normal": 10, "technical": 4, "total": 14},
+      "offline_trunk_target_row": {"normal": 2520, "technical": 0, "total": 2520},
+      "joint_record_batch_reads": 3,
+      "environment_construction": 0
+    }
+  },
+  "tests": {
+    "distinct_cases": 6,
+    "python_processes_used": 4,
+    "python_process_limit": 4,
+    "torch_or_numpy_import": false,
+    "case_executions": 18,
+    "final_result": "FAIL_AT_IMPORT",
+    "attempts": [
+      {
+        "attempt": 1,
+        "exit_code": 1,
+        "outcome": "2 errors: sandbox default temp write + wrong JSON level in test expectation",
+        "receipt": "test_r75_s1g_phase_a_exit.json",
+        "receipt_sha256": "512ef9c3ff4533e3fe32e9834dfc896018b8933a7bfca94900eacf0f719f126a"
+      },
+      {
+        "attempt": 2,
+        "exit_code": 1,
+        "outcome": "1 assertion failure: expected dict omitted contract_caps",
+        "receipt": "test_r75_s1g_phase_a_attempt2_exit.json",
+        "receipt_sha256": "38209b21cb304b437f47b28c6d1387f0003edd297f3f2ed72a8d881a24548c24"
+      },
+      {
+        "attempt": 3,
+        "exit_code": 0,
+        "outcome": "6 tests OK, but superseded by later source revision",
+        "receipt": "test_r75_s1g_phase_a_attempt3_exit.json",
+        "receipt_sha256": "f3771364e534f6c76f1a65bb32325b3e1dddfe6cfc49d45821e66a91857a0376"
+      },
+      {
+        "attempt": 4,
+        "exit_code": 1,
+        "outcome": "import failure at r75_s1_runner.py:1613; 0 of 6 cases executed",
+        "receipt": "test_r75_s1g_phase_a_attempt4_exit.json",
+        "receipt_sha256": "cce8713a598e2dface1b418c74eed8f6cb73d25b17e64bdb585ce0fa816b101b"
+      }
+    ],
+    "no_test_run_after_cap": true,
+    "final_source_verified": false
+  },
+  "phase_a_consumption": {
+    "torch_import": 0,
+    "numpy_import": 0,
+    "model_load_or_construction": 0,
+    "forward": 0,
+    "backward": 0,
+    "optimizer_step_real_or_synthetic": 0,
+    "ppo_update": 0,
+    "ppo_replay": 0,
+    "environment_construction": 0,
+    "sampling": 0,
+    "checkpoint_write": 0,
+    "rng_restore": 0,
+    "outer_launch": 0,
+    "canonical_ledger_charged_events": 0,
+    "canonical_technical_attempt_registration": 0,
+    "pure_test_python_processes": 4,
+    "fixture_technical_charge": 1,
+    "fixture_unregistered_technical_refusal": 1
+  },
+  "canonical_production_untouched": {
+    "r75_total_ledger.jsonl": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
+    "r75_physical_optimizer_step.json": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa",
+    "r75_offline_trunk_target_row.json": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527",
+    "r75_joint_record.json": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3",
+    "r75_environment_construction.json": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6"
+  },
+  "read_only_closeout_findings": {
+    "s1g_precheck_is_not_bound_to_s1g_plan": true,
+    "runner_calls_r75_s1_precheck_main_for_s1g": true,
+    "precheck_hardcoded_plan_path": "ROUND75_S1_RUN_PLAN.json",
+    "precheck_expected_r75_frozen_sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
+    "final_working_r75_frozen_sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
+    "precheck_ledger_contract": "zero ledger",
+    "real_s1g_ledger_contract": "non-zero old production baseline",
+    "phase_b_safe_to_launch": false
+  },
+  "git": {
+    "pushed": false,
+    "merged": false,
+    "deployed": false,
+    "commit_scope": "named S1G source, plan, outer, test and derived docs only; no weights, raw logs, receipts or protected files"
+  }
+}

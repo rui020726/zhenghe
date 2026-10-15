@@ -1,0 +1,2201 @@
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE.md b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE.md
+new file mode 100644
+index 0000000..a539ff5
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE.md
+@@ -0,0 +1,126 @@
++# ROUND75 S1G Phase A evidence close-out
++
++This is a read-only evidence close-out. It freezes the failed Phase A source and the four test
++attempts; it does not repair source, rerun tests, or authorize Phase B.
++
++## Git state
++
++- Branch: `exp/round75-native-ppo-qualification`
++- Base HEAD: `ff5a1409812633dfcce00288858576960b77ec39`
++- Base parent: `d2a634facbc25bea1acd7be3e01474ddca0a5a08`
++- Tracked modifications at manifest time: `r75_frozen.py`, `r75_s1_runner.py`
++- Named ignored-to-be-force-added files: `r75_s1g_outer_exec.py`, `ROUND75_S1G_RUN_PLAN.json`,
++  `test_r75_s1g_phase_a.py`, and the S1G report/verdict/stop/task/evidence docs.
++- Excluded from the commit: raw output, receipts, logs, checkpoints, protected ROUND46 files,
++  and the unrelated R59 analysis log.
++
++## Four real exit receipts
++
++The four exit codes are 1, 1, 0, 1. The first three attempts executed six cases each, for 18
++case executions. Attempt 4 failed at import before executing any case.
++
++```json
++{
++  "kind": "round75-s1g-phase-a-test-exit/1",
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "python": "D:\\project_env\\python.exe",
++  "test_sha256": "ad4597717e703179eb69746fa64b1355cc5efd0cc1d3e14ff093feb1313e26ca",
++  "log_sha256": "9ea37f29098058b271f1fd0547de201d22dba8cd3b257777930037033504905c",
++  "exit_code": 1,
++  "passed": false,
++  "recorded_at": "2026-10-15T07:48:13.5054325Z"
++}
++```
++
++```json
++{
++  "kind": "round75-s1g-phase-a-test-exit/1",
++  "attempt": 2,
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "python": "D:\\project_env\\python.exe",
++  "test_sha256": "aa26bf25050a5a87b78aad26bf1083c1f85e442b7978cefa7bd12875d78ff785",
++  "log_sha256": "7f1e55e285f89a9764d2118edc2ed605c8e7981412921f1e2d2d24960daae53d",
++  "exit_code": 1,
++  "passed": false,
++  "recorded_at": "2026-10-15T07:49:56.4619592Z"
++}
++```
++
++```json
++{
++  "kind": "round75-s1g-phase-a-test-exit/1",
++  "attempt": 3,
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "python": "D:\\project_env\\python.exe",
++  "test_sha256": "5f5e87504b59aa324e5ded84b0864d09d8131b1489e1a09a55a43fd7832770ff",
++  "log_sha256": "e987e7caaa7745c77aa353fe6ade2dc4551c208c67306ae7cd6a93bca3c9c06d",
++  "exit_code": 0,
++  "passed": true,
++  "recorded_at": "2026-10-15T07:51:02.0599739Z"
++}
++```
++
++```json
++{
++  "kind": "round75-s1g-phase-a-test-exit/1",
++  "attempt": 4,
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "python": "D:\\project_env\\python.exe",
++  "test_sha256": "01c62fb000c9d61db22e324743f76bceeeb42c5528beebc6164bb3a990c374d4",
++  "log_sha256": "98073e8998db562bc235c514814014aef3afe38f2be3c477064d5c3b7f22d41e",
++  "exit_code": 1,
++  "passed": false,
++  "recorded_at": "2026-10-15T08:02:25.0131532Z"
++}
++```
++
++## Production runtime identity
++
++| File | SHA256 | Bytes |
++|---|---|---:|
++| `r75_environment_construction_guard.json` | `be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b` | 223 |
++| `r75_environment_construction.json` | `abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6` | 288 |
++| `r75_joint_record_guard.json` | `eb004d98cd0689e16f678856be7bae95df99b8b168a4ce1dec9d82aec39bc567` | 398 |
++| `r75_joint_record.json` | `08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3` | 273 |
++| `r75_offline_trunk_target_row_guard.json` | `6ac36b9182a0d14f82b7fe645c67fb8b7389282326f5b3cae353d6da5edea8e9` | 11,329 |
++| `r75_offline_trunk_target_row.json` | `5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527` | 297 |
++| `r75_physical_optimizer_step_guard.json` | `5d4c65c6de6b4d2c753854fbd4117abd0ab4032220a2f91d56ddb2eb76e9c168` | 1,087 |
++| `r75_physical_optimizer_step.json` | `23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa` | 288 |
++| `r75_total_ledger.jsonl` | `fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d` | 19,980 |
++
++## Ledger facts
++
++The total ledger has 88 events. Actual charged summaries are:
++
++- physical optimizer step: 5 charged events, 5 normal, 0 technical;
++- offline trunk target row: 70 charged calls, 840 normal rows, 0 technical rows;
++- joint record: 1 charged batch read, 1 normal;
++- environment construction: 0.
++
++This exactly matches the documented old baseline. It is not a Phase B post-run state and must
++not be described as an all-zero system.
++
++## Precheck mismatch
++
++The current S1G runner path calls `r75_s1_precheck.main()`, but `r75_s1_precheck.py` hardcodes:
++
++```python
++PLAN_PATH = HERE / "ROUND75_S1_RUN_PLAN.json"
++```
++
++The runner does not switch that module-level path when `--run-s1g` is used. In addition, both
++plans pin `r75_frozen.py` to
++`83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80`, while the final working
++`r75_frozen.py` is
++`bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e`. The precheck also asserts
++a zero ledger, while S1G explicitly starts from the non-zero old production baseline. Therefore
++the current S1G launch path is not eligible for Phase B.
++
++## Key source evidence
++
++The complete six-case source remains `test_r75_s1g_phase_a.py`. Its current content is included
++in the committed full cached diff and is not re-run here. The current runner license check is
++at `r75_s1_runner.py:1607`; it contains the final unverified `IndentationError` at line 1613.
++The A1/A2/A3, stage-save, comparison and fee-route call points are cited in
++`ROUND75_S1G_PHASE_A_EVIDENCE_MANIFEST.json`. The outer missing/invalid exit fail-closed path is
++at `r75_s1g_outer_exec.py:452` and `:491`.
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE_MANIFEST.json b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE_MANIFEST.json
+new file mode 100644
+index 0000000..82e4c91
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE_MANIFEST.json
+@@ -0,0 +1,122 @@
++{
++  "kind": "round75-s1g-phase-a-evidence-manifest/1",
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "branch": "exp/round75-native-ppo-qualification",
++  "base_head": "ff5a1409812633dfcce00288858576960b77ec39",
++  "base_parent": "d2a634facbc25bea1acd7be3e01474ddca0a5a08",
++  "git_status_at_manifest_write": {
++    "tracked_modified": [
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py",
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py"
++    ],
++    "named_untracked_for_force_add": [
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py",
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_RUN_PLAN.json",
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_phase_a.py",
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_REPORT.md",
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_VERDICT.json",
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_STOP_STATE.json",
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_TASK_STATE.json",
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE_MANIFEST.json",
++      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_EVIDENCE.md"
++    ],
++    "excluded": [
++      "raw/",
++      "test logs",
++      "exit receipts",
++      "checkpoint files",
++      "analysis/round59-communication-decision-density/r59_analysis_run.log",
++      "protected ROUND46 files"
++    ]
++  },
++  "final_unverified_source_identity": {
++    "r75_frozen.py": {"sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e", "bytes": 42530},
++    "r75_s1_runner.py": {"sha256": "5039fd10b08e33e9393f52fdeeba4923587e16596768e6ef6ef5f1153602623e", "bytes": 101109},
++    "r75_s1g_outer_exec.py": {"sha256": "940a273a8199175f933c2e2ef516db42d1acb792d8099063118ecc14ed555d53", "bytes": 37239},
++    "ROUND75_S1G_RUN_PLAN.json": {"sha256": "8d1d46acfe6633d7c02bbeae7377984323e4157f030e1d4e4802a9bbdb1b364e", "bytes": 24248},
++    "test_r75_s1g_phase_a.py": {"sha256": "01c62fb000c9d61db22e324743f76bceeeb42c5528beebc6164bb3a990c374d4", "bytes": 10418}
++  },
++  "tests": {
++    "distinct_top_level_cases": 6,
++    "process_limit": 4,
++    "processes_used": 4,
++    "attempts": [
++      {"attempt": 1, "exit_code": 1, "cases_executed": 6, "test_sha256": "ad4597717e703179eb69746fa64b1355cc5efd0cc1d3e14ff093feb1313e26ca", "receipt_sha256": "512ef9c3ff4533e3fe32e9834dfc896018b8933a7bfca94900eacf0f719f126a", "log_sha256": "9ea37f29098058b271f1fd0547de201d22dba8cd3b257777930037033504905c"},
++      {"attempt": 2, "exit_code": 1, "cases_executed": 6, "test_sha256": "aa26bf25050a5a87b78aad26bf1083c1f85e442b7978cefa7bd12875d78ff785", "receipt_sha256": "38209b21cb304b437f47b28c6d1387f0003edd297f3f2ed72a8d881a24548c24", "log_sha256": "7f1e55e285f89a9764d2118edc2ed605c8e7981412921f1e2d2d24960daae53d"},
++      {"attempt": 3, "exit_code": 0, "cases_executed": 6, "test_sha256": "5f5e87504b59aa324e5ded84b0864d09d8131b1489e1a09a55a43fd7832770ff", "receipt_sha256": "f3771364e534f6c76f1a65bb32325b3e1dddfe6cfc49d45821e66a91857a0376", "log_sha256": "e987e7caaa7745c77aa353fe6ade2dc4551c208c67306ae7cd6a93bca3c9c06d"},
++      {"attempt": 4, "exit_code": 1, "cases_executed": 0, "test_sha256": "01c62fb000c9d61db22e324743f76bceeeb42c5528beebc6164bb3a990c374d4", "receipt_sha256": "cce8713a598e2dface1b418c74eed8f6cb73d25b17e64bdb585ce0fa816b101b", "log_sha256": "98073e8998db562bc235c514814014aef3afe38f2be3c477064d5c3b7f22d41e"}
++    ],
++    "total_case_executions": 18,
++    "final_result": "FAIL_AT_IMPORT",
++    "final_source_verified": false
++  },
++  "production_runtime_nine": {
++    "r75_environment_construction_guard.json": {"sha256": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b", "bytes": 223},
++    "r75_environment_construction.json": {"sha256": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6", "bytes": 288},
++    "r75_joint_record_guard.json": {"sha256": "eb004d98cd0689e16f678856be7bae95df99b8b168a4ce1dec9d82aec39bc567", "bytes": 398},
++    "r75_joint_record.json": {"sha256": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3", "bytes": 273},
++    "r75_offline_trunk_target_row_guard.json": {"sha256": "6ac36b9182a0d14f82b7fe645c67fb8b7389282326f5b3cae353d6da5edea8e9", "bytes": 11329},
++    "r75_offline_trunk_target_row.json": {"sha256": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527", "bytes": 297},
++    "r75_physical_optimizer_step_guard.json": {"sha256": "5d4c65c6de6b4d2c753854fbd4117abd0ab4032220a2f91d56ddb2eb76e9c168", "bytes": 1087},
++    "r75_physical_optimizer_step.json": {"sha256": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa", "bytes": 288},
++    "r75_total_ledger.jsonl": {"sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d", "bytes": 19980}
++  },
++  "production_ledger_actual_summary": {
++    "total_events": 88,
++    "physical_optimizer_step": {"charged_events": 5, "sum_normal": 5, "sum_reserve": 0, "guard_used_normal": 5, "guard_used_reserve": 0, "guard_refusals": 0},
++    "offline_trunk_target_row": {"charged_events": 70, "sum_normal_rows": 840, "sum_reserve_rows": 0, "guard_used_normal": 840, "guard_used_reserve": 0, "guard_refusals": 0},
++    "joint_record": {"charged_events": 1, "sum_normal": 1, "sum_reserve": 0, "guard_used_normal": 1, "guard_used_reserve": 0, "guard_refusals": 0},
++    "environment_construction": {"charged_events": 0, "sum_normal": 0, "sum_reserve": 0, "guard_used_normal": 0, "guard_used_reserve": 0, "guard_refusals": 0}
++  },
++  "baseline_comparison": {
++    "old_baseline_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
++    "old_baseline_events": 88,
++    "old_baseline_physical_normal": 5,
++    "old_baseline_trunk_rows_normal": 840,
++    "old_baseline_trunk_calls_charged": 70,
++    "old_baseline_batch_reads": 1,
++    "matches": true,
++    "phase_b_has_not_been_launched": true,
++    "phase_b_system_is_not_all_zero": true
++  },
++  "read_only_findings": {
++    "s1g_precheck_is_not_bound_to_s1g_plan": true,
++    "precheck_hardcoded_plan_path": "ROUND75_S1_RUN_PLAN.json",
++    "runner_calls_r75_s1_precheck_main_for_s1g": true,
++    "precheck_expected_r75_frozen_sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
++    "final_working_r75_frozen_sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
++    "precheck_ledger_contract": "zero ledger",
++    "real_s1g_ledger_contract": "non-zero old production baseline",
++    "final_runner_import_error": "r75_s1_runner.py:1613 IndentationError: unexpected indent",
++    "phase_b_safe_to_launch": false
++  },
++  "code_evidence": {
++    "license_is_fresh": "r75_s1_runner.py:1607",
++    "stage_artifacts": "r75_s1_runner.py:1125",
++    "meter_a2_install": "r75_s1_runner.py:1322",
++    "a1_capture_save": "r75_s1_runner.py:1356",
++    "a2_native_update_and_stage_save": "r75_s1_runner.py:1366",
++    "meter_a3_install": "r75_s1_runner.py:1391",
++    "a3_load_start_stage": "r75_s1_runner.py:1397",
++    "a3_technical_pre_registration_and_update": "r75_s1_runner.py:1432",
++    "a3_end_stage_save_and_compare": "r75_s1_runner.py:1457",
++    "outer_launch_once_failclosed": "r75_s1g_outer_exec.py:452",
++    "outer_record_outcome_missing_exit": "r75_s1g_outer_exec.py:491",
++    "precheck_ledger_check": "r75_s1_precheck.py:154",
++    "precheck_main": "r75_s1_precheck.py:384",
++    "complete_six_case_source": "test_r75_s1g_phase_a.py"
++  },
++  "full_diff_evidence": {
++    "file": "ROUND75_S1G_PHASE_A_FINAL_DIFF.patch",
++    "basis": "git diff --cached against ff5a1409812633dfcce00288858576960b77ec39",
++    "contains": "named source, plan, outer, test and derived docs",
++    "excludes": "raw, receipts, logs, checkpoints, protected files"
++  },
++  "commit_state": {
++    "explicit_local_commit_planned": true,
++    "push": false,
++    "merge": false,
++    "deploy": false,
++    "post_commit_head_self_asserted": false
++  }
++}
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_REPORT.md b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_REPORT.md
+new file mode 100644
+index 0000000..89fb97f
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_REPORT.md
+@@ -0,0 +1,134 @@
++# ROUND75 S1G Phase A close-out
++
++Request ID: `R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015`  
++Branch: `exp/round75-native-ppo-qualification`  
++Base HEAD: `ff5a1409812633dfcce00288858576960b77ec39`  
++Base parent: `d2a634facbc25bea1acd7be3e01474ddca0a5a08`  
++Output root: `runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/`
++
++This report covers Phase A only. It records the already-approved source changes, the new
++S1G plan and outer receipt wiring, and three narrow pure-test Python attempts. It does not
++launch Phase B and does not treat the historical `7eff4a4` S0 preparation as this request.
++
++## Scope and classification
++
++The scientific replay remains A1 + A2 + A3: one critic-only control step, one native update
++of four physical optimizer steps, and the same update replay from the disk bundle with four
++physical optimizer steps. A1 and A2 physical steps are normal. A3 physical steps are
++technical and use the dedicated registration prefix. The scientific arithmetic is unchanged:
++4 physical optimizer steps and 70 trunk calls / 840 target rows per native update.
++
++Only physical optimizer steps carry the technical classification. Every new trunk target
++row and call remains normal: A2 840 normal, A3 840 normal, total 1,680 normal. The two new
++batch-read events also remain normal. There is no authorization or route that reclassifies
++trunk rows as technical. Existing production counters and caps are not rewritten.
++
++The S1G baseline is the old production state, not a zero ledger: 5 normal physical steps,
++840 normal trunk rows across 70 calls, one normal batch read, and zero environment
++construction. After the planned S1G attempt, the physical category totals are 10 normal /
++4 technical / 14 hard; the trunk totals remain 2,520 normal / 0 technical / 2,520.
++
++## Source identity and wiring
++
++- `r75_frozen.py` adds `physical_step_category` and
++  `physical_step_registration_prefix` to `r75_native_ppo_update`. It rejects a technical
++  category without the prefix and a prefix on a normal step. The category and prefixed
++  `what` are passed to `resources.charge_physical_step`; no optimizer, loss, epoch, clip,
++  or trunk-meter arithmetic changes.
++- `r75_s1_runner.py` adds the S1G request, plan, attempt directory, technical prefix, and
++  `--run-s1g` CLI. In the S1G path, A3 calls
++  `pre_register_technical_attempt(S1G_TECHNICAL_PREFIX)` before `r75_native_ppo_update`,
++  then passes `physical_step_category="technical"` and the same prefix. A2 remains normal.
++  The S1G request is accepted only with its frozen request ID and private attempt
++  directory.
++- `r75_s1g_outer_exec.py` is a new pure-stdlib parent. It separates prepare and launch,
++  preserves the failed historical attempt, writes an O_EXCL one-time attempt marker, runs
++  one real CPU child exactly once, captures binary stdout and stderr, and records both the
++  real child return code and the wrapper return separately. It contains final SHA pins and
++  no placeholder hashes.
++- `ROUND75_S1G_RUN_PLAN.json` freezes the S1G contract, the non-zero production baseline,
++  the normal/technical accounting above, child receipt requirements, and Phase B as one
++  authorized attempt after Phase A source review.
++
++## Frozen source and plan SHA256
++
++| File | SHA256 | Bytes |
++|---|---|---:|
++| `r75_frozen.py` | `6531152014bf6698b5c474abee1576c8d9cf82ba69f128a553f2f38a90a70f28` | 42,667 |
++| `r75_s1_runner.py` | `5699fadd6c7fc3eae5a58a3687285938e519f434d6e8cd7a061c193d5d09dfac` | 100,622 |
++| `r75_s1g_outer_exec.py` | `1f463ff60bea129b2b0fd7001e0ad1bfd3db5bcdbfc27045da14072eb62bf1cb` | 36,513 |
++| `ROUND75_S1G_RUN_PLAN.json` | `8d1d46acfe6633d7c02bbeae7377984323e4157f030e1d4e4802a9bbdb1b364e` | 24,248 |
++| `test_r75_s1g_phase_a.py` | `5f5e87504b59aa324e5ded84b0864d09d8131b1489e1a09a55a43fd7832770ff` | 5,567 |
++
++## Narrow pure-test attempts
++
++The suite has six distinct cases and no Torch or NumPy import. It uses AST checks for the
++frozen fee route and runner/outer wiring, reads the frozen plan, and exercises the real
++guard pre-registration API only in a disposable fixture under the repo. It also proves that
++the canonical production root is refused as a fixture root. No canonical production counter
++or ledger was used.
++
++The final 6-case suite did not pass as a whole. The first three attempts executed six cases
++each (18 case executions): attempt 1 had two errors, attempt 2 had one assertion failure, and
++attempt 3 passed 6/6. Attempt 4 failed at import before executing any of the six cases, so the
++total is 18 case executions, not 24. The four real exit codes are 1, 1, 0, 1.
++
++1. Attempt 1, exit code 1. It had two errors: the default OS temp directory was not writable
++   under the execution sandbox, and the plan test looked for `cumulative_caps_after_attempt`
++   at the wrong JSON level. Receipt: `test_r75_s1g_phase_a_exit.json`.
++2. Attempt 2, exit code 1. One assertion failed because the expected dictionary omitted the
++   plan's `contract_caps` field. Receipt:
++   `test_r75_s1g_phase_a_attempt2_exit.json`.
++3. Attempt 3, exit code 0. All six cases passed. Receipt:
++   `test_r75_s1g_phase_a_attempt3_exit.json`.
++4. Attempt 4, exit code 1. After the incremental source-review edits, the process failed at
++   import on `r75_s1_runner.py:1613` with `IndentationError: unexpected indent`; none of the
++   six cases ran. Receipt: `test_r75_s1g_phase_a_attempt4_exit.json`.
++
++All three attempts and logs remain as Git-external originals. No test process was run after
++the passing attempt.
++
++This sentence is superseded by the final close-out: the passing attempt 3 no longer qualifies
++the later source revision. Attempt 4 binds the final source to an import failure. The final
++source is unverified and Phase B is forbidden.
++
++## Read-only close-out findings
++
++The frozen S1G accounting is internally coherent, but the existing precheck is not S1G-bound:
++
++- `r75_s1_runner.py` always calls `r75_s1_precheck.main()` inside `run_s1()`.
++- `r75_s1_precheck.py` hardcodes module-level `PLAN_PATH = HERE / "ROUND75_S1_RUN_PLAN.json"`.
++  It does not read `S1G_PLAN_PATH`, and the S1G runner path does not hand it a new plan.
++- The old plan and the S1G plan both pin `r75_frozen.py`
++  `83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80`, while the final working
++  `r75_frozen.py` is `bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e`.
++  Therefore a real S1G launch would fail identity verification even if the source imported.
++- The precheck's ledger check also asserts a zero ledger. The real S1G contract starts from the
++  non-zero old production baseline. This is not safe to bypass; the precheck must be revised in
++  a later authorized source revision before any launch.
++
++The final runner also contains the known `IndentationError`. It is retained unchanged here.
++No syntax repair or fifth test was performed. The outer receipt path and accounting plan are
++evidence, not a license to launch Phase B.
++
++## Resource boundary
++
++Phase A performed zero Torch imports, zero NumPy imports, zero model load or construction,
++zero forward or backward, zero real or synthetic optimizer step, zero PPO update, zero
++environment construction, zero sampling, and zero checkpoint write. It did not restore RNG
++state and did not launch the outer runner. No technical attempt was registered in the
++canonical production ledger.
++
++The pure guard fixture test made one technical charge and one unregistered-technical refusal
++inside its disposable temporary root. This is diagnostic, not production or Phase B
++consumption. The canonical total ledger remains:
++
++`r75_total_ledger.jsonl` SHA256
++`fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d`, 19,980 bytes.
++
++## Handoff
++
++Phase A is complete and locally committed. Phase B remains not started and is allowed only
++as the already-approved one real CPU NN attempt after source review, through the frozen
++outer receipt path. A failed B attempt is a final case result, not an authorization to
++retry, rewrite the plan, or borrow unused normal headroom.
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_STOP_STATE.json b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_STOP_STATE.json
+new file mode 100644
+index 0000000..1ea672b
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_STOP_STATE.json
+@@ -0,0 +1,48 @@
++{
++  "kind": "round75-s1g-phase-a-stop-state/1",
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "status": "A_STOPPED_TEST_PROCESS_CAP_EXHAUSTED",
++  "phase_b_started": false,
++  "phase_b_permitted_after_this_state": false,
++  "test_processes": {
++    "used": 4,
++    "limit": 4,
++    "attempts": [
++      {"attempt": 1, "exit_code": 1, "receipt": "test_r75_s1g_phase_a_exit.json", "receipt_sha256": "512ef9c3ff4533e3fe32e9834dfc896018b8933a7bfca94900eacf0f719f126a"},
++      {"attempt": 2, "exit_code": 1, "receipt": "test_r75_s1g_phase_a_attempt2_exit.json", "receipt_sha256": "38209b21cb304b437f47b28c6d1387f0003edd297f3f2ed72a8d881a24548c24"},
++      {"attempt": 3, "exit_code": 0, "receipt": "test_r75_s1g_phase_a_attempt3_exit.json", "receipt_sha256": "f3771364e534f6c76f1a65bb32325b3e1dddfe6cfc49d45821e66a91857a0376"},
++      {"attempt": 4, "exit_code": 1, "receipt": "test_r75_s1g_phase_a_attempt4_exit.json", "receipt_sha256": "cce8713a598e2dface1b418c74eed8f6cb73d25b17e64bdb585ce0fa816b101b"}
++    ],
++    "final_result": "FAIL_AT_IMPORT"
++  },
++  "blocking_defect": {
++    "file": "r75_s1_runner.py",
++    "line": 1613,
++    "error": "IndentationError: unexpected indent",
++    "cause": "S1G license-verification lines were inserted with body indentation outside the function body; the six-case suite did not execute after import.",
++    "verified": false
++  },
++  "unverified_source_identity": {
++    "r75_frozen.py": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
++    "r75_s1_runner.py": "5039fd10b08e33e9393f52fdeeba4923587e16596768e6ef6ef5f1153602623e",
++    "r75_s1g_outer_exec.py": "940a273a8199175f933c2e2ef516db42d1acb792d8099063118ecc14ed555d53",
++    "ROUND75_S1G_RUN_PLAN.json": "8d1d46acfe6633d7c02bbeae7377984323e4157f030e1d4e4802a9bbdb1b364e",
++    "test_r75_s1g_phase_a.py": "01c62fb000c9d61db22e324743f76bceeeb42c5528beebc6164bb3a990c374d4"
++  },
++  "consumption_boundary": {
++    "torch_import": 0,
++    "numpy_import": 0,
++    "model_load_or_construction": 0,
++    "forward": 0,
++    "backward": 0,
++    "optimizer_step": 0,
++    "ppo_update": 0,
++    "environment_construction": 0,
++    "checkpoint_write": 0,
++    "outer_launch": 0,
++    "canonical_ledger_charged_events": 0,
++    "pure_test_python_processes": 4
++  },
++  "committed": false,
++  "next_operator_instruction": "Do not launch Phase B. A new explicit revision scope is required before correcting or retesting; no fifth pure-test process may be claimed from this A authorization."
++}
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_VERDICT.json b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_VERDICT.json
+new file mode 100644
+index 0000000..688ade1
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_PHASE_A_VERDICT.json
+@@ -0,0 +1,140 @@
++{
++  "kind": "round75-s1g-phase-a-verdict/1",
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "branch": "exp/round75-native-ppo-qualification",
++  "base_head": "ff5a1409812633dfcce00288858576960b77ec39",
++  "base_parent": "d2a634facbc25bea1acd7be3e01474ddca0a5a08",
++  "status": "PHASE_A_STOPPED_AFTER_TEST_PROCESS_CAP",
++  "phase_b_started": false,
++  "phase_b_authorized_after_source_review": true,
++  "old_s0_prep_head_7eff4a4_is_not_this_request": true,
++  "source_identity": {
++    "r75_frozen.py": "6531152014bf6698b5c474abee1576c8d9cf82ba69f128a553f2f38a90a70f28",
++    "r75_s1_runner.py": "5699fadd6c7fc3eae5a58a3687285938e519f434d6e8cd7a061c193d5d09dfac",
++    "r75_s1g_outer_exec.py": "1f463ff60bea129b2b0fd7001e0ad1bfd3db5bcdbfc27045da14072eb62bf1cb",
++    "ROUND75_S1G_RUN_PLAN.json": "8d1d46acfe6633d7c02bbeae7377984323e4157f030e1d4e4802a9bbdb1b364e",
++    "test_r75_s1g_phase_a.py": "5f5e87504b59aa324e5ded84b0864d09d8131b1489e1a09a55a43fd7832770ff"
++  },
++  "source_wiring": {
++    "native_fee_route": "physical_step_category and registration prefix enter r75_native_ppo_update and r75_resources.charge_physical_step",
++    "technical_prefix": "r75_s1g_A3_technical_retry_20261015",
++    "technical_pre_registration": true,
++    "a1_category": "normal",
++    "a2_category": "normal",
++    "a3_physical_category": "technical",
++    "a3_trunk_row_category": "normal",
++    "batch_read_category": "normal",
++    "scientific_optimizer_steps_per_native_update": 4,
++    "trunk_calls_per_native_update": 70,
++    "trunk_rows_per_native_update": 840
++  },
++  "accounting": {
++    "old_production_baseline": {
++      "physical_optimizer_step": {"used_normal": 5, "used_technical": 0},
++      "offline_trunk_target_row": {"used_normal": 840, "used_technical": 0, "trunk_calls": 70},
++      "joint_record": {"used_normal": 1},
++      "environment_construction": 0,
++      "total_ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d"
++    },
++    "s1g_attempt_budget": {
++      "a1": {"physical_steps": 1, "category": "normal", "trunk_rows": 0},
++      "a2": {"physical_steps": 4, "category": "normal", "trunk_rows": 840, "trunk_calls": 70, "batch_reads": 1},
++      "a3": {"physical_steps": 4, "category": "technical", "trunk_rows": 840, "trunk_rows_category": "normal", "trunk_calls": 70, "batch_reads": 1}
++    },
++    "s1g_totals": {
++      "physical_optimizer_step": {"normal": 5, "technical": 4, "hard": 9},
++      "offline_trunk_target_row": {"normal": 1680, "technical": 0, "trunk_calls": 140},
++      "joint_record_batch_reads": 2,
++      "environment_construction": 0
++    },
++    "cumulative_after_s1g": {
++      "physical_optimizer_step": {"normal": 10, "technical": 4, "total": 14},
++      "offline_trunk_target_row": {"normal": 2520, "technical": 0, "total": 2520},
++      "joint_record_batch_reads": 3,
++      "environment_construction": 0
++    }
++  },
++  "tests": {
++    "distinct_cases": 6,
++    "python_processes_used": 4,
++    "python_process_limit": 4,
++    "torch_or_numpy_import": false,
++    "case_executions": 18,
++    "final_result": "FAIL_AT_IMPORT",
++    "attempts": [
++      {
++        "attempt": 1,
++        "exit_code": 1,
++        "outcome": "2 errors: sandbox default temp write + wrong JSON level in test expectation",
++        "receipt": "test_r75_s1g_phase_a_exit.json",
++        "receipt_sha256": "512ef9c3ff4533e3fe32e9834dfc896018b8933a7bfca94900eacf0f719f126a"
++      },
++      {
++        "attempt": 2,
++        "exit_code": 1,
++        "outcome": "1 assertion failure: expected dict omitted contract_caps",
++        "receipt": "test_r75_s1g_phase_a_attempt2_exit.json",
++        "receipt_sha256": "38209b21cb304b437f47b28c6d1387f0003edd297f3f2ed72a8d881a24548c24"
++      },
++      {
++        "attempt": 3,
++        "exit_code": 0,
++        "outcome": "6 tests OK, but superseded by later source revision",
++        "receipt": "test_r75_s1g_phase_a_attempt3_exit.json",
++        "receipt_sha256": "f3771364e534f6c76f1a65bb32325b3e1dddfe6cfc49d45821e66a91857a0376"
++      },
++      {
++        "attempt": 4,
++        "exit_code": 1,
++        "outcome": "import failure at r75_s1_runner.py:1613; 0 of 6 cases executed",
++        "receipt": "test_r75_s1g_phase_a_attempt4_exit.json",
++        "receipt_sha256": "cce8713a598e2dface1b418c74eed8f6cb73d25b17e64bdb585ce0fa816b101b"
++      }
++    ],
++    "no_test_run_after_cap": true,
++    "final_source_verified": false
++  },
++  "phase_a_consumption": {
++    "torch_import": 0,
++    "numpy_import": 0,
++    "model_load_or_construction": 0,
++    "forward": 0,
++    "backward": 0,
++    "optimizer_step_real_or_synthetic": 0,
++    "ppo_update": 0,
++    "ppo_replay": 0,
++    "environment_construction": 0,
++    "sampling": 0,
++    "checkpoint_write": 0,
++    "rng_restore": 0,
++    "outer_launch": 0,
++    "canonical_ledger_charged_events": 0,
++    "canonical_technical_attempt_registration": 0,
++    "pure_test_python_processes": 4,
++    "fixture_technical_charge": 1,
++    "fixture_unregistered_technical_refusal": 1
++  },
++  "canonical_production_untouched": {
++    "r75_total_ledger.jsonl": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
++    "r75_physical_optimizer_step.json": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa",
++    "r75_offline_trunk_target_row.json": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527",
++    "r75_joint_record.json": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3",
++    "r75_environment_construction.json": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6"
++  },
++  "read_only_closeout_findings": {
++    "s1g_precheck_is_not_bound_to_s1g_plan": true,
++    "runner_calls_r75_s1_precheck_main_for_s1g": true,
++    "precheck_hardcoded_plan_path": "ROUND75_S1_RUN_PLAN.json",
++    "precheck_expected_r75_frozen_sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
++    "final_working_r75_frozen_sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
++    "precheck_ledger_contract": "zero ledger",
++    "real_s1g_ledger_contract": "non-zero old production baseline",
++    "phase_b_safe_to_launch": false
++  },
++  "git": {
++    "pushed": false,
++    "merged": false,
++    "deployed": false,
++    "commit_scope": "named S1G source, plan, outer, test and derived docs only; no weights, raw logs, receipts or protected files"
++  }
++}
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_RUN_PLAN.json b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_RUN_PLAN.json
+new file mode 100644
+index 0000000..ef52315
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_RUN_PLAN.json
+@@ -0,0 +1,468 @@
++{
++  "kind": "round75-s1g-run-plan/1",
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "status": "HUMAN_APPROVED_PHASE_A_PREPARED_B_PENDING_SOURCE_REVIEW",
++  "meaning": "The complete real S1 driver and its freeze precheck are prepared and frozen here. Nothing in this plan has been executed: zero torch import, zero model load or construction, zero forward/backward, zero optimizer or PPO step, zero environment, zero sampling, zero checkpoint write. S1 requires a separate decision-side execution permission.",
++  "branch": "exp/round75-native-ppo-qualification",
++  "head_at_writing": "ff5a1409812633dfcce00288858576960b77ec39",
++  "parent_head": "0f8574accae16676a75a248da180be9d49e9fa04",
++  "future_command": "python r75_s1g_outer_exec.py --launch --request-id R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "entry_points": {
++    "precheck": "r75_s1_precheck.py (pure stdlib, no torch, no r75_frozen import, read-only)",
++    "runner": "r75_s1_runner.py (lazy torch / r75_frozen import inside the run path only)"
++  },
++  "input_identity": {
++    "row": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/rows/v2_r44_train_s11_e0_s1300027_a1.json",
++      "sha256": "882711788d8ccae4ec8092b4eb26df7da6771c9b352b6c7507624d3644abebd8",
++      "bytes": 341845
++    },
++    "tape": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/logs/v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
++      "sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421",
++      "bytes": 215820
++    },
++    "r58_ep0_model": {
++      "path": "D:/code/整合/zhenghe-round42/runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt",
++      "sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
++      "bytes": 77327,
++      "registry_checkpoint_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
++      "registry_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
++      "registry_action_head_sha256": "aad35fc6ba3fc43bfe174cb08a5fabb8180654765ba9ab39b6b71fdc42b8b102"
++    },
++    "behaviour_parameters": {
++      "row_field": "controller_parameters_after.parameter_sha256",
++      "value": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
++      "parameter_count": 5700,
++      "matches_registry": true
++    },
++    "batch_facts": {
++      "seed": 11,
++      "episode_index": 0,
++      "scenario_seed": 1300027,
++      "training_seed": 11,
++      "steps": 1000,
++      "optimizer_steps": 0,
++      "lambda": 1.0,
++      "lambda_at_rollout": 1.0,
++      "eta_lambda": 0.5,
++      "budget_bytes": 29300,
++      "b0_bytes": 10000.0,
++      "config_hash": "fbc5c80cc3206bdb",
++      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
++      "substituted_fields_classified": 12
++    },
++    "required_batch_shape": {
++      "joint_records": 66,
++      "candidate_rows": 168,
++      "feature_dim": 19,
++      "horizon_ticks": 1000,
++      "targets": 6,
++      "free_early": 5,
++      "free_late": 1
++    },
++    "adapter": "r75_replay_adapter.load_qualification_batch(row, tape) - the existing qualified adapter; no new collector, no environment, no episode/GAE switch, no field back-filling, no rewriting of the recorded log-probs"
++  },
++  "source_identity": {
++    "canonical_trainer": {
++      "path": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
++      "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
++      "expected": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
++    },
++    "canonical_common": {
++      "path": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_common.py",
++      "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
++      "expected": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a"
++    },
++    "canonical_controller": {
++      "path": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_controller.py",
++      "sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
++      "expected": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1"
++    },
++    "r66_frozen": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round66_bc_early_path_preserving_late_adaptation/r66_frozen.py",
++      "sha256": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10",
++      "expected": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10"
++    },
++    "r75_guard": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_guard.py",
++      "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
++      "expected": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
++      "note": "the verified mechanisms are NOT touched by this revision"
++    },
++    "canonical_onpolicy": {
++      "path": "D:/code/整合/zhenghe/runs/comm_tight_budget_20260919/onpolicy.py",
++      "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
++      "expected": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
++      "note": "onpolicy.py is NOT in the canonical run directory; it is reached through the same wiring, from the tight-budget round that v2_common.enter_round() puts on sys.path. Pinned by R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015 by reading that live file; no replacement copy is introduced."
++    },
++    "canonical_cost_math": {
++      "path": "D:/code/整合/zhenghe/runs/comm_cost_controller_stage_a_20260927/cost_math.py",
++      "sha256": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
++      "expected": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
++      "note": "cost_math.py is NOT in the canonical run directory either; it is imported by configure_source_imports() from the stage-A directory that v2_common.enter_round() puts on sys.path, and r75_frozen reads the already-imported object back from sys.modules instead of importing a second copy. Pinned by R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015 by reading that live file; the checkout copy under zhenghe-round42 carries the SAME digest, so the resolved path is what distinguishes the two."
++    },
++    "r75_frozen": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py",
++      "sha256": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
++      "expected": "83813d6e06971a1e1fc1e25d9e9f94b0fa72310e300e037c0fa73d539c540b80",
++      "revision": "import-bootstrap-repair: r66_frozen.configure_source_imports() now runs BEFORE any canonical import, and _verify_canonical_bindings() asserts at import time that each canonical binding is the object the helper returned, that its resolved __file__ sits under the canonical root, that the file actually read hashes to the pinned value, and that the living GAE=1.0 / ETA=0.5 / GAMMA=1.0 came from the configured module; the identity check then compared that dictionary entry with itself, so it proved nothing - it now compares the module-level bindings this module uses (trainer / common / controller) and the sys.modules cache against the helper return, and reads cost_math back from sys.modules with its own resolved path and digest pin (never imported again here)"
++    },
++    "r75_replay_adapter": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_replay_adapter.py",
++      "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2"
++    },
++    "reused_verified_sources": {
++      "r74_guard_prod.py": {
++        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round74_constrained_early_head_adaptation/r74_guard_prod.py",
++        "sha256": "623b9ec6cd243d27321e8c745a0247c97126c9028141cb0ed4760dd90c0796db",
++        "expected": "623b9ec6cd243d27321e8c745a0247c97126c9028141cb0ed4760dd90c0796db"
++      },
++      "r74_guard.py": {
++        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round74_constrained_early_head_adaptation/r74_guard.py",
++        "sha256": "9a6b06374fc5b56b6d8077dc6aa332444533198aca0967cb36b867795af614d7",
++        "expected": "9a6b06374fc5b56b6d8077dc6aa332444533198aca0967cb36b867795af614d7"
++      },
++      "r43_call_counter_hooks.py": {
++        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r43_call_counter_hooks.py",
++        "sha256": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
++        "expected": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7"
++      }
++    },
++    "gae_default_distinction": {
++      "v2_common_default": "GAE_LAMBDA = 0.95, ETA_LAMBDA = 0.05 (module defaults, NOT used)",
++      "r66_living_override": "configure_source_imports() sets common.GAE_LAMBDA = 1.0 and common.ETA_LAMBDA = 0.5",
++      "requirement": "the S1 run must report the LIVE values 1.0 / 0.5 and must never silently fall back to the 0.95 / 0.05 defaults",
++      "enforcement": "r75_frozen._verify_canonical_bindings() reads common.GAE_LAMBDA / common.ETA_LAMBDA / common.GAMMA back from the configured module at import time and refuses the run if they are not 1.0 / 0.5 / 1.0"
++    }
++  },
++  "gate_only_controller": {
++    "construction": "r75_frozen.build_gate_only_controller(seed=11) -> r66.load_r58_ep0_model + r66.fresh_partitioned_controller(ep0_state=...) + freeze_trunk_only",
++    "two_head_equality": "both independent heads are set to the OLD single action_head values, so route_logits reproduces the single-head behaviour by construction",
++    "no_late_scaling": "no late x .10 or any other head scaling is applied",
++    "alignment": "r66.likelihood_alignment must pass within common.LOG_PROB_TOLERANCE = 1e-6; the gate prior never enters the forward",
++    "qualification_only": "these parameters NEVER become the R71 research INIT and NEVER become an effect training checkpoint",
++    "r71_research_config_unchanged": [
++      "lambda*A_task - A_cost combined advantage",
++      "trunk frozen only",
++      "8 trainable objects (early_head, late_head, task_value_head, cost_head; 390 scalars)",
++      "12 objects / 5830 scalars total",
++      "beta=1.00 gate prior is a training-loss term only",
++      "19-dim observation, ready_cut 147",
++      "gamma 1.0",
++      "live GAE lambda 1.0",
++      "dual eta 0.5",
++      "lambda_init 1.0",
++      "B0 10000",
++      "budget 29300 / 6 targets / ACK off"
++    ]
++  },
++  "candidates": {
++    "A1_nonempty_adam_critic_only_control_step": {
++      "physical_optimizer_steps": 1,
++      "offline_trunk_target_rows": 0,
++      "joint_records": 0,
++      "design": "Adam(lr=3e-4) over the SAME eight trainable objects as the native path. ONE synthetic physical step in which only the two critic modules carry a legal controllable non-zero gradient; both actor heads and the trunk receive none, so the actor/trunk parameters do not move and the original behaviour probabilities are preserved. The step is pre-charged to the central ledger before optimizer.step() and recorded at the real entry.",
++      "truthful_records": [
++        "for each of the eight objects: grad is None / non-None",
++        "for each of the eight objects: Adam exp_avg / exp_avg_sq present / absent",
++        "an absent state is recorded as absent and NEVER fabricated as non-empty"
++      ],
++      "full_state_saved": [
++        "five module state_dicts",
++        "all Adam state values with the eight-object name mapping",
++        "lambda (dual) and lambda_at_rollout",
++        "python random state",
++        "numpy random state",
++        "torch RNG state",
++        "update cursor 0",
++        "data identity (row/tape sha256)",
++        "frozen configuration"
++      ]
++    },
++    "A2_source_actual_update": {
++      "physical_optimizer_steps": 4,
++      "offline_trunk_target_rows": 840,
++      "joint_records": 1,
++      "design": "From the SAME A1 state, call r75_native_ppo_update(update_index=0) once through the real path: trainer.batch_samples + GAE, the metered r66.likelihood_alignment pass (168 candidate rows over 66 calls), the DATA_ORDER_SEED shuffle, 4 epochs x 1 minibatch, the beta=1.00 / ready_cut=147 gate prior, the clipped surrogate + dual critic + entropy + gate loss, the global clip over the eight trainable objects, optimizer.step."
++    },
++    "A3_full_state_save_restore_same_update": {
++      "physical_optimizer_steps": 4,
++      "offline_trunk_target_rows": 840,
++      "joint_records": 1,
++      "design": "Restore the exact pre-update A1 state into FRESH objects and re-execute the SAME update (update_index=0). The re-run starts from the restored pre-state and does not advance the scientific cursor; it replaces the trial, it is not a second committed update."
++    }
++  },
++  "accounting": {
++    "planned_totals": {
++      "physical_optimizer_steps": 9,
++      "offline_trunk_target_rows": 1680,
++      "joint_records": 2,
++      "environment_constructions": 0
++    },
++    "per_native_update": {
++      "physical_optimizer_steps": 4,
++      "trunk_entry_calls": 70,
++      "trunk_entry_rows": 840,
++      "largest_single_row_charge": 168,
++      "alignment_calls": 66,
++      "alignment_rows": 168,
++      "epoch_calls": 4,
++      "epoch_rows": 672
++    },
++    "both_native_updates": {
++      "trunk_entry_calls": 140,
++      "trunk_entry_rows": 1680
++    },
++    "record_exposures": {
++      "unique_records": 66,
++      "batch_reads": 2,
++      "record_exposures": 132
++    },
++    "joint_record_semantics": "the central unit joint_record counts BATCH-READ events, not original joint records and not environment episodes: 2 batch-read events re-expose the same 66 unique records 132 times; the environment guard stays 0/0/0",
++    "caps": {
++      "physical_optimizer_step": "normal 12 + technical 4 / hard 16",
++      "offline_trunk_target_row": "normal 5000 + technical 1000 / hard 6000, per-charge 1024",
++      "environment_construction": "0 / 0 / 0 - forbidden by source"
++    },
++    "headroom_after_plan": {
++      "physical_optimizer_steps": 7,
++      "offline_trunk_target_rows": 4320
++    },
++    "no_quota_borrowing": "the plan may not convert headroom into extra steps; no extra forward verification, parameter/state comparison does not forward"
++  },
++  "metering_contract": {
++    "attachment": "every real forward attaches ONLY to R75Resources.production() (the canonical durable root)",
++    "installation": "resources.ensure_trunk_meter(controller, ...) is installed BEFORE any possible forward, for BOTH controllers (A2 and A3)",
++    "recorded_per_controller": [
++      "calls_attempted",
++      "calls_charged",
++      "rows_charged",
++      "calls_completed",
++      "rows_completed",
++      "calls_refused",
++      "calls_failed"
++    ],
++    "phase_split": {
++      "alignment": "cumulative snapshot at the end of r66.likelihood_alignment minus pre_meter",
++      "epochs": "final cumulative snapshot minus the alignment-end snapshot",
++      "total": "final cumulative snapshot minus pre_meter",
++      "invariant": "alignment + epochs == total for EVERY component"
++    },
++    "no_dodge": "the meter is never uninstalled to escape accounting; no aggregate replaces the entry; no double charge",
++    "reconciliation": "every Adam.step is pre-charged and reconciled item-by-item against the durable counter; resources.verify_or_fail() runs before any work"
++  },
++  "comparison_contract": {
++    "compared_value_by_value": [
++      "five module parameters",
++      "all Adam state values with the eight-object name mapping",
++      "lambda / lambda_at_rollout",
++      "python / numpy / torch RNG state",
++      "update cursor",
++      "scientific numeric returns of the update record"
++    ],
++    "excluded_in_advance_and_accounted_separately": [
++      "wall-clock timestamps",
++      "central cumulative resource counters and ledger event sequence numbers",
++      "temporary file paths and process ids",
++      "the A3 trunk-entry meter absolute cumulative readings (A3 is a second controller, so its absolute counts are expected to differ and are reconciled, not diffed)"
++    ],
++    "forbidden_exclusions": "no real scientific difference may be excluded; the exclusion list is fixed here before the run"
++  },
++  "stop_conditions": [
++    "any source, data or ledger byte-identity mismatch",
++    "the R58 ep0 state-dict key mapping into the five-module controller fails",
++    "likelihood_alignment exceeds 1e-6 (data is never rewritten, alignment never disabled)",
++    "any Adam object whose recorded grad/state presence contradicts the measurement",
++    "the A3 re-run record differs from A2 in any compared field",
++    "any ledger refusal, any fixture/simulated attachment, any environment construction attempt",
++    "non-finite loss or gradient norm",
++    "any checkpoint save that omits the optimizer state or the RNG state"
++  ],
++  "execution_discipline": {
++    "attempts": "ONE real execution attempt",
++    "no_auto_retry": "an anomaly keeps the failure and the consumed originals and stops immediately",
++    "no_technical_reserve": "ordinary exhaustion is never auto-upgraded to the technical reserve",
++    "no_refund": "a failed step is never refunded",
++    "no_scratch": "no charged scratch, dev, preheat, small trial or extra probe",
++    "history_preserved": "the R74 >=16 physical-step lower bound and every earlier gap stay permanently recorded"
++  },
++  "not_covered": [
++    "torch import, model load/construction and the state-dict mapping outcome",
++    "the real likelihood_alignment outcome",
++    "any real or synthetic optimizer step, PPO update or replay",
++    "the real collector, real episodes, closed-loop simulation, any evaluation block",
++    "full multi-batch training and any research checkpoint",
++    "any communication-policy effect, cost or task-outcome conclusion"
++  ],
++  "canonical_ledger_frozen_snapshot": {
++    "root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/raw/runtime",
++    "files": {
++      "r75_environment_construction.json": {
++        "sha256": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6",
++        "bytes": 288
++      },
++      "r75_environment_construction_guard.json": {
++        "sha256": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b",
++        "bytes": 223
++      },
++      "r75_joint_record.json": {
++        "sha256": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3",
++        "bytes": 273
++      },
++      "r75_joint_record_guard.json": {
++        "sha256": "1d4022fcd21516d1b91b60ba3f3ca9efc3ee837da8a615012f9dcad2e69a8a9d",
++        "bytes": 226
++      },
++      "r75_offline_trunk_target_row.json": {
++        "sha256": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527",
++        "bytes": 297
++      },
++      "r75_offline_trunk_target_row_guard.json": {
++        "sha256": "314fbb13412443a381ebb59e6479be5ae10431a45c5672beb370a899f18ae778",
++        "bytes": 232
++      },
++      "r75_physical_optimizer_step.json": {
++        "sha256": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa",
++        "bytes": 288
++      },
++      "r75_physical_optimizer_step_guard.json": {
++        "sha256": "13b9d36da125823d69196c67ed44361fa6cf121fbbf8ada618e667312ba894aa",
++        "bytes": 223
++      },
++      "r75_total_ledger.jsonl": {
++        "sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
++        "bytes": 2579
++      }
++    },
++    "total_ledger_events": 12,
++    "charged_events": 0,
++    "rule": "the precheck must reproduce this snapshot byte-for-byte; no bootstrap append and no rebuild is permitted"
++  },
++  "authorization": {
++    "human": "approved_full_s1g_first_a_then_single_b_20261015",
++    "phase_a": "source_tests_and_local_commit_only",
++    "phase_b": "single_real_nn_attempt_after_source_review",
++    "no_repeat_question": "true"
++  },
++  "s1g_execution_contract": {
++    "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++    "output_root": "raw/s1g_native_retry",
++    "attempt_dir": "raw/s1g_native_retry/R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++    "technical_attempt_prefix": "r75_s1g_A3_technical_retry_20261015",
++    "ledger_baseline": {
++      "total_ledger_events": 88,
++      "total_ledger_bytes": 19980,
++      "total_ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
++      "guards": {
++        "physical_optimizer_step": {
++          "used_normal": 5,
++          "used_reserve": 0,
++          "refusals": 0,
++          "charged_events": 5
++        },
++        "offline_trunk_target_row": {
++          "used_normal": 840,
++          "used_reserve": 0,
++          "refusals": 0,
++          "charged_events": 70
++        },
++        "joint_record": {
++          "used_normal": 1,
++          "used_reserve": 0,
++          "refusals": 0,
++          "charged_events": 1
++        },
++        "environment_construction": {
++          "used_normal": 0,
++          "used_reserve": 0,
++          "refusals": 0,
++          "charged_events": 0
++        }
++      }
++    },
++    "attempt_budget": {
++      "A1": {
++        "phase": "critic_only_control_step",
++        "physical_steps": 1,
++        "category": "normal",
++        "offline_trunk_target_rows": 0,
++        "joint_records": 0
++      },
++      "A2": {
++        "phase": "native_update_0",
++        "physical_steps": 4,
++        "category": "normal",
++        "offline_trunk_target_rows": 840,
++        "trunk_calls": 70,
++        "joint_records": 1
++      },
++      "A3": {
++        "phase": "same_update_replay_from_this_A1_disk_bundle",
++        "physical_steps": 4,
++        "category": "technical",
++        "offline_trunk_target_rows": 840,
++        "trunk_calls": 70,
++        "joint_records": 1
++      },
++      "totals": {
++        "physical_optimizer_steps": {
++          "normal": 5,
++          "technical": 4,
++          "hard": 9
++        },
++        "offline_trunk_target_row": {
++          "normal": 1680,
++          "reserve": 0,
++          "trunk_calls": 140,
++          "max_single_call": 168
++        },
++        "joint_record": {
++          "normal_batch_reads": 2,
++          "new_exposures": 132,
++          "unique_records_per_read": 66
++        },
++        "environment_construction": 0
++      },
++      "cumulative_caps_after_attempt": {
++        "physical_optimizer_step": {
++          "normal": 10,
++          "reserve": 4,
++          "total": 14,
++          "contract_caps": "normal 12 + technical 4 / hard 16"
++        },
++        "offline_trunk_target_row": {
++          "normal": 2520,
++          "reserve": 0,
++          "total": 2520,
++          "contract_caps": "normal 5000 + technical 1000 / hard 6000"
++        },
++        "joint_record": {
++          "batch_reads": 3,
++          "exposures": 198
++        },
++        "environment_construction": 0
++      },
++      "no_extra_retry_refund_or_headroom_use": true
++    },
++    "child_receipt_contract": {
++      "outer_python": "stdlib_only_parent",
++      "real_child": "single_cpu_nn_python",
++      "hold_process_handle": true,
++      "binary_stdio": true,
++      "required_fields": [
++        "argv",
++        "cwd",
++        "child_pid",
++        "started_at",
++        "ended_at",
++        "child_returncode",
++        "timed_out",
++        "timeout_s"
++      ],
++      "missing_returncode": "missing_failclosed_not_zero",
++      "inference_from_stdout": "forbidden"
++    },
++    "scientific_invariants": "The existing frozen RUN_PLAN candidates, comparison_contract, data identity, 66/168 batch, trunk-freeze, 8 trainable objects, LR, epochs, minibatch, optimizer order and return semantics remain unchanged; category/prefix metadata is diagnostic/accounting only."
++  }
++}
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_TASK_STATE.json b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_TASK_STATE.json
+new file mode 100644
+index 0000000..e22482f
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_TASK_STATE.json
+@@ -0,0 +1,21 @@
++{
++  "kind": "round75-s1g-task-state/1",
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "current_phase": "A_COMPLETE_PENDING_SOURCE_REVIEW",
++  "next_gate": "human_or_decision_side_source_review",
++  "phase_a_complete": true,
++  "phase_b_started": false,
++  "phase_b_repeat_requested": false,
++  "phase_b_attempts_executed": 0,
++  "phase_b_authorized_after_source_review": true,
++  "scope_correction": {
++    "technical_applies_to": "A3 physical optimizer steps only",
++    "technical_does_not_apply_to": ["A3 trunk rows", "A2 trunk rows", "batch reads", "environment construction"],
++    "misapplied_trunk_technical_change": "reverted before the passing test attempt",
++    "scientific_shape_preserved": true
++  },
++  "protected_files": {
++    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
++    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
++  }
++}
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py
+index e5fa4b6..bcc821a 100644
+--- a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py
+@@ -377,7 +377,9 @@ def _meter_delta(before: dict[str, int], after: dict[str, int]) -> dict[str, int
+ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]], *,
+                           update_index: int, resources,
+                           diag_updates: tuple[int, ...] = (0, 15, 31),
+-                          gate_beta: float = GATE_BETA) -> dict[str, Any]:
++                          gate_beta: float = GATE_BETA,
++                          physical_step_category: str = "normal",
++                          physical_step_registration_prefix: str | None = None) -> dict[str, Any]:
+     """One native PPO update over a real recorded batch; trunk frozen; 8 trainable objects.
+ 
+     Faithful adaptation of ``r66_frozen.frozen_early_ppo_update``. Everything except the freeze
+@@ -390,6 +392,11 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
+     / charged / completed reported separately). No caller-side aggregate pre-charge exists.
+     """
+     _require_production_ledger(resources)
++    if physical_step_category not in ("normal", "technical"):
++        raise ValueError("physical_step_category must be 'normal' or 'technical'")
++    if (physical_step_category == "technical") != (physical_step_registration_prefix is not None):
++        raise ValueError("technical physical steps require a registration prefix; normal steps "
++                         "must not carry one")
+     frozen_parameters(controller)
+     trainable_parameters(controller)
+ 
+@@ -589,8 +596,13 @@ def r75_native_ppo_update(controller, optimizer, episodes: list[dict[str, Any]],
+             norm = torch.nn.utils.clip_grad_norm_(trainable_parameters(controller),
+                                                   common.MAX_GRAD_NORM)
+             # Pre-charge BEFORE the physical step; a step failure does not refund.
++            physical_step_what = (
++                f"{physical_step_registration_prefix}:"
++                f"r75_native_update_{update_index}_minibatch_{minibatches}"
++                if physical_step_registration_prefix is not None else
++                f"r75_native_update_{update_index}_minibatch_{minibatches}")
+             resources.charge_physical_step(
+-                what=f"r75_native_update_{update_index}_minibatch_{minibatches}")
++                what=physical_step_what, category=physical_step_category)
+             optimizer.step()
+             if not (torch.isfinite(loss) and torch.isfinite(norm)):
+                 raise RuntimeError(f"update {update_index}: non-finite loss or gradient norm")
+@@ -679,4 +691,4 @@ def update_accounting(n_samples: int, trunk_rows_per_epoch: int) -> dict[str, in
+             "minibatches_per_epoch": int(minibatches_per_epoch),
+             "physical_optimizer_steps": int(steps),
+             "offline_trunk_target_rows": int(trunk_rows_per_epoch * (4 + 1)),
+-            "epochs": 4, "minibatch_steps": 256}
+\ No newline at end of file
++            "epochs": 4, "minibatch_steps": 256}
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py
+index 7fa5e64..8c3bd44 100644
+--- a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py
+@@ -56,6 +56,10 @@ S1_DIR = HERE / "raw" / "s1"
+ # import, so a run that cannot name itself never reaches torch.
+ FIRST_ATTEMPT_REQUEST_ID = "R75_S1_NATIVE_QUALIFICATION_20261015"
+ EXECUTION_REQUEST_ID = None
++S1G_REQUEST_ID = "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"
++S1G_PLAN_PATH = HERE / "ROUND75_S1G_RUN_PLAN.json"
++S1G_ATTEMPT_DIR = HERE / "raw" / "s1g_native_retry" / S1G_REQUEST_ID
++S1G_TECHNICAL_PREFIX = "r75_s1g_A3_technical_retry_20261015"
+ 
+ SEED = 11
+ LR = 3e-4
+@@ -1123,7 +1127,8 @@ def _completed_stage_artifacts(state) -> list[dict[str, Any]]:
+     artifacts: list[dict[str, Any]] = []
+     for key, label in (("A1_baseline_bundle", "A1_baseline"),
+                        ("A2_stage_snapshot", "A2_completed"),
+-                       ("A3_start_stage_snapshot", "A3_start_gate_passed")):
++                       ("A3_start_stage_snapshot", "A3_start_gate_passed"),
++                       ("A3_end_stage_snapshot", "A3_completed")):
+         item = state.record.get(key)
+         if not isinstance(item, dict) or "path" not in item:
+             continue
+@@ -1365,7 +1370,9 @@ def run_s1() -> int:
+         state.count("native_ppo_update_attempts", "r75_native_ppo_update", label="A2",
+                     update_index=0)
+         record["A2"] = r75_frozen.r75_native_ppo_update(
+-            controller, observer, [episode], update_index=0, resources=resources)
++            controller, observer, [episode], update_index=0, resources=resources,
++            physical_step_category="normal",
++            physical_step_registration_prefix=None)
+         record["post_meter_a2"] = meter_a2.snapshot()
+         a2_end = capture_full_state(controller, observer, np_mod=np_mod, torch_mod=torch,
+                                     data_identity=data_identity, configuration=configuration, cursor=1)
+@@ -1423,15 +1430,38 @@ def run_s1() -> int:
+             label="A3_after_disk_restore", state=state, full_state=a3_start)
+ 
+         state.phase = "A3_native_update"
++        if EXECUTION_REQUEST_ID == S1G_REQUEST_ID:
++            resources.pre_register_technical_attempt(S1G_TECHNICAL_PREFIX)
++            record["A3_technical_retry"] = {
++                "request_id": S1G_REQUEST_ID,
++                "pre_registered_attempt_prefix": S1G_TECHNICAL_PREFIX,
++                "physical_step_category": "technical",
++                "physical_steps": 4,
++            }
++            a3_step_category = "technical"
++            a3_step_prefix = S1G_TECHNICAL_PREFIX
++        else:
++            record["A3_technical_retry"] = {
++                "request_id": EXECUTION_REQUEST_ID,
++                "physical_step_category": "normal",
++                "physical_steps": 4,
++            }
++            a3_step_category = "normal"
++            a3_step_prefix = None
+         state.count("native_ppo_update_attempts", "r75_native_ppo_update", label="A3",
+                     update_index=0)
+         record["A3"] = r75_frozen.r75_native_ppo_update(
+-            controller3, observer3, [episode], update_index=0, resources=resources)
++            controller3, observer3, [episode], update_index=0, resources=resources,
++            physical_step_category=a3_step_category,
++            physical_step_registration_prefix=a3_step_prefix)
+         record["post_meter_a3"] = meter_a3.snapshot()
+         a3_end = capture_full_state(controller3, observer3, np_mod=np_mod, torch_mod=torch,
+                                     data_identity=bundle["data_identity"],
+                                     configuration=bundle["configuration"],
+                                     cursor=int(bundle["update_cursor"]) + 1)
++        record["A3_end_stage_snapshot"] = _save_stage_snapshot(
++            S1_DIR / "r75_s1_A3_end_stage_snapshot.pt", stage="A3_completed",
++            label="A3_end_after_native_update", state=state, full_state=a3_end)
+ 
+         # --- the four comparisons the contract demands -----------------------------------------
+         state.phase = "comparison"
+@@ -1580,10 +1610,12 @@ def _license_is_fresh(recorded, request_id, target):
+     A marker without license_state == "issued", without a --run-s1 argv, or whose recorded
+     --request-id / --attempt-dir disagree with this child is NOT a consumable license; taking it
+     over anyway would let a stale or cross-directory marker authorize a run."""
+-    if not isinstance(recorded, dict) or recorded.get("license_state") != "issued":
++        expected_flag = "--run-s1g" if request_id == S1G_REQUEST_ID else "--run-s1"
++        other_flag = "--run-s1" if request_id == S1G_REQUEST_ID else "--run-s1g"
++        if not isinstance(recorded, dict) or recorded.get("license_state") != "issued":
+         return False
+     argv = recorded.get("argv")
+-    if not isinstance(argv, list) or "--run-s1" not in argv:
++        if not isinstance(argv, list) or expected_flag not in argv or other_flag in argv:
+         return False
+     if _license_flag_value(argv, "--request-id") != request_id:
+         return False
+@@ -1705,6 +1737,8 @@ def main(argv=None) -> int:
+     parser = argparse.ArgumentParser(description="ROUND75 S1 runner (prepared, not run)")
+     parser.add_argument("--run-s1", action="store_true",
+                         help="execute the paid S1 path (requires a separate decision-side approval)")
++    parser.add_argument("--run-s1g", action="store_true",
++                        help="execute the S1G retry with its independent plan and attempt directory")
+     parser.add_argument("--print-plan", action="store_true", help="print the frozen plan summary")
+     parser.add_argument("--request-id", default=None,
+                         help="the execution identity of THIS attempt; the historical request id "
+@@ -1713,7 +1747,14 @@ def main(argv=None) -> int:
+                         help="this attempt's private directory inside the ROUND75 output root; "
+                              "raw/s1 keeps the preserved first failure")
+     args = parser.parse_args(argv)
+-    if args.print_plan or not args.run_s1:
++    if args.run_s1g and args.run_s1:
++        sys.stderr.write("S1 REFUSED: --run-s1 and --run-s1g are mutually exclusive\n")
++        return 2
++    if args.run_s1g:
++        global PLAN, PLAN_PATH
++        PLAN_PATH = S1G_PLAN_PATH
++        PLAN = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
++    if args.print_plan or (not args.run_s1 and not args.run_s1g):
+         print(json.dumps({"kind": PLAN["kind"], "request_id": PLAN["request_id"],
+                           "status": PLAN["status"], "head_at_writing": PLAN["head_at_writing"],
+                           "future_command": PLAN["future_command"],
+@@ -1722,9 +1763,12 @@ def main(argv=None) -> int:
+                                    "nothing; --run-s1 is the paid path")}, indent=2))
+         return 0
+     if not args.request_id or not args.attempt_dir:
+-        sys.stderr.write("S1 REFUSED: --run-s1 requires --request-id and --attempt-dir; a run "
+-                         "that cannot name itself and its own directory never reaches the paid "
+-                         "path\n")
++        sys.stderr.write("S1 REFUSED: --run-s1/--run-s1g requires --request-id and --attempt-dir; "
++                         "a run that cannot name itself and its own directory never reaches the "
++                         "paid path\n")
++        return 2
++    if args.run_s1g and args.request_id != S1G_REQUEST_ID:
++        sys.stderr.write("S1 REFUSED: --run-s1g requires its own frozen request id\n")
+         return 2
+     try:
+         _bind_execution_identity(args.request_id, args.attempt_dir)
+@@ -1735,4 +1779,4 @@ def main(argv=None) -> int:
+ 
+ 
+ if __name__ == "__main__":
+-    raise SystemExit(main())
+\ No newline at end of file
++    raise SystemExit(main())
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py
+new file mode 100644
+index 0000000..fab1408
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py
+@@ -0,0 +1,703 @@
++#!/usr/bin/env python
++"""ROUND75 S1G native retry outer execution record. Pure stdlib; performs no neural work itself.
++
++Revision of r75_s1_outer_exec.py, which is preserved byte-identical as the version that actually
++executed request R75_S1_NATIVE_QUALIFICATION_20261015. Five things changed and nothing else:
++
++1. Return-code attribution. The child return code, the wrapper return value and a wrapper-side
++   exception are three different facts and are recorded separately. SystemExit is the wrapper's own
++   exit transport, so the __main__ guard lets it through BEFORE the BaseException handler; a
++   SystemExit can no longer be written down as a wrapper crash.
++2. An explicit prepare/launch split. ``--prepare`` (the default) verifies the pre-charge identities
++   and writes a prepared record. It creates NO attempt marker and starts NO child. ``--launch``
++   additionally creates the O_EXCL attempt marker and runs the frozen runner exactly once.
++   ``--launch`` requires an explicit --request-id, so the placeholder follow-up id below is never a
++   run permission: renaming the request is not an authorization.
++3. The execution identity and the private attempt directory are handed to the child as well,
++   so the runner's own bundle, failure receipts, trial record and durable counters land in the
++   SAME directory and under the SAME request id as this record. The runner refuses, before any
++   paid import, a missing identity, the historical request id in any directory, the historical
++   raw/s1 directory, a directory outside this output root, and a repeated request id.
++4. An independent output location. This revision writes under raw/s1_revised/ and never touches
++   raw/s1/, which holds the first attempt's originals.
++5. A preserved first failure is registered, not feared. The nine originals under raw/s1/ are
++   re-hashed on every run to prove they were not touched, and the request id that produced them
++   is refused in ANY output directory. A different, explicitly authorized request id writing to
++   its own directory is not refused merely because a preserved history exists; nothing under
++   raw/s1/ is deleted, cleared, rewritten or counted as this revision's output.
++
++The complete stdout/stderr BYTES are captured to .bin files, which are authoritative; the .txt
++copies are decoded with errors="replace" and any loss is registered explicitly. A post-run ledger
++snapshot is read-only. Nothing is ever retried here.
++"""
++import argparse
++import datetime
++import hashlib
++import json
++import os
++import subprocess
++import sys
++import time
++import traceback
++from pathlib import Path
++
++FOLLOW_UP_REQUEST_ID = "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"
++OUTPUT_DIR_NAME = "raw/s1g_native_retry"
++RUNNER_NAME = "r75_s1_runner.py"
++RUNNER_ARGV = ["--run-s1g"]
++TIMEOUT_S = 7200
++PREPARED_RECORD = "r75_s1g_outer_v2_prepared.json"
++OUTCOME_RECORD = "r75_s1g_outer_v2_outcome.json"
++WRAPPER_FAILURE_RECORD = "r75_s1g_outer_v2_wrapper_failure.json"
++
++EXPECT_CODE = {
++    "r75_s1_runner.py": "5039fd10b08e33e9393f52fdeeba4923587e16596768e6ef6ef5f1153602623e",
++    "r75_s1_precheck.py": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c",
++    "r75_frozen.py": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
++    "r75_guard.py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
++    "r75_replay_adapter.py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
++    "ROUND75_S1G_RUN_PLAN.json": "1ba8241d7ca7f82b3f940aa7b44af3c42f0ba54358de69328d2505b9fab682da",
++}
++EXPECT_DATA = {
++    "row": (r"runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/rows/v2_r44_train_s11_e0_s1300027_a1.json",
++            "882711788d8ccae4ec8092b4eb26df7da6771c9b352b6c7507624d3644abebd8"),
++    "tape": (r"runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/logs/v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
++             "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421"),
++    "model": (r"runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt",
++              "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a"),
++}
++# The first attempt really ran and failed at the paid import. Its nine originals are preserved
++# byte-for-byte under raw/s1/ and are registered here so that any later run can prove it did not
++# touch them. Their existence is NOT a refusal: only a repeated request id is.
++FIRST_ATTEMPT_DIR = "raw/s1"
++FIRST_ATTEMPT_REQUEST_ID = "R75_S1_NATIVE_QUALIFICATION_20261015"
++EXPECT_FIRST_ATTEMPT_FILES = {
++    "r75_s1_outer_attempt_marker.json":
++        "3723fb40b71bbee3fbf2ab56770c3c833d0278540b8ac542cba6188ddef0e496",
++    "r75_s1_outer_outcome.json":
++        "61475ef3b77e4401ec3048718abc9b19f7a811187978310e8e0b5403ea6e41fc",
++    "r75_s1_outer_prelaunch_manifest.json":
++        "fe93a5bda22d23a9de8255af1f959f57d28aee640cd91ba84500575738c4f09e",
++    "r75_s1_outer_stderr.bin":
++        "db569234b8624fbca27eea14ff001d0341f4261498bbe5e6355231ce0856c438",
++    "r75_s1_outer_stderr.txt":
++        "7c031d1e17b2a70c19ba3007eba95880e31e2d459045282ff6d3e1e1155eb639",
++    "r75_s1_outer_stdout.bin":
++        "37b5f7e364dcb0fbb6a435b309fff1ad2a284914a4da163de26dbc8aa1ddf22e",
++    "r75_s1_outer_stdout.txt":
++        "37b5f7e364dcb0fbb6a435b309fff1ad2a284914a4da163de26dbc8aa1ddf22e",
++    "r75_s1_outer_wrapper_failure.json":
++        "0810ac8e9a838010dbaa5b34ba50d635052e901e5e23e3939ebf69b0d867e7a6",
++    "r75_s1_outer_wrapper_failure_clarification.json":
++        "831390add015d4d60cb17db5164214bb966815f6bb11b1cfd02309f29f79c148",
++}
++
++
++def sha256_file(path) -> str:
++    digest = hashlib.sha256()
++    with open(path, "rb") as handle:
++        for chunk in iter(lambda: handle.read(1 << 20), b""):
++            digest.update(chunk)
++    return digest.hexdigest()
++
++
++def now():
++    return {"unix": time.time(),
++            "iso": datetime.datetime.now().astimezone().isoformat(timespec="seconds")}
++
++
++def git(repo, *args):
++    proc = subprocess.run(["git", *args], cwd=str(repo), capture_output=True)
++    return (proc.returncode, proc.stdout.decode("utf-8", "replace").strip(),
++            proc.stderr.decode("utf-8", "replace").strip())
++
++
++def ledger_snapshot(runtime_dir, frozen):
++    """Read the guard JSONs and total ledger, then reconcile their real event schemas.
++
++    This is read-only. Charged rows are summed from each event n by category; used_after is a
++    second reading, not a substitute for the sum. Guard top-level cumulative values, guard event
++    lists and total-ledger event sequences must agree. Any missing or bad schema becomes unknown
++    or mismatch and blocks permission; no history is cleared or corrected here.
++    """
++    runtime_dir = Path(runtime_dir)
++    files = {}
++    for name in sorted(os.listdir(runtime_dir)):
++        path = runtime_dir / name
++        if path.is_file():
++            files[name] = {"sha256": sha256_file(path), "bytes": path.stat().st_size}
++    total_path = runtime_dir / "r75_total_ledger.jsonl"
++    events: list[dict] = []
++    unparsed: list[int] = []
++    if total_path.is_file():
++        with total_path.open("r", encoding="utf-8") as handle:
++            for line in handle:
++                stripped = line.strip()
++                if not stripped:
++                    continue
++                try:
++                    events.append(json.loads(stripped))
++                except ValueError:
++                    unparsed.append(len(stripped.encode("utf-8")))
++    guard_files = {"physical_optimizer_step": "r75_physical_optimizer_step_guard.json",
++                   "offline_trunk_target_row": "r75_offline_trunk_target_row_guard.json",
++                   "joint_record": "r75_joint_record_guard.json",
++                   "environment_construction": "r75_environment_construction_guard.json"}
++    per_unit: dict[str, dict] = {}
++    mismatches: list[dict] = []
++    for unit, guard_name in sorted(guard_files.items()):
++        unit_ledger = [event for event in events
++                       if event.get("unit") == unit
++                       and event.get("event") in ("charged", "refused")]
++        summary: dict = {"used_normal": 0, "used_reserve": 0, "refusals": 0,
++                         "charged_events": 0, "guard_events": 0, "total_ledger_events": 0,
++                         "used_after_normal": 0, "used_after_reserve": 0,
++                         "schema_ok": False, "guard_ledger_match": False}
++        valid = True
++        problems: list[str] = []
++        guard_path = runtime_dir / guard_name
++        guard = None
++        if not guard_path.is_file():
++            valid = False
++            problems.append("missing guard file: " + guard_name)
++        else:
++            try:
++                guard = json.loads(guard_path.read_text(encoding="utf-8"))
++            except (ValueError, OSError) as error:
++                guard = None
++                valid = False
++                problems.append("unreadable guard " + guard_name + ": " + type(error).__name__)
++        if not isinstance(guard, dict):
++            valid = False
++            problems.append("guard is not a JSON object: " + guard_name)
++        else:
++            required = ("kind", "unit", "used_normal", "used_reserve", "refusals", "events")
++            missing = [key for key in required if key not in guard]
++            if missing:
++                valid = False
++                problems.append("missing guard fields: " + ",".join(missing))
++            if guard.get("unit") != unit:
++                valid = False
++                problems.append("guard unit mismatch")
++            guard_events = guard.get("events")
++            if not isinstance(guard_events, list):
++                valid = False
++                problems.append("guard events is not a list")
++                guard_events = []
++        if valid:
++            for category, key in (("normal", "used_normal"), ("reserve", "used_reserve")):
++                category_events = [event for event in guard_events
++                                   if event.get("event") == "charged"
++                                   and event.get("category") == category]
++                n_sum = 0
++                used_after = 0
++                for index, event in enumerate(category_events):
++                    value = event.get("n")
++                    after = event.get("used_after")
++                    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
++                        valid = False
++                        problems.append("guard " + category + " event " + str(index) +
++                                        " has invalid n")
++                        break
++                    if not isinstance(after, int) or isinstance(after, bool):
++                        valid = False
++                        problems.append("guard " + category + " event " + str(index) +
++                                        " has invalid used_after")
++                        break
++                    n_sum += value
++                    used_after = after
++                if valid:
++                    top_value = guard.get(key)
++                    if not isinstance(top_value, int) or isinstance(top_value, bool):
++                        valid = False
++                        problems.append("guard top-level " + key + " is invalid")
++                    elif n_sum != top_value or used_after != top_value:
++                        valid = False
++                        problems.append(
++                            "guard " + key + " mismatch: top=" + str(top_value) +
++                            ", n_sum=" + str(n_sum) + ", used_after=" + str(used_after))
++            refusals = guard.get("refusals")
++            if not isinstance(refusals, int) or isinstance(refusals, bool) or refusals < 0:
++                valid = False
++                problems.append("guard refusals is invalid")
++            elif sum(event.get("event") == "refused" for event in guard_events) != refusals:
++                valid = False
++                problems.append("guard refusal count does not match its refused events")
++        if valid:
++            for event in unit_ledger:
++                kind = event.get("event")
++                category = event.get("category")
++                if kind == "charged":
++                    value = event.get("n")
++                    after = event.get("used_after")
++                    if category not in ("normal", "reserve"):
++                        valid = False
++                        problems.append("ledger charged event has invalid category")
++                        break
++                    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
++                        valid = False
++                        problems.append("ledger charged event has invalid n")
++                        break
++                    if not isinstance(after, int) or isinstance(after, bool):
++                        valid = False
++                        problems.append("ledger charged event has invalid used_after")
++                        break
++                    if category == "normal":
++                        summary["used_normal"] += value
++                        summary["used_after_normal"] = after
++                    else:
++                        summary["used_reserve"] += value
++                        summary["used_after_reserve"] = after
++                    summary["charged_events"] += 1
++                elif kind == "refused":
++                    summary["refusals"] += 1
++            if valid:
++                summary["total_ledger_events"] = len(unit_ledger)
++                summary["guard_events"] = len(guard_events)
++                if summary["used_normal"] != guard.get("used_normal"):
++                    valid = False
++                    problems.append("normal n_sum does not match guard used_normal")
++                if summary["used_reserve"] != guard.get("used_reserve"):
++                    valid = False
++                    problems.append("reserve n_sum does not match guard used_reserve")
++                if summary["refusals"] != guard.get("refusals"):
++                    valid = False
++                    problems.append("ledger refusals do not match guard refusals")
++                if summary["charged_events"] + summary["refusals"] != summary["guard_events"]:
++                    valid = False
++                    problems.append("ledger charged-event count does not match guard event count")
++        if valid:
++            summary["schema_ok"] = True
++            summary["guard_ledger_match"] = True
++        else:
++            summary["used_normal"] = "unknown"
++            summary["used_reserve"] = "unknown"
++            summary["refusals"] = "unknown"
++            summary["charged_events"] = "unknown"
++        summary["problems"] = problems
++        per_unit[unit] = summary
++        if not valid:
++            mismatches.append({"unit": unit, "problems": problems})
++    return {"root": str(runtime_dir), "files": files,
++            "total_ledger_events": len(events),
++            "unparsed_total_ledger_lines": unparsed,
++            "per_unit_last_known": per_unit,
++            "guard_ledger_reconciliation": {"ok": not mismatches,
++                                            "mismatches": mismatches,
++                                            "units": sorted(per_unit)},
++            "frozen_snapshot_match": (files == frozen) if frozen is not None else None,
++            "note": ("read-only; n/category/used_after are reconciled with each guard top-level "
++                     "cumulative and its event list; unknown or mismatch blocks use")}
++
++
++def write_json(path, payload):
++    Path(path).parent.mkdir(parents=True, exist_ok=True)
++    tmp = str(path) + ".tmp"
++    with open(tmp, "w", encoding="utf-8", newline="\n") as handle:
++        json.dump(payload, handle, indent=2, ensure_ascii=False, default=str)
++        handle.write("\n")
++        handle.flush()
++        os.fsync(handle.fileno())
++    os.replace(tmp, path)
++
++
++def first_attempt_state(here):
++    """Register the preserved first failed attempt. Read-only; its existence is never a refusal."""
++    first = here / FIRST_ATTEMPT_DIR
++    if not first.exists():
++        return {"present": False, "request_id": FIRST_ATTEMPT_REQUEST_ID, "files": {},
++                "unregistered_files": [],
++                "problems": ["raw/s1 is missing; the first attempt originals must be preserved"]}
++    problems, files = [], {}
++    for name, want in sorted(EXPECT_FIRST_ATTEMPT_FILES.items()):
++        path = first / name
++        if not path.is_file():
++            problems.append("first attempt original missing: " + name)
++            continue
++        got = sha256_file(path)
++        if got != want:
++            problems.append("first attempt original changed: %s is %s, expected %s"
++                            % (name, got, want))
++        files[name] = {"sha256": got, "bytes": os.path.getsize(path)}
++    unregistered = sorted(entry.name for entry in first.iterdir() if entry.is_file()
++                          and entry.name not in EXPECT_FIRST_ATTEMPT_FILES)
++    return {"present": True, "request_id": FIRST_ATTEMPT_REQUEST_ID, "files": files,
++            "unregistered_files": unregistered, "problems": problems}
++
++
++def duplicate_request_refusal(request_id, s1_dir, here):
++    """A request id runs at most once, in ANY attempt directory. Read-only; returns a reason or None.
++
++    The search is global across the whole attempts base (every per-attempt subdirectory) plus the
++    preserved raw/s1, so a request id cannot be re-launched by moving to a different directory. The
++    first failed attempt id is refused by name in every directory."""
++    if request_id == FIRST_ATTEMPT_REQUEST_ID:
++        return ("request id %s is the first failed attempt; its O_EXCL marker forbids a second "
++                "launch in any directory" % request_id)
++    candidates = []
++    attempts_base = here / OUTPUT_DIR_NAME
++    if attempts_base.exists():
++        candidates.extend(sorted(attempts_base.rglob("r75_s1_outer_v2_attempt_marker_*.json")))
++    historical = here / FIRST_ATTEMPT_DIR
++    if historical.exists():
++        candidates.extend(sorted(historical.glob("r75_s1_outer_v2_attempt_marker_*.json")))
++    for path in candidates:
++        try:
++            recorded = json.loads(path.read_text(encoding="utf-8")).get("request_id")
++        except (ValueError, OSError):
++            continue
++        if recorded == request_id:
++            return ("an attempt marker for request id %s already exists at %s"
++                    % (request_id, path))
++    return None
++
++
++def verify_pre_charge(repo, here, runtime_dir, plan):
++    """Re-derive every identity the paid path depends on. Read-only; imports nothing paid."""
++    problems = []
++    for args in (("rev-parse", "HEAD"), ("rev-parse", "HEAD^")):
++        code, out, err = git(repo, *args)
++        if code != 0:
++            problems.append("git %s failed: %s" % (" ".join(args), err))
++    rc, head, _ = git(repo, "rev-parse", "HEAD")
++    rc2, parent, _ = git(repo, "rev-parse", "HEAD^")
++    rc3, branch, _ = git(repo, "rev-parse", "--abbrev-ref", "HEAD")
++    rc4, dirty, _ = git(repo, "status", "--porcelain=v1")
++    for name, want in sorted(EXPECT_CODE.items()):
++        path = here / name
++        if not path.is_file():
++            problems.append("missing code file: " + name)
++            continue
++        got = sha256_file(path)
++        if got != want:
++            problems.append("code sha256 mismatch for %s: %s" % (name, got))
++    for role, (rel, want) in sorted(EXPECT_DATA.items()):
++        path = repo / rel
++        if not path.is_file():
++            problems.append("missing data file (%s): %s" % (role, rel))
++            continue
++        got = sha256_file(path)
++        if got != want:
++            problems.append("data sha256 mismatch for %s: %s" % (role, got))
++    baseline_contract = plan["s1g_execution_contract"]["ledger_baseline"]
++    snapshot = ledger_snapshot(runtime_dir, None)
++    if snapshot["total_ledger_events"] != baseline_contract["total_ledger_events"]:
++        problems.append("canonical ledger has %d events, baseline %d expected"
++                        % (snapshot["total_ledger_events"],
++                           baseline_contract["total_ledger_events"]))
++    if snapshot["total_ledger_sha256"] != baseline_contract["total_ledger_sha256"]:
++        problems.append("canonical ledger SHA256 does not match the S1G baseline")
++    for unit, want in sorted(baseline_contract["guards"].items()):
++        got = snapshot["per_unit_last_known"].get(unit)
++        if not isinstance(got, dict):
++            problems.append("missing baseline counter for %s" % unit)
++            continue
++        for field in ("used_normal", "used_reserve", "refusals", "charged_events"):
++            if got.get(field) != want.get(field):
++                problems.append(
++                    "baseline counter mismatch %s.%s: got %r, want %r"
++                    % (unit, field, got.get(field), want.get(field)))
++    if snapshot["guard_ledger_reconciliation"]["ok"] is not True:
++        problems.append("guard/ledger reconciliation failed: "
++                        + json.dumps(snapshot["guard_ledger_reconciliation"]["mismatches"],
++                                     sort_keys=True))
++    first_attempt = first_attempt_state(here)
++    problems.extend(first_attempt["problems"])
++    record = {"problems": problems, "head": head, "parent": parent, "branch": branch,
++              "worktree_porcelain": dirty, "code_sha256": {}, "data_sha256": {},
++              "ledger_zero_start": snapshot, "first_attempt": first_attempt, "verified_at": now()}
++    for name in sorted(EXPECT_CODE):
++        path = here / name
++        if path.is_file():
++            record["code_sha256"][name] = sha256_file(path)
++    for role, (rel, _want) in sorted(EXPECT_DATA.items()):
++        path = repo / rel
++        if path.is_file():
++            record["data_sha256"][role] = {"path": rel, "sha256": sha256_file(path)}
++    return record
++
++
++def register_attempt(s1_dir, request_id, argv, head, parent, wrapper_sha):
++    """ONE attempt marker per request id, exclusive creation. A duplicate never starts."""
++    marker = s1_dir / ("r75_s1_outer_v2_attempt_marker_%s.json" % request_id)
++    try:
++        handle = os.open(str(marker), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
++    except FileExistsError:
++        return None, marker
++    with os.fdopen(handle, "w", encoding="utf-8", newline="\n") as fh:
++        json.dump({"kind": "round75-s1-outer-v2-attempt-marker/1", "request_id": request_id,
++                   "attempt_dir": str(s1_dir),
++                   "created_at": now(), "wrapper_pid": os.getpid(), "head": head,
++                   "parent": parent, "argv": list(argv),
++                   "license_state": "issued", "consumed_at": None, "consumed_by_pid": None,
++                   "note": ("created with O_EXCL before any paid Python started; it is the ONE "
++                            "parent->child launch license. The child consumes it exactly once by "
++                            "creating an O_EXCL consumption record; its existence also forbids a "
++                            "second launch of this request id")}, fh, indent=2)
++        fh.write("\n")
++        fh.flush()
++        os.fsync(fh.fileno())
++    return marker, marker
++
++
++def build_child_argv(runner_path, flags):
++    """Assemble the ONE real child argument vector, exactly once.
++
++    The interpreter and the script path appear a single time as the first two entries; the caller
++    passes only the runner flags. launch_once() execs the returned vector verbatim and never
++    re-prefixes it, so a real command can never carry python/runner twice."""
++    return [sys.executable, str(runner_path)] + list(flags)
++
++
++def launch_once(repo, runner_path, argv, timeout_s):
++    """Run the frozen runner exactly once and return the child facts. No retry, no fallback.
++
++    ``argv`` is the COMPLETE vector assembled once by build_child_argv(); its first two entries are
++    already the interpreter and this runner path, so it is exec'd verbatim. ``runner_path`` is
++    cross-checked against argv and is NEVER prepended a second time."""
++    argv = list(argv)
++    if argv[1:2] != [str(runner_path)]:
++        raise ValueError("launch_once received an argv whose script entry is not the runner: %r"
++                         % (argv,))
++    started = now()
++    proc = subprocess.Popen(argv, cwd=str(repo),
++                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
++    timed_out = False
++    try:
++        out, err = proc.communicate(timeout=timeout_s)
++    except subprocess.TimeoutExpired:
++        timed_out = True
++        proc.kill()
++        out, err = proc.communicate()
++    if not isinstance(proc.returncode, int) or isinstance(proc.returncode, bool):
++        raise RuntimeError("launch_once failed closed: the child did not produce an integer "
++                           "returncode; it is never recorded as success")
++    ended = now()
++    return {"started_at": started, "ended_at": ended, "wall_seconds": round(ended["unix"] - started["unix"], 3),
++            "child_pid": proc.pid, "child_returncode": proc.returncode, "timed_out": timed_out,
++            "timeout_s": timeout_s, "stdout_bytes": out, "stderr_bytes": err}
++
++
++def decode_report(raw):
++    return {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
++            "utf8_decoded_losslessly": _lossless(raw)}
++
++
++def _lossless(raw):
++    try:
++        raw.decode("utf-8")
++        return True
++    except UnicodeDecodeError:
++        return False
++
++
++def record_outcome(s1_dir, request_id, child, head, parent, branch, wrapper_sha, snapshot,
++                   produced, launch_refusal=None):
++    out, err = child["stdout_bytes"], child["stderr_bytes"]
++    child_returncode = child.get("child_returncode")
++    timed_out = child.get("timed_out")
++    child_returncode_valid = (isinstance(child_returncode, int)
++                              and not isinstance(child_returncode, bool))
++    timed_out_valid = isinstance(timed_out, bool)
++    if not (child_returncode_valid and timed_out_valid):
++        payload_returncode = "MISSING_OR_INVALID"
++        wrapper_return = 5
++    else:
++        payload_returncode = child_returncode
++        wrapper_return = 0 if (child_returncode == 0 and not timed_out) else 5
++    payload = {"kind": "round75-s1g-outer-outcome/1", "request_id": request_id,
++               "runner_launched": True, "timed_out": timed_out,
++               "started_at": child["started_at"], "ended_at": child["ended_at"],
++               "wall_seconds": child["wall_seconds"], "child_pid": child["child_pid"],
++               "child_returncode": payload_returncode,
++               "wrapper_return": wrapper_return,
++               "wrapper_exception": None,
++               "stdout": decode_report(out), "stderr": decode_report(err),
++               "stdout_tail": out.decode("utf-8", "replace")[-4000:],
++               "stderr_tail": err.decode("utf-8", "replace")[-4000:],
++               "ledger_after": snapshot, "s1_dir_files": produced,
++               "head": head, "parent": parent, "branch": branch,
++               "wrapper_sha256": wrapper_sha,
++               "note": ("child_returncode is the REAL child exit code, wrapper_return is this "
++                        "process's own exit value and wrapper_exception is a wrapper-side crash; "
++                        "the three are never merged. The .bin files are authoritative; the .txt "
++                        "copies are lossy-decoded and any loss is registered above.")}
++    if launch_refusal is not None:
++        payload["launch_refusal"] = launch_refusal
++    write_json(s1_dir / OUTCOME_RECORD, payload)
++    return payload
++
++
++def record_wrapper_failure(s1_dir, request_id, error):
++    write_json(s1_dir / WRAPPER_FAILURE_RECORD,
++               {"kind": "round75-s1g-outer-wrapper-failure/1", "request_id": request_id,
++                "failed_at": now(), "error_type": type(error).__name__, "error": str(error),
++                "traceback": traceback.format_exc(),
++                "note": ("a WRAPPER-side exception only; it is not a runner exit code, not a "
++                         "second attempt and not an additional failure of the child")})
++
++
++def prepare(repo, here, s1_dir, request_id, plan, runtime_dir):
++    """Verify the pre-charge identities and write the prepared record. Starts nothing."""
++    record = verify_pre_charge(repo, here, runtime_dir, plan)
++    wrapper_sha = sha256_file(__file__)
++    payload = {"kind": "round75-s1g-outer-prepared/1", "request_id": request_id,
++               "prepared_at": now(), "wrapper_sha256": wrapper_sha,
++               "launched": False, "attempt_marker_created": False, **record,
++               "note": ("preparation only: the identities were re-verified and recorded, no "
++                        "attempt marker was created and no child was started")}
++    write_json(s1_dir / PREPARED_RECORD, payload)
++    return payload, record["problems"]
++
++
++def run(repo, here, s1_dir, request_id, plan, runtime_dir):
++    """Verify, register the ONE attempt marker, launch once, record the outcome."""
++    record = verify_pre_charge(repo, here, runtime_dir, plan)
++    wrapper_sha = sha256_file(__file__)
++    if record["problems"]:
++        write_json(s1_dir / WRAPPER_FAILURE_RECORD,
++                   {"kind": "round75-s1g-outer-refusal/1", "request_id": request_id,
++                    "refused_at": now(), "reason": "pre-charge verification failed",
++                    "problems": record["problems"], "runner_launched": False,
++                    "note": "nothing paid was started and no attempt marker was created"})
++        return 3, record["problems"]
++    refusal = duplicate_request_refusal(request_id, s1_dir, here)
++    if refusal is not None:
++        write_json(s1_dir / WRAPPER_FAILURE_RECORD,
++                   {"kind": "round75-s1g-outer-refusal/1", "request_id": request_id,
++                    "refused_at": now(), "reason": "duplicate request id",
++                    "problems": [refusal], "runner_launched": False,
++                    "note": ("the frozen runner was NOT launched; a request id runs at most once "
++                             "and the first attempt id can never run again")})
++        return 4, [refusal]
++    argv = build_child_argv(here / RUNNER_NAME,
++                            RUNNER_ARGV + ["--request-id", request_id,
++                                           "--attempt-dir", str(s1_dir)])
++    marker, marker_path = register_attempt(s1_dir, request_id, argv, record["head"],
++                                           record["parent"], wrapper_sha)
++    if marker is None:
++        write_json(s1_dir / WRAPPER_FAILURE_RECORD,
++                   {"kind": "round75-s1g-outer-refusal/1", "request_id": request_id,
++                    "refused_at": now(),
++                    "reason": "duplicate request: the attempt marker %s already exists" % marker_path.name,
++                    "problems": ["an attempt marker for this request id already exists"],
++                    "runner_launched": False,
++                    "note": "the frozen runner was NOT launched; no retry is permitted here"})
++        return 4, ["duplicate attempt marker: %s" % marker_path.name]
++    write_json(s1_dir / PREPARED_RECORD,
++               {"kind": "round75-s1g-outer-prepared/1", "request_id": request_id,
++                "prepared_at": now(), "wrapper_sha256": wrapper_sha, "launched": True,
++                "attempt_marker_created": True, **record})
++    child = launch_once(repo, here / RUNNER_NAME, argv, TIMEOUT_S)
++    with open(s1_dir / "r75_s1_outer_v2_stdout.bin", "wb") as handle:
++        handle.write(child["stdout_bytes"])
++    with open(s1_dir / "r75_s1_outer_v2_stderr.bin", "wb") as handle:
++        handle.write(child["stderr_bytes"])
++    with open(s1_dir / "r75_s1_outer_v2_stdout.txt", "w", encoding="utf-8", newline="\n") as handle:
++        handle.write(child["stdout_bytes"].decode("utf-8", "replace"))
++    with open(s1_dir / "r75_s1_outer_v2_stderr.txt", "w", encoding="utf-8", newline="\n") as handle:
++        handle.write(child["stderr_bytes"].decode("utf-8", "replace"))
++    snapshot = ledger_snapshot(runtime_dir, None)
++    produced = sorted(path.name for path in s1_dir.iterdir() if path.is_file())
++    record_outcome(s1_dir, request_id, child, record["head"], record["parent"], record["branch"],
++                   wrapper_sha, snapshot, produced)
++    return (0 if (child["child_returncode"] == 0 and not child["timed_out"]) else 5), []
++
++
++def _request_id_from_argv(argv):
++    """The request id this process was invoked with, or the placeholder when none was given."""
++    for index, item in enumerate(argv):
++        if item == "--request-id" and index + 1 < len(argv):
++            return argv[index + 1]
++        if item.startswith("--request-id="):
++            return item.split("=", 1)[1]
++    return FOLLOW_UP_REQUEST_ID
++
++
++def _resolve_attempt_dir(here, request_id, attempt_dir):
++    """Resolve this attempt's private directory.
++
++    Default: <attempts base>/<request-id> so distinct request ids never share a directory and never
++    overwrite each other's originals. An explicit --attempt-dir is honoured only when it lives inside
++    the output root and is not the historical raw/s1 or anything under it. Returns None to signal a
++    refusal; the caller records it and returns 2."""
++    if attempt_dir:
++        target = Path(attempt_dir)
++        if not target.is_absolute():
++            target = here / target
++        target = Path(os.path.normpath(str(target)))
++        historical = Path(os.path.normpath(str(here / FIRST_ATTEMPT_DIR)))
++        if target == historical or historical in target.parents:
++            return None
++        if target != here and here not in target.parents:
++            return None
++        return target
++    safe = "".join(ch if (ch.isalnum() or ch in "._-") else "_" for ch in request_id)
++    return here / OUTPUT_DIR_NAME / safe
++
++
++def main(argv=None):
++    parser = argparse.ArgumentParser(description="ROUND75 S1 outer execution record, revised")
++    parser.add_argument("--launch", action="store_true",
++                        help="register the ONE attempt marker and run the frozen runner once")
++    parser.add_argument("--prepare", action="store_true",
++                        help="verify and record only; creates no marker and starts no child")
++    parser.add_argument("--request-id", default=FOLLOW_UP_REQUEST_ID,
++                        help="the request id this attempt belongs to")
++    parser.add_argument("--attempt-dir", default=None,
++                        help="optional explicit attempt directory inside the output root; defaults "
++                             "to <attempts base>/<request-id> so each attempt is isolated")
++    args = parser.parse_args(argv)
++    here = Path(__file__).resolve().parent
++    repo = here
++    while not (repo / ".git").exists():
++        repo = repo.parent
++    runtime_dir = here / "raw" / "runtime"
++    plan = json.loads((here / "ROUND75_S1_RUN_PLAN.json").read_text(encoding="utf-8"))
++    s1_dir = _resolve_attempt_dir(here, args.request_id, args.attempt_dir)
++    if s1_dir is None:
++        sys.stderr.write("S1 OUTER V2 REFUSED: --attempt-dir must live inside the output root and "
++                         "must not be the historical raw/s1 or anything under it\n")
++        return 2
++    s1_dir.mkdir(parents=True, exist_ok=True)
++    if args.launch:
++        if args.request_id == FOLLOW_UP_REQUEST_ID:
++            sys.stderr.write("S1 OUTER V2 REFUSED: --launch requires an explicit --request-id; "
++                             "the placeholder follow-up id is not a run permission\n")
++            return 2
++        code, problems = run(repo, here, s1_dir, args.request_id, plan, runtime_dir)
++        for problem in problems:
++            sys.stderr.write("  - %s\n" % problem)
++        return code
++    payload, problems = prepare(repo, here, s1_dir, args.request_id, plan, runtime_dir)
++    if problems:
++        sys.stderr.write("S1 OUTER V2 REFUSED: pre-charge verification failed\n")
++        for problem in problems:
++            sys.stderr.write("  - %s\n" % problem)
++        return 3
++    print(json.dumps({"kind": "round75-s1g-outer-prepared-summary/1",
++                      "request_id": args.request_id, "head": payload["head"],
++                      "parent": payload["parent"], "launched": False,
++                      "attempt_marker_created": False,
++                      "code_sha256": payload["code_sha256"],
++                      "ledger_zero_start_events": payload["ledger_zero_start"]["total_ledger_events"],
++                      "note": ("preparation only; --launch was not given and is not authorized "
++                               "by the repair request")}, indent=2))
++    return 0
++
++
++if __name__ == "__main__":
++    try:
++        _EXIT_CODE = main(sys.argv[1:])
++    except SystemExit:
++        raise                       # the wrapper's own exit transport, never a wrapper crash
++    except BaseException as _error:
++        try:
++            _here = Path(__file__).resolve().parent
++            _crash_id = _request_id_from_argv(sys.argv[1:])
++            record_wrapper_failure(_here / OUTPUT_DIR_NAME / _crash_id, _crash_id, _error)
++        except Exception:
++            pass
++        sys.stderr.write("S1 OUTER V2 WRAPPER FAILED: %s: %s\n" % (type(_error).__name__, _error))
++        raise
++    raise SystemExit(_EXIT_CODE)
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_phase_a.py b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_phase_a.py
+new file mode 100644
+index 0000000..28b0d42
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_phase_a.py
+@@ -0,0 +1,197 @@
++"""Narrow pure-stdlib tests for ROUND75 S1G Phase A accounting and receipt wiring."""
++from __future__ import annotations
++
++import ast
++import json
++import sys
++import tempfile
++import unittest
++from pathlib import Path
++
++HERE = Path(__file__).resolve().parent
++PARENT = HERE.parent
++if str(PARENT) not in sys.path:
++    sys.path.insert(0, str(PARENT))
++
++import r75_guard  # noqa: E402  pure stdlib; no torch import
++import r75_s1_runner  # noqa: E402  import is free; paid imports stay inside run paths
++import r75_s1g_outer_exec  # noqa: E402  pure stdlib outer module
++
++
++FROZEN = HERE / "r75_frozen.py"
++RUNNER = HERE / "r75_s1_runner.py"
++OUTER = HERE / "r75_s1g_outer_exec.py"
++PLAN = HERE / "ROUND75_S1G_RUN_PLAN.json"
++
++
++class Round75S1GPhaseATests(unittest.TestCase):
++    @staticmethod
++    def source(path: Path) -> str:
++        return path.read_text(encoding="utf-8")
++
++    def test_frozen_technical_prefix_fee_route(self):
++        tree = ast.parse(self.source(FROZEN))
++        functions = {
++            node.name: node for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)
++        }
++        update = functions["r75_native_ppo_update"]
++        self.assertIn("physical_step_category", [
++            arg.arg for arg in update.args.kwonlyargs])
++        self.assertIn("physical_step_registration_prefix", [
++            arg.arg for arg in update.args.kwonlyargs])
++        text = self.source(FROZEN)
++        self.assertIn('(physical_step_category == "technical") != '
++                      '(physical_step_registration_prefix is not None)', text)
++        self.assertIn("charge_physical_step(\n                what=physical_step_what, "
++                      "category=physical_step_category)", text)
++        return_nodes = [node for node in ast.walk(update) if isinstance(node, ast.Return)]
++        return_keys = []
++        for node in return_nodes:
++            if isinstance(node.value, ast.Dict):
++                return_keys.extend(
++                    key.value for key in node.value.keys
++                    if isinstance(key, ast.Constant) and isinstance(key.value, str))
++        self.assertIn("optimizer_steps", return_keys)
++        self.assertNotIn("physical_step_category", return_keys)
++        self.assertNotIn("physical_step_registration_prefix", return_keys)
++
++    def test_runner_s1g_a3_technical_wiring(self):
++        text = self.source(RUNNER)
++        tree = ast.parse(text)
++        functions = {
++            node.name: node for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)
++        }
++        self.assertIn("run_s1", functions)
++        self.assertIn('S1G_REQUEST_ID = "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"', text)
++        self.assertIn('S1G_TECHNICAL_PREFIX = "r75_s1g_A3_technical_retry_20261015"', text)
++        self.assertIn("resources.pre_register_technical_attempt(S1G_TECHNICAL_PREFIX)", text)
++        self.assertIn("a3_step_category = \"technical\"", text)
++        self.assertIn("physical_step_category=a3_step_category", text)
++        self.assertIn("physical_step_registration_prefix=a3_step_prefix", text)
++        self.assertIn('record["A3_end_stage_snapshot"] = _save_stage_snapshot(', text)
++        self.assertIn('("A3_end_stage_snapshot", "A3_completed")', text)
++        valid = {
++            "license_state": "issued",
++            "argv": ["/python", str(RUNNER), "--run-s1g",
++                     "--request-id", "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++                     "--attempt-dir", str(HERE / "raw" / "s1g_native_retry" /
++                                          "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015")],
++        }
++        self.assertTrue(r75_s1_runner._license_is_fresh(
++            valid, "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++            HERE / "raw" / "s1g_native_retry" /
++            "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"))
++        self.assertFalse(r75_s1_runner._license_is_fresh(
++            {"license_state": "issued",
++             "argv": ["/python", str(RUNNER), "--run-s1",
++                      "--request-id", "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++                      "--attempt-dir", str(HERE / "raw" / "s1g_native_retry" /
++                                           "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015")]},
++            "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++            HERE / "raw" / "s1g_native_retry" /
++            "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"))
++
++    def test_outer_reliable_returncode_and_frozen_hashes(self):
++        text = self.source(OUTER)
++        self.assertIn("child_returncode", text)
++        self.assertIn("wrapper_return", text)
++        self.assertNotIn("__S1G_RUNNER_SHA__", text)
++        self.assertNotIn("__S1G_FROZEN_SHA__", text)
++        self.assertNotIn("__S1G_PLAN_SHA__", text)
++        self.assertIn("RUNNER_ARGV = [\"--run-s1g\"]", text)
++        self.assertIn('OUTPUT_DIR_NAME = "raw/s1g_native_retry"', text)
++        outer_fixture_parent = HERE / "_r75_s1g_phase_a_test_fixture"
++        outer_fixture_parent.mkdir(exist_ok=True)
++        with tempfile.TemporaryDirectory(prefix="outer_record_", dir=outer_fixture_parent) as temp:
++            child = {"stdout_bytes": b"out", "stderr_bytes": b"err", "timed_out": False,
++                     "started_at": {"unix": 1}, "ended_at": {"unix": 2},
++                     "wall_seconds": 1, "child_pid": 123}
++            payload = r75_s1g_outer_exec.record_outcome(
++                Path(temp), "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015", child,
++                "head", "parent", "branch", "wrapper", {"ledger": True}, ["file"])
++            self.assertEqual(payload["child_returncode"], "MISSING_OR_INVALID")
++            self.assertEqual(payload["wrapper_return"], 5)
++            child["child_returncode"] = 0
++            payload = r75_s1g_outer_exec.record_outcome(
++                Path(temp), "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015", child,
++                "head", "parent", "branch", "wrapper", {"ledger": True}, ["file"])
++            self.assertEqual(payload["child_returncode"], 0)
++            self.assertEqual(payload["wrapper_return"], 0)
++        original_popen = r75_s1g_outer_exec.subprocess.Popen
++        class _NoExitProcess:
++            returncode = None
++            pid = 123
++            def communicate(self, timeout=None):
++                return b"", b""
++        def fake_popen(*args, **kwargs):
++            return _NoExitProcess()
++        r75_s1g_outer_exec.subprocess.Popen = fake_popen
++        try:
++            with self.assertRaises(RuntimeError):
++                r75_s1g_outer_exec.launch_once(HERE, RUNNER, ["/python", str(RUNNER)], 1)
++        finally:
++            r75_s1g_outer_exec.subprocess.Popen = original_popen
++
++    def test_plan_uses_new_baseline_and_technical_accounting(self):
++        plan = json.loads(self.source(PLAN))
++        self.assertEqual(plan["request_id"], "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015")
++        contract = plan["s1g_execution_contract"]
++        baseline = contract["ledger_baseline"]["guards"]
++        self.assertEqual(baseline["physical_optimizer_step"]["used_normal"], 5)
++        self.assertEqual(baseline["offline_trunk_target_row"]["used_normal"], 840)
++        self.assertEqual(baseline["offline_trunk_target_row"]["charged_events"], 70)
++        budget = contract["attempt_budget"]
++        self.assertEqual(budget["A1"]["category"], "normal")
++        self.assertEqual(budget["A2"]["category"], "normal")
++        self.assertEqual(budget["A3"]["category"], "technical")
++        totals = budget["totals"]
++        self.assertEqual(totals["physical_optimizer_steps"], {
++            "normal": 5, "technical": 4, "hard": 9})
++        self.assertEqual(totals["offline_trunk_target_row"]["normal"], 1680)
++        self.assertEqual(totals["offline_trunk_target_row"]["reserve"], 0)
++        self.assertEqual(
++            budget["cumulative_caps_after_attempt"]["offline_trunk_target_row"],
++            {"normal": 2520, "reserve": 0, "total": 2520,
++             "contract_caps": "normal 5000 + technical 1000 / hard 6000"})
++
++    def test_guard_technical_charge_requires_pre_registration_fixture_only(self):
++        fixture_parent = HERE / "_r75_s1g_phase_a_test_fixture"
++        fixture_parent.mkdir(exist_ok=True)
++        with tempfile.TemporaryDirectory(prefix="r75_s1g_phase_a_", dir=fixture_parent) as temp:
++            resources = r75_guard.R75Resources.fixture(Path(temp))
++            prefix = "r75_s1g_A3_technical_retry_20261015"
++            resources.pre_register_technical_attempt(prefix)
++            self.assertEqual(resources.charge_physical_step(
++                prefix + ":probe", category="technical"), 1)
++            with self.assertRaises(r75_guard.R75LedgerError):
++                resources.charge_physical_step("unregistered:probe", category="technical")
++            class _ShapeList(list):
++                shape = (840, 19)
++            self.assertEqual(resources.charge_trunk_forward(
++                _ShapeList([0.0] * 19 for _ in range(840)),
++                prefix + ":normal_trunk", category="normal"), 840)
++            optimizer = type("Optimizer", (), {"step": lambda self: None})()
++            observer = r75_s1_runner.ObservedStepEntry(
++                optimizer, resources, "fixture_old5_baseline")
++            for index in range(5):
++                resources.charge_physical_step(f"fixture:old5_baseline_step_{index}")
++                observer.step()
++            completed = [item for item in observer.records if item["phase"] == "completed"]
++            self.assertEqual(len(completed), 5)
++            self.assertTrue(all(item["exactly_one_new_permit"] for item in completed))
++            with self.assertRaises(RuntimeError):
++                observer.step()
++            self.assertEqual(observer.records[-1]["phase"], "refused")
++            self.assertFalse(observer.records[-1]["delegated"])
++            snapshot = resources.snapshots()
++            self.assertEqual(snapshot["physical_optimizer_step"]["used_normal"], 0)
++            self.assertEqual(snapshot["physical_optimizer_step"]["used_reserve"], 6)
++            self.assertEqual(snapshot["offline_trunk_target_row"]["used_normal"], 840)
++
++    def test_fixture_cannot_use_canonical_production_root(self):
++        with self.assertRaises(r75_guard.R75LedgerError):
++            r75_guard.R75Resources.fixture(r75_guard.R75_CANONICAL_ROOT)
++
++
++if __name__ == "__main__":
++    unittest.main()

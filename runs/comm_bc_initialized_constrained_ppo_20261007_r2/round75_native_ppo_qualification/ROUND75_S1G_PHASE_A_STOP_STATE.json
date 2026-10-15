@@ -1,0 +1,48 @@
+{
+  "kind": "round75-s1g-phase-a-stop-state/1",
+  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
+  "status": "A_STOPPED_TEST_PROCESS_CAP_EXHAUSTED",
+  "phase_b_started": false,
+  "phase_b_permitted_after_this_state": false,
+  "test_processes": {
+    "used": 4,
+    "limit": 4,
+    "attempts": [
+      {"attempt": 1, "exit_code": 1, "receipt": "test_r75_s1g_phase_a_exit.json", "receipt_sha256": "512ef9c3ff4533e3fe32e9834dfc896018b8933a7bfca94900eacf0f719f126a"},
+      {"attempt": 2, "exit_code": 1, "receipt": "test_r75_s1g_phase_a_attempt2_exit.json", "receipt_sha256": "38209b21cb304b437f47b28c6d1387f0003edd297f3f2ed72a8d881a24548c24"},
+      {"attempt": 3, "exit_code": 0, "receipt": "test_r75_s1g_phase_a_attempt3_exit.json", "receipt_sha256": "f3771364e534f6c76f1a65bb32325b3e1dddfe6cfc49d45821e66a91857a0376"},
+      {"attempt": 4, "exit_code": 1, "receipt": "test_r75_s1g_phase_a_attempt4_exit.json", "receipt_sha256": "cce8713a598e2dface1b418c74eed8f6cb73d25b17e64bdb585ce0fa816b101b"}
+    ],
+    "final_result": "FAIL_AT_IMPORT"
+  },
+  "blocking_defect": {
+    "file": "r75_s1_runner.py",
+    "line": 1613,
+    "error": "IndentationError: unexpected indent",
+    "cause": "S1G license-verification lines were inserted with body indentation outside the function body; the six-case suite did not execute after import.",
+    "verified": false
+  },
+  "unverified_source_identity": {
+    "r75_frozen.py": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
+    "r75_s1_runner.py": "5039fd10b08e33e9393f52fdeeba4923587e16596768e6ef6ef5f1153602623e",
+    "r75_s1g_outer_exec.py": "940a273a8199175f933c2e2ef516db42d1acb792d8099063118ecc14ed555d53",
+    "ROUND75_S1G_RUN_PLAN.json": "8d1d46acfe6633d7c02bbeae7377984323e4157f030e1d4e4802a9bbdb1b364e",
+    "test_r75_s1g_phase_a.py": "01c62fb000c9d61db22e324743f76bceeeb42c5528beebc6164bb3a990c374d4"
+  },
+  "consumption_boundary": {
+    "torch_import": 0,
+    "numpy_import": 0,
+    "model_load_or_construction": 0,
+    "forward": 0,
+    "backward": 0,
+    "optimizer_step": 0,
+    "ppo_update": 0,
+    "environment_construction": 0,
+    "checkpoint_write": 0,
+    "outer_launch": 0,
+    "canonical_ledger_charged_events": 0,
+    "pure_test_python_processes": 4
+  },
+  "committed": false,
+  "next_operator_instruction": "Do not launch Phase B. A new explicit revision scope is required before correcting or retesting; no fifth pure-test process may be claimed from this A authorization."
+}
