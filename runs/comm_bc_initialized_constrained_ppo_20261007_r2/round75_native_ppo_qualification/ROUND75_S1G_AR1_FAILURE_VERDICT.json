@@ -1,0 +1,92 @@
+{
+  "kind": "round75-s1g-ar1-failure-verdict/1",
+  "task_id": "R75_S1G_AR1_PRECHECK_BASELINE_REPAIR_20261015",
+  "status": "FAILURE_CLOSEOUT_TESTS_NOT_PASSING",
+  "branch": "exp/round75-native-ppo-qualification",
+  "base_head": "cf7a44033a0dd9e83763e5d6b995bda70a4f74ec",
+  "base_parent": "ff5a1409812633dfcce00288858576960b77ec39",
+  "tests": {
+    "planned_cases": 6,
+    "executed_cases": 6,
+    "failures": 1,
+    "errors": 2,
+    "passed": false,
+    "third_python_process": "forbidden after exhausting the cap"
+  },
+  "processes": [
+    {
+      "receipt": "test_r75_s1g_phase_a_syntax_check_exit.json",
+      "pid": 39064,
+      "exit_code": 1,
+      "cases": 0,
+      "cause": "invalid inline -c wrapper program; SyntaxError: invalid syntax at import"
+    },
+    {
+      "receipt": "test_r75_s1g_phase_a_ar1_exit.json",
+      "pid": 75188,
+      "exit_code": 1,
+      "cases": 6,
+      "failures": 1,
+      "errors": 2,
+      "cause": "real suite completed as failed"
+    }
+  ],
+  "outputs": [
+    {"name": "test_r75_s1g_phase_a_syntax_check_stdout.log", "bytes": 0,
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    {"name": "test_r75_s1g_phase_a_syntax_check_stderr.log", "bytes": 81,
+     "sha256": "1b90e5534b97d997df7df6c40f8f5efa7a3f32efd5c625ea0fd7a966d34a2b51"},
+    {"name": "test_r75_s1g_phase_a_ar1_stdout.log", "bytes": 0,
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    {"name": "test_r75_s1g_phase_a_ar1_stderr.log", "bytes": 2261,
+     "sha256": "e500881faa72a518cf8f55a6fc1b566cb5805af3d21367df7a49ad95be609a99"}
+  ],
+  "source_identity": [
+    {"path": "r75_s1_runner.py", "bytes": 101264,
+     "sha256": "4f84184a25d9058df97abf04fb00febe1d6b8c123944fcc9814e78651d3835d4",
+     "git_blob": "570b6350457170ff21ed6d59a894de3bacaa64dc"},
+    {"path": "r75_s1_precheck.py", "bytes": 30173,
+     "sha256": "ad14206200b8786fea5f09a0cc5ffe838a57255cb9d844313c7b3fc45da38703",
+     "git_blob": "833beb4313790a8e3eca9c7e7fa71ce703917a11"},
+    {"path": "r75_s1g_outer_exec.py", "bytes": 37246,
+     "sha256": "96f6ed6c1f0f7f1f8239c1df3a77d767a9613d3dd1744c0224aefd7bb390c4d9",
+     "git_blob": "f08e8f8601767cce9adebfca5bebe02852b2ea24"},
+    {"path": "test_r75_s1g_phase_a.py", "bytes": 15358,
+     "sha256": "7776973ccc9bf85e8605fbbd2bc0abe28c897fbe76b2b15b85f099f8baca4faf",
+     "git_blob": "adaa96b4f4e31c1cd6a5c7d530beb8fc4299dc3a"},
+    {"path": "ROUND75_S1G_AR1_RUN_PLAN.json", "bytes": 25820,
+     "sha256": "6303c093d0e19d71081e5c1c5d6393f21733d8f7c9c9fb87ec6fd21eecd7ebab",
+     "git_blob": "5acee11151a580ed8ee1dbba730c00ca5592101c"},
+    {"path": "ROUND75_S1G_AR1_FAILURE_DIFF.patch", "bytes": 55273,
+     "sha256": "ec1d724fabbe6e23269673d6fb71eb3aaeb4b1635ac4ddba5949f1a878d9bd4e",
+     "git_blob": "0813ddd339b373c58981e89dfb675d91c6f86f84"}
+  ],
+  "unchanged_identity": [
+    {"path": "r75_frozen.py", "sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e"},
+    {"path": "r75_guard.py", "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f"},
+    {"path": "r75_replay_adapter.py", "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2"}
+  ],
+  "runtime": {
+    "total_ledger_events": 88,
+    "total_ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
+    "guards": {
+      "physical_optimizer_step": {"used_normal": 5, "used_reserve": 0, "charged_events": 5},
+      "offline_trunk_target_row": {"used_normal": 840, "used_reserve": 0, "charged_events": 70},
+      "joint_record": {"used_normal": 1, "used_reserve": 0, "charged_events": 1},
+      "environment_construction": {"used_normal": 0, "used_reserve": 0, "charged_events": 0}
+    },
+    "charged_n_histogram": {
+      "offline_trunk_target_row:normal": {"1": 19, "2": 20, "3": 4, "4": 18, "5": 5, "168": 4}
+    }
+  },
+  "determined_defects": [
+    "test calls nonexistent R75Resources.charge_trunk_forward; the resources API is charge_offline_rows(n, what, *, category='normal')",
+    "fake Optimizer has no calls attribute and its step lambda never increments",
+    "fake Popen communicate is bound without a working implicit self; timeout path lacks kill and a second communicate",
+    "check_active_production_baseline does not verify active_production_baseline.total_ledger_sha256"
+  ],
+  "forbidden_and_not_done": ["torch", "numpy", "model load", "forward", "backward",
+                             "optimizer step", "PPO", "environment", "checkpoint write",
+                             "canonical charge", "technical registration", "phase B"],
+  "authorization": "failure closeout and explicit local commit only; no repair or B authorization"
+}

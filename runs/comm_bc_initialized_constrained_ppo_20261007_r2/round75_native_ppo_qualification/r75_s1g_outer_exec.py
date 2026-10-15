@@ -51,12 +51,12 @@ OUTCOME_RECORD = "r75_s1g_outer_v2_outcome.json"
 WRAPPER_FAILURE_RECORD = "r75_s1g_outer_v2_wrapper_failure.json"
 
 EXPECT_CODE = {
-    "r75_s1_runner.py": "5039fd10b08e33e9393f52fdeeba4923587e16596768e6ef6ef5f1153602623e",
-    "r75_s1_precheck.py": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c",
+    "r75_s1_runner.py": "4f84184a25d9058df97abf04fb00febe1d6b8c123944fcc9814e78651d3835d4",
+    "r75_s1_precheck.py": "ad14206200b8786fea5f09a0cc5ffe838a57255cb9d844313c7b3fc45da38703",
     "r75_frozen.py": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
     "r75_guard.py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
     "r75_replay_adapter.py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
-    "ROUND75_S1G_RUN_PLAN.json": "1ba8241d7ca7f82b3f940aa7b44af3c42f0ba54358de69328d2505b9fab682da",
+    "ROUND75_S1G_AR1_RUN_PLAN.json": "6303c093d0e19d71081e5c1c5d6393f21733d8f7c9c9fb87ec6fd21eecd7ebab",
 }
 EXPECT_DATA = {
     "row": (r"runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/rows/v2_r44_train_s11_e0_s1300027_a1.json",
@@ -653,7 +653,7 @@ def main(argv=None):
     while not (repo / ".git").exists():
         repo = repo.parent
     runtime_dir = here / "raw" / "runtime"
-    plan = json.loads((here / "ROUND75_S1_RUN_PLAN.json").read_text(encoding="utf-8"))
+    plan = json.loads((here / "ROUND75_S1G_AR1_RUN_PLAN.json").read_text(encoding="utf-8"))
     s1_dir = _resolve_attempt_dir(here, args.request_id, args.attempt_dir)
     if s1_dir is None:
         sys.stderr.write("S1 OUTER V2 REFUSED: --attempt-dir must live inside the output root and "
@@ -680,7 +680,7 @@ def main(argv=None):
                       "parent": payload["parent"], "launched": False,
                       "attempt_marker_created": False,
                       "code_sha256": payload["code_sha256"],
-                      "ledger_zero_start_events": payload["ledger_zero_start"]["total_ledger_events"],
+                      "ledger_baseline_events": payload["ledger_zero_start"]["total_ledger_events"],
                       "note": ("preparation only; --launch was not given and is not authorized "
                                "by the repair request")}, indent=2))
     return 0

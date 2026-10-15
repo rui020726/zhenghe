@@ -1,0 +1,72 @@
+{
+  "kind": "round75-s1g-ar1-task-state/1",
+  "task_id": "R75_S1G_AR1_PRECHECK_BASELINE_REPAIR_20261015",
+  "status": "FAILURE_CLOSEOUT",
+  "authorization": {
+    "source": "human-approved A-R1 repair plus at most two pure test processes",
+    "scope": "A-R1 source repair, fixed six-item pure stdlib/fake verification, and local delivery",
+    "b_not_authorized_now": true,
+    "b_executed": false
+  },
+  "source_head": "cf7a44033a0dd9e83763e5d6b995bda70a4f74ec",
+  "changed_files_in_scope": [
+    "r75_s1_runner.py",
+    "r75_s1_precheck.py",
+    "ROUND75_S1G_AR1_RUN_PLAN.json",
+    "r75_s1g_outer_exec.py",
+    "test_r75_s1g_phase_a.py"
+  ],
+  "unchanged_required_files": {
+    "r75_frozen.py": {
+      "sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e"
+    },
+    "r75_guard.py": "do not edit",
+    "r75_replay_adapter.py": "do not edit"
+  },
+  "test_consumption": {
+    "ar1_pure_python_processes": 2,
+    "ar1_pure_python_processes_cap": 2,
+    "historical_original_g_phase_a_exits": [1, 1, 0, 1],
+    "historical_receipts_unchanged": true,
+    "ar1_python_exit_receipts": [
+      {
+        "kind": "round75-s1g-ar1-syntax-check-exit/1",
+        "pid": 39064,
+        "exit_code": 1,
+        "passed": false,
+        "note": "wrapper quoting made the inline AST program invalid; no test suite ran"
+      },
+      {
+        "kind": "round75-s1g-ar1-phase-a-test-exit/1",
+        "pid": 75188,
+        "exit_code": 1,
+        "passed": false,
+        "failures": 1,
+        "errors": 2,
+        "notes": [
+          "charge_trunk_forward is not an R75Resources method",
+          "one fake Popen communicate binding omitted the implicit self argument",
+          "one tampered active-baseline case remained passed"
+        ]
+      }
+    ],
+    "remaining_ar1_pure_python_processes": 0
+  },
+  "failure_closeout": {
+    "test_suite_passed": false,
+    "actual_cases": 6,
+    "failures": 1,
+    "errors": 2,
+    "failure_report": "ROUND75_S1G_AR1_FAILURE_REPORT.md",
+    "failure_verdict": "ROUND75_S1G_AR1_FAILURE_VERDICT.json",
+    "failure_manifest": "ROUND75_S1G_AR1_FAILURE_MANIFEST.json",
+    "failure_diff": "ROUND75_S1G_AR1_FAILURE_DIFF.patch"
+  },
+  "constraints": {
+    "baseline": "real non-zero 88 events / 5 normal physical / 840 normal trunk rows / 70 calls / 1 batch",
+    "caps_unchanged": "12/4/16 physical and 5000/1000/6000 trunk rows",
+    "a3_targets": "physical 4 technical; trunk 1680 all normal",
+    "forbidden": ["torch", "numpy", "models", "Adam", "NN", "optimizer", "PPO", "environment", "CPU probe", "fixture serializer", "canonical charge", "technical registration"]
+  },
+  "no_push_merge_deploy": true
+}

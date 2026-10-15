@@ -1,0 +1,985 @@
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_precheck.py b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_precheck.py
+index 49d94c7883e46c19ca0f66cbe12c2bb37ab56370..833beb4313790a8e3eca9c7e7fa71ce703917a11 100644
+--- a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_precheck.py
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_precheck.py
+@@ -24,6 +24,7 @@ sys.path.insert(0, str(HERE))
+ 
+ import r75_guard as guard_mod                      # noqa: E402  (stdlib-only reuse chain)
+ import r75_replay_adapter as adapter_mod           # noqa: E402  (stdlib-only)
++from r75_s1g_outer_exec import ledger_snapshot     # noqa: E402  verified stdlib parser
+ 
+ 
+ def _repo_root() -> Path:
+@@ -183,6 +184,107 @@ def check_ledger_snapshot(plan: dict, report: Report) -> None:
+     report.check("ledger:no_residual_lock", not locks, f"lock files: {locks}")
+ 
+ 
++def check_active_production_baseline(plan: dict, report: Report) -> None:
++    """Verify the real S1G start ledger instead of a rebuilt or zero ledger."""
++    contract = plan["active_production_baseline"]
++    root = resolve_path(contract["root"])
++    snapshot = ledger_snapshot(root, contract["files"])
++    report.check("ledger:baseline_files", snapshot["frozen_snapshot_match"] is True,
++                 "the nine runtime files match the active S1G baseline byte-for-byte")
++    report.check("ledger:baseline_event_count",
++                 snapshot["total_ledger_events"] == contract["total_ledger_events"],
++                 f"{snapshot['total_ledger_events']} events, expected "
++                 f"{contract['total_ledger_events']}")
++    report.check("ledger:baseline_reconciliation",
++                 snapshot["guard_ledger_reconciliation"]["ok"] is True,
++                 "each durable guard reconciles against the append-only ledger")
++    events = [json.loads(line) for line in (root / "r75_total_ledger.jsonl")
++              .read_text(encoding="utf-8").splitlines() if line.strip()]
++    sums: dict[str, dict[str, int]] = {}
++    for event in events:
++        sums.setdefault(event.get("guard", ""),
++                        {"charged_events": 0, "sum_normal": 0, "sum_reserve": 0})
++        if event.get("event") == "charged":
++            sums[event.get("guard", "")]["charged_events"] += 1
++            if event.get("category") == "normal":
++                sums[event.get("guard", "")]["sum_normal"] += int(event.get("n", 0))
++            elif event.get("category") == "reserve":
++                sums[event.get("guard", "")]["sum_reserve"] += int(event.get("n", 0))
++    kinds = {
++        "physical_optimizer_step": "r75-physical-optimizer-step-guard/1",
++        "offline_trunk_target_row": "r75-offline-trunk-target-row-guard/1",
++        "joint_record": "r75-joint-record-guard/1",
++        "environment_construction": "r75-environment-construction-guard/1",
++    }
++    for unit, want in contract["guards"].items():
++        got = snapshot["per_unit_last_known"].get(unit, {})
++        for field in ("used_normal", "used_reserve", "refusals", "charged_events"):
++            report.check(f"ledger:baseline:{unit}:{field}", got.get(field) == want[field],
++                         f"{field} = {got.get(field)!r}, expected {want[field]!r}")
++        event_sum = sums.get(kinds[unit], {})
++        report.check(f"ledger:baseline:{unit}:event_sums",
++                     event_sum.get("charged_events") == want["charged_events"]
++                     and event_sum.get("sum_normal") == want.get("sum_normal", 0)
++                     and event_sum.get("sum_reserve") == want.get("sum_reserve", 0),
++                     f"event sums {event_sum!r}, expected {want!r}")
++    locks = sorted(path.name for path in root.glob("*.lock"))
++    report.check("ledger:baseline_no_residual_lock", not locks, f"lock files: {locks}")
++
++
++def check_s1g_headroom(plan: dict, report: Report) -> None:
++    """Check old production usage plus S1G by exact category, with no fallback."""
++    baseline = plan["active_production_baseline"]["guards"]
++    attempt = plan["s1g_execution_contract"]["attempt_budget"]["totals"]
++    cumulative = plan["s1g_execution_contract"]["attempt_budget"]["cumulative_caps_after_attempt"]
++    physical = {
++        "normal": baseline["physical_optimizer_step"]["used_normal"]
++                  + attempt["physical_optimizer_steps"]["normal"],
++        "reserve": baseline["physical_optimizer_step"]["used_reserve"]
++                   + attempt["physical_optimizer_steps"]["technical"],
++        "total": baseline["physical_optimizer_step"]["used_normal"]
++                 + baseline["physical_optimizer_step"]["used_reserve"]
++                 + attempt["physical_optimizer_steps"]["hard"],
++    }
++    report.check("headroom:physical_by_category",
++                 physical == {key: cumulative["physical_optimizer_step"][key]
++                              for key in ("normal", "reserve", "total")},
++                 f"physical baseline+attempt {physical}, cumulative "
++                 f"{cumulative['physical_optimizer_step']}")
++    report.check("headroom:physical_within_caps",
++                 physical["normal"] <= 12 and physical["reserve"] <= 4
++                 and physical["total"] <= 16,
++                 "physical normal<=12, reserve<=4, total<=16")
++    rows = {
++        "normal": baseline["offline_trunk_target_row"]["used_normal"]
++                  + attempt["offline_trunk_target_row"]["normal"],
++        "reserve": baseline["offline_trunk_target_row"]["used_reserve"]
++                   + attempt["offline_trunk_target_row"]["reserve"],
++    }
++    report.check("headroom:trunk_by_category",
++                 rows == {key: cumulative["offline_trunk_target_row"][key]
++                          for key in ("normal", "reserve")},
++                 f"trunk baseline+attempt {rows}, cumulative "
++                 f"{cumulative['offline_trunk_target_row']}")
++    report.check("headroom:trunk_within_caps",
++                 rows["normal"] <= 5000 and rows["reserve"] <= 1000
++                 and rows["normal"] + rows["reserve"] <= 6000,
++                 "trunk normal<=5000, reserve<=1000, hard<=6000")
++    report.check("headroom:trunk_rows_stay_normal",
++                 attempt["offline_trunk_target_row"]["reserve"] == 0,
++                 "A2/A3 trunk rows and calls stay normal; only A3 physical steps are technical")
++    per_charge = verified_per_charge_cap(plan, report)
++    largest = plan["accounting"]["per_native_update"]["largest_single_row_charge"]
++    report.check("headroom:largest_single_row_charge",
++                 per_charge > 0 and largest <= per_charge,
++                 f"largest single charge {largest} vs verified per-charge cap {per_charge}")
++    env_root = resolve_path(plan["active_production_baseline"]["root"])
++    env_state = json.loads((env_root / "r75_environment_construction_guard.json")
++                           .read_text(encoding="utf-8"))
++    report.check("headroom:environment_forbidden",
++                 int(env_state["normal_cap"]) == 0 and int(env_state["hard_cap"]) == 0,
++                 "environment construction stays 0/0/0 and is refused by source")
++
++
+ def verified_per_charge_cap(plan: dict, report: Report) -> int:
+     """The per-charge cap must come from a VERIFIED source, never from a missing JSON key.
+ 
+@@ -206,7 +308,8 @@ def verified_per_charge_cap(plan: dict, report: Report) -> int:
+     contract_cap = int(contract_match.group(1))
+     report.check("quota:per_charge_cap_sources_agree", guard_cap == contract_cap,
+                  f"guard source {guard_cap} vs frozen contract {contract_cap}")
+-    root = resolve_path(plan["canonical_ledger_frozen_snapshot"]["root"])
++    root = resolve_path(plan.get("active_production_baseline",
++                                  plan["canonical_ledger_frozen_snapshot"])["root"])
+     raw_state = json.loads((root / "r75_offline_trunk_target_row_guard.json").read_text(encoding="utf-8"))
+     raw_value = raw_state.get("per_charge_cap")
+     report.check("quota:per_charge_cap_raw_json_not_contradicting",
+@@ -381,15 +484,22 @@ def check_import_bootstrap(plan: dict, report: Report) -> None:
+                  "the helper is the pinned r66_frozen.py, not a local reimplementation")
+ 
+ 
+-def main() -> int:
++def main(plan_path=None) -> int:
++    global PLAN_PATH
++    if plan_path is not None:
++        PLAN_PATH = Path(plan_path).resolve()
+     plan = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
+     report = Report()
+     check_source_identity(plan, report)
+     check_guard_pin(plan, report)
+     check_input_identity(plan, report)
+     check_batch_shape(plan, report)
+-    check_ledger_snapshot(plan, report)
+-    check_quota_headroom(plan, report)
++    if plan.get("revision_id") == "R75_S1G_AR1_PRECHECK_BASELINE_REPAIR_20261015":
++        check_active_production_baseline(plan, report)
++        check_s1g_headroom(plan, report)
++    else:
++        check_ledger_snapshot(plan, report)
++        check_quota_headroom(plan, report)
+     check_living_config(plan, report)
+     check_living_config_is_not_literal(plan, report)
+     check_final_prep_fixes(plan, report)
+@@ -397,6 +507,8 @@ def main() -> int:
+ 
+     verdict = {
+         "kind": "round75-s1-precheck/1",
++        "revision_id": plan.get("revision_id"),
++        "plan_path": str(PLAN_PATH),
+         "request_id": plan["request_id"],
+         "plan_status": plan["status"],
+         "head_at_writing": plan["head_at_writing"],
+@@ -417,4 +529,4 @@ def main() -> int:
+ 
+ 
+ if __name__ == "__main__":
+-    raise SystemExit(main())
+\ No newline at end of file
++    raise SystemExit(main())
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py
+index 8c3bd44d3bfd46491e8d0f553b95d15950dd8314..570b6350457170ff21ed6d59a894de3bacaa64dc 100644
+--- a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1_runner.py
+@@ -58,6 +58,8 @@ FIRST_ATTEMPT_REQUEST_ID = "R75_S1_NATIVE_QUALIFICATION_20261015"
+ EXECUTION_REQUEST_ID = None
+ S1G_REQUEST_ID = "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"
+ S1G_PLAN_PATH = HERE / "ROUND75_S1G_RUN_PLAN.json"
++S1G_AR1_REVISION_ID = "R75_S1G_AR1_PRECHECK_BASELINE_REPAIR_20261015"
++S1G_AR1_PLAN_PATH = HERE / "ROUND75_S1G_AR1_RUN_PLAN.json"
+ S1G_ATTEMPT_DIR = HERE / "raw" / "s1g_native_retry" / S1G_REQUEST_ID
+ S1G_TECHNICAL_PREFIX = "r75_s1g_A3_technical_retry_20261015"
+ 
+@@ -1282,7 +1284,7 @@ def run_s1() -> int:
+     state.phase = "precheck"
+     import r75_s1_precheck
+ 
+-    precheck_code = r75_s1_precheck.main()
++    precheck_code = r75_s1_precheck.main(PLAN_PATH)
+     if precheck_code != 0:
+         print("S1 REFUSED: the freeze precheck failed; nothing paid was started", file=sys.stderr)
+         return 2
+@@ -1308,7 +1310,8 @@ def run_s1() -> int:
+         resources = r75_guard.R75Resources.production()
+         state.resources = resources
+         resources.verify_or_fail()
+-        print("canonical production ledger opened and reconciled at the zero starting point")
++        print("canonical production ledger opened and reconciled against the active frozen "
++              "S1G baseline")
+ 
+         # --- gate-only controller: R58 ep0 behaviour, two equal heads, trunk frozen ------------
+         state.phase = "A2_controller_construction"
+@@ -1610,12 +1613,12 @@ def _license_is_fresh(recorded, request_id, target):
+     A marker without license_state == "issued", without a --run-s1 argv, or whose recorded
+     --request-id / --attempt-dir disagree with this child is NOT a consumable license; taking it
+     over anyway would let a stale or cross-directory marker authorize a run."""
+-        expected_flag = "--run-s1g" if request_id == S1G_REQUEST_ID else "--run-s1"
+-        other_flag = "--run-s1" if request_id == S1G_REQUEST_ID else "--run-s1g"
+-        if not isinstance(recorded, dict) or recorded.get("license_state") != "issued":
++    expected_flag = "--run-s1g" if request_id == S1G_REQUEST_ID else "--run-s1"
++    other_flag = "--run-s1" if request_id == S1G_REQUEST_ID else "--run-s1g"
++    if not isinstance(recorded, dict) or recorded.get("license_state") != "issued":
+         return False
+     argv = recorded.get("argv")
+-        if not isinstance(argv, list) or expected_flag not in argv or other_flag in argv:
++    if not isinstance(argv, list) or expected_flag not in argv or other_flag in argv:
+         return False
+     if _license_flag_value(argv, "--request-id") != request_id:
+         return False
+@@ -1752,7 +1755,7 @@ def main(argv=None) -> int:
+         return 2
+     if args.run_s1g:
+         global PLAN, PLAN_PATH
+-        PLAN_PATH = S1G_PLAN_PATH
++        PLAN_PATH = S1G_AR1_PLAN_PATH
+         PLAN = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
+     if args.print_plan or (not args.run_s1 and not args.run_s1g):
+         print(json.dumps({"kind": PLAN["kind"], "request_id": PLAN["request_id"],
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py
+index fab14089e1a9009de34d2c07e689bc159332bcee..f08e8f8601767cce9adebfca5bebe02852b2ea24 100644
+--- a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py
+@@ -51,12 +51,12 @@ OUTCOME_RECORD = "r75_s1g_outer_v2_outcome.json"
+ WRAPPER_FAILURE_RECORD = "r75_s1g_outer_v2_wrapper_failure.json"
+ 
+ EXPECT_CODE = {
+-    "r75_s1_runner.py": "5039fd10b08e33e9393f52fdeeba4923587e16596768e6ef6ef5f1153602623e",
+-    "r75_s1_precheck.py": "f44ce536abd5e0368b8bb99ed0a09167ff9ba699dcb507c9c05d0e60472c9f0c",
++    "r75_s1_runner.py": "4f84184a25d9058df97abf04fb00febe1d6b8c123944fcc9814e78651d3835d4",
++    "r75_s1_precheck.py": "ad14206200b8786fea5f09a0cc5ffe838a57255cb9d844313c7b3fc45da38703",
+     "r75_frozen.py": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
+     "r75_guard.py": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
+     "r75_replay_adapter.py": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2",
+-    "ROUND75_S1G_RUN_PLAN.json": "1ba8241d7ca7f82b3f940aa7b44af3c42f0ba54358de69328d2505b9fab682da",
++    "ROUND75_S1G_AR1_RUN_PLAN.json": "6303c093d0e19d71081e5c1c5d6393f21733d8f7c9c9fb87ec6fd21eecd7ebab",
+ }
+ EXPECT_DATA = {
+     "row": (r"runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/rows/v2_r44_train_s11_e0_s1300027_a1.json",
+@@ -653,7 +653,7 @@ def main(argv=None):
+     while not (repo / ".git").exists():
+         repo = repo.parent
+     runtime_dir = here / "raw" / "runtime"
+-    plan = json.loads((here / "ROUND75_S1_RUN_PLAN.json").read_text(encoding="utf-8"))
++    plan = json.loads((here / "ROUND75_S1G_AR1_RUN_PLAN.json").read_text(encoding="utf-8"))
+     s1_dir = _resolve_attempt_dir(here, args.request_id, args.attempt_dir)
+     if s1_dir is None:
+         sys.stderr.write("S1 OUTER V2 REFUSED: --attempt-dir must live inside the output root and "
+@@ -680,7 +680,7 @@ def main(argv=None):
+                       "parent": payload["parent"], "launched": False,
+                       "attempt_marker_created": False,
+                       "code_sha256": payload["code_sha256"],
+-                      "ledger_zero_start_events": payload["ledger_zero_start"]["total_ledger_events"],
++                      "ledger_baseline_events": payload["ledger_zero_start"]["total_ledger_events"],
+                       "note": ("preparation only; --launch was not given and is not authorized "
+                                "by the repair request")}, indent=2))
+     return 0
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_phase_a.py b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_phase_a.py
+index 28b0d42e66b130a82961d4923e4add1ce1ba9b38..adaa96b4f4e31c1cd6a5c7d530beb8fc4299dc3a 100644
+--- a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_phase_a.py
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_phase_a.py
+@@ -2,6 +2,9 @@
+ from __future__ import annotations
+ 
+ import ast
++import contextlib
++import copy
++import io
+ import json
+ import sys
+ import tempfile
+@@ -15,13 +18,14 @@ if str(PARENT) not in sys.path:
+ 
+ import r75_guard  # noqa: E402  pure stdlib; no torch import
+ import r75_s1_runner  # noqa: E402  import is free; paid imports stay inside run paths
++import r75_s1_precheck  # noqa: E402  pure stdlib; no torch import
+ import r75_s1g_outer_exec  # noqa: E402  pure stdlib outer module
+ 
+ 
+ FROZEN = HERE / "r75_frozen.py"
+ RUNNER = HERE / "r75_s1_runner.py"
+ OUTER = HERE / "r75_s1g_outer_exec.py"
+-PLAN = HERE / "ROUND75_S1G_RUN_PLAN.json"
++PLAN = HERE / "ROUND75_S1G_AR1_RUN_PLAN.json"
+ 
+ 
+ class Round75S1GPhaseATests(unittest.TestCase):
+@@ -54,6 +58,15 @@ class Round75S1GPhaseATests(unittest.TestCase):
+         self.assertIn("optimizer_steps", return_keys)
+         self.assertNotIn("physical_step_category", return_keys)
+         self.assertNotIn("physical_step_registration_prefix", return_keys)
++        runner_text = self.source(RUNNER)
++        self.assertLess(runner_text.index("record[\"A2_stage_snapshot\"] = _save_stage_snapshot("),
++                        runner_text.index("end_diffs = compare_full_states("))
++        plan = json.loads(self.source(PLAN))
++        compared, diffs = r75_s1_runner.compare_scientific_returns(
++            {"gate_records": 1, "gate_diag": 1},
++            {"gate_records": 1, "gate_diag": 2}, plan)
++        self.assertEqual([item["field"] for item in diffs], ["gate_diag"])
++        self.assertIn("gate_records", compared)
+ 
+     def test_runner_s1g_a3_technical_wiring(self):
+         text = self.source(RUNNER)
+@@ -63,6 +76,9 @@ class Round75S1GPhaseATests(unittest.TestCase):
+         }
+         self.assertIn("run_s1", functions)
+         self.assertIn('S1G_REQUEST_ID = "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"', text)
++        self.assertIn('S1G_AR1_PLAN_PATH = HERE / "ROUND75_S1G_AR1_RUN_PLAN.json"', text)
++        self.assertIn("PLAN_PATH = S1G_AR1_PLAN_PATH", text)
++        self.assertIn("precheck_code = r75_s1_precheck.main(PLAN_PATH)", text)
+         self.assertIn('S1G_TECHNICAL_PREFIX = "r75_s1g_A3_technical_retry_20261015"', text)
+         self.assertIn("resources.pre_register_technical_attempt(S1G_TECHNICAL_PREFIX)", text)
+         self.assertIn("a3_step_category = \"technical\"", text)
+@@ -99,6 +115,11 @@ class Round75S1GPhaseATests(unittest.TestCase):
+         self.assertNotIn("__S1G_FROZEN_SHA__", text)
+         self.assertNotIn("__S1G_PLAN_SHA__", text)
+         self.assertIn("RUNNER_ARGV = [\"--run-s1g\"]", text)
++        self.assertIn('ROUND75_S1G_AR1_RUN_PLAN.json', text)
++        self.assertIn('"r75_s1_runner.py": "4f84184a25d9058df97abf04fb00febe1d6b8c123944fcc9814e78651d3835d4"', text)
++        self.assertIn('"r75_s1_precheck.py": "ad14206200b8786fea5f09a0cc5ffe838a57255cb9d844313c7b3fc45da38703"', text)
++        self.assertIn('"r75_frozen.py": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e"', text)
++        self.assertIn('"ROUND75_S1G_AR1_RUN_PLAN.json": "6303c093d0e19d71081e5c1c5d6393f21733d8f7c9c9fb87ec6fd21eecd7ebab"', text)
+         self.assertIn('OUTPUT_DIR_NAME = "raw/s1g_native_retry"', text)
+         outer_fixture_parent = HERE / "_r75_s1g_phase_a_test_fixture"
+         outer_fixture_parent.mkdir(exist_ok=True)
+@@ -118,23 +139,37 @@ class Round75S1GPhaseATests(unittest.TestCase):
+             self.assertEqual(payload["child_returncode"], 0)
+             self.assertEqual(payload["wrapper_return"], 0)
+         original_popen = r75_s1g_outer_exec.subprocess.Popen
+-        class _NoExitProcess:
+-            returncode = None
+-            pid = 123
+-            def communicate(self, timeout=None):
++        for returncode, timed_out, expected in (
++                (0, False, 0), (1, False, 1), (None, False, None),
++                (True, False, True), ("0", False, "0"), (0, True, 0)):
++            class _FakeProcess:
++                pass
++            process = _FakeProcess()
++            process.returncode = returncode
++            process.pid = 123
++            def communicate(_self, timeout=None, _timed_out=timed_out):
++                if _timed_out:
++                    raise r75_s1g_outer_exec.subprocess.TimeoutExpired([], 1)
+                 return b"", b""
+-        def fake_popen(*args, **kwargs):
+-            return _NoExitProcess()
+-        r75_s1g_outer_exec.subprocess.Popen = fake_popen
+-        try:
+-            with self.assertRaises(RuntimeError):
+-                r75_s1g_outer_exec.launch_once(HERE, RUNNER, ["/python", str(RUNNER)], 1)
+-        finally:
+-            r75_s1g_outer_exec.subprocess.Popen = original_popen
++            process.communicate = communicate
++            r75_s1g_outer_exec.subprocess.Popen = lambda *args, **kwargs: process
++            try:
++                if returncode is None or returncode is True or returncode == "0":
++                    with self.assertRaises(RuntimeError):
++                        r75_s1g_outer_exec.launch_once(HERE, RUNNER, ["/python", str(RUNNER)], 1)
++                else:
++                    payload = r75_s1g_outer_exec.launch_once(
++                        HERE, RUNNER, ["/python", str(RUNNER)], 1)
++                    self.assertEqual(payload["child_returncode"], expected)
++                    self.assertEqual(payload["timed_out"], timed_out)
++            finally:
++                r75_s1g_outer_exec.subprocess.Popen = original_popen
+ 
+-    def test_plan_uses_new_baseline_and_technical_accounting(self):
++    def test_ar1_plan_and_precheck_accept_real_baseline(self):
+         plan = json.loads(self.source(PLAN))
+         self.assertEqual(plan["request_id"], "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015")
++        self.assertEqual(plan["revision_id"], "R75_S1G_AR1_PRECHECK_BASELINE_REPAIR_20261015")
++        self.assertEqual(plan["active_production_baseline"]["total_ledger_events"], 88)
+         contract = plan["s1g_execution_contract"]
+         baseline = contract["ledger_baseline"]["guards"]
+         self.assertEqual(baseline["physical_optimizer_step"]["used_normal"], 5)
+@@ -154,38 +189,84 @@ class Round75S1GPhaseATests(unittest.TestCase):
+             {"normal": 2520, "reserve": 0, "total": 2520,
+              "contract_caps": "normal 5000 + technical 1000 / hard 6000"})
+ 
++        buffer = io.StringIO()
++        with contextlib.redirect_stdout(buffer):
++            self.assertEqual(r75_s1_precheck.main(PLAN), 0)
++        verdict = json.loads(buffer.getvalue())
++        self.assertEqual(verdict["revision_id"], "R75_S1G_AR1_PRECHECK_BASELINE_REPAIR_20261015")
++        self.assertEqual(verdict["plan_path"], str(PLAN))
++        self.assertTrue(verdict["passed"])
++
++        report = r75_s1_precheck.Report()
++        r75_s1_precheck.check_s1g_headroom(plan, report)
++        self.assertTrue(report.passed)
++
++        excess = copy.deepcopy(plan)
++        excess["s1g_execution_contract"]["attempt_budget"]["totals"][
++            "physical_optimizer_steps"]["normal"] = 9
++        excess["s1g_execution_contract"]["attempt_budget"]["cumulative_caps_after_attempt"][
++            "physical_optimizer_step"] = {"normal": 14, "reserve": 0, "total": 14}
++        excess_report = r75_s1_precheck.Report()
++        r75_s1_precheck.check_s1g_headroom(excess, excess_report)
++        self.assertFalse(excess_report.passed)
++
++        for field, value in (("total_ledger_sha256", "0" * 64),
++                             ("total_ledger_events", 89)):
++            tampered = copy.deepcopy(plan)
++            tampered["active_production_baseline"][field] = value
++            tampered_report = r75_s1_precheck.Report()
++            r75_s1_precheck.check_active_production_baseline(tampered, tampered_report)
++            self.assertFalse(tampered_report.passed)
++        for field, value in (("used_normal", 6), ("refusals", 1)):
++            tampered = copy.deepcopy(plan)
++            tampered["active_production_baseline"]["guards"][
++                "physical_optimizer_step"][field] = value
++            tampered_report = r75_s1_precheck.Report()
++            r75_s1_precheck.check_active_production_baseline(tampered, tampered_report)
++            self.assertFalse(tampered_report.passed)
++
+     def test_guard_technical_charge_requires_pre_registration_fixture_only(self):
+         fixture_parent = HERE / "_r75_s1g_phase_a_test_fixture"
+         fixture_parent.mkdir(exist_ok=True)
+         with tempfile.TemporaryDirectory(prefix="r75_s1g_phase_a_", dir=fixture_parent) as temp:
+             resources = r75_guard.R75Resources.fixture(Path(temp))
+             prefix = "r75_s1g_A3_technical_retry_20261015"
+-            resources.pre_register_technical_attempt(prefix)
+-            self.assertEqual(resources.charge_physical_step(
+-                prefix + ":probe", category="technical"), 1)
+-            with self.assertRaises(r75_guard.R75LedgerError):
+-                resources.charge_physical_step("unregistered:probe", category="technical")
++            for index in range(5):
++                resources.charge_physical_step(f"fixture:old5:{index}", category="normal")
+             class _ShapeList(list):
+                 shape = (840, 19)
+             self.assertEqual(resources.charge_trunk_forward(
+                 _ShapeList([0.0] * 19 for _ in range(840)),
+                 prefix + ":normal_trunk", category="normal"), 840)
+             optimizer = type("Optimizer", (), {"step": lambda self: None})()
+-            observer = r75_s1_runner.ObservedStepEntry(
+-                optimizer, resources, "fixture_old5_baseline")
+-            for index in range(5):
+-                resources.charge_physical_step(f"fixture:old5_baseline_step_{index}")
++            observer = r75_s1_runner.ObservedStepEntry(optimizer, resources, "old5")
++            with self.assertRaises(RuntimeError):
+                 observer.step()
+-            completed = [item for item in observer.records if item["phase"] == "completed"]
+-            self.assertEqual(len(completed), 5)
+-            self.assertTrue(all(item["exactly_one_new_permit"] for item in completed))
++            self.assertEqual(optimizer.calls, 0)
++            with self.assertRaises(r75_guard.R75LedgerError):
++                resources.charge_physical_step(prefix + ":unregistered", category="technical")
++            self.assertEqual(optimizer.calls, 0)
++            resources.pre_register_technical_attempt(prefix)
++            with self.assertRaises(r75_guard.R75LedgerError):
++                resources.charge_physical_step("wrong-prefix:probe", category="technical")
++            resources.charge_physical_step("fixture:new-normal", category="normal")
++            observer.step()
++            resources.charge_physical_step(prefix + ":new-technical", category="technical")
++            observer.step()
++            self.assertEqual(optimizer.calls, 2)
++            resources.charge_physical_step("fixture:duplicate-a", category="normal")
++            resources.charge_physical_step("fixture:duplicate-b", category="normal")
+             with self.assertRaises(RuntimeError):
+                 observer.step()
+-            self.assertEqual(observer.records[-1]["phase"], "refused")
++            self.assertEqual(optimizer.calls, 2)
++            self.assertEqual(observer.records[-1]["new_permits_since_previous_step"], 2)
+             self.assertFalse(observer.records[-1]["delegated"])
++            self.assertEqual(resources.charge_trunk_forward(
++                _ShapeList([0.0] * 19 for _ in range(840)),
++                "fixture:normal-trunk", category="normal"), 840)
+             snapshot = resources.snapshots()
+-            self.assertEqual(snapshot["physical_optimizer_step"]["used_normal"], 0)
+-            self.assertEqual(snapshot["physical_optimizer_step"]["used_reserve"], 6)
++            self.assertEqual(snapshot["physical_optimizer_step"]["used_normal"], 8)
++            self.assertEqual(snapshot["physical_optimizer_step"]["used_reserve"], 1)
+             self.assertEqual(snapshot["offline_trunk_target_row"]["used_normal"], 840)
+ 
+     def test_fixture_cannot_use_canonical_production_root(self):
+diff --git a/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_AR1_RUN_PLAN.json b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_AR1_RUN_PLAN.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..5acee11151a580ed8ee1dbba730c00ca5592101c
+--- /dev/null
++++ b/runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_AR1_RUN_PLAN.json
+@@ -0,0 +1,491 @@
++{
++  "kind": "round75-s1g-run-plan/1",
++  "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "revision_id": "R75_S1G_AR1_PRECHECK_BASELINE_REPAIR_20261015",
++  "status": "HUMAN_APPROVED_PHASE_A_PREPARED_B_PENDING_SOURCE_REVIEW",
++  "meaning": "The complete real S1 driver and its freeze precheck are prepared and frozen here. Nothing in this plan has been executed: zero torch import, zero model load or construction, zero forward/backward, zero optimizer or PPO step, zero environment, zero sampling, zero checkpoint write. S1 requires a separate decision-side execution permission.",
++  "branch": "exp/round75-native-ppo-qualification",
++  "head_at_writing": "cf7a44033a0dd9e83763e5d6b995bda70a4f74ec",
++  "parent_head": "ff5a1409812633dfcce00288858576960b77ec39",
++  "future_command": "python r75_s1g_outer_exec.py --launch --request-id R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++  "entry_points": {
++    "precheck": "r75_s1_precheck.py (pure stdlib, no torch, no r75_frozen import, read-only)",
++    "runner": "r75_s1_runner.py (lazy torch / r75_frozen import inside the run path only)"
++  },
++  "input_identity": {
++    "row": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/rows/v2_r44_train_s11_e0_s1300027_a1.json",
++      "sha256": "882711788d8ccae4ec8092b4eb26df7da6771c9b352b6c7507624d3644abebd8",
++      "bytes": 341845
++    },
++    "tape": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round58_gen2/raw/logs/v2_r44_train_s11_e0_s1300027_a1_tape.jsonl",
++      "sha256": "6d4c4363ff490fafe08b55bbf369dcfaf6284b741c2802cf9ef3374d9b792421",
++      "bytes": 215820
++    },
++    "r58_ep0_model": {
++      "path": "D:/code/整合/zhenghe-round42/runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt",
++      "sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
++      "bytes": 77327,
++      "registry_checkpoint_sha256": "76ffc86c4aca26fb3b27380d5195a0cbd07822f7b85d1f1070a5550776dd458a",
++      "registry_parameter_sha256": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
++      "registry_action_head_sha256": "aad35fc6ba3fc43bfe174cb08a5fabb8180654765ba9ab39b6b71fdc42b8b102"
++    },
++    "behaviour_parameters": {
++      "row_field": "controller_parameters_after.parameter_sha256",
++      "value": "37303c494cd997894fba1441cf9d2cde86cf2135e71f443a4ed1bcb9ec7f0330",
++      "parameter_count": 5700,
++      "matches_registry": true
++    },
++    "batch_facts": {
++      "seed": 11,
++      "episode_index": 0,
++      "scenario_seed": 1300027,
++      "training_seed": 11,
++      "steps": 1000,
++      "optimizer_steps": 0,
++      "lambda": 1.0,
++      "lambda_at_rollout": 1.0,
++      "eta_lambda": 0.5,
++      "budget_bytes": 29300,
++      "b0_bytes": 10000.0,
++      "config_hash": "fbc5c80cc3206bdb",
++      "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1",
++      "substituted_fields_classified": 12
++    },
++    "required_batch_shape": {
++      "joint_records": 66,
++      "candidate_rows": 168,
++      "feature_dim": 19,
++      "horizon_ticks": 1000,
++      "targets": 6,
++      "free_early": 5,
++      "free_late": 1
++    },
++    "adapter": "r75_replay_adapter.load_qualification_batch(row, tape) - the existing qualified adapter; no new collector, no environment, no episode/GAE switch, no field back-filling, no rewriting of the recorded log-probs"
++  },
++  "source_identity": {
++    "canonical_trainer": {
++      "path": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_trainer.py",
++      "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
++      "expected": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841"
++    },
++    "canonical_common": {
++      "path": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_common.py",
++      "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
++      "expected": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a"
++    },
++    "canonical_controller": {
++      "path": "D:/code/整合/zhenghe/runs/comm_cost_v2_rerun_20260928/v2_controller.py",
++      "sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
++      "expected": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1"
++    },
++    "r66_frozen": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round66_bc_early_path_preserving_late_adaptation/r66_frozen.py",
++      "sha256": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10",
++      "expected": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10"
++    },
++    "r75_guard": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_guard.py",
++      "sha256": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
++      "expected": "4d730f71fb34ad411043c65141b6bcbb3f7d2f3c4668a6b53054e6400e35d55f",
++      "note": "the verified mechanisms are NOT touched by this revision"
++    },
++    "canonical_onpolicy": {
++      "path": "D:/code/整合/zhenghe/runs/comm_tight_budget_20260919/onpolicy.py",
++      "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
++      "expected": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
++      "note": "onpolicy.py is NOT in the canonical run directory; it is reached through the same wiring, from the tight-budget round that v2_common.enter_round() puts on sys.path. Pinned by R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015 by reading that live file; no replacement copy is introduced."
++    },
++    "canonical_cost_math": {
++      "path": "D:/code/整合/zhenghe/runs/comm_cost_controller_stage_a_20260927/cost_math.py",
++      "sha256": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
++      "expected": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
++      "note": "cost_math.py is NOT in the canonical run directory either; it is imported by configure_source_imports() from the stage-A directory that v2_common.enter_round() puts on sys.path, and r75_frozen reads the already-imported object back from sys.modules instead of importing a second copy. Pinned by R75_S0_IMPORT_BOOTSTRAP_REPAIR_20261015 by reading that live file; the checkout copy under zhenghe-round42 carries the SAME digest, so the resolved path is what distinguishes the two."
++    },
++    "r75_frozen": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_frozen.py",
++      "sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
++      "expected": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
++      "revision": "A-R1 keeps the failed A source byte-identical; physical_step_category/prefix remain in the fee route and out of the scientific return"
++    },
++    "r75_replay_adapter": {
++      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_replay_adapter.py",
++      "sha256": "0034fa40fbb55362646c84e8ef987e1aa01d72c619bd1c82a244dc88a0224dc2"
++    },
++    "reused_verified_sources": {
++      "r74_guard_prod.py": {
++        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round74_constrained_early_head_adaptation/r74_guard_prod.py",
++        "sha256": "623b9ec6cd243d27321e8c745a0247c97126c9028141cb0ed4760dd90c0796db",
++        "expected": "623b9ec6cd243d27321e8c745a0247c97126c9028141cb0ed4760dd90c0796db"
++      },
++      "r74_guard.py": {
++        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round74_constrained_early_head_adaptation/r74_guard.py",
++        "sha256": "9a6b06374fc5b56b6d8077dc6aa332444533198aca0967cb36b867795af614d7",
++        "expected": "9a6b06374fc5b56b6d8077dc6aa332444533198aca0967cb36b867795af614d7"
++      },
++      "r43_call_counter_hooks.py": {
++        "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/r43_call_counter_hooks.py",
++        "sha256": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7",
++        "expected": "02f80072a14d7305b619edd0db9617a7b0a0f31315b3265aebf1e694ac7398f7"
++      }
++    },
++    "gae_default_distinction": {
++      "v2_common_default": "GAE_LAMBDA = 0.95, ETA_LAMBDA = 0.05 (module defaults, NOT used)",
++      "r66_living_override": "configure_source_imports() sets common.GAE_LAMBDA = 1.0 and common.ETA_LAMBDA = 0.5",
++      "requirement": "the S1 run must report the LIVE values 1.0 / 0.5 and must never silently fall back to the 0.95 / 0.05 defaults",
++      "enforcement": "r75_frozen._verify_canonical_bindings() reads common.GAE_LAMBDA / common.ETA_LAMBDA / common.GAMMA back from the configured module at import time and refuses the run if they are not 1.0 / 0.5 / 1.0"
++    }
++  },
++  "gate_only_controller": {
++    "construction": "r75_frozen.build_gate_only_controller(seed=11) -> r66.load_r58_ep0_model + r66.fresh_partitioned_controller(ep0_state=...) + freeze_trunk_only",
++    "two_head_equality": "both independent heads are set to the OLD single action_head values, so route_logits reproduces the single-head behaviour by construction",
++    "no_late_scaling": "no late x .10 or any other head scaling is applied",
++    "alignment": "r66.likelihood_alignment must pass within common.LOG_PROB_TOLERANCE = 1e-6; the gate prior never enters the forward",
++    "qualification_only": "these parameters NEVER become the R71 research INIT and NEVER become an effect training checkpoint",
++    "r71_research_config_unchanged": [
++      "lambda*A_task - A_cost combined advantage",
++      "trunk frozen only",
++      "8 trainable objects (early_head, late_head, task_value_head, cost_head; 390 scalars)",
++      "12 objects / 5830 scalars total",
++      "beta=1.00 gate prior is a training-loss term only",
++      "19-dim observation, ready_cut 147",
++      "gamma 1.0",
++      "live GAE lambda 1.0",
++      "dual eta 0.5",
++      "lambda_init 1.0",
++      "B0 10000",
++      "budget 29300 / 6 targets / ACK off"
++    ]
++  },
++  "candidates": {
++    "A1_nonempty_adam_critic_only_control_step": {
++      "physical_optimizer_steps": 1,
++      "offline_trunk_target_rows": 0,
++      "joint_records": 0,
++      "design": "Adam(lr=3e-4) over the SAME eight trainable objects as the native path. ONE synthetic physical step in which only the two critic modules carry a legal controllable non-zero gradient; both actor heads and the trunk receive none, so the actor/trunk parameters do not move and the original behaviour probabilities are preserved. The step is pre-charged to the central ledger before optimizer.step() and recorded at the real entry.",
++      "truthful_records": [
++        "for each of the eight objects: grad is None / non-None",
++        "for each of the eight objects: Adam exp_avg / exp_avg_sq present / absent",
++        "an absent state is recorded as absent and NEVER fabricated as non-empty"
++      ],
++      "full_state_saved": [
++        "five module state_dicts",
++        "all Adam state values with the eight-object name mapping",
++        "lambda (dual) and lambda_at_rollout",
++        "python random state",
++        "numpy random state",
++        "torch RNG state",
++        "update cursor 0",
++        "data identity (row/tape sha256)",
++        "frozen configuration"
++      ]
++    },
++    "A2_source_actual_update": {
++      "physical_optimizer_steps": 4,
++      "offline_trunk_target_rows": 840,
++      "joint_records": 1,
++      "design": "From the SAME A1 state, call r75_native_ppo_update(update_index=0) once through the real path: trainer.batch_samples + GAE, the metered r66.likelihood_alignment pass (168 candidate rows over 66 calls), the DATA_ORDER_SEED shuffle, 4 epochs x 1 minibatch, the beta=1.00 / ready_cut=147 gate prior, the clipped surrogate + dual critic + entropy + gate loss, the global clip over the eight trainable objects, optimizer.step."
++    },
++    "A3_full_state_save_restore_same_update": {
++      "physical_optimizer_steps": 4,
++      "offline_trunk_target_rows": 840,
++      "joint_records": 1,
++      "design": "Restore the exact pre-update A1 state into FRESH objects and re-execute the SAME update (update_index=0). The re-run starts from the restored pre-state and does not advance the scientific cursor; it replaces the trial, it is not a second committed update."
++    }
++  },
++  "accounting": {
++    "planned_totals": {
++      "physical_optimizer_steps": 9,
++      "offline_trunk_target_rows": 1680,
++      "joint_records": 2,
++      "environment_constructions": 0
++    },
++    "per_native_update": {
++      "physical_optimizer_steps": 4,
++      "trunk_entry_calls": 70,
++      "trunk_entry_rows": 840,
++      "largest_single_row_charge": 168,
++      "alignment_calls": 66,
++      "alignment_rows": 168,
++      "epoch_calls": 4,
++      "epoch_rows": 672
++    },
++    "both_native_updates": {
++      "trunk_entry_calls": 140,
++      "trunk_entry_rows": 1680
++    },
++    "record_exposures": {
++      "unique_records": 66,
++      "batch_reads": 2,
++      "record_exposures": 132
++    },
++    "joint_record_semantics": "the central unit joint_record counts BATCH-READ events, not original joint records and not environment episodes: 2 batch-read events re-expose the same 66 unique records 132 times; the environment guard stays 0/0/0",
++    "caps": {
++      "physical_optimizer_step": "normal 12 + technical 4 / hard 16",
++      "offline_trunk_target_row": "normal 5000 + technical 1000 / hard 6000, per-charge 1024",
++      "environment_construction": "0 / 0 / 0 - forbidden by source"
++    },
++    "headroom_after_plan": {
++      "physical_optimizer_steps": 7,
++      "offline_trunk_target_rows": 4320
++    },
++    "no_quota_borrowing": "the plan may not convert headroom into extra steps; no extra forward verification, parameter/state comparison does not forward"
++  },
++  "metering_contract": {
++    "attachment": "every real forward attaches ONLY to R75Resources.production() (the canonical durable root)",
++    "installation": "resources.ensure_trunk_meter(controller, ...) is installed BEFORE any possible forward, for BOTH controllers (A2 and A3)",
++    "recorded_per_controller": [
++      "calls_attempted",
++      "calls_charged",
++      "rows_charged",
++      "calls_completed",
++      "rows_completed",
++      "calls_refused",
++      "calls_failed"
++    ],
++    "phase_split": {
++      "alignment": "cumulative snapshot at the end of r66.likelihood_alignment minus pre_meter",
++      "epochs": "final cumulative snapshot minus the alignment-end snapshot",
++      "total": "final cumulative snapshot minus pre_meter",
++      "invariant": "alignment + epochs == total for EVERY component"
++    },
++    "no_dodge": "the meter is never uninstalled to escape accounting; no aggregate replaces the entry; no double charge",
++    "reconciliation": "every Adam.step is pre-charged and reconciled item-by-item against the durable counter; resources.verify_or_fail() runs before any work"
++  },
++  "comparison_contract": {
++    "compared_value_by_value": [
++      "five module parameters",
++      "all Adam state values with the eight-object name mapping",
++      "lambda / lambda_at_rollout",
++      "python / numpy / torch RNG state",
++      "update cursor",
++      "scientific numeric returns of the update record"
++    ],
++    "excluded_in_advance_and_accounted_separately": [
++      "wall-clock timestamps",
++      "central cumulative resource counters and ledger event sequence numbers",
++      "temporary file paths and process ids",
++      "the A3 trunk-entry meter absolute cumulative readings (A3 is a second controller, so its absolute counts are expected to differ and are reconciled, not diffed)"
++    ],
++    "forbidden_exclusions": "no real scientific difference may be excluded; the exclusion list is fixed here before the run"
++  },
++  "stop_conditions": [
++    "any source, data or ledger byte-identity mismatch",
++    "the R58 ep0 state-dict key mapping into the five-module controller fails",
++    "likelihood_alignment exceeds 1e-6 (data is never rewritten, alignment never disabled)",
++    "any Adam object whose recorded grad/state presence contradicts the measurement",
++    "the A3 re-run record differs from A2 in any compared field",
++    "any ledger refusal, any fixture/simulated attachment, any environment construction attempt",
++    "non-finite loss or gradient norm",
++    "any checkpoint save that omits the optimizer state or the RNG state"
++  ],
++  "execution_discipline": {
++    "attempts": "ONE real execution attempt",
++    "no_auto_retry": "an anomaly keeps the failure and the consumed originals and stops immediately",
++    "no_technical_reserve": "ordinary exhaustion is never auto-upgraded to the technical reserve",
++    "no_refund": "a failed step is never refunded",
++    "no_scratch": "no charged scratch, dev, preheat, small trial or extra probe",
++    "history_preserved": "the R74 >=16 physical-step lower bound and every earlier gap stay permanently recorded"
++  },
++  "not_covered": [
++    "torch import, model load/construction and the state-dict mapping outcome",
++    "the real likelihood_alignment outcome",
++    "any real or synthetic optimizer step, PPO update or replay",
++    "the real collector, real episodes, closed-loop simulation, any evaluation block",
++    "full multi-batch training and any research checkpoint",
++    "any communication-policy effect, cost or task-outcome conclusion"
++  ],
++  "canonical_ledger_frozen_snapshot": {
++    "root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/raw/runtime",
++    "files": {
++      "r75_environment_construction.json": {
++        "sha256": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6",
++        "bytes": 288
++      },
++      "r75_environment_construction_guard.json": {
++        "sha256": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b",
++        "bytes": 223
++      },
++      "r75_joint_record.json": {
++        "sha256": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3",
++        "bytes": 273
++      },
++      "r75_joint_record_guard.json": {
++        "sha256": "1d4022fcd21516d1b91b60ba3f3ca9efc3ee837da8a615012f9dcad2e69a8a9d",
++        "bytes": 226
++      },
++      "r75_offline_trunk_target_row.json": {
++        "sha256": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527",
++        "bytes": 297
++      },
++      "r75_offline_trunk_target_row_guard.json": {
++        "sha256": "314fbb13412443a381ebb59e6479be5ae10431a45c5672beb370a899f18ae778",
++        "bytes": 232
++      },
++      "r75_physical_optimizer_step.json": {
++        "sha256": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa",
++        "bytes": 288
++      },
++      "r75_physical_optimizer_step_guard.json": {
++        "sha256": "13b9d36da125823d69196c67ed44361fa6cf121fbbf8ada618e667312ba894aa",
++        "bytes": 223
++      },
++      "r75_total_ledger.jsonl": {
++        "sha256": "1f5929a4e29ed0a1ad4c4a638190969dd9a84eebd6fadd2b402c0e8ffa20df0b",
++        "bytes": 2579
++      }
++    },
++    "total_ledger_events": 12,
++    "charged_events": 0,
++    "rule": "the precheck must reproduce this snapshot byte-for-byte; no bootstrap append and no rebuild is permitted"
++  },
++  "authorization": {
++    "human": "approved_full_s1g_first_a_then_single_b_20261015",
++    "phase_a": "source_tests_and_local_commit_only",
++    "phase_b": "single_real_nn_attempt_after_source_review",
++    "no_repeat_question": "true"
++  },
++  "active_production_baseline": {
++    "root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/raw/runtime",
++    "total_ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
++    "total_ledger_events": 88,
++    "files": {
++      "r75_environment_construction.json": {"sha256": "abd847cfce1c782c7d6a3832557d865083fcf0695e24aab002e54754a39182f6", "bytes": 288},
++      "r75_environment_construction_guard.json": {"sha256": "be58a93de378a1fe9e05bc3f2d2cb7059f705b161ef59191c6aab09701c3981b", "bytes": 223},
++      "r75_joint_record.json": {"sha256": "08544238cf7e06c57ee22c0d87589d27bff9c259a09eac185375e29e3e0cb1c3", "bytes": 273},
++      "r75_joint_record_guard.json": {"sha256": "eb004d98cd0689e16f678856be7bae95df99b8b168a4ce1dec9d82aec39bc567", "bytes": 398},
++      "r75_offline_trunk_target_row.json": {"sha256": "5531991a84b76129693a9993eb511354ccfcde0d019b6f35a04b1ffb36244527", "bytes": 297},
++      "r75_offline_trunk_target_row_guard.json": {"sha256": "6ac36b9182a0d14f82b7fe645c67fb8b7389282326f5b3cae353d6da5edea8e9", "bytes": 11329},
++      "r75_physical_optimizer_step.json": {"sha256": "23a4022bb542fc9e5cef6d4f23cdef66f2795128c689beab904e5dbf054328aa", "bytes": 288},
++      "r75_physical_optimizer_step_guard.json": {"sha256": "5d4c65c6de6b4d2c753854fbd4117abd0ab4032220a2f91d56ddb2eb76e9c168", "bytes": 1087},
++      "r75_total_ledger.jsonl": {"sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d", "bytes": 19980}
++    },
++    "guards": {
++      "physical_optimizer_step": {"used_normal": 5, "used_reserve": 0, "refusals": 0, "charged_events": 5, "sum_normal": 5, "sum_reserve": 0},
++      "offline_trunk_target_row": {"used_normal": 840, "used_reserve": 0, "refusals": 0, "charged_events": 70, "sum_normal": 840, "sum_reserve": 0},
++      "joint_record": {"used_normal": 1, "used_reserve": 0, "refusals": 0, "charged_events": 1, "sum_normal": 1, "sum_reserve": 0},
++      "environment_construction": {"used_normal": 0, "used_reserve": 0, "refusals": 0, "charged_events": 0, "sum_normal": 0, "sum_reserve": 0}
++    }
++  },
++  "s1g_execution_contract": {
++    "request_id": "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++    "output_root": "raw/s1g_native_retry",
++    "attempt_dir": "raw/s1g_native_retry/R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015",
++    "technical_attempt_prefix": "r75_s1g_A3_technical_retry_20261015",
++    "ledger_baseline": {
++      "total_ledger_events": 88,
++      "total_ledger_bytes": 19980,
++      "total_ledger_sha256": "fff8dc1f3d9222ed280a5dc9139f3f82de4c5537ccbc69894d340b44e605475d",
++      "guards": {
++        "physical_optimizer_step": {
++          "used_normal": 5,
++          "used_reserve": 0,
++          "refusals": 0,
++          "charged_events": 5
++        },
++        "offline_trunk_target_row": {
++          "used_normal": 840,
++          "used_reserve": 0,
++          "refusals": 0,
++          "charged_events": 70
++        },
++        "joint_record": {
++          "used_normal": 1,
++          "used_reserve": 0,
++          "refusals": 0,
++          "charged_events": 1
++        },
++        "environment_construction": {
++          "used_normal": 0,
++          "used_reserve": 0,
++          "refusals": 0,
++          "charged_events": 0
++        }
++      }
++    },
++    "attempt_budget": {
++      "A1": {
++        "phase": "critic_only_control_step",
++        "physical_steps": 1,
++        "category": "normal",
++        "offline_trunk_target_rows": 0,
++        "joint_records": 0
++      },
++      "A2": {
++        "phase": "native_update_0",
++        "physical_steps": 4,
++        "category": "normal",
++        "offline_trunk_target_rows": 840,
++        "trunk_calls": 70,
++        "joint_records": 1
++      },
++      "A3": {
++        "phase": "same_update_replay_from_this_A1_disk_bundle",
++        "physical_steps": 4,
++        "category": "technical",
++        "offline_trunk_target_rows": 840,
++        "trunk_calls": 70,
++        "joint_records": 1
++      },
++      "totals": {
++        "physical_optimizer_steps": {
++          "normal": 5,
++          "technical": 4,
++          "hard": 9
++        },
++        "offline_trunk_target_row": {
++          "normal": 1680,
++          "reserve": 0,
++          "trunk_calls": 140,
++          "max_single_call": 168
++        },
++        "joint_record": {
++          "normal_batch_reads": 2,
++          "new_exposures": 132,
++          "unique_records_per_read": 66
++        },
++        "environment_construction": 0
++      },
++      "cumulative_caps_after_attempt": {
++        "physical_optimizer_step": {
++          "normal": 10,
++          "reserve": 4,
++          "total": 14,
++          "contract_caps": "normal 12 + technical 4 / hard 16"
++        },
++        "offline_trunk_target_row": {
++          "normal": 2520,
++          "reserve": 0,
++          "total": 2520,
++          "contract_caps": "normal 5000 + technical 1000 / hard 6000"
++        },
++        "joint_record": {
++          "batch_reads": 3,
++          "exposures": 198
++        },
++        "environment_construction": 0
++      },
++      "no_extra_retry_refund_or_headroom_use": true
++    },
++    "child_receipt_contract": {
++      "outer_python": "stdlib_only_parent",
++      "real_child": "single_cpu_nn_python",
++      "hold_process_handle": true,
++      "binary_stdio": true,
++      "required_fields": [
++        "argv",
++        "cwd",
++        "child_pid",
++        "started_at",
++        "ended_at",
++        "child_returncode",
++        "timed_out",
++        "timeout_s"
++      ],
++      "missing_returncode": "missing_failclosed_not_zero",
++      "inference_from_stdout": "forbidden"
++    },
++    "scientific_invariants": "The existing frozen RUN_PLAN candidates, comparison_contract, data identity, 66/168 batch, trunk-freeze, 8 trainable objects, LR, epochs, minibatch, optimizer order and return semantics remain unchanged; category/prefix metadata is diagnostic/accounting only."
++  }
++}
+

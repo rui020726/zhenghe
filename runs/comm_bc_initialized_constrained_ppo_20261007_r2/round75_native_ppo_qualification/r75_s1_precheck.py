@@ -24,6 +24,7 @@ sys.path.insert(0, str(HERE))
 
 import r75_guard as guard_mod                      # noqa: E402  (stdlib-only reuse chain)
 import r75_replay_adapter as adapter_mod           # noqa: E402  (stdlib-only)
+from r75_s1g_outer_exec import ledger_snapshot     # noqa: E402  verified stdlib parser
 
 
 def _repo_root() -> Path:
@@ -183,6 +184,107 @@ def check_ledger_snapshot(plan: dict, report: Report) -> None:
     report.check("ledger:no_residual_lock", not locks, f"lock files: {locks}")
 
 
+def check_active_production_baseline(plan: dict, report: Report) -> None:
+    """Verify the real S1G start ledger instead of a rebuilt or zero ledger."""
+    contract = plan["active_production_baseline"]
+    root = resolve_path(contract["root"])
+    snapshot = ledger_snapshot(root, contract["files"])
+    report.check("ledger:baseline_files", snapshot["frozen_snapshot_match"] is True,
+                 "the nine runtime files match the active S1G baseline byte-for-byte")
+    report.check("ledger:baseline_event_count",
+                 snapshot["total_ledger_events"] == contract["total_ledger_events"],
+                 f"{snapshot['total_ledger_events']} events, expected "
+                 f"{contract['total_ledger_events']}")
+    report.check("ledger:baseline_reconciliation",
+                 snapshot["guard_ledger_reconciliation"]["ok"] is True,
+                 "each durable guard reconciles against the append-only ledger")
+    events = [json.loads(line) for line in (root / "r75_total_ledger.jsonl")
+              .read_text(encoding="utf-8").splitlines() if line.strip()]
+    sums: dict[str, dict[str, int]] = {}
+    for event in events:
+        sums.setdefault(event.get("guard", ""),
+                        {"charged_events": 0, "sum_normal": 0, "sum_reserve": 0})
+        if event.get("event") == "charged":
+            sums[event.get("guard", "")]["charged_events"] += 1
+            if event.get("category") == "normal":
+                sums[event.get("guard", "")]["sum_normal"] += int(event.get("n", 0))
+            elif event.get("category") == "reserve":
+                sums[event.get("guard", "")]["sum_reserve"] += int(event.get("n", 0))
+    kinds = {
+        "physical_optimizer_step": "r75-physical-optimizer-step-guard/1",
+        "offline_trunk_target_row": "r75-offline-trunk-target-row-guard/1",
+        "joint_record": "r75-joint-record-guard/1",
+        "environment_construction": "r75-environment-construction-guard/1",
+    }
+    for unit, want in contract["guards"].items():
+        got = snapshot["per_unit_last_known"].get(unit, {})
+        for field in ("used_normal", "used_reserve", "refusals", "charged_events"):
+            report.check(f"ledger:baseline:{unit}:{field}", got.get(field) == want[field],
+                         f"{field} = {got.get(field)!r}, expected {want[field]!r}")
+        event_sum = sums.get(kinds[unit], {})
+        report.check(f"ledger:baseline:{unit}:event_sums",
+                     event_sum.get("charged_events") == want["charged_events"]
+                     and event_sum.get("sum_normal") == want.get("sum_normal", 0)
+                     and event_sum.get("sum_reserve") == want.get("sum_reserve", 0),
+                     f"event sums {event_sum!r}, expected {want!r}")
+    locks = sorted(path.name for path in root.glob("*.lock"))
+    report.check("ledger:baseline_no_residual_lock", not locks, f"lock files: {locks}")
+
+
+def check_s1g_headroom(plan: dict, report: Report) -> None:
+    """Check old production usage plus S1G by exact category, with no fallback."""
+    baseline = plan["active_production_baseline"]["guards"]
+    attempt = plan["s1g_execution_contract"]["attempt_budget"]["totals"]
+    cumulative = plan["s1g_execution_contract"]["attempt_budget"]["cumulative_caps_after_attempt"]
+    physical = {
+        "normal": baseline["physical_optimizer_step"]["used_normal"]
+                  + attempt["physical_optimizer_steps"]["normal"],
+        "reserve": baseline["physical_optimizer_step"]["used_reserve"]
+                   + attempt["physical_optimizer_steps"]["technical"],
+        "total": baseline["physical_optimizer_step"]["used_normal"]
+                 + baseline["physical_optimizer_step"]["used_reserve"]
+                 + attempt["physical_optimizer_steps"]["hard"],
+    }
+    report.check("headroom:physical_by_category",
+                 physical == {key: cumulative["physical_optimizer_step"][key]
+                              for key in ("normal", "reserve", "total")},
+                 f"physical baseline+attempt {physical}, cumulative "
+                 f"{cumulative['physical_optimizer_step']}")
+    report.check("headroom:physical_within_caps",
+                 physical["normal"] <= 12 and physical["reserve"] <= 4
+                 and physical["total"] <= 16,
+                 "physical normal<=12, reserve<=4, total<=16")
+    rows = {
+        "normal": baseline["offline_trunk_target_row"]["used_normal"]
+                  + attempt["offline_trunk_target_row"]["normal"],
+        "reserve": baseline["offline_trunk_target_row"]["used_reserve"]
+                   + attempt["offline_trunk_target_row"]["reserve"],
+    }
+    report.check("headroom:trunk_by_category",
+                 rows == {key: cumulative["offline_trunk_target_row"][key]
+                          for key in ("normal", "reserve")},
+                 f"trunk baseline+attempt {rows}, cumulative "
+                 f"{cumulative['offline_trunk_target_row']}")
+    report.check("headroom:trunk_within_caps",
+                 rows["normal"] <= 5000 and rows["reserve"] <= 1000
+                 and rows["normal"] + rows["reserve"] <= 6000,
+                 "trunk normal<=5000, reserve<=1000, hard<=6000")
+    report.check("headroom:trunk_rows_stay_normal",
+                 attempt["offline_trunk_target_row"]["reserve"] == 0,
+                 "A2/A3 trunk rows and calls stay normal; only A3 physical steps are technical")
+    per_charge = verified_per_charge_cap(plan, report)
+    largest = plan["accounting"]["per_native_update"]["largest_single_row_charge"]
+    report.check("headroom:largest_single_row_charge",
+                 per_charge > 0 and largest <= per_charge,
+                 f"largest single charge {largest} vs verified per-charge cap {per_charge}")
+    env_root = resolve_path(plan["active_production_baseline"]["root"])
+    env_state = json.loads((env_root / "r75_environment_construction_guard.json")
+                           .read_text(encoding="utf-8"))
+    report.check("headroom:environment_forbidden",
+                 int(env_state["normal_cap"]) == 0 and int(env_state["hard_cap"]) == 0,
+                 "environment construction stays 0/0/0 and is refused by source")
+
+
 def verified_per_charge_cap(plan: dict, report: Report) -> int:
     """The per-charge cap must come from a VERIFIED source, never from a missing JSON key.
 
@@ -206,7 +308,8 @@ def verified_per_charge_cap(plan: dict, report: Report) -> int:
     contract_cap = int(contract_match.group(1))
     report.check("quota:per_charge_cap_sources_agree", guard_cap == contract_cap,
                  f"guard source {guard_cap} vs frozen contract {contract_cap}")
-    root = resolve_path(plan["canonical_ledger_frozen_snapshot"]["root"])
+    root = resolve_path(plan.get("active_production_baseline",
+                                  plan["canonical_ledger_frozen_snapshot"])["root"])
     raw_state = json.loads((root / "r75_offline_trunk_target_row_guard.json").read_text(encoding="utf-8"))
     raw_value = raw_state.get("per_charge_cap")
     report.check("quota:per_charge_cap_raw_json_not_contradicting",
@@ -381,15 +484,22 @@ def check_import_bootstrap(plan: dict, report: Report) -> None:
                  "the helper is the pinned r66_frozen.py, not a local reimplementation")
 
 
-def main() -> int:
+def main(plan_path=None) -> int:
+    global PLAN_PATH
+    if plan_path is not None:
+        PLAN_PATH = Path(plan_path).resolve()
     plan = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
     report = Report()
     check_source_identity(plan, report)
     check_guard_pin(plan, report)
     check_input_identity(plan, report)
     check_batch_shape(plan, report)
-    check_ledger_snapshot(plan, report)
-    check_quota_headroom(plan, report)
+    if plan.get("revision_id") == "R75_S1G_AR1_PRECHECK_BASELINE_REPAIR_20261015":
+        check_active_production_baseline(plan, report)
+        check_s1g_headroom(plan, report)
+    else:
+        check_ledger_snapshot(plan, report)
+        check_quota_headroom(plan, report)
     check_living_config(plan, report)
     check_living_config_is_not_literal(plan, report)
     check_final_prep_fixes(plan, report)
@@ -397,6 +507,8 @@ def main() -> int:
 
     verdict = {
         "kind": "round75-s1-precheck/1",
+        "revision_id": plan.get("revision_id"),
+        "plan_path": str(PLAN_PATH),
         "request_id": plan["request_id"],
         "plan_status": plan["status"],
         "head_at_writing": plan["head_at_writing"],

@@ -58,6 +58,8 @@ FIRST_ATTEMPT_REQUEST_ID = "R75_S1_NATIVE_QUALIFICATION_20261015"
 EXECUTION_REQUEST_ID = None
 S1G_REQUEST_ID = "R75_S1G_NATIVE_QUALIFICATION_RETRY_REVIEW_20261015"
 S1G_PLAN_PATH = HERE / "ROUND75_S1G_RUN_PLAN.json"
+S1G_AR1_REVISION_ID = "R75_S1G_AR1_PRECHECK_BASELINE_REPAIR_20261015"
+S1G_AR1_PLAN_PATH = HERE / "ROUND75_S1G_AR1_RUN_PLAN.json"
 S1G_ATTEMPT_DIR = HERE / "raw" / "s1g_native_retry" / S1G_REQUEST_ID
 S1G_TECHNICAL_PREFIX = "r75_s1g_A3_technical_retry_20261015"
 
@@ -1282,7 +1284,7 @@ def run_s1() -> int:
     state.phase = "precheck"
     import r75_s1_precheck
 
-    precheck_code = r75_s1_precheck.main()
+    precheck_code = r75_s1_precheck.main(PLAN_PATH)
     if precheck_code != 0:
         print("S1 REFUSED: the freeze precheck failed; nothing paid was started", file=sys.stderr)
         return 2
@@ -1308,7 +1310,8 @@ def run_s1() -> int:
         resources = r75_guard.R75Resources.production()
         state.resources = resources
         resources.verify_or_fail()
-        print("canonical production ledger opened and reconciled at the zero starting point")
+        print("canonical production ledger opened and reconciled against the active frozen "
+              "S1G baseline")
 
         # --- gate-only controller: R58 ep0 behaviour, two equal heads, trunk frozen ------------
         state.phase = "A2_controller_construction"
@@ -1610,12 +1613,12 @@ def _license_is_fresh(recorded, request_id, target):
     A marker without license_state == "issued", without a --run-s1 argv, or whose recorded
     --request-id / --attempt-dir disagree with this child is NOT a consumable license; taking it
     over anyway would let a stale or cross-directory marker authorize a run."""
-        expected_flag = "--run-s1g" if request_id == S1G_REQUEST_ID else "--run-s1"
-        other_flag = "--run-s1" if request_id == S1G_REQUEST_ID else "--run-s1g"
-        if not isinstance(recorded, dict) or recorded.get("license_state") != "issued":
+    expected_flag = "--run-s1g" if request_id == S1G_REQUEST_ID else "--run-s1"
+    other_flag = "--run-s1" if request_id == S1G_REQUEST_ID else "--run-s1g"
+    if not isinstance(recorded, dict) or recorded.get("license_state") != "issued":
         return False
     argv = recorded.get("argv")
-        if not isinstance(argv, list) or expected_flag not in argv or other_flag in argv:
+    if not isinstance(argv, list) or expected_flag not in argv or other_flag in argv:
         return False
     if _license_flag_value(argv, "--request-id") != request_id:
         return False
@@ -1752,7 +1755,7 @@ def main(argv=None) -> int:
         return 2
     if args.run_s1g:
         global PLAN, PLAN_PATH
-        PLAN_PATH = S1G_PLAN_PATH
+        PLAN_PATH = S1G_AR1_PLAN_PATH
         PLAN = json.loads(PLAN_PATH.read_text(encoding="utf-8"))
     if args.print_plan or (not args.run_s1 and not args.run_s1g):
         print(json.dumps({"kind": PLAN["kind"], "request_id": PLAN["request_id"],
