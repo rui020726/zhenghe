@@ -642,12 +642,17 @@ def main(argv=None):
                         help="register the ONE attempt marker and run the frozen runner once")
     parser.add_argument("--prepare", action="store_true",
                         help="verify and record only; creates no marker and starts no child")
-    parser.add_argument("--request-id", default=FOLLOW_UP_REQUEST_ID,
+    parser.add_argument("--request-id", default=None,
                         help="the request id this attempt belongs to")
     parser.add_argument("--attempt-dir", default=None,
                         help="optional explicit attempt directory inside the output root; defaults "
                              "to <attempts base>/<request-id> so each attempt is isolated")
     args = parser.parse_args(argv)
+    if args.launch and not args.request_id:
+        sys.stderr.write("S1 OUTER V2 REFUSED: --launch requires an explicit --request-id\n")
+        return 2
+    if not args.launch and args.request_id is None:
+        args.request_id = FOLLOW_UP_REQUEST_ID
     here = Path(__file__).resolve().parent
     repo = here
     while not (repo / ".git").exists():
@@ -661,10 +666,6 @@ def main(argv=None):
         return 2
     s1_dir.mkdir(parents=True, exist_ok=True)
     if args.launch:
-        if args.request_id == FOLLOW_UP_REQUEST_ID:
-            sys.stderr.write("S1 OUTER V2 REFUSED: --launch requires an explicit --request-id; "
-                             "the placeholder follow-up id is not a run permission\n")
-            return 2
         code, problems = run(repo, here, s1_dir, args.request_id, plan, runtime_dir)
         for problem in problems:
             sys.stderr.write("  - %s\n" % problem)
