@@ -1,0 +1,73 @@
+{
+  "kind": "round75-s1f-git-identity-repair-phase-b-verdict/1",
+  "request_id": "R75_S1F_GIT_IDENTITY_REPAIR_DRAFT_20261015",
+  "status": "FUNCTIONAL_PASS_WITH_CAPTURE_COMPLETENESS_NOT_CLOSED",
+  "execution_head": "d2a634facbc25bea1acd7be3e01474ddca0a5a08",
+  "execution_parent": "70339f7efd57be07946cf8665815534675787517",
+  "branch": "exp/round75-native-ppo-qualification",
+  "single_parent_launch_attempt": 1,
+  "real_cpu_python_processes": 1,
+  "child_pid": 56120,
+  "child_exit_code": null,
+  "child_exit_code_status": "missing_not_inferred",
+  "child_exit_time": "missing",
+  "parent_observation_exit_code": 0,
+  "parent_observation_exit_code_is_child_exit": false,
+  "exit_read_error": "不能对 Null 值表达式调用方法。",
+  "functional": {
+    "case_count": 15,
+    "passed_true": 15,
+    "passed_false": 0,
+    "case_failed_exception_counter": 0,
+    "result_jsonl_stdout_consistent": true,
+    "default_torch_save_attempt_completed": 1,
+    "weights_only_load_attempt_completed": 1,
+    "fixture_read_attempt_completed": 1,
+    "fixture_bytes": 19497,
+    "fixture_sha256": "69d6472683ccd7067dad15db35467d35584b05ea3815e7e2f53e56843a438113",
+    "numpy_import_attempt_completed": 1,
+    "torch_import_attempt_completed": 1,
+    "rng_unchanged": true,
+    "rng_python_repr_sha256": "165c6cd377a442d963eb4df20cfbffc55459c9c37f0c1778b693583a61003043",
+    "rng_numpy_keys_sha256": "c034fe2b67ed775bfe451737ada67643b85b20912b4c5e5974f425e9d5f3b3ef",
+    "rng_torch_state_sha256": "698521d01a06e64f5a3dd2aaca18aa6de7e917aa785dfd11acd2069eb1fc77d2"
+  },
+  "capture_boundary": {
+    "actual_child_os_exit_captured": false,
+    "actual_child_exit_time_captured": false,
+    "end_to_end_capture_completeness_closed": false,
+    "functional_pass_implies_full_process_qualification": false
+  },
+  "forbidden_operations": {
+    "weights_only_false": 0,
+    "safe_globals_or_allowlist": 0,
+    "scientific_checkpoint_or_model_loads": 0,
+    "model_or_controller_construction": 0,
+    "optimizer_operations": 0,
+    "ppo_operations": 0,
+    "environments": 0,
+    "training_or_evaluation": 0,
+    "cuda_operations": 0,
+    "ledger_charges": 0,
+    "retries_or_second_python_processes": 0
+  },
+  "inventory": {
+    "before_sha256": "f52c88f149f37f6033b3521a2d7d50f64444e423cfdd2bf34303bdb70544165d",
+    "before_entries": 108,
+    "before_contains_phase_a_logs_despite_scope_label": true,
+    "before_scope_label_is_scope_proof": false,
+    "after_sha256": "d6ef2b3b17fe17ce6bf68c466ee14cb0376740b7053d523013c3f0286ad049b2",
+    "after_entries": 108,
+    "normalized_unique_before_entries": 99,
+    "normalized_unchanged": 99,
+    "raw_full_added_artifacts": 9,
+    "changed_prior_entries": 0,
+    "missing_prior_entries": 0
+  },
+  "protection": {
+    "ROUND46_CURRENT_TASK.json": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "r59_analysis_run.log": "ccc35a2420d6cc1ac81d0b745a977b9f7fc93e2e0ac7997054ec9aac4b130271"
+  },
+  "boundary": "This validates only the non-neural fixture save/load/read and identity mechanics on this implementation. It does not validate real scientific checkpoints, native PPO, S1 qualification, or any scientific effect."
+}

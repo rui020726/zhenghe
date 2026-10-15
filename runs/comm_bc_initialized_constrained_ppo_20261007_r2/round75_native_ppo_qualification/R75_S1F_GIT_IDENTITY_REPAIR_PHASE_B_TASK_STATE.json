@@ -1,0 +1,38 @@
+{
+  "kind": "round75-s1f-git-identity-repair-phase-b-task-state/1",
+  "request_id": "R75_S1F_GIT_IDENTITY_REPAIR_DRAFT_20261015",
+  "status": "PHASE_B_CLOSED_FUNCTIONAL_PASS_CAPTURE_INCOMPLETE",
+  "execution_head": "d2a634facbc25bea1acd7be3e01474ddca0a5a08",
+  "execution_parent": "70339f7efd57be07946cf8665815534675787517",
+  "branch": "exp/round75-native-ppo-qualification",
+  "report": "ROUND75_S1F_GIT_IDENTITY_REPAIR_B_REPORT.md",
+  "verdict": "ROUND75_S1F_GIT_IDENTITY_REPAIR_B_VERDICT.json",
+  "output_root": "raw/s1f_probe",
+  "consumption": {
+    "parent_launch_attempts": 1,
+    "real_cpu_python_processes": 1,
+    "case_attempts": 15,
+    "case_completed": 15,
+    "durable_passed": 15,
+    "real_case_failures": 0,
+    "exception_case_failed": 0,
+    "numpy_imports": 1,
+    "torch_imports": 1,
+    "fixture_saves": 1,
+    "weights_only_loads": 1,
+    "fixture_reads": 1,
+    "scientific_checkpoint_or_model_loads": 0,
+    "optimizer_or_ppo_operations": 0,
+    "environments": 0,
+    "cuda_operations": 0,
+    "ledger_charges": 0
+  },
+  "capture_completeness": {
+    "parent_observation_exit_code": 0,
+    "actual_child_exit_code": null,
+    "actual_child_exit_time": "missing",
+    "closed": false,
+    "retry_or_repair_allowed": false
+  },
+  "next_action": "STOP; no S1, Torch, NN, optimizer, environment, or Phase C action is authorized."
+}

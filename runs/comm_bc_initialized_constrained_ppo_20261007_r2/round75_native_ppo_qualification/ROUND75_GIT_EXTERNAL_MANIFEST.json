@@ -1608,5 +1608,64 @@
       "ledger_charges": 0
     },
     "note": "A is frozen for decision review; B does not auto-start from this commit."
+  },
+  "s1f_git_identity_repair_phase_b_20261015": {
+    "request_id": "R75_S1F_GIT_IDENTITY_REPAIR_DRAFT_20261015",
+    "status": "FUNCTIONAL_PASS_WITH_CAPTURE_COMPLETENESS_NOT_CLOSED",
+    "execution_head": "d2a634facbc25bea1acd7be3e01474ddca0a5a08",
+    "execution_parent": "70339f7efd57be07946cf8665815534675787517",
+    "branch": "exp/round75-native-ppo-qualification",
+    "single_parent_launch_attempt": 1,
+    "real_cpu_python_processes": 1,
+    "functional_results": {
+      "case_count": 15,
+      "passed_true": 15,
+      "passed_false": 0,
+      "case_failed_exception_counter": 0,
+      "result_jsonl_stdout_consistent": true
+    },
+    "operation_counts": {
+      "numpy_import_attempt_completed": 1,
+      "torch_import_attempt_completed": 1,
+      "fixture_save_attempt_completed": 1,
+      "weights_only_load_attempt_completed": 1,
+      "fixture_read_attempt_completed": 1,
+      "scientific_checkpoint_or_model_loads": 0,
+      "optimizer_or_ppo_operations": 0,
+      "environments": 0,
+      "cuda_operations": 0,
+      "ledger_charges": 0
+    },
+    "capture_boundary": {
+      "parent_observation_exit_code": 0,
+      "actual_child_exit_code": null,
+      "actual_child_exit_time": "missing",
+      "end_to_end_capture_completeness_closed": false
+    },
+    "fixture": {
+      "bytes": 19497,
+      "sha256": "69d6472683ccd7067dad15db35467d35584b05ea3815e7e2f53e56843a438113",
+      "weights_only": true
+    },
+    "derived_documents": {
+      "report": "ROUND75_S1F_GIT_IDENTITY_REPAIR_B_REPORT.md",
+      "verdict": "ROUND75_S1F_GIT_IDENTITY_REPAIR_B_VERDICT.json",
+      "task_state": "R75_S1F_GIT_IDENTITY_REPAIR_PHASE_B_TASK_STATE.json"
+    },
+    "before_inventory": {
+      "sha256": "f52c88f149f37f6033b3521a2d7d50f64444e423cfdd2bf34303bdb70544165d",
+      "entries": 108,
+      "contains_phase_a_logs_despite_scope_label": true
+    },
+    "after_inventory": {
+      "sha256": "d6ef2b3b17fe17ce6bf68c466ee14cb0376740b7053d523013c3f0286ad049b2",
+      "entries": 108,
+      "normalized_unique_before_entries": 99,
+      "normalized_unchanged": 99,
+      "raw_full_added_artifacts": 9,
+      "changed_prior_entries": 0,
+      "missing_prior_entries": 0
+    },
+    "boundary": "Non-neural technical qualification only; not scientific S1, native PPO, checkpoint qualification, or deployment approval."
   }
 }
