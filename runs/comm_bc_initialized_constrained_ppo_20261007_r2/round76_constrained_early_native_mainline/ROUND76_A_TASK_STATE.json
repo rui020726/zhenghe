@@ -1,0 +1,348 @@
+{
+  "kind": "round76-a-task-state/1",
+  "request_id": "R76_A_MAINLINE_WIRING_PREPARATION_20261016",
+  "phase": "A",
+  "status": "A_PREPARATION_COMPLETE",
+  "created_at_source_branch_head": "dc363721cc2954eabce04e34e2ccc578866ee468",
+  "source_branch": "exp/round75-native-ppo-qualification",
+  "working_branch": "exp/round76-constrained-early-native-mainline",
+  "source_review_acceptance": {
+    "accepted_by": "decision_chat",
+    "status": "A0_SOURCE_ACCEPTED",
+    "scope_note": "accepts R76 A source and pure interface preparation only; does not validate real R71 NN restore or scientific benefit",
+    "frozen_sources": [
+      {"file": "r76_guard.py", "sha256": "61b840977f6299b5435ad8406013bf67ca767bb3393e5dec2246e0e46887c39a"},
+      {"file": "r76_runtime.py", "sha256": "d9abf99b370567c3bdfd9e4aaf9161caa151ed1759ec26ac44e8a905fe8b2e78"},
+      {"file": "r76_native.py", "sha256": "4703f380030f6b7c0e22c948b0e05ca3d2abab1bd9b4dcc26d24441c7118bbb1"},
+      {"file": "r76_execute.py", "sha256": "bec6b89987ff7e6163fec501a15819afbecb2af0d984662bc1cd9b474c05dc0f"},
+      {"file": "r76_cli.py", "sha256": "9dbcdd6d7ea975322792032a0eac225399e18f7c56b3d89bdb2c6a0c193aaf48"},
+      {"file": "r76_contracts.py", "sha256": "005b50c7ee2e9ce062110e8b3190152f2a578df13d1d2a5730d8588ea8a930eb"},
+      {"file": "r76_episode_protocol.py", "sha256": "b7071b2a99d842334f6941790cafa07d3be8289e4ceb247b8977f896b9d27ba0"},
+      {"file": "test_r76_a0_source_review.py", "sha256": "92226a4c0cecc24780633c7a76f099fdf88b8d1a6fb15a4551cc386496b64566"}
+    ]
+  },
+  "a1_p1_release": {
+    "process": 1,
+    "python_process_limit": 2,
+    "fixed_case_executions_limit": 16,
+    "command": "D:/project_env/python.exe test_r76_a0_source_review.py -v",
+    "cwd": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round76_constrained_early_native_mainline",
+    "evidence_root": "raw/a1/R76_A1_P1_STDLIB_20261016",
+    "released_at_utc_note": "actual UTC recorded in CreateNew claim"
+  },
+  "a1_p1_execution": {
+    "status": "TECHNICAL_FAILURE",
+    "actual_pid": 75020,
+    "os_exit": 1,
+    "started_utc": "2026-10-16T07:57:31.1644915Z",
+    "ended_utc": "2026-10-16T07:57:31.6684558Z",
+    "python_process_used": 1,
+    "case_executions_observed": 8,
+    "distinct_case_names_observed": 8,
+    "test_result": "FAILED",
+    "failure": "test_4_parameter_partition_and_optimizer_coverage_are_r76_exact: r76_runtime.py:198 AttributeError: Module object has no attribute parameters",
+    "rerun_attempted": false,
+    "second_python_released": false,
+    "evidence_root": "raw/a1/R76_A1_P1_STDLIB_20261016",
+    "claim_sha256": "288c0d0488200a02e2b7ab078127258f1cb5a7af1ea83703dc09d80aa9c5d67f",
+    "pid_witness_sha256": "bd4802574e4e77ad1c02b67fca45ea8916ce790c3ca2e09218b527e92387739d",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "34e0dedb9a5954303904cfba48542fc8d2ca2e14f432263a88cc366b0b8d93ad",
+    "receipt_sha256": "82d1aa43337c04e21c1f4e0b8ced1b5d9d3c2d5f54700caa6a8bdf092ef30847",
+    "r76_sources_unchanged": true,
+    "old_r75_production_nine_unchanged": true,
+    "protected_files_unchanged": true
+  },
+  "a1_p2_execution": {
+    "status": "PASS",
+    "actual_pid": 66532,
+    "os_exit": 0,
+    "started_utc": "2026-10-16T08:06:59.3333978Z",
+    "ended_utc": "2026-10-16T08:06:59.7042181Z",
+    "python_process_used": 2,
+    "case_executions_observed": 8,
+    "distinct_case_names_observed": 8,
+    "test_result": "PASS",
+    "rerun_attempted": false,
+    "third_python_released": false,
+    "evidence_root": "raw/a1/R76_A1_P2_STDLIB_20261016",
+    "claim_sha256": "512e2eba23226d529539feb3c6df3b346388809b7e9dce145e72eaf80a18bad3",
+    "before_json_sha256": "c24da348cc2e93a5b1eb244cbac08f45fb83f302dfdca2a31d656aaf06c28d4e",
+    "pid_witness_sha256": "b5e7944d8b0ecde00db1f6a35d17b046a8642634af714cf426b8669c44a515be",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "f2d3e8cf2c3ce9303c83435790feac9daac1ddc42b2410445c2069305a954073",
+    "receipt_sha256": "fd5810c9d0636438c2fb92d00216deb080d7dbc86baefacb052427b5f879e24a",
+    "r76_sources_unchanged": true,
+    "old_r75_production_nine_unchanged": true,
+    "protected_files_unchanged": true,
+    "old_r75_total_ledger": {"bytes": 55011, "events": 240, "sha256": "f6095bd1b8c9d95c6005ad368d0a69e6e9f7af25a222abf760bcba7455062124"}
+  },
+  "final_closure": {
+    "status": "A_PREPARATION_COMPLETE",
+    "tested_parent_head": "dc363721cc2954eabce04e34e2ccc578866ee468",
+    "frozen_test_sha256": "f6ec2ebdbca568f0d770afbbd2bfdc06d81e767cb0a44b847ef3705fb54452f9",
+    "registered_real_contract_sha256": null,
+    "real_execution_next": "STOP_NO_REAL_EXECUTION_AUTHORIZED",
+    "scope_note": "preparation complete; does not grant real R71 NN restore, disk checkpoint qualification, optimizer, environment, training, evaluation or communication-benefit authority"
+  },
+  "authorization": {
+    "human_request": "授权完整 R76 A，先审源后纯测试",
+    "current_gate": "R76 A preparation complete; STOP_NO_REAL_EXECUTION_AUTHORIZED",
+    "pure_python": {
+      "used": 2,
+      "limit": 2,
+      "remaining": 0,
+      "case_executions_used": 16,
+      "case_executions_limit": 16,
+      "case_executions_remaining": 0
+    },
+    "torch_or_numpy_import": 0,
+    "model_load_or_construct": 0,
+    "forward_backward": 0,
+    "optimizer_or_ppo": 0,
+    "environment": 0,
+    "training": 0,
+    "evaluation": 0,
+    "production_ledger_construct": 0,
+    "real_checkpoint_serializer_call": 0,
+    "rng_restore": 0,
+    "new_experiments": 0
+  },
+  "preserved_prior_consumption": {
+    "r74_lower_bound": "at least 16 physical optimizer attempts; missing originals remain missing",
+    "r75_physical_optimizer_steps": 14,
+    "r75_offline_trunk_target_rows": 2520,
+    "r75_joint_records": 3,
+    "r75_environment_constructions": 0,
+    "r75_nine_nn_steps": "9/9",
+    "r75_b1_b2_parent": "2/2",
+    "r75_ar5_pure_process": "1/1"
+  },
+  "input_identity": {
+    "r71_init_s11": {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round71_critic_initialization_calibration/raw/checkpoints/v2_train_s11_init.pt",
+      "bytes": 50111,
+      "sha256": "fc25ead19bce38d00ae3bf619971ab717084711bdd2b5eb0431d1dda720a952f"
+    },
+    "r71_init_s22": {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round71_critic_initialization_calibration/raw/checkpoints/v2_train_s22_init.pt",
+      "bytes": 50175,
+      "sha256": "d95b9a27d5c28c8cd0b80c63b3539c78763bbaf53b79734a522e8e5a59cd8f81"
+    },
+    "r71_init_s33": {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round71_critic_initialization_calibration/raw/checkpoints/v2_train_s33_init.pt",
+      "bytes": 50175,
+      "sha256": "27baa262443a5ca6c6fb15bd60e0b294f6313324fe84cf386a2ac24377a874a9"
+    },
+    "r71_checkpoint_index": {
+      "sha256": "0c027d4817325bf4e02186d658ac52b0ccf6d9917a458380f72b8de8ea2a5009"
+    },
+    "r71_trial_execute_sha256": "66417acdfd72b15d9baf5f1b2a1524dcf09cc754e9e48af699c6a46159b18721",
+    "r71_runtime_binding_sha256": "b16396e01c5aa3f5d91ab99b026aa10c3646a562897e632d24579426aa3e9812",
+    "r68_execute_sha256": "c123dfe753effc5b6e35b8ce680e6bb1092a80a0d0deb40a0971df09e1c2cd3e",
+    "r75_frozen_sha256": "bb4bae98518cc482f4b733794ee1c3f93097c56c5b3e85d6fed2c65f2a72198e",
+    "canonical_v2_trainer_sha256": "ffb6953034cbc2548e6f7458a7c1d560fe3337ad3ccb846543bb8f6f4dcc05a6",
+    "canonical_r42_one_shot_sha256": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d"
+  },
+  "protected_files": [
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_CURRENT_TASK.json",
+      "sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+      "policy": "read-only, never modified, staged, or committed"
+    },
+    {
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V6_STOP_STATE.json",
+      "sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+      "policy": "read-only, never modified, staged, or committed"
+    }
+  ],
+  "a0_outputs_pending_review": [
+    {
+      "file": "r76_guard.py",
+      "sha256": "85ae44adf9fc1eaae3fdadf66dc477bcc245a8689986867e1a8131b9598dcd5f"
+    },
+    {
+      "file": "r76_runtime.py",
+      "sha256": "750efedb2fe8fb6c5b791ab0d0e77620b4bb2517f58df7fdd0d5570da8a897fc"
+    },
+    {
+      "file": "r76_native.py",
+      "sha256": "6ec93d9b2788c3c29f10ea15bbfad7cbb4077067bd6fd786dc36dd8acaaf75a2"
+    },
+    {
+      "file": "r76_execute.py",
+      "sha256": "7348f4c82c4abade28205e3350819b6b8f33d538dcb3b79b79878fd81debe8b0"
+    },
+    {
+      "file": "r76_cli.py",
+      "sha256": "97ae8946b1b497cbcb9ca43b6d0a6001c7f7cd2ee30967cb1d1f55e40af4ccbb"
+    },
+    {
+      "file": "r76_contracts.py",
+      "sha256": "f7d03162f6f707bd7e1e888e005bc0120164b556328294b6c36e2b4277a1e51b"
+    },
+    {
+      "file": "r76_episode_protocol.py",
+      "sha256": "b7071b2a99d842334f6941790cafa07d3be8289e4ceb247b8977f896b9d27ba0"
+    },
+    {
+      "file": "test_r76_a0_source_review.py",
+      "sha256": "2ebdd471870a5e2543638d620719e9163920e66997ee1c0046b345db2c370a9a"
+    }
+  ],
+  "repair_status": {
+    "runtime_call_chain": "closed in source",
+    "module_sha": "added and wired into install/save/load",
+    "parameter_object_mapping": "implemented with stable names, eight-object one-to-one check and trunk rejection",
+    "r71_identity": "actual *_sha256 keys and source-file hash are used; payload mask extras accepted without weakening required mask",
+    "fixed_8_tests": "real interfaces, real module names, real source hash, stable mapping, legal state, scalar task_stream, pre-registered technical attempt and CLI main early refusal",
+    "collector_tape_seam": "candidate audit/quote validation now matches r42_one_shot: forced omitted, free+masked required, closed audit required but quote optional; executable/block reasons, requested, decision class, shadow values and one-shot states are type/relationship checked",
+    "real_training_loop": "r76_execute.py now wires R71 INIT, collector, runner, persisted row/tape, native update, dual/cursor and checkpoint save/load",
+    "cli": "main still refuses before lazy real import without a valid permit; with a valid permit it calls the frozen driver",
+    "guard_pin": "refreshed to the current r76_guard.py SHA"
+  },
+  "review_findings": {
+    "runtime": [
+      "build_r76_controller_from_r71_init reports source_sha256 although that value is not returned or assigned in build scope",
+      "parameter_object_mapping is called by checkpoint build and load but is not defined",
+      "save_r76_checkpoint does not supply the required module_sha callback to build_r76_checkpoint_payload"
+    ],
+    "r71_init_validation": [
+      "calibration identity must use the actual *_sha256 keys",
+      "registered versus payload frozen-mask checks must retain required identity while accepting payload-only frozen_sha256/note"
+    ],
+    "fixed_8_tests": [
+      "test2 still uses ideal bare identity keys and does not bind real source files",
+      "test3 installs ideal r66/r68 module aliases instead of actual r66_frozen/r68_frozen",
+      "test4 checks AST/source text and an ideal mask rather than real parameter enumeration and optimizer coverage",
+      "test5 resume positives are not legal full-state records and fail to use actual parameter-object names/source identity",
+      "test6 task_stream still uses a nested dict instead of the real scalar stream",
+      "test7 does not pre-register a technical attempt and offline reserve total is misstated",
+      "test8 does not exercise CLI main early refusal and absence of an attempt directory"
+    ],
+    "mainline_wiring": [
+      "a complete real training loop and save/load binding are still missing",
+      "r76_cli.main currently refuses unconditionally after preflight"
+    ]
+  },
+  "resume_next": [
+    "repair runtime call chain and parameter-object mapping without Python execution",
+    "adapt fixed 8 tests to real interfaces and counters",
+    "implement the real training-loop source and gated CLI entrypoint",
+    "refresh the r76_guard source pin after its final edit",
+    "refresh task state and source SHAs; stop for decision-end A0 review",
+    "keep Python, tests, Torch/NumPy, model, optimizer, environment and checkpoint serializer calls at 0"
+  ],
+  "notes": [
+    "No Python, tests, syntax checks, AST execution, Torch/NumPy, model, optimizer, PPO, environment or checkpoint serializer calls were run in this repair turn; PASS may not be claimed.",
+    "The untracked analysis/round59-communication-decision-density/r59_analysis_run.log remains untouched."
+  ],
+  "a0_source_review_revision": {
+    "status": "A0_SOURCE_NOT_ACCEPTED",
+    "scope": "source-only edits and read-only PowerShell/git inspection; no Python, tests, syntax checks, AST execution, Torch/NumPy, model, optimizer, PPO, environment, checkpoint serializer, RNG restore or production ledger construction",
+    "changes": [
+      "parameter_object_mapping now uses explicit early/late/task/cost module objects without eager alias fallback",
+      "live cfg validation requires controller_module, matching the real R68 cfg key",
+      "module_sha sorts named parameters to match r68._module_sha",
+      "R71 INIT source bytes/SHA are validated before torch.load; fresh INIT and full resume use r66.fresh_partitioned_controller(empty architecture), not INIT replay or ep0 load",
+      "driver binds common.scenario_order, r68_execute.reuse_r66_references, r68_execute._r68_atomic_run and R68Ledger.is_complete",
+      "production_training and self-issued nonzero caps are removed; production resources remain zero-capped",
+      "same trunk meter is installed before rollouts and environment construction is charged through the R76 resource seam",
+      "episode reload checks row seed/episode/scenario/lambda identity; rolling checkpoint is loaded before fresh state construction; before/after batch records and checkpoints are wired",
+      "checkpoint source identity now requires the validated source manifest; source manifest binds actual canonical v2_trainer 0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841, not the ffb6 repository mirror"
+    ],
+    "current_outputs": [
+      {"file": "r76_guard.py", "sha256": "f4f27d3a889312a1f9d2b5bd7b12c93e75e49b8333c7cd14b3440c924e273c1a"},
+      {"file": "r76_runtime.py", "sha256": "4a8d9f19ec1ffc31e7a7def1d38d5e6f3a56851b882e19016c6a7b2f607d66c6"},
+      {"file": "r76_native.py", "sha256": "398d97e15fa2e92082c21c75dec74269cfd19f8635bd4c4e5856174e1cd8d7c6"},
+      {"file": "r76_execute.py", "sha256": "df3d69622c54c402267401f71981772d3efa9244717f7c52aedf4a7e8246d182"},
+      {"file": "r76_cli.py", "sha256": "97ae8946b1b497cbcb9ca43b6d0a6001c7f7cd2ee30967cb1d1f55e40af4ccbb"},
+      {"file": "r76_contracts.py", "sha256": "369f12986495415fd3baec0820c6e1223b7d8667446ca3d8c8609d8016faed1e"},
+      {"file": "r76_episode_protocol.py", "sha256": "b7071b2a99d842334f6941790cafa07d3be8289e4ceb247b8977f896b9d27ba0"},
+      {"file": "test_r76_a0_source_review.py", "sha256": "06358520541183c1aa1093f8856bab211edbf0faa36a6b201b53a959a61248f7"}
+    ],
+    "consumption": {
+      "python_processes": 0,
+      "fixed_case_executions": 0,
+      "torch_or_numpy_import": 0,
+      "model_load_or_construct": 0,
+      "forward_backward": 0,
+      "optimizer_or_ppo": 0,
+      "environment": 0,
+      "checkpoint_serializer_call": 0,
+      "rng_restore": 0,
+      "production_ledger_construct": 0
+    },
+    "pass_claimed": false
+  },
+  "a0_consolidation_requirements": {
+    "status": "registered_for_source_repair",
+    "pure_tests": [
+      "test2 records validate/load/hash/freeze/hash event order and rejects bad source before factory/unfreeze",
+      "test3 attaches native.module_sha and verifies actual binding/delegation parameters without passing controller_module as controller",
+      "test4 exercises real pure partition/assert/freeze helpers and independently enumerates 12 objects as 4 frozen plus 8 trainable",
+      "test5 validates a real pinned source manifest plus derivable data identity rather than six all-zero placeholders",
+      "test7 pre-registers technical fixture charges, uses matching prefixes, and validates cumulative/refusal totals",
+      "test8 rejects an apparently complete issued permit when no separately frozen real contract is registered, before lazy imports"
+    ],
+    "resource_contract": [
+      "separate driver hash from real execution contract",
+      "require an external contract binding request/task/branch/head, canonical root, source manifest, matrix, and caps",
+      "register no real contract in A0 and fail before real imports when none is registered",
+      "route validated contract caps into resources and environment active-claim seams",
+      "reject trunk meter reuse across different resources or offline guards"
+    ],
+    "resume_identity": [
+      "compare checkpoint source manifest with the real pinned manifest",
+      "bind seed, scenario order, references/config/contract, and data identity into payload validation and loading",
+      "reject seed filename/state mismatch before architecture, optimizer, or RNG restore",
+      "verify restored parameter names, groups/slots, mask, five modules, dual/RNG/cursor"
+    ],
+    "batch_durability": [
+      "record actual rollout lambda and per-batch lambda history",
+      "atomically and durably distinguish preupdate, postupdate, committed, and gated states",
+      "validate hash/cursor/RNG evidence on restart and stop on dangling or partial work"
+    ],
+    "native_guard_pin": "refresh EXPECTED_R76_GUARD_SOURCE_SHA256 after final guard edit"
+  },
+  "a0_consolidation_revision": {
+    "status": "HISTORICAL_A0_SOURCE_NOT_ACCEPTED",
+    "status_meaning": "historical as-of snapshot before decision-chat acceptance and P1/P2; not current authorization state and not current consumption",
+    "scope": "historical as-of snapshot: source-only edits and read-only PowerShell inspection; no Python, AST execution, tests, Torch/NumPy, model, NN, optimizer, PPO, environment, checkpoint serializer or RNG restore",
+    "closure_mapping": {
+      "test2": "event sequence records factory, pre-freeze hashes, freeze, and post-freeze hashes; untrained INIT is rejected before architecture construction",
+      "test3": "the wrapper is called only with update_index, while it passes resources and physical_step_category to FakeNative; parameters and absent self-issued optimizer are verified",
+      "test4": "pure partition/assert/freeze functions are executed on fake parameters with an independent 12-object, 4-frozen/8-trainable enumeration",
+      "test5": "the real pinned source manifest, exact config identity, reused-reference identity, data identity, and contract hash are required; seed context mismatch is rejected",
+      "test7": "both physical and offline technical charges are pre-registered with matching prefixes and cumulative totals are asserted",
+      "test8": "an apparently complete issued permit is rejected when no registered external contract exists, before lazy real imports",
+      "resource_contract": "driver hash is separated from an external contract; no contract is registered; CLI rejects before r76_execute import; each production guard receives its contract unit caps and r40/common launch caps bind to the contract environment caps",
+      "resume_identity": "full payload now pins source manifest, data identity, references, live config, contract hash, seed, optimizer names/groups/slots, mask, RNG schema and cursor",
+      "batch_durability": "lambda_at_rollout is set per batch; preupdate/ready/postupdate/committed records use atomic file replace and fsync; restart validates record hashes, cursor chain, current rolling hash only for the last commit, and first gate"
+    },
+    "current_outputs": [
+      {"file": "r76_guard.py", "sha256": "61b840977f6299b5435ad8406013bf67ca767bb3393e5dec2246e0e46887c39a"},
+      {"file": "r76_runtime.py", "sha256": "d9abf99b370567c3bdfd9e4aaf9161caa151ed1759ec26ac44e8a905fe8b2e78"},
+      {"file": "r76_native.py", "sha256": "4703f380030f6b7c0e22c948b0e05ca3d2abab1bd9b4dcc26d24441c7118bbb1"},
+      {"file": "r76_execute.py", "sha256": "bec6b89987ff7e6163fec501a15819afbecb2af0d984662bc1cd9b474c05dc0f"},
+      {"file": "r76_cli.py", "sha256": "9dbcdd6d7ea975322792032a0eac225399e18f7c56b3d89bdb2c6a0c193aaf48"},
+      {"file": "r76_contracts.py", "sha256": "005b50c7ee2e9ce062110e8b3190152f2a578df13d1d2a5730d8588ea8a930eb"},
+      {"file": "r76_episode_protocol.py", "sha256": "b7071b2a99d842334f6941790cafa07d3be8289e4ceb247b8977f896b9d27ba0"},
+      {"file": "test_r76_a0_source_review.py", "sha256": "f6ec2ebdbca568f0d770afbbd2bfdc06d81e767cb0a44b847ef3705fb54452f9"}
+    ],
+    "expected_guard_pin": "61b840977f6299b5435ad8406013bf67ca767bb3393e5dec2246e0e46887c39a",
+    "consumption": {
+      "python_processes": 0,
+      "fixed_case_executions": 0,
+      "torch_or_numpy_import": 0,
+      "model_load_or_construct": 0,
+      "forward_backward": 0,
+      "optimizer_or_ppo": 0,
+      "environment": 0,
+      "checkpoint_serializer_call": 0,
+      "rng_restore": 0,
+      "production_ledger_construct": 0
+    },
+    "pass_claimed": false
+  }
+}
