@@ -6,7 +6,7 @@
   "base_head": "f509ea35a0d0b65769079fa8e5e027565d8672f3",
   "parent_head": "dc363721cc2954eabce04e34e2ccc578866ee468",
   "stage": "B0_SOURCE_PREPARATION",
-  "status": "B2_RELEASED_NOT_STARTED",
+  "status": "B2_FAILED_AFTER_PARENT_LAUNCH",
   "human_authorization": {
     "approval_text_title": "ROUND76_B_R71_NATIVE_RESTORE_QUALIFICATION_REVIEW_20261016",
     "scope": "full R76 B with gated B0 source review, B1 pure tests, and one real B2 qualification",
@@ -154,7 +154,7 @@
     "historical_preparation_notes": "Earlier four B0 files were created outside the repo and moved into the authorized R76 directory; the move left a PowerShell non-terminating error record. Those originals are preserved and no execution was attributed to them."
   },
   "b2_release_state": {
-    "status": "released_not_started",
+    "status": "failed_after_parent_launch",
     "b1_actual_consumption": {
       "python_processes": 2,
       "fixed_case_executions": 6,
@@ -227,9 +227,29 @@
         "tape_bytes": 170262,
         "tape_sha256": "4e777d09c1038e51b7fc8aecf43ca47194a2d96ae231bfb573165a1d916bab1d"
       }
-    ],
+  ],
     "e0_attempt_note": "e0 original attempt2 is the historical adopted attempt; attempt1 failure remains preserved and is neither rewritten nor regenerated"
   },
+  "b2_execution_log": [
+    {
+      "stage": "B2",
+      "status": "FAILED_BEFORE_MODEL_OR_GUARD",
+      "request_id": "R76_B0_SOURCE_PREPARATION_20261016",
+      "parent_launches": 1,
+      "cpu_nn_python_processes": 1,
+      "parent_pid": 69840,
+      "child_pid": 63832,
+      "os_exit_code": 1,
+      "optimizer_steps": 0,
+      "checkpoint_loads": 0,
+      "checkpoint_saves": 0,
+      "environment_constructions": 0,
+      "input_counts": null,
+      "failed_call": "pre_model_input_counts",
+      "failure": "EpisodeProtocolError: tape record 9 one-shot state contains an invalid target or state",
+      "evidence_root": "raw/qualification/R76_B2_PARENT_CAPTURE_20261016"
+    }
+  ],
   "scope_note": "B0 is source preparation only; it does not run tests, create a permit or contract, import Torch/NumPy, construct/load a model, run forward/backward, optimizer, environment, real RNG restore, serializer, or production ledger. B1/B2 remain gated behind explicit source-review acceptance and same-task continuation.",
   "a_stage_preservation": {
     "status": "A final accepted artifacts remain unchanged",

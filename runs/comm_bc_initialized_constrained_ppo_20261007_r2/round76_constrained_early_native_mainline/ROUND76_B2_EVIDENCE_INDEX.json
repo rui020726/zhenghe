@@ -1,0 +1,37 @@
+{
+  "kind": "round76-b2-failure-evidence-index/1",
+  "status": "FAILED_BEFORE_MODEL_OR_GUARD",
+  "branch": "exp/round76-constrained-early-native-mainline",
+  "frozen_source_head": "c9eed7f18cd19defabd28288a0ebef4bd85c9bef",
+  "final_head": "c9eed7f18cd19defabd28288a0ebef4bd85c9bef",
+  "contract_path": "raw/qualification/r76_b_qualification_contract_20261016.json",
+  "contract_sha256": "6db44b625894c4bcd1d7a6ba926c3f9235e98e7c834d77a70dae3593d8ccd484",
+  "permit_path": "raw/qualification/r76_b_qualification_permit_20261016.json",
+  "permit_sha256": "40b16faf2f3d43ef3a99de3c9bb0729a982c1de78b24e1be5991976eb3cd7599",
+  "parent_capture": "raw/qualification/R76_B2_PARENT_CAPTURE_20261016",
+  "parent_claim_sha256": "910168d8c73675006f158b7880b2984359f22e7e2168708f38e978a2f95505b3",
+  "parent_receipt_sha256": "4fd6803b42efbe24abbb241440ca195a29efd33ca9d27ae854a214b1d9fc12ad",
+  "child_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "child_stderr_sha256": "b9d1e9633cec90b9eee60d3d27e5eb77275fd26d0305a164e76fb2c8e95d5cb5",
+  "consumption": {
+    "b2_parent_launches": 1,
+    "b2_cpu_nn_python_process_attempts": 1,
+    "optimizer_steps": 0,
+    "checkpoint_loads": 0,
+    "checkpoint_saves": 0,
+    "environment_constructions": 0,
+    "b1_python_processes": 2,
+    "b1_fixed_case_executions": 6
+  },
+  "guard_state": {
+    "r76_total_ledger_created": false,
+    "counter_files_created": false,
+    "checkpoints_created": false,
+    "scientific_phases_executed": []
+  },
+  "failure": {
+    "call": "pre_model_input_counts",
+    "error_type": "r76_episode_protocol.EpisodeProtocolError",
+    "message": "tape record 9 one-shot state contains an invalid target or state"
+  }
+}
