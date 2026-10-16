@@ -1,0 +1,90 @@
+{
+  "kind": "round75-s1g-ar5-task-state/1",
+  "task_id": "R75_S1G_AR5_LEDGER_SCHEMA_READONLY_REPAIR_20261015",
+  "phase": "T_RELEASED",
+  "authorization": {
+    "human": "approved_A_R5_source_then_one_pure_test; T formally released after P source review",
+    "t_released": true,
+    "t_started": false,
+    "pure_python_processes_allowed": 1,
+    "pure_python_processes_used": 0,
+    "b2_rerun_allowed": false,
+    "b2_rerun_used": 0,
+    "nn_or_environment_allowed": false
+  },
+  "historical_budgets": {
+    "original_b1_b2_parent_attempts": "2 / 2",
+    "original_g_physical_steps": "9 / 9",
+    "r75_cumulative_physical_optimizer_step": {
+      "used_normal": 10,
+      "used_reserve": 4,
+      "total": 14
+    },
+    "r75_cumulative_offline_trunk_target_row_normal": 2520,
+    "r75_cumulative_joint_record_normal": 3,
+    "r75_cumulative_environment_construction": 0
+  },
+  "execution_identity": {
+    "branch": "exp/round75-native-ppo-qualification",
+    "python": "D:/project_env/python.exe",
+    "start_head": "6f29a56b4a5f7e89a824bf522b7a220e3898643a",
+    "start_parent": "83b19fba4fd8ebf0e7a0fe1e32b42147c1071d06"
+  },
+  "allowed_p_changes": [
+    "r75_s1g_outer_exec.py:ledger_snapshot and its in-function private pure helpers",
+    "test_r75_s1g_ledger_schema_repair.py",
+    "ROUND75_S1G_AR5_TASK_STATE.json"
+  ],
+  "prepared_identity": {
+    "r75_s1g_outer_exec.py": "2f4d76bd6dece5ebda88d66626832b80f8acf6adc84d0358f7958a2932749130",
+    "test_r75_s1g_ledger_schema_repair.py": "36f09d78ba2978c607397d85d026ff2487bdcc44653f4093314bb890526eff8e"
+  },
+  "supplementary_fix_scope": {
+    "global_ledger_failure": "read_problems, unparsed, invalid events, unknown units and ledger used_after failures mark affected units unknown; all units are marked when the affected subset cannot be demarcated",
+    "unknown_semantics": "used_normal, used_reserve, refusals and charged_events remain unknown, never unknown-to-zero; original problems and observed metadata are retained",
+    "case4_fixture": "guard final used_after is 3 while central total cumulative remains 6",
+    "fixture_kind": "guard and ledger kind use the real four-unit hyphenated mapping"
+  },
+  "fix_scope": {
+    "used_after_semantics": "total used_normal + used_reserve, not category cumulative",
+    "refusal_normalization": "guard refused and central charge_refused are compared as the same logical event; source objects are not rewritten",
+    "event_sequence": "guard and central charged/refused sequences are compared by normalized event/category/n/what/used_after; unix is not compared",
+    "unparsed_lines": "missing ledgers, bad lines, invalid schemas and unknown charged/refused units fail closed"
+  },
+  "test_contract": {
+    "cases": 6,
+    "pure_stdlib": true,
+    "torch_or_nn": false,
+    "real_guard_construction": false,
+    "fixture_root": "raw/ar5_ledger_schema_fixture/R75_S1G_AR5_LEDGER_SCHEMA_READONLY_REPAIR_20261015"
+  },
+  "T_execution": {
+    "status": "PASS",
+    "actual_pid": 46272,
+    "os_exit": 0,
+    "parent_shell_exit_not_substituted": true,
+    "pure_stdlib_python_process_used": 1,
+    "pure_stdlib_python_process_max": 1,
+    "claim": "raw/ar5_t/R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016/claim.json",
+    "receipt": "raw/ar5_t/R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016/receipt.json",
+    "stdout": "raw/ar5_t/R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016/stdout.log",
+    "stderr": "raw/ar5_t/R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016/stderr.log",
+    "tests": {
+      "result": "OK",
+      "errors": 0,
+      "failures": 0,
+      "cases": 6
+    },
+    "production_nine_unchanged": "9/9",
+    "fixture": {
+      "task_root": "raw/ar5_ledger_schema_fixture/R75_S1G_AR5_LEDGER_SCHEMA_READONLY_REPAIR_20261015",
+      "files": 25,
+      "dirs": 5
+    },
+    "receipt_derived_errors": {
+      "production_nine_unchanged_false": true,
+      "fixture_dirs_files_1_1": true
+    },
+    "no_NN_rerun": true
+  }
+}

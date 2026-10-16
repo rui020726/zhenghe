@@ -1,0 +1,57 @@
+{
+  "kind": "round75-s1g-ar5-manifest/1",
+  "task_id": "R75_S1G_AR5_LEDGER_SCHEMA_READONLY_REPAIR_20261015",
+  "committed_files": [
+    {
+      "role": "outer parser",
+      "sha256": "2f4d76bd6dece5ebda88d66626832b80f8acf6adc84d0358f7958a2932749130",
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/r75_s1g_outer_exec.py"
+    },
+    {
+      "role": "six-case test",
+      "sha256": "36f09d78ba2978c607397d85d026ff2487bdcc44653f4093314bb890526eff8e",
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/test_r75_s1g_ledger_schema_repair.py"
+    },
+    {
+      "role": "post-run task state",
+      "sha256": "19940ca5eee3dc2183036342c7932953a6a3c6bab209f192961fc1564981ab26",
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_AR5_TASK_STATE.json"
+    },
+    {
+      "role": "derived report",
+      "sha256": "9b24178ba23824b78a5fef43405f5fdf56bf015394089019ed91b339d23aa467",
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_AR5_REPORT.md"
+    },
+    {
+      "role": "derived verdict",
+      "sha256": "c7c1d9ef814e88b4d7f3fb9b5f02d4a0e1223d8bd8a9c0564e3834bc5bf3db97",
+      "path": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round75_native_ppo_qualification/ROUND75_S1G_AR5_VERDICT.json"
+    }
+  ],
+  "git_external_evidence": [
+    {
+      "path": "raw/ar5_t/R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016/claim.json",
+      "sha256": "57cfa35f0702b445d082401f962c97dc076c4c09ff35365a17bc409bbb303dde"
+    },
+    {
+      "path": "raw/ar5_t/R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016/receipt.json",
+      "sha256": "2d9be3b2e64dcb183ecc7404b533f1946a421f7fd3eec0cdf9975bac02e10313"
+    },
+    {
+      "path": "raw/ar5_t/R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016/stdout.log",
+      "sha256": "658a759ea1a7ea2b2feef6a62e71de97cd4161cd68f13142b725165488f514a1"
+    },
+    {
+      "path": "raw/ar5_t/R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016/stderr.log",
+      "sha256": "ffc85ae3ed8cc5feb5db315d317b06115c7e454c23d0f83b6619138160e523d3"
+    }
+  ],
+  "derived_receipt_errata": {
+    "independent_production_unchanged": "9/9",
+    "actual_fixture_dirs": 5,
+    "fixture_dirs_files_1_1": false,
+    "production_nine_unchanged_false": false,
+    "actual_fixture_files": 25
+  },
+  "delivered_head_read_from_git_after_commit": true
+}

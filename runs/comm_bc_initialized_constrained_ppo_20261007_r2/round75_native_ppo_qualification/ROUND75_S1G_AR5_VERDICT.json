@@ -1,0 +1,82 @@
+{
+  "kind": "round75-s1g-ar5-verdict/1",
+  "task_id": "R75_S1G_AR5_LEDGER_SCHEMA_READONLY_REPAIR_20261015",
+  "status": "PASS",
+  "start_head": "6f29a56b4a5f7e89a824bf522b7a220e3898643a",
+  "source_identity": {
+    "test_r75_s1g_ledger_schema_repair": "36f09d78ba2978c607397d85d026ff2487bdcc44653f4093314bb890526eff8e",
+    "r75_s1g_outer_exec": "2f4d76bd6dece5ebda88d66626832b80f8acf6adc84d0358f7958a2932749130",
+    "post_run_state": "19940ca5eee3dc2183036342c7932953a6a3c6bab209f192961fc1564981ab26"
+  },
+  "execution": {
+    "parent_shell_exit_not_substituted": true,
+    "python": "D:\\project_env\\python.exe",
+    "pure_stdlib_python_process_used": 1,
+    "pure_stdlib_python_process_max": 1,
+    "actual_pid": 46272,
+    "python_started": true,
+    "os_exit": 0
+  },
+  "tests": {
+    "result": "OK",
+    "stderr_nonempty_is_normal": true,
+    "cases": 6,
+    "errors": 0,
+    "stderr_summary": "Ran 6 tests in 0.281s OK",
+    "failures": 0
+  },
+  "actual_case1_snapshot": {
+    "total_ledger_events": 240,
+    "reconciliation_ok": true,
+    "sha256": "658a759ea1a7ea2b2feef6a62e71de97cd4161cd68f13142b725165488f514a1",
+    "per_unit": {
+      "joint_record": {
+        "used_normal": 3
+      },
+      "environment_construction": {
+        "used_normal": 0
+      },
+      "physical_optimizer_step": {
+        "used_reserve": 4,
+        "used_normal": 10
+      },
+      "offline_trunk_target_row": {
+        "used_normal": 2520
+      }
+    },
+    "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round75_native_ppo_qualification\\raw\\ar5_t\\R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016\\stdout.log"
+  },
+  "production_nine": {
+    "total": 9,
+    "independent_equal": 9,
+    "unchanged": true,
+    "false_negative_cause": "single matched record auto-unwrapped to hashtable; Count=3 and x[0] misuse",
+    "receipt_false_negative_field": "production_nine_unchanged=false"
+  },
+  "fixture": {
+    "task_root": "raw/ar5_ledger_schema_fixture/R75_S1G_AR5_LEDGER_SCHEMA_READONLY_REPAIR_20261015",
+    "receipt_count_false_negative": true,
+    "false_negative_cause": "parent root counted and Measure-Object count misuse",
+    "files": 25,
+    "dirs": 5
+  },
+  "governance": {
+    "parent_prelaunch_claim_missing": true,
+    "ar5_t_claim_sha256": "57cfa35f0702b445d082401f962c97dc076c4c09ff35365a17bc409bbb303dde",
+    "old_b2_original_outer_reconciliation": false,
+    "ar5_t_prelaunch_claim": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round75_native_ppo_qualification\\raw\\ar5_t\\R75_S1G_AR5_T_LEDGER_SCHEMA_REPAIR_20261016\\claim.json",
+    "no_NN_rerun": true,
+    "receipt_sha256": "2d9be3b2e64dcb183ecc7404b533f1946a421f7fd3eec0cdf9975bac02e10313",
+    "stderr_sha256": "ffc85ae3ed8cc5feb5db315d317b06115c7e454c23d0f83b6619138160e523d3"
+  },
+  "boundaries": {
+    "checkpoint_write": 0,
+    "optimizer_or_PPO": 0,
+    "b2_rerun": 0,
+    "environment": 0
+  },
+  "protected": {
+    "ROUND46_CURRENT_TASK": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18"
+  }
+}
