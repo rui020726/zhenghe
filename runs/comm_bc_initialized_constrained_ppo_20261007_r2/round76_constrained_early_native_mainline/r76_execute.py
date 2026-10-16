@@ -131,8 +131,9 @@ def r76_fresh_controller(cfg: dict[str, Any], seed: int) -> tuple[Any, dict[str,
     payload = r76_native.torch.load(source_path, map_location="cpu", weights_only=False)
     controller, report = r76_runtime.build_r76_controller_from_r71_init(
         payload, registered_identity, seed=int(seed),
-        controller_factory=lambda value: _fresh_architecture_controller(
-            r76_native, value),
+        controller_factory=cfg.get(
+            "r76_controller_factory",
+            lambda value: _fresh_architecture_controller(r76_native, value)),
         module_sha=r76_native.module_sha,
         freeze_trunk_only=r76_native.freeze_trunk_only,
         source_file=source_path)

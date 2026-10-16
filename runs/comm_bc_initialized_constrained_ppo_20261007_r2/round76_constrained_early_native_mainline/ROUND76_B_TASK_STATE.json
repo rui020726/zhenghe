@@ -1,0 +1,238 @@
+{
+  "kind": "round76-b-task-state/1",
+  "request_id": "R76_B0_SOURCE_PREPARATION_20261016",
+  "task_id": "R76_B_R71_NATIVE_RESTORE_QUALIFICATION_20261016",
+  "branch": "exp/round76-constrained-early-native-mainline",
+  "base_head": "f509ea35a0d0b65769079fa8e5e027565d8672f3",
+  "parent_head": "dc363721cc2954eabce04e34e2ccc578866ee468",
+  "stage": "B0_SOURCE_PREPARATION",
+  "status": "B2_RELEASED_NOT_STARTED",
+  "human_authorization": {
+    "approval_text_title": "ROUND76_B_R71_NATIVE_RESTORE_QUALIFICATION_REVIEW_20261016",
+    "scope": "full R76 B with gated B0 source review, B1 pure tests, and one real B2 qualification",
+    "approval_source": "human in decision chat",
+    "note": "historical draft labels such as not-yet-authorized are superseded by the explicit human approval; numeric scope is unchanged"
+  },
+  "b1_execution_log": [
+    {
+      "stage": "B1_P1",
+      "status": "FAILED",
+      "request_id": "R76_B1_P1_STDLIB_20261016",
+      "test_source_sha256": "218be8868ca0eec84842a018b3e623490983837de4523de2d0447b6420afd01d",
+      "python_process": 1,
+      "case_executions": 3,
+      "distinct_cases": 3,
+      "os_exit_code": 1,
+      "child_pid": 54036,
+      "failed_case": "test_native_scientific_ast_and_guard_fixture_isolation",
+      "failure_class": "fixture TemporaryDirectory sandbox permission denied",
+      "evidence_root": "raw/b1_p1/R76_B1_P1_STDLIB_20261016"
+    },
+    {
+      "stage": "B1_P1_WRAPPER",
+      "status": "FAILED_BEFORE_PYTHON",
+      "note": "first PowerShell wrapper stopped on RunDir path validation; no Python process and no evidence root created; not counted as Python or NN parent consumption",
+      "evidence_root": null
+    },
+    {
+      "stage": "B1_P2",
+      "status": "PASS",
+      "request_id": "R76_B1_P2_STDLIB_20261016",
+      "test_source_sha256": "f379ca6f5ebd41301bc1d2a59f9364cdbb3347823a4a59157772e6e6f2fc9e17",
+      "python_process": 1,
+      "case_executions": 3,
+      "distinct_cases": 3,
+      "os_exit_code": 0,
+      "child_pid": 56276,
+      "evidence_root": "raw/b1_p2/R76_B1_P2_STDLIB_20261016"
+    }
+  ],
+  "caps": {
+    "kind": "round76-b-stage-caps/1",
+    "b0": {
+      "pure_stdlib_processes": 0,
+      "pure_stdlib_fixed_case_executions": 0
+    },
+    "b1": {
+      "pure_stdlib_processes": 2,
+      "pure_stdlib_fixed_case_executions": 6
+    },
+    "b2": {
+      "cpu_nn_python_processes": 1,
+      "normal_optimizer_steps": 17,
+      "reserve_optimizer_steps": 0,
+      "hard_optimizer_steps": 17,
+      "offline_trunk_target_rows": 15900,
+      "single_trunk_input_rows": 1024,
+      "environment_constructions": 0
+    },
+    "old_r75_hard_optimizer_steps_preserved": 16
+  },
+  "b0_test_cases": [
+    "test_contract_identity_permit_and_resource_role_refusals",
+    "test_b0_state_entry_and_pure_orchestrate_close_17_steps",
+    "test_native_scientific_ast_and_guard_fixture_isolation"
+  ],
+  "historical_b0_test_case_names": [
+    "test_caps_and_consumption_are_exact",
+    "test_b0_state_refuses_cross_stage_release"
+  ],
+  "b0_new_source_files": [
+    "r76_b_contracts.py",
+    "r76_b_driver.py",
+    "r76_b_entry.py",
+    "r76_b_parent.ps1",
+    "test_r76_b0_source_review.py"
+  ],
+  "consumption": {
+    "b0": {
+      "python_process": 0,
+      "fixed_case_execution": 0,
+      "model_construction_or_load": 0,
+      "forward_backward": 0,
+      "optimizer_step": 0,
+      "environment": 0,
+      "real_rng_restore": 0,
+      "serializer": 0,
+      "production_ledger": 0
+    },
+    "b1": {
+      "status": "not_released",
+      "consumption": null
+    },
+    "b2": {
+      "status": "not_released",
+      "consumption": null
+    }
+  },
+  "gates": {
+    "b0_source_review_passed": true,
+    "b1_pure_tests_released": true,
+    "b2_cpu_qualification_released": true
+  },
+  "current_source_review": {
+    "decision_chat_state": "B0_SOURCE_REVIEW_PASSED_B1_PURE_TESTS_PASSED_B2_RELEASED_NOT_STARTED",
+    "decision_chat_release_source": "same-task B2 release after independent B1 receipt verification",
+    "b1_full_stage_release_record": {
+      "released": false,
+      "planned_processes": 2,
+      "planned_distinct_cases": 3,
+      "planned_case_executions": 6,
+      "actual_consumption": null
+    },
+    "b0_actual_consumption": 0,
+    "remaining_implementation": [
+      "decision-chat source review of the completed B0/B2 source set",
+      "decision-chat B1 release and pure-test execution"
+    ],
+    "implemented_this_pass": [
+      "restored B0 contract/entry/test functions alongside full B2 contract",
+      "created the real B2 qualification driver with pre-model input counts",
+      "carried expected identity through build/save/validate/load/restore",
+      "validated contract source manifest and role-specific resource caps",
+      "refreshed the native guard source pin to the current guard file",
+      "added a pure orchestrate seam with real thin adapters and fake-op review",
+      "verified N=265 using actual batch_samples semantics before model construction",
+      "moved optimizer mapping to r76_runtime and passed explicit checkpoint identity",
+      "made missing-versus-None full-state differences fail closed",
+      "instrumented factory/Adam/load/save attempt-completed operation caps",
+      "read central steps from the real guard and separated branch-path entries",
+      "switched parent stdio to binary CreateNew stream capture with fsync",
+      "added the real r76_b_entry __main__ boundary"
+    ],
+    "latest_feedback": [
+      "correct RUN_ROOT so frozen relative inputs resolve under the actual comm_bc run root",
+      "repair the guard env cap ternary and verify physical/offline/joint caps by role",
+      "carry trusted expected identity through build/save/validate/load/restore",
+      "validate contract source_manifest against frozen sources/driver/task role",
+      "make the entry reachable only through an external contract and one-shot permit",
+      "materialize the four rows/tapes once and count M/valid samples/T without early batch_samples",
+      "run A1 as a zero-trunk critic-only control step with the R75 loss and one pre-charged step",
+      "run both native branches at update_index=0 and compare full R76 payloads and scientific reports",
+      "add the PowerShell parent capture source and checkpoint file-fsync"
+    ],
+    "historical_preparation_notes": "Earlier four B0 files were created outside the repo and moved into the authorized R76 directory; the move left a PowerShell non-terminating error record. Those originals are preserved and no execution was attributed to them."
+  },
+  "b2_release_state": {
+    "status": "released_not_started",
+    "b1_actual_consumption": {
+      "python_processes": 2,
+      "fixed_case_executions": 6,
+      "distinct_cases": 3
+    },
+    "b2_allowed_limits": {
+      "parent_launches": 1,
+      "cpu_nn_python_processes": 1,
+      "normal_optimizer_steps": 17,
+      "reserve_optimizer_steps": 0,
+      "hard_optimizer_steps": 17,
+      "checkpoint_loads": 2,
+      "checkpoint_saves": 3,
+      "environment_constructions": 0
+    }
+  },
+  "frozen_input_manifest": {
+    "old_report": {
+      "path": "round71_critic_initialization_calibration/raw/checkpoints/r40_batch_s11_b0_attempt01.json",
+      "bytes": 5736,
+      "sha256": "19743d595783bb85a640ab78ca6790f0fabc90ac02ad36a8a10ee8785c44ca8e"
+    },
+    "r71_init": {
+      "path": "round71_critic_initialization_calibration/raw/checkpoints/v2_train_s11_init.pt",
+      "bytes": 50111,
+      "sha256": "fc25ead19bce38d00ae3bf619971ab717084711bdd2b5eb0431d1dda720a952f"
+    },
+    "episodes": [
+      {
+        "episode": 0,
+        "scenario": 1300027,
+        "attempt": 2,
+        "row_path": "round71_critic_initialization_calibration/raw/rows/v2_r71_train_s11_e0_s1300027_a2.json",
+        "row_bytes": 341408,
+        "row_sha256": "727c4faa8b391c7471524c291b630850ba6a63d3188d7b6d0f75bb904a04cf71",
+        "tape_path": "round71_critic_initialization_calibration/raw/logs/v2_r71_train_s11_e0_s1300027_a2_tape.jsonl",
+        "tape_bytes": 215634,
+        "tape_sha256": "7d2fa6b70fbcc3e66d7c013f0e96a163fadc58f1b0e3279cd96f2a5172c253ae"
+      },
+      {
+        "episode": 1,
+        "scenario": 1300014,
+        "attempt": 1,
+        "row_path": "round71_critic_initialization_calibration/raw/rows/v2_r71_train_s11_e1_s1300014_a1.json",
+        "row_bytes": 341491,
+        "row_sha256": "a671508751a9ba0b3077899ef13a879114a751fb992a7c4255191dfaa197854a",
+        "tape_path": "round71_critic_initialization_calibration/raw/logs/v2_r71_train_s11_e1_s1300014_a1_tape.jsonl",
+        "tape_bytes": 190843,
+        "tape_sha256": "18a2c867f3e5d4aaa689365fb1d6ccca213408fab823ad78c5792803448c2adc"
+      },
+      {
+        "episode": 2,
+        "scenario": 1300028,
+        "attempt": 1,
+        "row_path": "round71_critic_initialization_calibration/raw/rows/v2_r71_train_s11_e2_s1300028_a1.json",
+        "row_bytes": 340948,
+        "row_sha256": "de3b2ba09e2462f8c92634d5803c47d29fa688fe0bec52cd617f397593d8eab0",
+        "tape_path": "round71_critic_initialization_calibration/raw/logs/v2_r71_train_s11_e2_s1300028_a1_tape.jsonl",
+        "tape_bytes": 188184,
+        "tape_sha256": "ef33a3f9fe84ec8a06ad73cbb8aff195acab984b5517f1d2ce507a68a7f1e8b0"
+      },
+      {
+        "episode": 3,
+        "scenario": 1300044,
+        "attempt": 1,
+        "row_path": "round71_critic_initialization_calibration/raw/rows/v2_r71_train_s11_e3_s1300044_a1.json",
+        "row_bytes": 341667,
+        "row_sha256": "c6868c0bd0479dbf9be0f49aa9c05fd9b74a59c0598f4c245e900831ffad35cd",
+        "tape_path": "round71_critic_initialization_calibration/raw/logs/v2_r71_train_s11_e3_s1300044_a1_tape.jsonl",
+        "tape_bytes": 170262,
+        "tape_sha256": "4e777d09c1038e51b7fc8aecf43ca47194a2d96ae231bfb573165a1d916bab1d"
+      }
+    ],
+    "e0_attempt_note": "e0 original attempt2 is the historical adopted attempt; attempt1 failure remains preserved and is neither rewritten nor regenerated"
+  },
+  "scope_note": "B0 is source preparation only; it does not run tests, create a permit or contract, import Torch/NumPy, construct/load a model, run forward/backward, optimizer, environment, real RNG restore, serializer, or production ledger. B1/B2 remain gated behind explicit source-review acceptance and same-task continuation.",
+  "a_stage_preservation": {
+    "status": "A final accepted artifacts remain unchanged",
+    "old_r75_consumption": "historical R75 hard cap 16 and all prior consumption remain unchanged and are not transferable"
+  }
+}

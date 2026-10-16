@@ -234,7 +234,7 @@ R75_OPTIMIZER_SCHEMA = R76_OPTIMIZER_SCHEMA
 # The byte identity of the hardened central production ledger the native path demands. Any edit
 # to r75_guard.py fails the native entry closed until this pin is re-registered through an
 # explicit acceptance revision (a weakened guard cannot ride in on a renamed object).
-EXPECTED_R76_GUARD_SOURCE_SHA256 = "61b840977f6299b5435ad8406013bf67ca767bb3393e5dec2246e0e46887c39a"
+EXPECTED_R76_GUARD_SOURCE_SHA256 = "0e92d940abe436e478b6ca1ebc6b4043ba511663ff67a232d5f2e72556930f5b"
 
 # THE single structural change vs R66/R71: early_head moves out of the frozen set.
 FROZEN_MODULES = ("trunk",)

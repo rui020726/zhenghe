@@ -5,11 +5,13 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import os
 import sys
 from pathlib import Path
 from typing import Any, Callable
 
 import r76_contracts as contracts
+import r76_b_contracts as b_contracts
 
 
 class R76IdentityError(RuntimeError):
@@ -273,17 +275,23 @@ def require_resource_interface(resources: Any) -> None:
                  "charge_offline_rows", "verify_or_fail"):
         if not callable(getattr(resources, name, None)):
             raise R76IdentityError(f"R76 resources lack {name}")
-    if getattr(resources, "mode", None) != "production":
-        raise R76IdentityError("R76 real binding accepts only production resources")
+    if getattr(resources, "mode", None) not in ("production", "qualification"):
+        raise R76IdentityError(
+            "R76 real binding accepts only production or qualification resources")
 
 
 def install_r76_runtime_bindings(cfg: dict[str, Any], resources: Any,
-                                 native_module: Any, *, request_id: str) -> dict[str, Any]:
+                                 native_module: Any, *, request_id: str,
+                                 task_id: str | None = None) -> dict[str, Any]:
     """Bind native PPO, the eight-object optimizer, and save/load onto the live cfg."""
     captured = validate_base_config(cfg)
     require_resource_interface(resources)
-    if request_id != contracts.REQUEST_ID:
+    if request_id not in {contracts.REQUEST_ID, b_contracts.REQUEST_ID}:
         raise R76IdentityError("R76 runtime request id does not match the prepared request")
+    if request_id == b_contracts.REQUEST_ID and task_id != b_contracts.TASK_ID:
+        raise R76IdentityError("B run identity must use the registered B task id")
+    expected_identity = {"request_id": request_id,
+                         "task_id": task_id or contracts.TASK_ID}
 
     def r76_native_ppo(controller, optimizer, episodes, *, update_index):
         return native_module.r75_native_ppo_update(
@@ -294,8 +302,10 @@ def install_r76_runtime_bindings(cfg: dict[str, Any], resources: Any,
         mask = native_module.assert_mask(controller)
         return save_r76_checkpoint(
             path, controller, optimizer, state, cfg["trainer"].rng_state(),
-            r76_source_identity(cfg, request_id=request_id),
-            native_module.torch, mask=mask, module_sha=native_module.module_sha)
+            r76_source_identity(cfg, request_id=request_id,
+                                task_id=task_id or contracts.TASK_ID),
+            native_module.torch, mask=mask, module_sha=native_module.module_sha,
+            expected_identity=cfg["r76_expected_identity"])
 
     def r76_load_checkpoint(path, *, freeze=None):
         for key in ("r76_controller_factory", "r76_module_sha"):
@@ -306,10 +316,11 @@ def install_r76_runtime_bindings(cfg: dict[str, Any], resources: Any,
             controller_factory=cfg["r76_controller_factory"],
             module_sha=cfg["r76_module_sha"],
             freeze_trunk_only=native_module.freeze_trunk_only,
-            build_optimizer=native_module.build_optimizer,
+            build_optimizer=cfg.get("r76_build_optimizer", native_module.build_optimizer),
             restore_rng=cfg["trainer"].restore_rng,
             rng_state=cfg["trainer"].rng_state,
-            expected_context=cfg.get("r76_resume_context"))
+            expected_context=cfg.get("r76_resume_context"),
+            expected_identity=cfg["r76_expected_identity"])
 
     old_ppo = cfg["trainer"].ppo_update
     cfg["trainer"].ppo_update = r76_native_ppo
@@ -318,9 +329,13 @@ def install_r76_runtime_bindings(cfg: dict[str, Any], resources: Any,
     cfg["trainer"].save_checkpoint = r76_save_checkpoint
     cfg["trainer"].load_checkpoint = r76_load_checkpoint
     cfg["r76_module_sha"] = native_module.module_sha
+    cfg["r76_identity"] = {
+        **expected_identity,
+    }
+    cfg["r76_expected_identity"] = expected_identity
     identity = {
         "request_id": request_id,
-        "task_id": contracts.TASK_ID,
+        "task_id": expected_identity["task_id"],
         "training_version": contracts.R76_TRAINING_VERSION,
         "loss_version": contracts.R76_LOSS_VERSION,
         "state_schema": contracts.R76_STATE_SCHEMA,
@@ -365,7 +380,10 @@ R76_REQUIRED_DATA_IDENTITY_FIELDS = (
 R76_REQUIRED_REFERENCE_IDENTITY_FIELDS = ("kind", "reference_row_sha256")
 
 
-def build_r76_state(seed: int, *, data_order_seed: int, b0_bytes: float) -> dict[str, Any]:
+def build_r76_state(seed: int, *, data_order_seed: int, b0_bytes: float,
+                    identity: dict[str, str] | None = None) -> dict[str, Any]:
+    identity = identity or {"request_id": contracts.REQUEST_ID,
+                            "task_id": contracts.TASK_ID}
     return {
         "training_seed": int(seed),
         "episodes_done": 0,
@@ -379,7 +397,7 @@ def build_r76_state(seed: int, *, data_order_seed: int, b0_bytes: float) -> dict
         "gamma": 1.0,
         "gae_lambda": 1.0,
         "eta_lambda": 0.5,
-        "run_identity": {"request_id": contracts.REQUEST_ID, "task_id": contracts.TASK_ID},
+        "run_identity": identity,
         "contract_version": contracts.R76_FULL_CONTRACT["kind"],
         "training_version": contracts.R76_TRAINING_VERSION,
         "loss_version": contracts.R76_LOSS_VERSION,
@@ -389,7 +407,8 @@ def build_r76_state(seed: int, *, data_order_seed: int, b0_bytes: float) -> dict
     }
 
 
-def r76_source_identity(cfg: dict[str, Any], *, request_id: str) -> dict[str, Any]:
+def r76_source_identity(cfg: dict[str, Any], *, request_id: str,
+                        task_id: str | None = None) -> dict[str, Any]:
     """Build the exact non-module provenance carried by every R76 full checkpoint."""
     for key in ("r76_source_manifest", "r76_data_identity", "r76_reference_identity",
                 "r76_runtime_identity", "r76_resource_contract_sha256"):
@@ -397,7 +416,7 @@ def r76_source_identity(cfg: dict[str, Any], *, request_id: str) -> dict[str, An
             raise R76IdentityError(f"R76 source identity is missing live cfg {key}")
     return {
         "request_id": request_id,
-        "task_id": contracts.TASK_ID,
+        "task_id": task_id or cfg.get("r76_identity", {}).get("task_id", contracts.TASK_ID),
         "source_manifest": dict(cfg["r76_source_manifest"]),
         "data_identity": dict(cfg["r76_data_identity"]),
         "reference_identity": dict(cfg["r76_reference_identity"]),
@@ -422,7 +441,10 @@ def validate_r76_resume_context(payload: Any, expected: dict[str, Any] | None) -
         raise R76IdentityError("R76 resume context resource contract does not match")
 
 
-def validate_r76_training_state(state: Any) -> dict[str, Any]:
+def validate_r76_training_state(state: Any, *,
+                                identity: dict[str, str] | None = None) -> dict[str, Any]:
+    identity = identity or {"request_id": contracts.REQUEST_ID,
+                            "task_id": contracts.TASK_ID}
     contracts.validate_exact_keys(state, R76_REQUIRED_STATE_FIELDS, "R76 training state")
     if int(state["episodes_done"]) < 0 or int(state["updates"]) < 0 \
             or int(state["optimizer_steps"]) < 0:
@@ -430,8 +452,8 @@ def validate_r76_training_state(state: Any) -> dict[str, Any]:
     if int(state["episodes_done"]) != int(state["updates"]) * 4:
         raise R76IdentityError("R76 episode cursor is not four episodes per update")
     if not isinstance(state["run_identity"], dict) or \
-            state["run_identity"].get("request_id") != contracts.REQUEST_ID or \
-            state["run_identity"].get("task_id") != contracts.TASK_ID:
+            state["run_identity"].get("request_id") != identity["request_id"] or \
+            state["run_identity"].get("task_id") != identity["task_id"]:
         raise R76IdentityError("R76 run identity is not the exact request/task identity")
     if state["contract_version"] != contracts.R76_FULL_CONTRACT["kind"]:
         raise R76IdentityError("R76 contract version is not the exact full-resume contract")
@@ -485,7 +507,10 @@ def _optimizer_value_equal(left: Any, right: Any) -> bool:
     return left == right
 
 
-def validate_r76_full_payload(payload: Any) -> dict[str, Any]:
+def validate_r76_full_payload(payload: Any,
+                              expected_identity: dict[str, str] | None = None) -> dict[str, Any]:
+    identity = expected_identity or {"request_id": contracts.REQUEST_ID,
+                                     "task_id": contracts.TASK_ID}
     contracts.validate_exact_keys(payload, R76_REQUIRED_FULL_FIELDS, "R76 full payload")
     if payload.get("schema") in contracts.FOREIGN_STATE_SCHEMAS:
         raise R76IdentityError("a foreign checkpoint was offered as an R76 resume source")
@@ -512,17 +537,24 @@ def validate_r76_full_payload(payload: Any) -> dict[str, Any]:
             [len(group.get("params", [])) for group in optimizer.get("param_groups", [])] != [8]:
         raise R76IdentityError("payload optimizer is not one 8-parameter optimizer group")
     contracts.validate_r76_mask_report(payload.get("frozen_mask", {}))
-    validate_r76_training_state(payload.get("training_state", {}))
+    state = payload.get("training_state", {})
+    validate_r76_training_state(state, identity=identity)
     contracts.validate_exact_keys(payload.get("rng", {}), R76_REQUIRED_RNG_FIELDS, "R76 RNG")
     validate_r76_parameter_names(payload.get("parameter_object_names", []))
     source_identity = payload.get("source_identity", {})
     contracts.validate_exact_keys(source_identity, R76_REQUIRED_SOURCE_IDENTITY_FIELDS,
                                   "R76 checkpoint source identity")
-    if source_identity.get("request_id") != contracts.REQUEST_ID \
-            or source_identity.get("task_id") != contracts.TASK_ID \
+    if not isinstance(source_identity.get("request_id"), str) \
+            or not isinstance(source_identity.get("task_id"), str) \
+            or not source_identity["request_id"] \
+            or not source_identity["task_id"] \
+            or source_identity.get("request_id") != state.get("run_identity", {}).get("request_id") \
+            or source_identity.get("request_id") != identity["request_id"] \
+            or source_identity.get("task_id") != identity["task_id"] \
             or not isinstance(source_identity.get("module_sha256"), dict) \
             or set(source_identity["module_sha256"]) != set(contracts.R76_MODULES):
-        raise R76IdentityError("R76 checkpoint source identity is incomplete")
+        raise R76IdentityError(
+            "R76 checkpoint source identity is incomplete or does not match the expected run identity")
     try:
         contracts.validate_source_manifest(source_identity.get("source_manifest", {}))
     except RuntimeError as error:
@@ -550,8 +582,18 @@ def validate_r76_full_payload(payload: Any) -> dict[str, Any]:
 def build_r76_checkpoint_payload(controller: Any, optimizer: Any, state: dict[str, Any],
                                  rng_state: dict[str, Any], source_identity: dict[str, Any],
                                  *, mask: dict[str, Any],
-                                 module_sha: Callable[[Any, str], str]) -> dict[str, Any]:
-    validate_r76_training_state(state)
+                                 module_sha: Callable[[Any, str], str],
+                                 expected_identity: dict[str, str] | None = None
+                                 ) -> dict[str, Any]:
+    if expected_identity is None:
+        if source_identity.get("request_id") == b_contracts.REQUEST_ID:
+            raise R76IdentityError(
+                "B checkpoint payload requires explicit trusted expected identity")
+        identity = {"request_id": contracts.REQUEST_ID,
+                    "task_id": contracts.TASK_ID}
+    else:
+        identity = dict(expected_identity)
+    validate_r76_training_state(state, identity=identity)
     parameter_object_names = parameter_object_mapping(controller, optimizer)
     source_identity = dict(source_identity)
     source_identity["module_sha256"] = {name: module_sha(controller, name)
@@ -574,19 +616,24 @@ def build_r76_checkpoint_payload(controller: Any, optimizer: Any, state: dict[st
         "rng": rng_state,
         "source_identity": source_identity,
     }
-    return validate_r76_full_payload(payload)
+    return validate_r76_full_payload(payload, expected_identity=identity)
 
 
 def save_r76_checkpoint(path, controller: Any, optimizer: Any, state: dict[str, Any],
                         rng_state: dict[str, Any], source_identity: dict[str, Any],
                         torch_module: Any, *, mask: dict[str, Any],
-                        module_sha: Callable[[Any, str], str]) -> str:
+                        module_sha: Callable[[Any, str], str],
+                        expected_identity: dict[str, str] | None = None) -> str:
     payload = build_r76_checkpoint_payload(controller, optimizer, state, rng_state,
-                                           source_identity, mask=mask, module_sha=module_sha)
+                                           source_identity, mask=mask, module_sha=module_sha,
+                                           expected_identity=expected_identity)
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + f".{hashlib.sha256(str(path).encode()).hexdigest()[:8]}.tmp")
     torch_module.save(payload, temporary)
+    with temporary.open("rb+") as handle:
+        handle.flush()
+        os.fsync(handle.fileno())
     temporary.replace(path)
     return str(path)
 
@@ -597,10 +644,12 @@ def load_r76_checkpoint(path, torch_module: Any, *, controller_factory: Callable
                         build_optimizer: Callable[[Any, float], Any],
                         restore_rng: Callable[[dict[str, Any]], None],
                         rng_state: Callable[[], dict[str, Any]] | None = None,
-                        expected_context: dict[str, Any] | None = None
+                        expected_context: dict[str, Any] | None = None,
+                        expected_identity: dict[str, str] | None = None
                         ) -> tuple[Any, Any, dict[str, Any]]:
     payload = validate_r76_full_payload(torch_module.load(
-        Path(path), map_location="cpu", weights_only=False))
+        Path(path), map_location="cpu", weights_only=False),
+        expected_identity=expected_identity)
     validate_r76_resume_context(payload, expected_context)
     state = payload["training_state"]
     seed = int(state["training_seed"])

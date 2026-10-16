@@ -77,6 +77,7 @@ REUSED_SOURCE_IDENTITY = {
 # THE R76 canonical durable root. production() is pinned here; every other root is refused.
 R76_CANONICAL_ROOT = HERE / "raw" / "runtime"
 R75_CANONICAL_ROOT = R76_CANONICAL_ROOT
+R76_QUALIFICATION_ROOT = HERE / "raw" / "qualification"
 R75_HISTORICAL_CANONICAL_ROOT = (HERE.parent / "round75_native_ppo_qualification" /
                                  "raw" / "runtime")
 
@@ -185,6 +186,20 @@ class R75EnvSlotGuard(_ProdCounter):
                          unit="environment_construction", lock_timeout=lock_timeout)
 
 
+class R75TrunkCallGuard(_ProdCounter):
+    def __init__(self, path, ledger, *, mode, lock_timeout=15.0, caps=None):
+        caps = caps or {"normal": 0, "reserve": 0, "hard": 0}
+        super().__init__(path, mode=mode, ledger=ledger,
+                         normal_cap=int(caps.get("normal", 0)),
+                         reserve_cap=int(caps.get("reserve", 0)),
+                         hard_cap=int(caps.get("hard", 0)),
+                         kind="r76-trunk-forward-call-guard/1",
+                         unit="trunk_forward_call", lock_timeout=lock_timeout)
+
+    def charge_call(self, what: str) -> int:
+        return self.charge(1, what, category="normal")
+
+
 R76PhysicalStepGuard = R75PhysicalStepGuard
 R76OfflineRowGuard = R75OfflineRowGuard
 R76JointRecordGuard = R75JointRecordGuard
@@ -228,6 +243,10 @@ class TrunkEntryMeter:
         batch = args[0] if args else kwargs.get("input", kwargs.get("batch"))
         rows = count_target_vectors(batch)        # a non-19 input raises before any charge
         try:
+            if self.resource is not None and getattr(
+                    self.resource, "trunk_calls", None) is not None:
+                self.resource.charge_trunk_call(
+                    f"{self.what_prefix}_call{self.calls_attempted}")
             self.guard.charge_trunk_forward(batch, f"{self.what_prefix}_call{self.calls_attempted}")
         except R75QuotaExhausted:
             self.calls_refused += 1
@@ -275,19 +294,23 @@ class R75Resources:
 
     def __init__(self, *, mode: str, root=None, training_caps=None,
                  resource_contract=None):
-        if mode not in ("production", "fixture"):
-            raise ValueError("mode must be 'production' or 'fixture'")
-        if mode == "production" and (training_caps is not None
-                                     or resource_contract is not None):
+        if mode not in ("production", "fixture", "qualification"):
+            raise ValueError("mode must be 'production', 'qualification', or 'fixture'")
+        if mode in ("production", "qualification") and (
+                training_caps is not None or resource_contract is not None):
             if not isinstance(resource_contract, dict) \
-                    or resource_contract.get("kind") != "round76-real-training-contract/1" \
+                    or resource_contract.get("kind") not in (
+                        "round76-real-training-contract/1",
+                        "round76-b-qualification-contract/1") \
                     or resource_contract.get("status") != "issued":
                 raise R75LedgerError(
                     "R76 self-issued training caps are refused; caps may only come from an issued "
                     "round76-real-training-contract/1 object")
         self.mode = mode
         canonical = R75_CANONICAL_ROOT
-        if mode == "production":
+        if mode == "qualification":
+            canonical = R76_QUALIFICATION_ROOT
+        if mode in ("production", "qualification"):
             if root is not None and Path(root).resolve() != canonical.resolve():
                 raise R75LedgerError(
                     "R75 production resources are PINNED to the canonical durable root "
@@ -299,6 +322,7 @@ class R75Resources:
                 raise ValueError("fixture resources require an explicit throwaway root")
             candidate = Path(root).resolve()
             protected_roots = (R76_CANONICAL_ROOT.resolve(),
+                               R76_QUALIFICATION_ROOT.resolve(),
                                R75_HISTORICAL_CANONICAL_ROOT.resolve())
             if any(candidate == protected or protected in candidate.parents
                    for protected in protected_roots):
@@ -312,26 +336,33 @@ class R75Resources:
         self.root.mkdir(parents=True, exist_ok=True)
         self.r75_fixture = (mode == "fixture")
         self.resource_contract = resource_contract
+        counter_mode = "production" if mode in ("production", "qualification") else "fixture"
         self.ledger = _R74TotalLedger(self.root / "r76_total_ledger.jsonl")
         self.physical_steps = R75PhysicalStepGuard(
-            self.root / "r76_physical_optimizer_step_guard.json", self.ledger, mode=mode,
+            self.root / "r76_physical_optimizer_step_guard.json", self.ledger, mode=counter_mode,
             fixture_caps=(FIXTURE_ONLY_CAPS["physical_optimizer_step"]
                           if mode == "fixture"
                           else (training_caps or {}).get("physical_optimizer_step")))
         self.offline_rows = R75OfflineRowGuard(
-            self.root / "r76_offline_trunk_target_row_guard.json", self.ledger, mode=mode,
+            self.root / "r76_offline_trunk_target_row_guard.json", self.ledger,
+            mode=counter_mode,
             fixture_caps=(FIXTURE_ONLY_CAPS["offline_trunk_target_row"]
                           if mode == "fixture"
                           else (training_caps or {}).get("offline_trunk_target_row")))
         self.joint_records = R75JointRecordGuard(
-            self.root / "r76_joint_record_guard.json", self.ledger, mode=mode,
+            self.root / "r76_joint_record_guard.json", self.ledger, mode=counter_mode,
             fixture_caps=(FIXTURE_ONLY_CAPS["joint_record"]
                           if mode == "fixture"
                           else (training_caps or {}).get("joint_record")))
         self.env_slots = R75EnvSlotGuard(
-            self.root / "r76_environment_construction_guard.json", self.ledger, mode=mode,
-            caps=None if mode != "production" or training_caps is None
-            else training_caps.get("environment_construction"))
+            self.root / "r76_environment_construction_guard.json", self.ledger,
+            mode=counter_mode,
+            caps=(None if training_caps is None
+                  else training_caps.get("environment_construction")))
+        call_caps = (training_caps or {}).get("trunk_forward_call")
+        self.trunk_calls = (None if mode != "qualification" else R75TrunkCallGuard(
+            self.root / "r76_trunk_forward_call_guard.json", self.ledger,
+            mode="production", caps=call_caps))
         self._registered_technical_attempts: list[str] = []
         self._trunk_meters: list[TrunkEntryMeter] = []
 
@@ -348,6 +379,17 @@ class R75Resources:
             raise R75LedgerError(
                 "a production contract resource factory requires a contract object")
         return cls(mode="production", training_caps=contract["resource_caps"],
+                   resource_contract=contract)
+
+    @classmethod
+    def qualification_from_contract(cls, contract: dict) -> "R75Resources":
+        """Build the separate B qualification resource object from an issued contract."""
+        if not isinstance(contract, dict) or contract.get("kind") != \
+                "round76-b-qualification-contract/1":
+            raise R75LedgerError(
+                "a qualification contract resource factory requires an issued "
+                "round76-b-qualification-contract/1 object")
+        return cls(mode="qualification", training_caps=contract["resource_caps"],
                    resource_contract=contract)
 
     @classmethod
@@ -393,6 +435,11 @@ class R75Resources:
     def charge_joint_record(self, n: int = 1, what: str = "joint_record") -> int:
         return self.joint_records.charge(n, what)
 
+    def charge_trunk_call(self, what: str) -> int:
+        if self.trunk_calls is None:
+            raise R75LedgerError("this resource object has no trunk-call meter")
+        return self.trunk_calls.charge_call(what)
+
     def charge_env_construction(self, what: str) -> int:  # pragma: no cover - active claim
         return self.env_slots.charge(1, what)
 
@@ -426,6 +473,13 @@ class R75Resources:
             meter.uninstall()
         self._trunk_meters = []
 
+    def _active_counters(self) -> list[Any]:
+        counters = [self.physical_steps, self.offline_rows, self.joint_records,
+                    self.env_slots]
+        if self.trunk_calls is not None:
+            counters.append(self.trunk_calls)
+        return counters
+
     # -- reconciliation ---------------------------------------------------------------------
     def verify_or_fail(self) -> dict[str, Any]:
         """Force reconciliation NOW (open / before any work). Production fails closed."""
@@ -435,10 +489,10 @@ class R75Resources:
                 guard = event.get("guard")
                 maxima[guard] = max(maxima.get(guard, 0), int(event.get("used_after", 0)))
         mismatches = {}
-        for counter in (self.physical_steps, self.offline_rows, self.joint_records, self.env_slots):
+        for counter in self._active_counters():
             used = counter.used()
             ledger_max = maxima.get(counter.kind, 0)
-            if self.mode == "production" and used != ledger_max:
+            if self.mode in ("production", "qualification") and used != ledger_max:
                 mismatches[counter.unit] = {"counter_used": used, "ledger_max": ledger_max}
         if mismatches:
             raise R75LedgerError(
@@ -457,16 +511,17 @@ class R75Resources:
     # -- zero-identity bootstrap -------------------------------------------------------------
     def bootstrap(self) -> dict[str, Any]:
         """Persist/verify the zero-value identity BEFORE any charge exists (pure file op)."""
-        if self.mode != "production":
-            raise R75LedgerError("bootstrap is a production-only identity action")
-        for counter in (self.physical_steps, self.offline_rows, self.joint_records, self.env_slots):
+        if self.mode not in ("production", "qualification"):
+            raise R75LedgerError("bootstrap is production/qualification only")
+        counters = self._active_counters()
+        for counter in counters:
             snap = counter.snapshot()
             if snap["used"] or snap["refusals"]:
                 raise R75LedgerError(
                     f"bootstrap refused: {counter.unit} is not at the zero starting point "
                     f"(used={snap['used']}, refusals={snap['refusals']})")
         report = self.verify_or_fail()
-        for counter in (self.physical_steps, self.offline_rows, self.joint_records, self.env_slots):
+        for counter in counters:
             self.ledger.append(guard=counter.kind, event="ledger-opened", unit=counter.unit,
                                used_normal=0, used_reserve=0, refusals=0)
         # Register the superseded S0 zero counters WITHOUT touching them (read-only hashes).
@@ -489,13 +544,17 @@ class R75Resources:
 
     # -- bookkeeping -------------------------------------------------------------------------
     def snapshots(self) -> dict[str, Any]:
-        return {"kind": KIND, "mode": self.mode, "canonical_root": str(R75_CANONICAL_ROOT),
+        expected_root = (R75_CANONICAL_ROOT if self.mode == "production"
+                         else R76_QUALIFICATION_ROOT)
+        return {"kind": KIND, "mode": self.mode, "canonical_root": str(expected_root),
                 "root": str(self.root),
-                "pinned_to_canonical": self.root.resolve() == R75_CANONICAL_ROOT.resolve(),
+                "pinned_to_canonical": self.root.resolve() == expected_root.resolve(),
                 "physical_optimizer_step": self.physical_steps.snapshot(),
                 "offline_trunk_target_row": self.offline_rows.snapshot(),
                 "joint_record": self.joint_records.snapshot(),
                 "environment_construction": self.env_slots.snapshot(),
+                "trunk_forward_call": (None if self.trunk_calls is None
+                                       else self.trunk_calls.snapshot()),
                 "total_ledger_events": len(self.ledger.events()),
                 "registered_technical_attempts": list(self._registered_technical_attempts)}
 
@@ -520,14 +579,17 @@ def assert_native_production_resources(resources, *,
         raise R75LedgerError(
             f"the native path received {type(resources).__module__}.{type(resources).__name__}, "
             f"not r76_guard.R75Resources; a forged production object is refused by source")
-    if resources.mode != "production" or getattr(resources, "r75_fixture", False):
+    if resources.mode not in ("production", "qualification") or getattr(
+            resources, "r75_fixture", False):
         raise R75LedgerError(
-            "the native path refuses a non-production (fixture) resource attachment; pure spies "
+            "the native path refuses a non-production or fixture resource attachment; pure spies "
             "never reach the real NN path")
-    if Path(resources.root).resolve() != R75_CANONICAL_ROOT.resolve():
+    expected_root = (R75_CANONICAL_ROOT if resources.mode == "production"
+                     else R76_QUALIFICATION_ROOT)
+    if Path(resources.root).resolve() != expected_root.resolve():
         raise R75LedgerError(
             "the native path refuses a production object whose root is not the canonical "
-            "durable root")
+            "durable root for its role")
     if expected_guard_source_sha256 is not None:
         actual = sha256_file(Path(__file__).resolve())
         if actual != expected_guard_source_sha256:
