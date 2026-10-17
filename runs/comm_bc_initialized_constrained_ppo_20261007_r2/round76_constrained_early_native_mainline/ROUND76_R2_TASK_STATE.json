@@ -1,0 +1,179 @@
+{
+  "kind": "round76-r2-task-state/1",
+  "request_id": "R76_R2_A0_SOURCE_PREPARATION_20261017",
+  "task_id": "R76_R2_SOURCE_PREPARATION_20261017",
+  "branch": "exp/round76-constrained-early-native-mainline",
+  "current_stage": "A1_COMPLETE_PENDING_DECISION_REVIEW",
+  "source_head": "PENDING_FINAL_SOURCE_REVIEW_COMMIT",
+  "authorization": {
+    "scope": "complete R76 B-R2 continuation; A0 source revision only at this stage",
+    "approval_source": "human in decision chat",
+    "stage_note": "stage releases remain explicit; this file does not release A1 or R2-B"
+  },
+  "source_revision_scope": {
+    "cold_start_file": "r76_b_driver.py",
+    "manifest_file": "r76_b_contracts.py",
+    "new_parent_file": "r76_b_parent_r2.ps1",
+    "new_test_file": "test_r76_cold_start_r2.py",
+    "source_manifest_file_count": 16,
+    "source_manifest_files": [
+      "r76_b_contracts.py",
+      "r76_b_driver.py",
+      "r76_b_entry.py",
+      "r76_cli.py",
+      "r76_contracts.py",
+      "r76_episode_protocol.py",
+      "r76_execute.py",
+      "r76_guard.py",
+      "r76_runtime.py",
+      "r76_native.py",
+      "r76_b_parent.ps1",
+      "r76_b_parent_r1.ps1",
+      "r76_b_parent_r2.ps1",
+      "test_r76_b0_source_review.py",
+      "test_r76_protocol_history_r1.py",
+      "test_r76_cold_start_r2.py"
+    ],
+    "test_case_count": 3,
+    "test_cases": [
+      "test_1_canonical_r68_resolves_without_import_or_execution",
+      "test_2_missing_foreign_and_cached_module_sources_are_rejected",
+      "test_3_configure_cold_start_calls_and_zero_env_binding_with_fakes"
+    ],
+    "cold_start_pins": {
+      "r66_dir": "../round66_bc_early_path_preserving_late_adaptation",
+      "r66_execute.py_bytes": 53131,
+      "r66_execute.py_sha256": "9164f0c989847e78d1018512bcdd26cb1d234971f61f05f03a6d58927cf14670",
+      "r68_dir": "../round68_late_initial_confidence_ablation",
+      "r68_execute.py_bytes": 61201,
+      "r68_execute.py_sha256": "c123dfe753effc5b6e35b8ce680e6bb1092a80a0d0deb40a0971df09e1c2cd3e"
+    },
+    "third_correction_dedup": {
+      "revision_id": "R76_R2_A0_C3_D1E4A71F",
+      "status": "ALREADY_PROCESSED_BEFORE_ID_REGISTRATION",
+      "note": "third correction content was already applied; the late notice start points no longer match the current files, so it was not repeated",
+      "observed_head": "43edcd694817108e9d9b3fc042604aef65c25ec2",
+      "observed_driver_sha256": "2b6a4c5b3ccb74057aa949cf8ea73b7027a605ea0733e85d7873f4fc6428c790",
+      "observed_test_sha256": "fda511086f8f58b248ddf4273b66ed6b70dfd08e0f69e0b834895122ed4d4575"
+    },
+    "forbidden_changes": [
+      "R68 source",
+      "R66 source",
+      "scientific math",
+      "checkpoint semantics",
+      "optimizer/critic boundaries",
+      "native trainer/collector",
+      "runtime restore math",
+      "resource guard values",
+      "historical row/tape files",
+      "old R1 evidence"
+    ]
+  },
+  "gates": {
+    "a0_source_review_passed": true,
+    "a1_pure_precheck_released": true,
+    "r2_b_cpu_capture_released": false
+  },
+  "stage_releases": {
+    "a1": {
+      "released": true,
+      "pure_stdlib_process_cap": 1,
+      "distinct_top_level_cases": 3,
+      "fixed_case_execution_cap": 3,
+      "consumption": {
+        "status": "PASS",
+        "evidence_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round76_constrained_early_native_mainline/raw/r2_a1/R76_R2_A1_STDLIB_20261017",
+        "pure_stdlib_python_processes": 1,
+        "distinct_top_level_cases": 3,
+        "fixed_case_executions": 3,
+        "child_pid": 11924,
+        "os_exit_code": 0,
+        "timed_out": false,
+        "artifacts": {
+          "claim.json": {
+            "bytes": 1084,
+            "sha256": "12174fa5810f2a4b9b5deea0f8ce6dd8051c537f5d153fdc1c50759e7d522a6a"
+          },
+          "identity_before.json": {
+            "bytes": 2090,
+            "sha256": "6b8bfcf0907f150b3b3ee9377ce97335db8287d4e920b76dd8691f50c16927f5"
+          },
+          "identity_after.json": {
+            "bytes": 2090,
+            "sha256": "6b8bfcf0907f150b3b3ee9377ce97335db8287d4e920b76dd8691f50c16927f5"
+          },
+          "parent_receipt.json": {
+            "bytes": 32211,
+            "sha256": "f6e574b66106a4206c3a1ab66e7b3c923f7e46a269555868e272d70b344558a0"
+          },
+          "child.stdout.bin": {
+            "bytes": 0,
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "child.stderr.bin": {
+            "bytes": 469,
+            "sha256": "a8fad828cd79238a036a683297bc73b26c9e4bf48a76a56739dd7fa41404e76c"
+          }
+        }
+      }
+    },
+    "r2_b": {
+      "released": false,
+      "consumption": null
+    }
+  },
+  "qualification_binding": {
+    "request_id": "R76_B0_SOURCE_PREPARATION_20261016",
+    "task_id": "R76_B_R71_NATIVE_RESTORE_QUALIFICATION_20261016",
+    "frozen_input_manifest": "ROUND76_B_TASK_STATE.frozen_input_manifest",
+    "e0_attempt": 2,
+    "attempt_1_note": "preserved historical failure; not rewritten or regenerated"
+  },
+  "historical_consumption_preserved": {
+    "old_b1": {
+      "python_processes": 2,
+      "fixed_case_executions": 6
+    },
+    "old_b2": {
+      "parent_launches": 1,
+      "cpu_nn_python_processes": 1
+    },
+    "r1_a1": {
+      "python_processes": 1,
+      "fixed_case_executions": 4
+    },
+    "r1_b": {
+      "actual_parent_script_invocations": 2,
+      "authorized_parent_script_invocations": 1,
+      "parent_invocation_overage": 1,
+      "cpu_nn_python_processes": 1,
+      "outer_executable_absent_command_failures": 1,
+      "qualification_valid": false
+    },
+    "all_r76": {
+      "actual_parent_script_invocations": 3,
+      "future_parent_invocation_cap": 4,
+      "qualification_children": 2,
+      "future_qualification_child_cap": 3,
+      "actual_pure_stdlib_python_processes": 4,
+      "actual_pure_stdlib_fixed_case_executions": 13,
+      "future_pure_stdlib_python_process_cap": 4,
+      "future_pure_stdlib_fixed_case_execution_cap": 13,
+      "actual_optimizer_steps": 0,
+      "actual_environment_constructions": 0
+    }
+  },
+  "new_consumption": {
+    "python_process": 1,
+    "fixed_case_execution": 3,
+    "torch_or_numpy_import": 0,
+    "model_load_or_construct": 0,
+    "forward_backward": 0,
+    "optimizer_step": 0,
+    "environment": 0,
+    "real_rng_restore": 0,
+    "serializer": 0,
+    "production_ledger": 0
+  },
+  "protected_files_note": "ROUND46_CURRENT_TASK.json and ROUND46_R2_V6_STOP_STATE.json remain untouched and unstaged"
+}

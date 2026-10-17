@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+from importlib.machinery import PathFinder
 import json
 import os
 import sys
@@ -22,6 +23,21 @@ BRANCH_PHYSICAL_STEPS = 9
 SCIENTIFIC_CHECKPOINT_COUNT = 3
 SCIENTIFIC_CHECKPOINT_LOAD_COUNT = 2
 
+R2_CANONICAL_R66_DIR = HERE.parent / "round66_bc_early_path_preserving_late_adaptation"
+R2_CANONICAL_R68_DIR = HERE.parent / "round68_late_initial_confidence_ablation"
+R2_COLD_START_SOURCES = {
+    "r66_execute": {
+        "path": R2_CANONICAL_R66_DIR / "r66_execute.py",
+        "bytes": 53131,
+        "sha256": "9164f0c989847e78d1018512bcdd26cb1d234971f61f05f03a6d58927cf14670",
+    },
+    "r68_execute": {
+        "path": R2_CANONICAL_R68_DIR / "r68_execute.py",
+        "bytes": 61201,
+        "sha256": "c123dfe753effc5b6e35b8ce680e6bb1092a80a0d0deb40a0971df09e1c2cd3e",
+    },
+}
+
 
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
@@ -29,6 +45,63 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: handle.read(1 << 20), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def validate_r2_cold_start_paths() -> dict[str, Any]:
+    """Pin canonical R66/R68 cold-start origins without importing either module."""
+    r66_dir = R2_CANONICAL_R66_DIR.resolve()
+    r68_dir = R2_CANONICAL_R68_DIR.resolve()
+    if not r66_dir.is_dir() or not r68_dir.is_dir():
+        raise RuntimeError("R2 canonical R66/R68 runtime directories are missing")
+    if Path(r76_execute.R66_DIR).resolve() != r66_dir:
+        raise RuntimeError("R2 pinned R66 path differs from r76_execute.R66_DIR")
+    resolved_paths: dict[str, Path] = {}
+    for name, expected in R2_COLD_START_SOURCES.items():
+        path = expected["path"].resolve()
+        resolved_paths[name] = path
+        module = sys.modules.get(name)
+        if module is not None:
+            spec = getattr(module, "__spec__", None)
+            origin = getattr(spec, "origin", None) if spec is not None else None
+            module_file = getattr(module, "__file__", None)
+            if not isinstance(origin, str) or Path(origin).resolve() != path:
+                raise RuntimeError(
+                    f"R2 cold start found a foreign or opaque cached {name} module")
+            if module_file is not None and Path(module_file).resolve() != path:
+                raise RuntimeError(
+                    f"R2 cold start cached {name} __file__ does not match its origin")
+
+        if not path.is_file():
+            raise RuntimeError(f"R2 pinned {name} source is missing: {path}")
+        if path.stat().st_size != expected["bytes"]:
+            raise RuntimeError(f"R2 pinned {name} source byte size drifted")
+        if sha256_file(path) != expected["sha256"]:
+            raise RuntimeError(f"R2 pinned {name} source SHA256 drifted")
+
+    for directory in sorted({r66_dir, r68_dir}, key=lambda value: str(value)):
+        if str(directory) not in sys.path:
+            sys.path.insert(0, str(directory))
+
+    return {
+        "kind": "round76-r2-cold-start-path-identity/1",
+        "r66_dir": str(r66_dir),
+        "r68_dir": str(r68_dir),
+        "sources": {
+            name: str(_resolve_final_search_origin(name, path))
+            for name, path in resolved_paths.items()
+        },
+    }
+
+
+def _resolve_final_search_origin(name: str, expected_path: Path) -> Path:
+    """Resolve the actual final sys.path search result without executing the module."""
+    spec = PathFinder.find_spec(name, sys.path)
+    origin = getattr(spec, "origin", None) if spec is not None else None
+    if not isinstance(origin, str) or Path(origin).resolve() != expected_path:
+        got = str(Path(origin).resolve()) if origin else "<none>"
+        raise RuntimeError(
+            f"R2 {name} final search origin mismatch: {got} != {expected_path}")
+    return Path(origin).resolve()
 
 
 def _write_json(path: Path, value: Any) -> None:
@@ -41,6 +114,36 @@ def _write_json(path: Path, value: Any) -> None:
         handle.flush()
         os.fsync(handle.fileno())
     os.replace(temporary, path)
+
+
+def _write_r2_input_counts(counts: dict[str, Any], contract: dict[str, Any], *,
+                           capture_root: Path | None = None) -> dict[str, Any]:
+    """Write the pre-model counts once, durably, and never overwrite a partial artifact."""
+    root = (Path(capture_root) if capture_root is not None else
+            HERE / "raw" / "qualification" / "R76_B2_R2_PARENT_CAPTURE_20261017")
+    if not root.is_dir():
+        raise RuntimeError("R2 parent capture root must already exist before counts write")
+    path = root / "input_counts.json"
+    if path.exists():
+        raise RuntimeError("R2 input counts artifact already exists")
+    payload = {
+        "kind": "round76-r2-pre-model-input-counts/1",
+        "identity": {
+            "request_id": contract["request_id"],
+            "task_id": contract["task_id"],
+            "branch": contract["branch"],
+            "scope": contract["scope"],
+            "source_head": contract["source_head"],
+        },
+        "input_counts": dict(counts),
+    }
+    with path.open("x", encoding="utf-8", newline="\n") as handle:
+        json.dump(payload, handle, ensure_ascii=False, indent=2, sort_keys=True)
+        handle.write("\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+    return {"path": str(path), "bytes": path.stat().st_size,
+            "sha256": sha256_file(path)}
 
 
 def _read_json(path: Path) -> dict[str, Any]:
@@ -133,6 +236,7 @@ def pre_model_input_counts(input_manifest: dict[str, Any]
 
 def configure_qualification_runtime(contract: dict[str, Any],
                                    resource_contract_sha256: str) -> dict[str, Any]:
+    cold_start = validate_r2_cold_start_paths()
     if str(r76_execute.R66_DIR) not in sys.path:
         sys.path.insert(0, str(r76_execute.R66_DIR))
     import r66_execute
@@ -166,6 +270,7 @@ def configure_qualification_runtime(contract: dict[str, Any],
     cfg["r76_resource_contract_sha256"] = resource_contract_sha256
     cfg["r76_resource_contract"] = contract
     cfg["r76_runtime_identity"] = identity
+    cfg["r76_cold_start_identity"] = cold_start
     return cfg
 
 
@@ -716,6 +821,7 @@ def run_b2(args: argparse.Namespace) -> int:
     validate_b2_release(_read_json(HERE / "ROUND76_B_TASK_STATE.json")["gates"])
     contract, permit, contract_sha256 = validate_b2_bundle(args)
     input_counts, episodes = pre_model_input_counts(contract["input_manifest"])
+    _write_r2_input_counts(input_counts, contract)
     cfg = configure_qualification_runtime(contract, contract_sha256)
     _build_identity_context(cfg)
     ops = RealB2Ops(cfg, b_contracts.RESOURCE_ROOT, input_counts, episodes)

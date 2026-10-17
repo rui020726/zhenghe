@@ -69,8 +69,10 @@ SOURCE_MANIFEST_FILES = (
     "r76_native.py",
     "r76_b_parent.ps1",
     "r76_b_parent_r1.ps1",
+    "r76_b_parent_r2.ps1",
     "test_r76_b0_source_review.py",
     "test_r76_protocol_history_r1.py",
+    "test_r76_cold_start_r2.py",
 )
 
 B_STAGE_CAPS = {
