@@ -1,0 +1,157 @@
+{
+  "kind": "round76-r1-task-state/1",
+  "request_id": "R76_R1_A0_SOURCE_REVISION_20261016",
+  "task_id": "R76_R1_SOURCE_REVISION_20261016",
+  "branch": "exp/round76-constrained-early-native-mainline",
+  "current_stage": "A1_PURE_PRECHECK_PASSED_PENDING_REVIEW",
+  "source_head": "PENDING_FINAL_SOURCE_REVIEW_COMMIT",
+  "source_review_head": "5036550ecb10e8c639681cff03823d6e76d89191",
+  "source_review_source_manifest": {
+    "r76_b_contracts.py": "dc64eb2a682f9f4cdd7d02d821864d58743d69374ef5fb7ceb7027bfc415b72e",
+    "r76_b_driver.py": "f15df0e211bdaf87da5bb0aaf02d0f467013065729ff5b72bd0616ed85a84600",
+    "r76_b_entry.py": "20cca108ef0f1446d986cba020aa08120f05b425ef8250b3335b332c2fe4ea60",
+    "r76_cli.py": "9dbcdd6d7ea975322792032a0eac225399e18f7c56b3d89bdb2c6a0c193aaf48",
+    "r76_contracts.py": "005b50c7ee2e9ce062110e8b3190152f2a578df13d1d2a5730d8588ea8a930eb",
+    "r76_episode_protocol.py": "f04057c5b3c14575f31fee8faa9b0683f2fc86b4cd9d0d05aa4bf5ca30f1e24c",
+    "r76_execute.py": "ef3ff5638cd300cd4aacc34bf6012b5109568bf41b3fcbe3224ff68eb5b0aabb",
+    "r76_guard.py": "0e92d940abe436e478b6ca1ebc6b4043ba511663ff67a232d5f2e72556930f5b",
+    "r76_runtime.py": "840e16b33ec467e4fb699c8d7b2cd9ae4be0cbb9810763996f6d56d56d185cdc",
+    "r76_native.py": "53f918396c871d63426e367e98668935ed6b97732714d849eafdcd8691a1c154",
+    "r76_b_parent.ps1": "f5aea9b88ceec4ccd82869fc6df4173e3d2a298e7f1681db3d2355e45c1176d8",
+    "r76_b_parent_r1.ps1": "10f601932d2f9b98a315ced4da5226de29570f053800b5dd0d4399a476c20117",
+    "test_r76_b0_source_review.py": "f379ca6f5ebd41301bc1d2a59f9364cdbb3347823a4a59157772e6e6f2fc9e17",
+    "test_r76_protocol_history_r1.py": "9f7bfebb26f8e144bd75c92d564e6ea01a4f56e553ce1fe42692f6ca1b0939b6"
+  },
+  "authorization": {
+    "scope": "complete R76 B-R1 continuation; A0 source revision only at this stage",
+    "approval_source": "human in decision chat",
+    "stage_note": "stage releases remain explicit; this file does not release A1 or R1-B"
+  },
+  "source_revision_scope": {
+    "protocol_patch_files": ["r76_episode_protocol.py"],
+    "new_test_file": "test_r76_protocol_history_r1.py",
+    "new_parent_capture_file": "r76_b_parent_r1.ps1",
+    "manifest_changed_file": "r76_b_contracts.py",
+    "source_manifest_file_count": 14,
+    "test_case_count": 4,
+    "test_cases": [
+      "test_1_historical_target_passes_and_unknown_future_target_rejects",
+      "test_2_state_enum_and_existing_checks_are_preserved",
+      "test_3_json_round_trip_preserves_episode_level_state_history",
+      "test_4_pure_pre_model_validation_of_frozen_r71_inputs"
+    ],
+    "collector_semantics": {
+      "file": "../../comm_one_shot_full_trace_ablation_20261004/r42_one_shot.py",
+      "sha256": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+      "state_init_line": 68,
+      "state_snapshot_line": 309,
+      "state_update_lines": [155, 231, 232],
+      "meaning": "target_state is episode-level and may retain previously decided target IDs after they leave the current candidate set"
+    },
+    "forbidden_changes": [
+      "row/tape data",
+      "19D features",
+      "candidate classes",
+      "masks",
+      "actions",
+      "log_prob",
+      "numeric checks",
+      "native PPO",
+      "driver/entry",
+      "trainer/collector",
+      "runtime restore math",
+      "resource guard values",
+      "original parent",
+      "original B tests",
+      "historical row/tape files"
+    ]
+  },
+  "gates": {
+    "a0_source_review_passed": true,
+    "a1_pure_precheck_released": true,
+    "r1_b_cpu_capture_released": false
+  },
+  "stage_releases": {
+    "a1": {
+      "released": true,
+      "status": "PASS",
+      "pure_stdlib_process_cap": 1,
+      "distinct_top_level_cases": 4,
+      "fixed_case_execution_cap": 4,
+      "consumption": {
+        "python_processes": 1,
+        "distinct_top_level_cases": 4,
+        "fixed_case_executions": 4,
+        "torch_or_numpy_import": 0,
+        "model_load_or_construct": 0,
+        "forward_backward": 0,
+        "optimizer_step": 0,
+        "environment": 0,
+        "real_rng_restore": 0,
+        "serializer": 0,
+        "production_ledger": 0,
+        "child_pid": 62792,
+        "os_exit_code": 0,
+        "timed_out": false,
+        "started_utc": "2026-10-17T00:33:43.0202885Z",
+        "ended_utc": "2026-10-17T00:33:43.5684122Z",
+        "evidence_root": "raw/r1_a1/R76_R1_A1_STDLIB_20261017",
+        "stdout_sha256": "531e81e1a32290b69cc37507780684778af5e92b4dbe4d8debca1c5c2d3b188f",
+        "stderr_sha256": "0062cc44174a460ccbc6c22224d22308547d88474a22848cdf4367299cfe972c",
+        "case4_summary": {
+          "M": 265,
+          "N": 265,
+          "T": 543,
+          "max_candidates": 5,
+          "feature_width": 19,
+          "episode_count": 4
+        }
+      }
+    },
+    "r1_b": {
+      "released": false,
+      "consumption": null
+    }
+  },
+  "qualification_binding": {
+    "request_id": "R76_B0_SOURCE_PREPARATION_20261016",
+    "task_id": "R76_B_R71_NATIVE_RESTORE_QUALIFICATION_20261016",
+    "frozen_input_manifest": "ROUND76_B_TASK_STATE.frozen_input_manifest",
+    "e0_attempt": 2,
+    "attempt_1_note": "preserved historical failure; not rewritten or regenerated"
+  },
+  "historical_stage_consumption": {
+    "b1": {
+      "status": "PASSED",
+      "python_processes": 2,
+      "fixed_case_executions": 6,
+      "distinct_cases": 3,
+      "note": "old B1 consumption remains unchanged"
+    },
+    "b2": {
+      "status": "FAILED_AFTER_PARENT_LAUNCH",
+      "parent_launches": 1,
+      "cpu_nn_python_processes": 1,
+      "optimizer_steps": 0,
+      "checkpoint_loads": 0,
+      "checkpoint_saves": 0,
+      "environment_constructions": 0,
+      "failure": "EpisodeProtocolError: tape record 9 one-shot state contains an invalid target or state",
+      "evidence_root": "raw/qualification/R76_B2_PARENT_CAPTURE_20261016",
+      "note": "old B2 failure and evidence remain unchanged; old gates are not R1 credentials"
+    }
+  },
+  "new_consumption": {
+    "python_process": 1,
+    "fixed_case_execution": 4,
+    "torch_or_numpy_import": 0,
+    "model_load_or_construct": 0,
+    "forward_backward": 0,
+    "optimizer_step": 0,
+    "environment": 0,
+    "real_rng_restore": 0,
+    "serializer": 0,
+    "production_ledger": 0
+  },
+  "protected_files_note": "ROUND46_CURRENT_TASK.json and ROUND46_R2_V6_STOP_STATE.json remain untouched and unstaged"
+}
