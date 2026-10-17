@@ -3,8 +3,8 @@
   "request_id": "R76_R1_A0_SOURCE_REVISION_20261016",
   "task_id": "R76_R1_SOURCE_REVISION_20261016",
   "branch": "exp/round76-constrained-early-native-mainline",
-  "current_stage": "A1_PURE_PRECHECK_PASSED_PENDING_REVIEW",
-  "source_head": "PENDING_FINAL_SOURCE_REVIEW_COMMIT",
+  "current_stage": "R1_B_FAILED_BEFORE_MODEL_AND_GUARD",
+  "source_head": "c0b7bce381a7fe516cf92cd856805ba81f8e3c3c",
   "source_review_head": "5036550ecb10e8c639681cff03823d6e76d89191",
   "source_review_source_manifest": {
     "r76_b_contracts.py": "dc64eb2a682f9f4cdd7d02d821864d58743d69374ef5fb7ceb7027bfc415b72e",
@@ -69,7 +69,7 @@
   "gates": {
     "a0_source_review_passed": true,
     "a1_pure_precheck_released": true,
-    "r1_b_cpu_capture_released": false
+    "r1_b_cpu_capture_released": true
   },
   "stage_releases": {
     "a1": {
@@ -109,8 +109,31 @@
       }
     },
     "r1_b": {
-      "released": false,
-      "consumption": null
+      "released": true,
+      "status": "FAILED_BEFORE_MODEL_AND_GUARD",
+      "release_source": "same-task R1-B stage release after A1 acceptance and actual post-commit 14-source SHA recheck",
+      "consumption": {
+        "parent_launches": 1,
+        "cpu_nn_python_processes": 1,
+        "optimizer_steps": 0,
+        "checkpoint_loads": 0,
+        "checkpoint_saves": 0,
+        "environment_constructions": 0,
+        "parent_pid": 55844,
+        "child_pid": 11364,
+        "os_exit_code": 1,
+        "timed_out": false,
+        "started_utc": "2026-10-17T00:40:57.8968952Z",
+        "ended_utc": "2026-10-17T00:41:07.9879603Z",
+        "evidence_root": "raw/qualification/R76_B2_R1_PARENT_CAPTURE_20261016",
+        "prelaunch_claim_sha256": "f9dcb7787a90d16f422b05e5659f45493a6ba2f99e1b5ed0dd765121c993e062",
+        "stdout_sha256": "4d798c2958261af63619685a0b000257fb8732cd26a02b08446fce6f76b30fc1",
+        "stderr_sha256": "085d90e0808fc455645cee8b5341064f8eda569bfeec7aaec1642eb32a32c69b",
+        "parent_receipt_sha256": "65da721590b539bf7573e37687a98f4a6a16455d256dd17754d90f1e16efa1e9",
+        "failure": "ModuleNotFoundError: No module named 'r68_execute'",
+        "failed_call": "configure_qualification_runtime.import_r68_execute",
+        "failed_before": "model_or_guard_or_optimizer_or_checkpoint_or_environment"
+      }
     }
   },
   "qualification_binding": {
@@ -142,7 +165,8 @@
     }
   },
   "new_consumption": {
-    "python_process": 1,
+    "python_process": 2,
+    "parent_launches": 1,
     "fixed_case_execution": 4,
     "torch_or_numpy_import": 0,
     "model_load_or_construct": 0,
