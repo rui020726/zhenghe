@@ -1,0 +1,102 @@
+{
+  "kind": "round76-r1-failure-audit-index/1",
+  "request_id": "R76_R1_A0_SOURCE_REVISION_20261016",
+  "task_id": "R76_R1_SOURCE_REVISION_20261016",
+  "branch": "exp/round76-constrained-early-native-mainline",
+  "source_head": "c0b7bce381a7fe516cf92cd856805ba81f8e3c3c",
+  "final_head": "39b6bf966f0a1644fc0b059043d32cccabd8f935",
+  "qualification_valid": false,
+  "failure_counts": {
+    "outer_executable_absent_command_failures": 1,
+    "actual_r1_parent_script_invocations": 2,
+    "r1_parent_invocation_cap": 1,
+    "r1_parent_invocation_overage": 1,
+    "r1_qualification_children": 1,
+    "old_b_parent_invocations": 1,
+    "all_r76_parent_invocations": 3,
+    "all_r76_parent_invocation_cap": 2,
+    "all_r76_parent_invocation_overage": 1
+  },
+  "failure_events": [
+    {
+      "call": "outer tool command",
+      "status": "failed_before_parent",
+      "cause": "C:/Program Files/PowerShell/7/pwsh.exe not found",
+      "parent_invocation": false,
+      "child_pid": null,
+      "claim": null
+    },
+    {
+      "call": "actual r76_b_parent_r1.ps1 invocation 1",
+      "status": "failed_at_stage_gate",
+      "cause": "current_stage was R1_B_CPU_PARENT_CAPTURE_RELEASED_NOT_STARTED instead of R1_B_CPU_PARENT_CAPTURE_RELEASED",
+      "parent_invocation": true,
+      "child_pid": null,
+      "claim": null,
+      "consumed_unique_parent_allowance": true
+    },
+    {
+      "call": "actual r76_b_parent_r1.ps1 invocation 2",
+      "status": "failed_before_model_and_guard",
+      "cause": "ModuleNotFoundError: No module named 'r68_execute'",
+      "parent_invocation": true,
+      "parent_pid": 55844,
+      "child_pid": 11364,
+      "os_exit_code": 1,
+      "claim": "raw/qualification/R76_B2_R1_PARENT_CAPTURE_20261016/prelaunch_claim.json"
+    }
+  ],
+  "a1_result": {
+    "status": "PASS",
+    "python_processes": 1,
+    "distinct_cases": 4,
+    "fixed_case_executions": 4,
+    "child_pid": 62792,
+    "os_exit_code": 0,
+    "stdout_sha256": "531e81e1a32290b69cc37507780684778af5e92b4dbe4d8debca1c5c2d3b188f",
+    "stderr_sha256": "0062cc44174a460ccbc6c22224d22308547d88474a22848cdf4367299cfe972c",
+    "note": "pure-source pass only; does not validate R1-B technical qualification"
+  },
+  "r1_parent_evidence": {
+    "root": "raw/qualification/R76_B2_R1_PARENT_CAPTURE_20261016",
+    "prelaunch_claim": {
+      "bytes": 1939,
+      "sha256": "f9dcb7787a90d16f422b05e5659f45493a6ba2f99e1b5ed0dd765121c993e062"
+    },
+    "child_stdout": {
+      "bytes": 26,
+      "sha256": "4d798c2958261af63619685a0b000257fb8732cd26a02b08446fce6f76b30fc1"
+    },
+    "child_stderr": {
+      "bytes": 1147,
+      "sha256": "085d90e0808fc455645cee8b5341064f8eda569bfeec7aaec1642eb32a32c69b"
+    },
+    "parent_receipt": {
+      "bytes": 2330,
+      "sha256": "65da721590b539bf7573e37687a98f4a6a16455d256dd17754d90f1e16efa1e9"
+    },
+    "contract": {
+      "path": "raw/qualification/round76_b_r1_contract_20261017.json",
+      "bytes": 5706,
+      "sha256": "527902935556c4ac83c8647720049356a74e1987bf46d43e6f06670582cfb090"
+    },
+    "permit": {
+      "path": "raw/qualification/round76_b_r1_permit_20261017.json",
+      "bytes": 846,
+      "sha256": "79d02cb757eb4189337439a80ca9334e02fd63d57be414fcb86387f78308efe8"
+    }
+  },
+  "zero_evidence": {
+    "model_construct_or_load": "no evidence in traceback or partial artifacts; import chain stopped before model construction",
+    "optimizer_step": "no evidence of optimizer construction or step",
+    "checkpoint_save_or_load": "no evidence of checkpoint operation",
+    "environment_construction": "no evidence of environment construction",
+    "limitation": "module-load side effects such as NumPy/Torch import may have occurred and cannot be excluded from the traceback alone"
+  },
+  "protection_and_identity": {
+    "old_r75_ledger_sha256": "f6095bd1b8c9d95c6005ad368d0a69e6e9f7af25a222abf760bcba7455062124",
+    "ROUND46_CURRENT_TASK.json_sha256": "cf3ad1984d0d8ec526d53a57fab98bd43963d5eec5de7f45aec23d3396b2b39b",
+    "ROUND46_R2_V6_STOP_STATE.json_sha256": "93a2f69ff0c6cd2f8e153d4a165ee39d618f2f326343039b59f03c1588d03e18",
+    "source_manifest_14_sha256_match": true
+  }
+}

@@ -113,7 +113,9 @@
       "status": "FAILED_BEFORE_MODEL_AND_GUARD",
       "release_source": "same-task R1-B stage release after A1 acceptance and actual post-commit 14-source SHA recheck",
       "consumption": {
-        "parent_launches": 1,
+        "parent_launches": 2,
+        "parent_launches_pre_audit": 1,
+        "parent_launches_correction": "parent_launches=1 was corrected to actual_parent_script_invocations=2 by the independent audit; one gate-failure invocation consumed the unique parent allowance without child/claim/receipt",
         "cpu_nn_python_processes": 1,
         "optimizer_steps": 0,
         "checkpoint_loads": 0,
@@ -130,9 +132,13 @@
         "stdout_sha256": "4d798c2958261af63619685a0b000257fb8732cd26a02b08446fce6f76b30fc1",
         "stderr_sha256": "085d90e0808fc455645cee8b5341064f8eda569bfeec7aaec1642eb32a32c69b",
         "parent_receipt_sha256": "65da721590b539bf7573e37687a98f4a6a16455d256dd17754d90f1e16efa1e9",
-        "failure": "ModuleNotFoundError: No module named 'r68_execute'",
+        "first_invocation_failure": "R1 task-state current_stage gate mismatch before child launch; unique parent allowance consumed",
+        "second_invocation_failure": "ModuleNotFoundError: No module named 'r68_execute'",
+        "outer_executable_absent_command_failures": 1,
+        "outer_executable_absent_failure": "C:/Program Files/PowerShell/7/pwsh.exe not found; target parent not launched",
         "failed_call": "configure_qualification_runtime.import_r68_execute",
-        "failed_before": "model_or_guard_or_optimizer_or_checkpoint_or_environment"
+        "failed_before": "model_or_guard_or_optimizer_or_checkpoint_or_environment",
+        "qualification_valid": false
       }
     }
   },
@@ -166,7 +172,11 @@
   },
   "new_consumption": {
     "python_process": 2,
-    "parent_launches": 1,
+    "parent_launches": 2,
+    "parent_launches_pre_audit": 1,
+    "outer_executable_absent_command_failures": 1,
+    "all_r76_parent_invocations": 3,
+    "all_r76_parent_invocation_cap": 2,
     "fixed_case_execution": 4,
     "torch_or_numpy_import": 0,
     "model_load_or_construct": 0,
