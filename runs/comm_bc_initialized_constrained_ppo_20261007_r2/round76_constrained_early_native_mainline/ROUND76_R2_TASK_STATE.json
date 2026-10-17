@@ -3,8 +3,8 @@
   "request_id": "R76_R2_A0_SOURCE_PREPARATION_20261017",
   "task_id": "R76_R2_SOURCE_PREPARATION_20261017",
   "branch": "exp/round76-constrained-early-native-mainline",
-  "current_stage": "A1_COMPLETE_PENDING_DECISION_REVIEW",
-  "source_head": "PENDING_FINAL_SOURCE_REVIEW_COMMIT",
+  "current_stage": "R2_B_FAILED_AFTER_PARENT_LAUNCH",
+  "source_head": "5bfdf2aff5879024fa35fd679544035863c5d056",
   "authorization": {
     "scope": "complete R76 B-R2 continuation; A0 source revision only at this stage",
     "approval_source": "human in decision chat",
@@ -72,7 +72,7 @@
   "gates": {
     "a0_source_review_passed": true,
     "a1_pure_precheck_released": true,
-    "r2_b_cpu_capture_released": false
+    "r2_b_cpu_capture_released": true
   },
   "stage_releases": {
     "a1": {
@@ -118,8 +118,56 @@
       }
     },
     "r2_b": {
-      "released": false,
-      "consumption": null
+      "released": true,
+      "consumption": {
+        "status": "FAILED_AFTER_PARENT_LAUNCH",
+        "capture_root": "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round76_constrained_early_native_mainline/raw/qualification/R76_B2_R2_PARENT_CAPTURE_20261017",
+        "parent_pid": 36300,
+        "child_pid": 57708,
+        "os_exit_code": 1,
+        "timed_out": false,
+        "parent_script_invocations": 1,
+        "cpu_nn_python_processes": 1,
+        "optimizer_steps": 0,
+        "checkpoint_loads": 0,
+        "checkpoint_saves": 0,
+        "environment_constructions": 0,
+        "input_counts": {
+          "M": 265,
+          "N": 265,
+          "T": 543,
+          "episodes": 4,
+          "max_targets_per_record": 5,
+          "valid_samples": 265
+        },
+        "failure": "RuntimeError: runtime import provenance mismatch for r43_call_counter_hooks",
+        "artifacts": {
+          "entry_attempt_claim.json": {
+            "bytes": 1887,
+            "sha256": "ffbe958ffa41156ce8d4574702596c3f981d449020e540a1c6e3cbe4517757a6"
+          },
+          "prelaunch_claim.json": {
+            "bytes": 2197,
+            "sha256": "6c93552989135dacfe134b273cde87aff068821e3a957ce46a7e0db4cc35d7e6"
+          },
+          "input_counts.json": {
+            "bytes": 513,
+            "sha256": "4b22a50c551d3d811476a8b4f8aeb34610d380ff06c1c0a29fdca512b333b9f4"
+          },
+          "parent_receipt.json": {
+            "bytes": 2654,
+            "sha256": "887b0589f107c94857c482f273d2ad6d4967c9d83dc272a77d6a4e7fb188be7b"
+          },
+          "child.stdout.bin": {
+            "bytes": 74,
+            "sha256": "54ea2bb38935aef228af4f9b01d4e919eb377964f7f4b63950fa109efa87aa69"
+          },
+          "child.stderr.bin": {
+            "bytes": 2865,
+            "sha256": "3564b8f175e350770fea1a3980cdd43d193363b4fe0231d732afcfb62ed0cedf"
+          }
+        }
+      }
     }
   },
   "qualification_binding": {
@@ -151,9 +199,9 @@
       "qualification_valid": false
     },
     "all_r76": {
-      "actual_parent_script_invocations": 3,
+      "actual_parent_script_invocations": 4,
       "future_parent_invocation_cap": 4,
-      "qualification_children": 2,
+      "qualification_children": 3,
       "future_qualification_child_cap": 3,
       "actual_pure_stdlib_python_processes": 4,
       "actual_pure_stdlib_fixed_case_executions": 13,
@@ -164,7 +212,9 @@
     }
   },
   "new_consumption": {
-    "python_process": 1,
+    "python_process": 2,
+    "cpu_nn_python_process": 1,
+    "parent_script_invocation": 1,
     "fixed_case_execution": 3,
     "torch_or_numpy_import": 0,
     "model_load_or_construct": 0,
