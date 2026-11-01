@@ -32,7 +32,81 @@ Thumbs.db
 checkpoints*/
 model/save*/
 logs/
-runs/
+# Experiment runs stay out of version control (checkpoints, JSONL lifecycles,
+# detection-stream bundles, stdout captures); only the small, reproducible
+# ablation drivers and verdicts live in the repo.
+runs/*
+!runs/joint_eval_20260916/
+runs/joint_eval_20260916/*
+!runs/joint_eval_20260916/*.cmd
+!runs/joint_eval_20260916/*.py
+!runs/joint_eval_20260916/*.json
+!runs/coordinator_baselines_20260917/
+runs/coordinator_baselines_20260917/*
+!runs/coordinator_baselines_20260917/*.py
+!runs/coordinator_baselines_20260917/*.json
+!runs/coordinator_baselines_20260917/*.md
+!runs/learnability_20260917/
+runs/learnability_20260917/*
+!runs/learnability_20260917/*.py
+!runs/learnability_20260917/*.json
+!runs/learnability_20260917/*.md
+!runs/duration_relevance_20260917/
+runs/duration_relevance_20260917/*
+!runs/duration_relevance_20260917/*.py
+!runs/duration_relevance_20260917/*.md
+!runs/duration_relevance_20260917/DURATION_GATE.json
+!runs/duration_relevance_20260917/duration_facts.json
+!runs/duration_relevance_20260917/counterfactual_*.json
+!runs/coalition_formation_latency_20260918/
+runs/coalition_formation_latency_20260918/*
+!runs/coalition_formation_latency_20260918/*.py
+!runs/coalition_formation_latency_20260918/*.md
+!runs/coalition_formation_latency_20260918/*.json
+!runs/dispatch_trigger_audit_20260918/
+runs/dispatch_trigger_audit_20260918/*
+!runs/dispatch_trigger_audit_20260918/*.py
+!runs/dispatch_trigger_audit_20260918/*.md
+!runs/dispatch_trigger_audit_20260918/*.json
+!runs/dispatch_trigger_audit_20260918/paired/
+runs/dispatch_trigger_audit_20260918/paired/*
+!runs/dispatch_trigger_audit_20260918/paired/expansion.json
+!runs/coalition_validation_20260918/
+runs/coalition_validation_20260918/*
+!runs/coalition_validation_20260918/*.py
+!runs/coalition_validation_20260918/*.md
+!runs/coalition_validation_20260918/*.json
+runs/coalition_validation_20260918/stream_index_w*.json
+!runs/release_validation_20260918/
+runs/release_validation_20260918/*
+!runs/release_validation_20260918/*.py
+!runs/release_validation_20260918/*.md
+!runs/release_validation_20260918/*.json
+!runs/membership_consistency_20260918/
+runs/membership_consistency_20260918/*
+!runs/membership_consistency_20260918/*.py
+!runs/membership_consistency_20260918/*.md
+!runs/membership_consistency_20260918/*.json
+!runs/corrected_env_final_20260918/
+runs/corrected_env_final_20260918/*
+!runs/corrected_env_final_20260918/*.py
+!runs/corrected_env_final_20260918/*.md
+!runs/corrected_env_final_20260918/*.json
+!runs/comm_control_20260919/
+runs/comm_control_20260919/*
+!runs/comm_control_20260919/*.py
+!runs/comm_control_20260919/*.md
+!runs/comm_control_20260919/*.json
+!runs/comm_budget_pilot_20260919/
+runs/comm_budget_pilot_20260919/*
+!runs/comm_budget_pilot_20260919/*.py
+!runs/comm_budget_pilot_20260919/*.md
+!runs/comm_budget_pilot_20260919/*.json
+!runs/comm_stability_20260919/
+runs/comm_stability_20260919/*
+!runs/comm_stability_20260919/*.py
+!runs/comm_stability_20260919/*.md
+!runs/comm_stability_20260919/*.json
 train/
 animations/
 gifs/
@@ -62,3 +136,548 @@ training_output.log
 failure_analysis*.csv
 test_results*.csv
 single_episode_*
+*.jsonl
+
+# ROUND45-R2 run artifacts remain ignored. The BC files below stay local; their
+# exact identities are recorded in the curated JSON receipt.
+!runs/comm_rule_warmstart_cost_learning_20261006_r2/
+runs/comm_rule_warmstart_cost_learning_20261006_r2/*
+!runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/
+runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/*
+!runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/
+runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/*
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s11.pt
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s22.pt
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/checkpoints/BC_POST_MODEL_s33.pt
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/BC_OPTIMIZER_STEPS_s11.jsonl
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/BC_OPTIMIZER_STEPS_s22.jsonl
+/runs/comm_rule_warmstart_cost_learning_20261006_r2/bc_journals/BC_OPTIMIZER_STEPS_s33.jsonl
+!runs/comm_tight_budget_20260919/
+runs/comm_tight_budget_20260919/*
+!runs/comm_tight_budget_20260919/*.py
+!runs/comm_tight_budget_20260919/*.md
+!runs/comm_tight_budget_20260919/*.json
+!runs/comm_protocol_v2_20260920/
+runs/comm_protocol_v2_20260920/*
+!runs/comm_protocol_v2_20260920/*.py
+!runs/comm_protocol_v2_20260920/*.md
+!runs/comm_protocol_v2_20260920/*.json
+!runs/comm_ack_value_20260920/
+runs/comm_ack_value_20260920/*
+!runs/comm_ack_value_20260920/*.py
+!runs/comm_ack_value_20260920/*.md
+!runs/comm_ack_value_20260920/*.json
+!runs/comm_rule_confirm_20260921/
+runs/comm_rule_confirm_20260921/*
+!runs/comm_rule_confirm_20260921/*.py
+!runs/comm_rule_confirm_20260921/*.md
+!runs/comm_rule_confirm_20260921/*.json
+!runs/comm_evidence_review_20260921/
+runs/comm_evidence_review_20260921/*
+!runs/comm_evidence_review_20260921/*.py
+!runs/comm_evidence_review_20260921/*.md
+!runs/comm_evidence_review_20260921/*.json
+!runs/comm_multistep_stage1_20260922/
+runs/comm_multistep_stage1_20260922/*
+!runs/comm_multistep_stage1_20260922/*.py
+!runs/comm_multistep_stage1_20260922/*.md
+!runs/comm_multistep_stage1_20260922/*.json
+!runs/comm_send_actionability_20260922/
+runs/comm_send_actionability_20260922/*
+!runs/comm_send_actionability_20260922/*.py
+!runs/comm_send_actionability_20260922/*.md
+!runs/comm_send_actionability_20260922/*.json
+!runs/comm_target_scoped_feasibility_20260922/
+runs/comm_target_scoped_feasibility_20260922/*
+!runs/comm_target_scoped_feasibility_20260922/*.py
+!runs/comm_target_scoped_feasibility_20260922/*.md
+!runs/comm_target_scoped_feasibility_20260922/*.json
+!runs/comm_h20_terminal_attribution_20260922/
+runs/comm_h20_terminal_attribution_20260922/*
+!runs/comm_h20_terminal_attribution_20260922/*.py
+!runs/comm_h20_terminal_attribution_20260922/*.md
+!runs/comm_h20_terminal_attribution_20260922/*.json
+!runs/comm_budget_action_mask_fix_20260922/
+runs/comm_budget_action_mask_fix_20260922/*
+!runs/comm_budget_action_mask_fix_20260922/*.py
+!runs/comm_budget_action_mask_fix_20260922/*.md
+!runs/comm_budget_action_mask_fix_20260922/*.json
+!runs/comm_budget_masked_retrain_20260922/
+runs/comm_budget_masked_retrain_20260922/*
+!runs/comm_budget_masked_retrain_20260922/*.py
+!runs/comm_budget_masked_retrain_20260922/*.md
+!runs/comm_budget_masked_retrain_20260922/*.json
+!runs/comm_task_pressure_learnability_20260922/
+runs/comm_task_pressure_learnability_20260922/*
+!runs/comm_task_pressure_learnability_20260922/*.py
+!runs/comm_task_pressure_learnability_20260922/*.md
+!runs/comm_task_pressure_learnability_20260922/*.json
+!runs/comm_action_geometry_audit_20260923/
+runs/comm_action_geometry_audit_20260923/*
+!runs/comm_action_geometry_audit_20260923/*.py
+!runs/comm_action_geometry_audit_20260923/*.md
+!runs/comm_action_geometry_audit_20260923/*.json
+
+# audit scratch: hash cache and console captures
+runs/comm_action_geometry_audit_20260923/_*.json
+runs/comm_action_geometry_audit_20260923/*.log
+!runs/comm_recipient_topology_feasibility_20260923/
+runs/comm_recipient_topology_feasibility_20260923/*
+!runs/comm_recipient_topology_feasibility_20260923/*.py
+!runs/comm_recipient_topology_feasibility_20260923/*.md
+!runs/comm_recipient_topology_feasibility_20260923/*.json
+
+# topology audit scratch: console captures
+runs/comm_recipient_topology_feasibility_20260923/_*
+!runs/comm_research_closure_20260923/
+runs/comm_research_closure_20260923/*
+!runs/comm_research_closure_20260923/*.py
+!runs/comm_research_closure_20260923/*.md
+!runs/comm_research_closure_20260923/*.json
+
+# closure audit scratch: console captures and hash caches
+runs/comm_research_closure_20260923/_*
+!runs/comm_info_path_validation_20260923/
+runs/comm_info_path_validation_20260923/*
+!runs/comm_info_path_validation_20260923/*.py
+!runs/comm_info_path_validation_20260923/*.md
+!runs/comm_info_path_validation_20260923/*.json
+
+# D1 run scratch: per-episode logs, console captures, ledgers kept off-tree
+runs/comm_info_path_validation_20260923/rows/
+runs/comm_info_path_validation_20260923/logs/
+runs/comm_info_path_validation_20260923/_*
+
+!runs/real_search_undetected_attribution_20260923/
+runs/real_search_undetected_attribution_20260923/*
+!runs/real_search_undetected_attribution_20260923/*.py
+!runs/real_search_undetected_attribution_20260923/*.md
+!runs/real_search_undetected_attribution_20260923/*.json
+
+# attribution round scratch (test temporaries delete themselves)
+runs/real_search_undetected_attribution_20260923/_*
+!runs/search_trace_and_policy_20260925/
+runs/search_trace_and_policy_20260925/*
+!runs/search_trace_and_policy_20260925/*.py
+!runs/search_trace_and_policy_20260925/*.md
+!runs/search_trace_and_policy_20260925/*.json
+
+# round-18 scratch: per-episode step records, probe files, console captures
+runs/search_trace_and_policy_20260925/rows/
+runs/search_trace_and_policy_20260925/logs/
+runs/search_trace_and_policy_20260925/_*
+!runs/comm_cost_objective_design_20260926/
+runs/comm_cost_objective_design_20260926/*
+!runs/comm_cost_objective_design_20260926/*.py
+!runs/comm_cost_objective_design_20260926/*.md
+!runs/comm_cost_objective_design_20260926/*.json
+
+# round-19 quarantine: superseded drafts stay on disk, out of Git
+runs/comm_cost_objective_design_20260926/rejected/
+!runs/comm_cost_controller_stage_a_20260927/
+runs/comm_cost_controller_stage_a_20260927/*
+!runs/comm_cost_controller_stage_a_20260927/*.py
+!runs/comm_cost_controller_stage_a_20260927/*.md
+!runs/comm_cost_controller_stage_a_20260927/*.json
+
+# round-20 quarantine and caches stay on disk, out of Git
+runs/comm_cost_controller_stage_a_20260927/rejected/
+runs/comm_cost_controller_stage_a_20260927/__pycache__/
+
+# round-21 Stage B: harness, protocol and gate artefacts; live books and raw logs stay out
+!runs/comm_cost_stage_b_20260927/
+runs/comm_cost_stage_b_20260927/*
+!runs/comm_cost_stage_b_20260927/*.py
+!runs/comm_cost_stage_b_20260927/*.md
+!runs/comm_cost_stage_b_20260927/*.json
+runs/comm_cost_stage_b_20260927/START_LEDGER_*.json
+runs/comm_cost_stage_b_20260927/logs/
+runs/comm_cost_stage_b_20260927/rows/
+runs/comm_cost_stage_b_20260927/rejected/
+runs/comm_cost_stage_b_20260927/__pycache__/
+
+# round-22 Stage C: harness, protocol and manifests; live books, logs and weights stay out
+!runs/comm_cost_stage_c_20260927/
+runs/comm_cost_stage_c_20260927/*
+!runs/comm_cost_stage_c_20260927/*.py
+!runs/comm_cost_stage_c_20260927/*.md
+!runs/comm_cost_stage_c_20260927/*.json
+runs/comm_cost_stage_c_20260927/START_LEDGER_*.json
+runs/comm_cost_stage_c_20260927/logs/
+runs/comm_cost_stage_c_20260927/rows/
+runs/comm_cost_stage_c_20260927/checkpoints/
+runs/comm_cost_stage_c_20260927/rejected/
+runs/comm_cost_stage_c_20260927/__pycache__/
+
+# round-24 ROUND24 v2 rerun: harness, protocol and manifests; live books, logs and weights stay out
+!runs/comm_cost_v2_rerun_20260928/
+runs/comm_cost_v2_rerun_20260928/*
+!runs/comm_cost_v2_rerun_20260928/*.py
+!runs/comm_cost_v2_rerun_20260928/*.md
+!runs/comm_cost_v2_rerun_20260928/*.json
+runs/comm_cost_v2_rerun_20260928/START_LEDGER_*.json
+runs/comm_cost_v2_rerun_20260928/logs/
+runs/comm_cost_v2_rerun_20260928/rows/
+runs/comm_cost_v2_rerun_20260928/checkpoints/
+runs/comm_cost_v2_rerun_20260928/rejected/
+runs/comm_cost_v2_rerun_20260928/__pycache__/
+
+# round-25 ROUND25 greedy replication: protocol, manifests and gates; live books, logs and weights stay out
+!runs/comm_cost_greedy_replication_20260928/
+runs/comm_cost_greedy_replication_20260928/*
+!runs/comm_cost_greedy_replication_20260928/*.py
+!runs/comm_cost_greedy_replication_20260928/*.md
+!runs/comm_cost_greedy_replication_20260928/*.json
+runs/comm_cost_greedy_replication_20260928/START_LEDGER_*.json
+runs/comm_cost_greedy_replication_20260928/logs/
+runs/comm_cost_greedy_replication_20260928/rows/
+runs/comm_cost_greedy_replication_20260928/checkpoints/
+runs/comm_cost_greedy_replication_20260928/rejected/
+runs/comm_cost_greedy_replication_20260928/__pycache__/
+
+# round-26 ROUND26 read-only recheck and mechanism diagnosis: scripts and analysis artefacts only
+!runs/round26_analysis_20260929/
+runs/round26_analysis_20260929/*
+!runs/round26_analysis_20260929/*.py
+!runs/round26_analysis_20260929/*.md
+!runs/round26_analysis_20260929/*.json
+runs/round26_analysis_20260929/__pycache__/
+
+# round-27 ROUND27 fixed-scene first-report advance intervention: protocol, gates and reports; live books, logs and rows stay out
+!runs/comm_cost_firstreport_intervention_20260929/
+runs/comm_cost_firstreport_intervention_20260929/*
+!runs/comm_cost_firstreport_intervention_20260929/*.py
+!runs/comm_cost_firstreport_intervention_20260929/*.md
+!runs/comm_cost_firstreport_intervention_20260929/*.json
+runs/comm_cost_firstreport_intervention_20260929/START_LEDGER_*.json
+runs/comm_cost_firstreport_intervention_20260929/logs/
+runs/comm_cost_firstreport_intervention_20260929/rows/
+runs/comm_cost_firstreport_intervention_20260929/checkpoints/
+runs/comm_cost_firstreport_intervention_20260929/rejected/
+runs/comm_cost_firstreport_intervention_20260929/__pycache__/
+
+# round-28 ROUND28 training-scene first-report counterfactual diagnosis: protocol, gates and reports; live books, logs and rows stay out
+!runs/comm_cost_firstreport_diagnosis_20260929/
+runs/comm_cost_firstreport_diagnosis_20260929/*
+!runs/comm_cost_firstreport_diagnosis_20260929/*.py
+!runs/comm_cost_firstreport_diagnosis_20260929/*.md
+!runs/comm_cost_firstreport_diagnosis_20260929/*.json
+runs/comm_cost_firstreport_diagnosis_20260929/START_LEDGER_*.json
+runs/comm_cost_firstreport_diagnosis_20260929/logs/
+runs/comm_cost_firstreport_diagnosis_20260929/rows/
+runs/comm_cost_firstreport_diagnosis_20260929/checkpoints/
+runs/comm_cost_firstreport_diagnosis_20260929/rejected/
+runs/comm_cost_firstreport_diagnosis_20260929/__pycache__/
+
+# round-29 ROUND29 deadline encoding audit and minimal observation prototype: scripts, audit jsons and reports; nothing from any live run
+!runs/comm_deadline_encoding_audit_20260929/
+runs/comm_deadline_encoding_audit_20260929/*
+!runs/comm_deadline_encoding_audit_20260929/*.py
+!runs/comm_deadline_encoding_audit_20260929/*.md
+!runs/comm_deadline_encoding_audit_20260929/*.json
+runs/comm_deadline_encoding_audit_20260929/__pycache__/
+
+# round-30 ROUND30 old/new deadline encoding paired ablation: harness, protocol, gates, manifests and reports; live books, logs, tapes and weights stay out
+!runs/comm_deadline_encoding_ablation_20260930/
+runs/comm_deadline_encoding_ablation_20260930/*
+!runs/comm_deadline_encoding_ablation_20260930/*.py
+!runs/comm_deadline_encoding_ablation_20260930/*.md
+!runs/comm_deadline_encoding_ablation_20260930/*.json
+runs/comm_deadline_encoding_ablation_20260930/START_LEDGER_*.json
+runs/comm_deadline_encoding_ablation_20260930/logs/
+runs/comm_deadline_encoding_ablation_20260930/rows/
+runs/comm_deadline_encoding_ablation_20260930/checkpoints/
+runs/comm_deadline_encoding_ablation_20260930/rejected/
+runs/comm_deadline_encoding_ablation_20260930/__pycache__/
+
+# round-31 ROUND31 constraint-optimization diagnosis (0 environment launches): scripts, rebuilt
+# trajectory/performance jsons and reports; ROUND30 raw logs/rows/weights stay out of git as before
+!runs/comm_constraint_optimization_diagnosis_20260930/
+runs/comm_constraint_optimization_diagnosis_20260930/*
+!runs/comm_constraint_optimization_diagnosis_20260930/*.py
+!runs/comm_constraint_optimization_diagnosis_20260930/*.md
+!runs/comm_constraint_optimization_diagnosis_20260930/*.json
+runs/comm_constraint_optimization_diagnosis_20260930/__pycache__/
+runs/comm_constraint_optimization_diagnosis_20260930/logs/
+runs/comm_constraint_optimization_diagnosis_20260930/rows/
+runs/comm_constraint_optimization_diagnosis_20260930/checkpoints/
+
+# round-32 ROUND32 actor surrogate reduction ablation: harness, protocol, gates, manifests, reports;
+# live books, logs, tapes, rows and weights stay out of git exactly as in rounds 24/28/29/30/31
+!runs/comm_actor_reduction_ablation_20261001/
+runs/comm_actor_reduction_ablation_20261001/*
+!runs/comm_actor_reduction_ablation_20261001/*.py
+!runs/comm_actor_reduction_ablation_20261001/*.md
+!runs/comm_actor_reduction_ablation_20261001/*.json
+!runs/comm_actor_reduction_ablation_20261001/*.txt
+runs/comm_actor_reduction_ablation_20261001/START_LEDGER_*.json
+runs/comm_actor_reduction_ablation_20261001/logs/
+runs/comm_actor_reduction_ablation_20261001/rows/
+runs/comm_actor_reduction_ablation_20261001/checkpoints/
+runs/comm_actor_reduction_ablation_20261001/rejected/
+runs/comm_actor_reduction_ablation_20261001/__pycache__/
+
+# round-35 ROUND35 reward-wiring smoke verification and restore-boundary recheck: harness, anchors,
+# gates, per-event tables and reports; live books, logs, tapes, rows and weights stay out of git
+# exactly as in rounds 24/28-32
+!runs/comm_reward_smoke_20260930/
+runs/comm_reward_smoke_20260930/*
+!runs/comm_reward_smoke_20260930/*.py
+!runs/comm_reward_smoke_20260930/*.md
+!runs/comm_reward_smoke_20260930/*.json
+runs/comm_reward_smoke_20260930/START_LEDGER_*.json
+runs/comm_reward_smoke_20260930/logs/
+runs/comm_reward_smoke_20260930/rows/
+runs/comm_reward_smoke_20260930/checkpoints/
+runs/comm_reward_smoke_20260930/rejected/
+runs/comm_reward_smoke_20260930/__pycache__/
+
+# round-36 fixed training (last bounded training) plus parallel delivery documentation: harness,
+# gates, per-seed records, ledgers and drafts are tracked; raw lifecycles, transcripts, tapes,
+# rows, checkpoints and console logs stay outside git exactly as in rounds 24/28-35
+!runs/comm_final_train_20261001/
+runs/comm_final_train_20261001/*
+!runs/comm_final_train_20261001/*.py
+!runs/comm_final_train_20261001/*.md
+!runs/comm_final_train_20261001/*.json
+!runs/comm_final_train_20261001/delivery_draft/
+runs/comm_final_train_20261001/delivery_draft/*
+!runs/comm_final_train_20261001/delivery_draft/*.md
+!runs/comm_final_train_20261001/delivery_draft/*.json
+!runs/comm_final_train_20261001/seed*/
+runs/comm_final_train_20261001/seed*/*
+!runs/comm_final_train_20261001/seed*/*.json
+runs/comm_final_train_20261001/seed*/logs/
+runs/comm_final_train_20261001/seed*/rows/
+runs/comm_final_train_20261001/seed*/checkpoints/
+runs/comm_final_train_20261001/seed*/rejected/
+runs/comm_final_train_20261001/__pycache__/
+
+# round-37 fixed final evaluation of the corrected communication models: frozen plan, gate,
+# ledgers, statistics and reports are tracked; raw lifecycles, transcripts, tapes, rows, claims,
+# shard summaries and checkpoints stay outside git as in every previous round
+!runs/comm_final_evaluation_20261002/
+runs/comm_final_evaluation_20261002/*
+!runs/comm_final_evaluation_20261002/*.py
+!runs/comm_final_evaluation_20261002/*.md
+!runs/comm_final_evaluation_20261002/*.json
+!runs/comm_final_evaluation_20261002/delivery_draft/
+runs/comm_final_evaluation_20261002/delivery_draft/*
+!runs/comm_final_evaluation_20261002/delivery_draft/*.md
+!runs/comm_final_evaluation_20261002/delivery_draft/*.json
+runs/comm_final_evaluation_20261002/logs/
+runs/comm_final_evaluation_20261002/rows/
+runs/comm_final_evaluation_20261002/checkpoints/
+runs/comm_final_evaluation_20261002/rejected/
+runs/comm_final_evaluation_20261002/claims/
+runs/comm_final_evaluation_20261002/shards/
+runs/comm_final_evaluation_20261002/__pycache__/
+
+# round-42 one-shot SEND/SKIP ablation: versioned harness and curated reports are tracked;
+# live ledgers, raw episodes, tapes, transcripts and checkpoints remain local.
+!runs/comm_one_shot_report_selection_20261003/
+runs/comm_one_shot_report_selection_20261003/*
+!runs/comm_one_shot_report_selection_20261003/*.py
+!runs/comm_one_shot_report_selection_20261003/*.md
+!runs/comm_one_shot_report_selection_20261003/*.json
+runs/comm_one_shot_report_selection_20261003/__pycache__/
+runs/comm_one_shot_report_selection_20261003/runtime/
+runs/comm_one_shot_report_selection_20261003/logs/
+runs/comm_one_shot_report_selection_20261003/rows/
+runs/comm_one_shot_report_selection_20261003/checkpoints/
+runs/comm_one_shot_report_selection_20261003/rejected/
+runs/comm_one_shot_report_selection_20261003/failures/
+runs/comm_one_shot_report_selection_20261003/launch_claims/
+runs/comm_one_shot_report_selection_20261003/launch_slots/
+
+# ROUND42-R continuation: versioned runner repair and audit records are tracked;
+# the carried-over/new live claims and raw execution artifacts remain local.
+!runs/comm_one_shot_report_selection_20261003_r/
+runs/comm_one_shot_report_selection_20261003_r/*
+!runs/comm_one_shot_report_selection_20261003_r/*.py
+!runs/comm_one_shot_report_selection_20261003_r/*.md
+!runs/comm_one_shot_report_selection_20261003_r/*.json
+runs/comm_one_shot_report_selection_20261003_r/__pycache__/
+runs/comm_one_shot_report_selection_20261003_r/runtime/
+runs/comm_one_shot_report_selection_20261003_r/logs/
+runs/comm_one_shot_report_selection_20261003_r/rows/
+runs/comm_one_shot_report_selection_20261003_r/checkpoints/
+runs/comm_one_shot_report_selection_20261003_r/rejected/
+runs/comm_one_shot_report_selection_20261003_r/failures/
+runs/comm_one_shot_report_selection_20261003_r/launch_claims/
+runs/comm_one_shot_report_selection_20261003_r/launch_slots/
+
+# ROUND42-R gate repair and exact resume: code and curated records are tracked;
+# copied execution inputs and all resumed raw outputs stay in this isolated directory.
+!runs/comm_one_shot_gate_resume_20261003/
+runs/comm_one_shot_gate_resume_20261003/*
+!runs/comm_one_shot_gate_resume_20261003/*.py
+!runs/comm_one_shot_gate_resume_20261003/*.md
+!runs/comm_one_shot_gate_resume_20261003/*.json
+runs/comm_one_shot_gate_resume_20261003/__pycache__/
+runs/comm_one_shot_gate_resume_20261003/runtime/
+runs/comm_one_shot_gate_resume_20261003/logs/
+runs/comm_one_shot_gate_resume_20261003/rows/
+runs/comm_one_shot_gate_resume_20261003/checkpoints/
+runs/comm_one_shot_gate_resume_20261003/rejected/
+runs/comm_one_shot_gate_resume_20261003/failures/
+runs/comm_one_shot_gate_resume_20261003/launch_claims/
+runs/comm_one_shot_gate_resume_20261003/launch_slots/
+
+# ROUND42-R version 2 resume-only adapter: tracked code/curated identity, isolated raw outputs.
+!runs/comm_one_shot_gate_resume_20261003_v2/
+runs/comm_one_shot_gate_resume_20261003_v2/*
+!runs/comm_one_shot_gate_resume_20261003_v2/*.py
+!runs/comm_one_shot_gate_resume_20261003_v2/*.md
+!runs/comm_one_shot_gate_resume_20261003_v2/*.json
+runs/comm_one_shot_gate_resume_20261003_v2/__pycache__/
+runs/comm_one_shot_gate_resume_20261003_v2/runtime/
+runs/comm_one_shot_gate_resume_20261003_v2/logs/
+runs/comm_one_shot_gate_resume_20261003_v2/rows/
+runs/comm_one_shot_gate_resume_20261003_v2/checkpoints/
+runs/comm_one_shot_gate_resume_20261003_v2/rejected/
+runs/comm_one_shot_gate_resume_20261003_v2/failures/
+runs/comm_one_shot_gate_resume_20261003_v2/launch_claims/
+runs/comm_one_shot_gate_resume_20261003_v2/launch_slots/
+runs/comm_one_shot_gate_resume_20261003_v2/training_progress/
+
+# ROUND46-R2 V7 eval-only recovery: adapter code, zero-environment tests, entry
+# records and the immutable prelaunch identity are tracked; every live claim,
+# slot, row, log, tape, receipt, checkpoint and runtime state stays local.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_v7_eval_only.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/test_r46_v7_episode_closure.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V7_EXECUTION_ENTRY.md
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V7_CURRENT_CURSOR.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/ROUND46_R2_V7_FROZEN_CONFIG.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/ROUND46_R2_V7_PRELAUNCH_GATE.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/ROUND46_R2_V7_QUOTA_PLAN.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v7_eval_only/ROUND46_R2_V7_STOP_STATE.json
+
+# ROUND46-R2 V8 booking-close: adapter code, tests, cursor and prelaunch identity
+# are tracked; live claims, rows, logs, receipts and runtime state stay local.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_v8_eval_booking_close.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/test_r46_v8_booking_close.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V8_CURRENT_CURSOR.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v8_eval_booking_close/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/v8_eval_booking_close/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v8_eval_booking_close/ROUND46_R2_V8_FROZEN_CONFIG.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v8_eval_booking_close/ROUND46_R2_V8_PRELAUNCH_GATE.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v8_eval_booking_close/ROUND46_R2_V8_QUOTA_PLAN.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v8_eval_booking_close/ROUND46_R2_V8_STOP_STATE.json
+
+# ROUND46-R2 V9 runtime close: adapter code, tests, cursor and prelaunch identity
+# are tracked; live claims, rows, logs, receipts and runtime state stay local.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_v9_eval_runtime_close.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/test_r46_v9_eval_runtime_close.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V9_CURRENT_CURSOR.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v9_eval_runtime_close/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/v9_eval_runtime_close/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v9_eval_runtime_close/ROUND46_R2_V9_FROZEN_CONFIG.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v9_eval_runtime_close/ROUND46_R2_V9_PRELAUNCH_GATE.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v9_eval_runtime_close/ROUND46_R2_V9_QUOTA_PLAN.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v9_eval_runtime_close/ROUND46_R2_V9_STOP_STATE.json
+
+# ROUND46-R2 V10 final close: adapter code, tests, cursor and prelaunch identity
+# are tracked; live claims, rows, logs, receipts and runtime state stay local.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/r46_v10_eval_final_close.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/test_r46_v10_eval_final_close.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/ROUND46_R2_V10_CURRENT_CURSOR.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_FROZEN_CONFIG.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_PRELAUNCH_GATE.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_QUOTA_PLAN.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_REPORT.md
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_MACHINE_VERDICT.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_FINAL_RESULTS.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_PAIRED_RESULTS.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_TARGET_ID_DIFFS.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_EXECUTION_LEDGER.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_GIT_OUTSIDE_MANIFEST.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_RUNTIME_BINDING_TABLE.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/v10_eval_final_close/ROUND46_R2_V10_ANALYSIS_INPUT_MANIFEST.json
+
+# ROUND47 read-only cost decomposition: analysis scripts, pure tests, deliverables
+# and input manifests are tracked; no models, logs or raw artifacts.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round47_cost_decomposition/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/round47_cost_decomposition/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round47_cost_decomposition/*.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round47_cost_decomposition/*.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round47_cost_decomposition/*.md
+
+# ROUND48 read-only policy drift probe: scripts, pure tests, deliverables and
+# manifests are tracked; no models, tapes, logs or raw artifacts.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round48_policy_drift_probe/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/round48_policy_drift_probe/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round48_policy_drift_probe/*.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round48_policy_drift_probe/*.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round48_policy_drift_probe/*.md
+
+# ROUND62 read-only early-report information audit: scripts, tests and curated
+# reports are tracked; R61 source tapes, lifecycle logs and checkpoints stay local.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round62_early_report_information_audit/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/round62_early_report_information_audit/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round62_early_report_information_audit/*.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round62_early_report_information_audit/*.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round62_early_report_information_audit/*.md
+
+# ROUND63 read-only matched-support audit: curated analysis and tests only.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round63_matched_slack_feasibility/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/round63_matched_slack_feasibility/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round63_matched_slack_feasibility/*.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round63_matched_slack_feasibility/*.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round63_matched_slack_feasibility/*.md
+
+# ROUND64 fixed deadline x action mechanism experiment: curate executable source,
+# frozen inputs, preflight, analysis and final reports only; keep raw episodes/logs local.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/r64_guard.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/r64_intervention.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/r64_runtime.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/r64_execute.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/r64_identity.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/r64_preflight.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/r64_analysis.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/test_round64_zero_env.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/test_round64_analysis.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/test_round64_resume_seam.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_EXECUTION_BASIS.md
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_FREEZE.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_RESUME_SEAM_CANDIDATE.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_CAP13_APPROVAL.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_RECOVERY_RECEIPT.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_CAP13_PREFLIGHT.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_CAP13_FINAL_VERDICT.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_CAP13_ORIGINALS_MANIFEST.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_PAIRED_ANALYSIS_CAP13.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_CAP13_REPORT.md
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_PREFLIGHT_15.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_GATE_RECONCILIATION.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_PAIRED_ANALYSIS.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_MACHINE_VERDICT.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_REPORT.md
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_LEDGER_AUDIT.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_ORIGINALS_MANIFEST.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_RESUME_SEAM_READINESS.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/ROUND64_RESUME_SEAM_READINESS.md
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/QUALIFICATION_AND_RECOVERY_REVIEW.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round64_controlled_deadline_intervention/QUALIFICATION_AND_RECOVERY_REVIEW.md
+
+# ROUND68 late-initial-confidence ablation: curate executable source, frozen inputs, tests and reports only; keep raw episodes/logs/checkpoints/guard-ledgers local.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round68_late_initial_confidence_ablation/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/round68_late_initial_confidence_ablation/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round68_late_initial_confidence_ablation/*.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round68_late_initial_confidence_ablation/*.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round68_late_initial_confidence_ablation/*.md
+
+# ROUND71 critic-initialisation calibration approved fixed trial: curate executable source, the archived authorisation/licence and tests only; keep raw episodes/logs/checkpoints/guard-ledgers local.
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round71_critic_initialization_calibration/
+runs/comm_bc_initialized_constrained_ppo_20261007_r2/round71_critic_initialization_calibration/*
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round71_critic_initialization_calibration/*.py
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round71_critic_initialization_calibration/*.json
+!runs/comm_bc_initialized_constrained_ppo_20261007_r2/round71_critic_initialization_calibration/*.md

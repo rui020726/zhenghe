@@ -1,0 +1,296 @@
+{
+ "kind": "round72-machine-verdict/1",
+ "task": "ROUND72 - ROUND71 originals acceptance and greedy-behaviour-unchanged mechanism diagnostic",
+ "branch": "analysis/round72-calibration-behaviour-diagnostic",
+ "evidence_head": "fe53d476efb56baaae194d68d7f749a546b14389",
+ "session_side_effects": {
+  "environment_constructions": 0,
+  "model_loads": 0,
+  "forward_passes": 0,
+  "rng_uses": 0,
+  "ppo_or_optimizer_calls": 0,
+  "synthetic_optimizer_steps": 0,
+  "checkpoint_writes": 0,
+  "new_evaluations": 0,
+  "new_claims": 0,
+  "note": "read-only parsing of persisted JSON/JSONL plus writing these deliverables"
+ },
+ "runtime_identity": {
+  "r42_one_shot.py": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+  "r40_train_resume_adapter.py": "688dee0c60a5ab7893991d10948a7c5cff12ec6ba6f91fce07c3439a0ee7f2ca",
+  "r42_versions.py": "26b9e1a3d4f3b9a5d39ca020a5ebd3653615c09a76a77ae4138f4ab98420a3d8",
+  "r66_frozen.py": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10",
+  "canonical_v2_trainer.py": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "cost_math.py": "bca99af08479398a7aec2a2f085163d31edd532f109b8cfc2043c1bfcfb49026",
+  "comm_budget.py": "e50e985efba3628e8d6faefc4bf36e9c7a9dd2ec304069e23f3e9f00f1207929",
+  "comm_learning.py": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f",
+  "r68_r71_runtime_identical": true
+ },
+ "plan_source_identity": {
+  "eval_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r68-late-initial-confidence-alpha0.10/1+r71-critic-calibration-init/1+r71-eval/1",
+  "training_version": "constrained-cost-v2/one-shot-send-skip/1/full-trace-gae-lambda-1/1/dual-eta-lambda-0p5/1/rule-bc-late147-init/1/published-completion-event-at-relay-tick/2+r53-critic-representation-stop-gradient/1+r56-soft-early-report-prior-beta0p10/1+r58-prior-strength-beta1p00/1+r60-partitioned-early-late-actor-head/1+r66-frozen-early-path-late-adaptation/1+r68-late-initial-confidence-alpha0.10/1+r71-critic-calibration-init/1",
+  "eval_block": "1800000..1800031 (already-used development block, NOT a confirmation set)",
+  "training_teacher_block": "1300000..1300047 (R68 real training tapes; R71 offline-fit teacher)",
+  "scene_unit": 32,
+  "seeds": [
+   11,
+   22,
+   33
+  ],
+  "modes": [
+   "greedy",
+   "sampled"
+  ],
+  "focal_scene": 1700027,
+  "greedy_is_primary": true,
+  "sampled_reported_separately": true
+ },
+ "eval_matrix": {
+  "cells": 192,
+  "focal_cells": 6,
+  "arms_compared": "r71:new_ep128 minus r68:trained_alpha",
+  "bootstrap": {
+   "rng": "PCG64",
+   "seed": 20261012,
+   "draws": 10000,
+   "index_sha256": "fefcfebb1c1cf9822ba6f55e107ffcfa5368a72640f764a768eddd7c8b8b278e",
+   "quantile": "numpy linear 0.025/0.975"
+  },
+  "row_source_audit_keys": [
+   "r71_model",
+   "r68_control_reuse",
+   "admission_rule"
+  ]
+ },
+ "mechanism": {
+  "matched_free_first_report_decisions": 1098,
+  "early_decisions": {
+   "n": 804,
+   "max_abs_dp": 0.0,
+   "structural": true,
+   "reason": "trunk+early_head frozen (requires_grad=False); early probability is bit-identical across arms"
+  },
+  "late_decisions": {
+   "n": 294,
+   "changed": 294,
+   "max_abs_dp": 0.11426997184753418,
+   "min_abs_margin_r68": 0.07624417543411255,
+   "min_abs_margin_r71": 0.04009431600570679,
+   "max_encroachment_ratio": 0.4865001034372464,
+   "argmax_flips": 0
+  },
+  "greedy_argmax_flips_total": 0,
+  "greedy_cells_identical_per_seed": 32,
+  "sampled_action_flips": {
+   "n": 14,
+   "all_late": true,
+   "all_sampled": true
+  },
+  "prior_trainable_path": "beta=1.00 early gate prior acts only on early first-emission free rows that route to the frozen early_head; prior_trainable_grad_l1 = 0.0 at all gate_diag updates in both rounds",
+  "calibration_effect_on_gradients": {
+   "critic_grad_l1_mean_r68": 86.78837755446632,
+   "critic_grad_l1_mean_r71": 8.210512009811485,
+   "task_value_head_l1_mean_r68": 78.0707924029375,
+   "task_value_head_l1_mean_r71": 8.117767793697917,
+   "late_head_l1_mean_r68": 0.2691390147604167,
+   "late_head_l1_mean_r71": 0.16059406871875,
+   "gradient_norm_mean_r68": 10.681272916666666,
+   "gradient_norm_mean_r71": 1.1315885416666667
+  }
+ },
+ "greedy_unchanged_explanation": "Early free first-report probabilities are bit-identical because the R66 intervention froze the shared trunk and early_head. The R71 critic calibration moved only the two value heads, so it can only reach the actor through the late_head gradient; the late head did move on 294/294 visited late free states, but the smallest |p-0.5| margin was 0.0401 (R71) and the largest single-decision shift reached at most 0.4865 of the way to the boundary, so no greedy decision crossed p=0.5. Hence greedy first-report actions, task sets and metered cost are identical to R68 on all 192 cells.",
+ "primary_result_per_seed": {
+  "greedy": {
+   "11/greedy": {
+    "task_delta": 0.0,
+    "cost_delta_B_per_scene": 0.0,
+    "targets_lost": 0,
+    "on_time": 183,
+    "bytes_per_scene": 4066.5,
+    "identical_to_r68": true
+   },
+   "22/greedy": {
+    "task_delta": 0.0,
+    "cost_delta_B_per_scene": 0.0,
+    "targets_lost": 0,
+    "on_time": 183,
+    "bytes_per_scene": 4066.5,
+    "identical_to_r68": true
+   },
+   "33/greedy": {
+    "task_delta": 0.0,
+    "cost_delta_B_per_scene": 0.0,
+    "targets_lost": 0,
+    "on_time": 183,
+    "bytes_per_scene": 4066.5,
+    "identical_to_r68": true
+   }
+  },
+  "sampled": {
+   "11/sampled": {
+    "on_time": 180,
+    "bytes_per_scene": 3152.625,
+    "task_delta": 0.0,
+    "task_ci95": [
+     0.0,
+     0.0
+    ],
+    "cost_delta_B_per_scene": -155.8125,
+    "cost_ci95": [
+     -389.625,
+     0.0
+    ],
+    "targets_lost": 0
+   },
+   "22/sampled": {
+    "on_time": 183,
+    "bytes_per_scene": 3669.375,
+    "task_delta": 0.0,
+    "task_ci95": [
+     0.0,
+     0.0
+    ],
+    "cost_delta_B_per_scene": 331.125,
+    "cost_ci95": [
+     78.375,
+     662.625
+    ],
+    "targets_lost": 0
+   },
+   "33/sampled": {
+    "on_time": 180,
+    "bytes_per_scene": 2848.875,
+    "task_delta": -0.03125,
+    "task_ci95": [
+     -0.09375,
+     0.0
+    ],
+    "cost_delta_B_per_scene": -642.1875,
+    "cost_ci95": [
+     -1133.8125,
+     -239.625
+    ],
+    "targets_lost": 1
+   }
+  }
+ },
+ "cost_target_comparison_vs_rules": {
+  "IMMEDIATE": {
+   "on_time": 183,
+   "bytes_per_scene_mean": 14356.5
+  },
+  "LATE_DISCOVERY_GATE": {
+   "on_time": 183,
+   "bytes_per_scene_mean": 3897.9375
+  },
+  "ALWAYS_HOLD": {
+   "on_time": 170,
+   "bytes_per_scene_mean": 0.0
+  },
+  "learned_new_ep128_greedy": {
+   "on_time": 183,
+   "bytes_per_scene": 4066.5,
+   "vs_immediate_cost_delta_B_per_scene": -10290.0,
+   "targets_lost_vs_immediate": 0
+  },
+  "greedy_vs_late_rule_cost_delta_B_per_scene": 168.5625,
+  "greedy_vs_late_rule_decomposition": "5394/32; 31 scenes identical, scene 1800000 alone adds 5394 B"
+ },
+ "budget_audit": {
+  "executor": "integrated_sar/comm_budget.py: one shared hard per-episode byte credit + per-step capacity for every arm (learned and rules alike)",
+  "charge_rule": "cost = payload estimate x subscribed robots, billed in full even if the packet is lost; credit never driven negative; every refusal counted",
+  "refusal_counters": [
+   "budget_refused_sends",
+   "budget_refused_bytes",
+   "capacity_refused_sends"
+  ],
+  "budget_value_source": "29300 B per-episode credit is config-injected (comm_budget_bytes / bytes_per_episode); no hardcoded literal found in read source",
+  "dev_eval_block_binding": "NOT binding: immediate mean 14356.5 B/scene (max ~15876), learned greedy 4066.5 B/scene, both far below 29300",
+  "training_block_binding": "UNVERIFIED: training uses block 1300000..1300047 (distinct from the eval block); per-episode tape refusal counters are not present in the batch summary records, so training-block budget binding is not asserted from dev-eval immediate cost",
+  "separation_note": "dev-eval immediate cost below 29300 does NOT establish that the training budget was never binding; the two blocks are different scene sets"
+ },
+ "advantage_contract": {
+  "gamma": 1.0,
+  "gae_lambda": 1.0,
+  "eta_lambda": 0.5,
+  "lambda_init": 1.0,
+  "final_lambda": {
+   "s11": 1.625,
+   "s22": 1.5,
+   "s33": 1.625
+  },
+  "gae": "per-decision-next-value; A_t = r_t + gamma*bootstrap - V + gamma*gae_lambda*next_A; returns = A + V",
+  "critic_targets": "two heads regress the GAE returns return_task / return_cost (gamma=1 undiscounted future sum) with a value baseline; NOT a raw TD residual",
+  "combined_actor_advantage": "lambda_dual * A_task - A_cost (cost_math.actor_advantage)",
+  "advantage_normalization": "none (per-episode std division forbidden); task/cost not separately normalized",
+  "cost_reward": "billed_bytes / B0_BYTES (positive measured-cost convention)",
+  "dual_update": "lambda_next = max(0, lambda + eta*g_hat); g_hat = E[Y_ref]-E[Y_policy]-delta in on-time-tasks-per-episode units",
+  "cost_baseline_counterexample": "A_cost = return_cost - V_cost with V_cost ~ E[cost]; the baseline containing expected cost does NOT cancel the cost policy gradient (E[-A_cost*dlogpi/dz] = -c*p*(1-p), = -0.2436c at p=0.58). No narrative may claim the cost baseline neutralises cost pressure without an independent wiring counterexample.",
+  "quantification_limit": "only persisted late_actor_grad_l1 / critic_grad_l1 quantify actor contributions; RMSE~1.01 is a value fit, not a gradient noise std; no new autograd opened"
+ },
+ "effective_logit_evidence": {
+  "recorded_probability": "send_probabilities = softmax over the 2 one-shot actions of the routed-head logits from controller.forward",
+  "routing": "ready_step = round(f[18]*1000) - round(f[0]); early_head if <=147 else late_head; uses only the legal 19-D input",
+  "mask": "real sequential budget mask applied in the collector before the choice; a non-affordable candidate is forced HOLD (not a free choice, no RNG spent)",
+  "prior_scope": "beta=1.00 gate prior is a TRAINING auxiliary loss on early first-emission free rows only; it is NOT an eval-time additive logit term, so eval probabilities are pure routed-head softmax",
+  "head_scale_caveat": "late_init_alpha=0.10 only scales the late head initial network term; it does not prove the margin cannot cross zero later, and the unscaled prior cannot be assumed to preserve margin sign",
+  "no_greedy_flip_framing": "0/1098 argmax flips is reported for this actual fixed scheme; it is NOT claimed to be structurally locked",
+  "coverage": "recorded pre-action 19-D features, effective SEND probability, action and candidate_audit charge are persisted per free decision in the tapes",
+  "missing": "no separate raw pre-softmax logit panel beyond the recorded effective probability; probability shift, training difference and sampled-eval RNG are reported as separate channels"
+ },
+ "belief_source": {
+  "observation_layout": "comm-send-state/1 (19 dims)",
+  "boundary_rule": "every feature is a property of the sender-held message, the sender own ledger/airtime, or current budget/capacity; no receiver belief, robot position, scenario id or target id may enter (comm_learning.py)",
+  "always_hold_170_of_183": "ALWAYS_HOLD first-report ablation completion (on_time 170, spent 0); it is NOT a 92.9% information-path share",
+  "value_fit_caveat": "fitting V(s) does not prove the 19-D observation distinguishes SEND vs SKIP action values"
+ },
+ "numerical_source_corrections": {
+  "greedy_late_mean_diff": "168.5625 B/scene = 5394/32, entirely scene 1800000; 31 scenes identical; CI [0, 505.6875]; not a theoretical optimisable space",
+  "late_183_targets": "late preserving the 183 dev-block targets does not imply all late messages are worthless or Pareto optimal",
+  "blocks": "R68/R71 training teacher block 1300000..1300047; dev-eval block 1800000..1800031 (background only, not in the fit)",
+  "r71_billing_rows": {
+   "rows": 70693,
+   "calls": 78,
+   "joint_rows": 37508,
+   "cap": 72000,
+   "remaining": 1307
+  },
+  "r71_billing_note": "70693 rows are the offline-fit trunk-input forward ledger (cap 72000), NOT the teacher dataset; teacher = 384 R68 training tapes over 1300000..1300047; teacher-scale 32046 joint / 58928 target is delegation context, not independently re-derived here"
+ },
+ "sampled_rng": {
+  "action_rng_key": "runner.eval_action_seed(seed, scene, mode); shared across arms and with ROUND66 for the same (seed, scene, mode)",
+  "bootstrap": {
+   "rng": "PCG64",
+   "seed": 20261012,
+   "draws": 10000,
+   "index_sha256": "fefcfebb1c1cf9822ba6f55e107ffcfa5368a72640f764a768eddd7c8b8b278e",
+   "quantile": "numpy linear 0.025/0.975"
+  },
+  "cross_seed_direction_note": "sampled cost directions differ by seed (s11 -155.8, s22 +331.1, s33 -642.2 with 1 target lost); these track the per-decision late probability shifts documented in the boundary audit, so they are not attributed wholly to sampling variance"
+ },
+ "cannot_rule_out": [
+  "no generalisation beyond this single development block",
+  "no non-inferiority or deployment claim",
+  "the null greedy result is not attributed to a single root cause; parameter-sharing interference is not proven to be the only cause",
+  "saturation vs margin: R66 was saturated near p=0.999; R68 alpha=0.10 moved late p into 0.54-0.99, so this mechanism is margin, not saturation",
+  "early targets remain valuable; late labels are not a safe-deletion ground truth"
+ ],
+ "correctness_defect": "none found that affects the reported results",
+ "unexplained_bookkeeping": {
+  "update.likelihood_alignment.max_abs_gap": "bit-identical across all 96 batch records of both rounds; partially explained as a float32-vs-float64 summation residual and exactly 0 for single-free-candidate steps; not fully explained for 6 batches (b11,b13 per seed, both candidates late); tolerance 1e-6 passed in both rounds; not used as evidence for or against any scientific claim; registered for a separate read-only follow-up"
+ },
+ "historical_overruns_not_inherited": {
+  "round60": "608 real environment constructions vs 600 hard cap (over by 8); historical, not modified, no headroom borrowed",
+  "round67": ">=9419 offline forward rows vs 5000 cap; historical",
+  "round72_this_session": "fresh zero budget; nothing inherited"
+ },
+ "evidence_paths": {
+  "boundary_audit": "D:\\code\\整合\\zhenghe-round42\\analysis\\round72-calibration-behaviour-diagnostic\\ROUND72_BOUNDARY_AUDIT.json",
+  "validation": "D:\\code\\整合\\zhenghe-round42\\analysis\\round72-calibration-behaviour-diagnostic\\ROUND72_VALIDATION.json",
+  "training_signal_audit": "D:\\code\\整合\\zhenghe-round42\\analysis\\round72-calibration-behaviour-diagnostic\\ROUND72_TRAINING_SIGNAL_AUDIT.json",
+  "r71_statistics": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\raw\\ROUND71_STATISTICS.json",
+  "r68_rule_context": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round68_late_initial_confidence_ablation\\raw\\ROUND68_RULE_CONTEXT.json",
+  "r71_checkpoint_index": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\ROUND71_CHECKPOINT_INDEX.json",
+  "r71_resource_ledger": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\ROUND71_RESOURCE_LEDGER.json"
+ }
+}

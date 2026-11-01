@@ -1,0 +1,158 @@
+{
+  "kind": "round54-execution-validity/1",
+  "current_adapter_sha256": "e2f16bf55478d1a95e0f9ee07338f1cc602041373feaf5e8fadee28ab7a7f0d9",
+  "current_trainer_sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+  "adapter_matches_frozen": true,
+  "trainer_matches_frozen": true,
+  "r53_delivery_head": "39b9cccf2a87862304ebde112c382bb8aa2b842c",
+  "executor_sha256_by_commit": {
+    "4ab9b1f": "800eebd3a60a3d5803584827a697953961f7cf7d359085f208c6c6cf5747d0f8",
+    "86438c9": "02fa91b6e6e3a1dfa9242d6ac5d624f87b3ff86cf807a9461fa547f931fd25ac",
+    "90cced8": "c92bc37e29a5b01a3864c6e165f0790cba61089b0f7efaac863bad4ceef7ab77",
+    "6e971ea": "284f1aa5cfe31760925c731666efe7fbbba5f64eeb2432c13d604fda13f465d2",
+    "39b9ccc": "284f1aa5cfe31760925c731666efe7fbbba5f64eeb2432c13d604fda13f465d2"
+  },
+  "claim_prelaunch_head_distribution": {
+    "bc": {
+      "490d9e7": 48
+    },
+    "cand": {
+      "90cced8": 96
+    },
+    "train": {
+      "86438c9": 12,
+      "90cced8": 372
+    }
+  },
+  "claim_attempts": {
+    "1": 528
+  },
+  "claim_statuses": {
+    "complete": 528
+  },
+  "check1_first_twelve_and_three_updates": {
+    "verdict": "成立",
+    "critic_isolation_active_at_first_launch": true,
+    "evidence": [
+      "executor 02fa91b6 (commit 86438c9) installed install_on_verified_trainer + validate_live_binding inside bind_live_runtime before run_first_four_gate_then_continue (lines 655/659/755 in the 4ab9b1f-lineage file)",
+      "round53_trial_adapter.py sha256 unchanged vs frozen prelaunch identity e2f16bf5...",
+      "canonical trainer v2_trainer.py sha256 unchanged vs frozen 0550b99e...",
+      "first-four gate receipts: passed; preupdate cursors 0/0/0, lambda 1.0, empty fresh Adam, bc_parameter_sha256 = registered per seed",
+      "registered_r44_ep0_rng_exact = true in all three receipts (R44 ep0 provided RNG only; model init came from true R45 BC_POST checkpoint)"
+    ],
+    "version_fix_scope": "runtime frozen-copy training_version string only (gate identity input); no reward/billing/observation/protocol/math change; git diff 86438c9..39b9ccc touches only r53_execute.py among harness/upstream files",
+    "caveat": "修复后门禁通过本身不证明修复前训练等价；等价性由钩子已安装+训练数学未变的证据支撑"
+  },
+  "check2_resume_exactness": {
+    "verdict": "成立",
+    "evidence": [
+      "R40 adapter (unchanged frozen file) resume path: _latest_resume_source selects the committed rolling checkpoint (updates=1, episodes_done=4) after payload identity validation",
+      "trainer.load_checkpoint restores controller weights, full Adam optimizer state (moments), lambda from training_state, and full Python/NumPy/Torch RNG (save_checkpoint writes 'rng'; load_checkpoint calls restore_rng)",
+      "run log 'R40 resumed seed {s} at episode 4 lambda=1.0000 updates=1' for all three seeds",
+      "batch_index continues from state['updates']=1 -> continuation batches b1..b31; no PPO update repeated",
+      "frozen scenario order: scenario = order[episode_index]; continuation uses order[4:] exactly",
+      "batch commit receipts close: episodes 0..127 each covered exactly once per seed"
+    ],
+    "batch_commit_closure": {
+      "11": {
+        "episodes_covered_exactly_once": true,
+        "batch_cursor_closure": true,
+        "batches": 32
+      },
+      "22": {
+        "episodes_covered_exactly_once": true,
+        "batch_cursor_closure": true,
+        "batches": 32
+      },
+      "33": {
+        "episodes_covered_exactly_once": true,
+        "batch_cursor_closure": true,
+        "batches": 32
+      }
+    },
+    "model_init_roles": {
+      "initial_model": "true R45 BC_POST checkpoint state (parameter sha matches registry)",
+      "r44_ep0_checkpoint_role": "RNG-only (gate receipt registered_r44_ep0_rng_exact=true)",
+      "resume_source": "committed batch-0 state (weights+optimizer+lambda+RNG), not re-initialization"
+    }
+  },
+  "check3_bc_sampled_fix": {
+    "verdict": "成立（48格首次构造之前发现，未产生错误episode）",
+    "evidence": [
+      "failure raised at controller initialization before any BC claim (traceback: BC_POST model-only initialization mismatch for seed 11)",
+      "all 48 BC claims carry prelaunch_head 490d9e7 (BC-fix executor); zero BC claims under earlier heads",
+      "all 48 BC claims: status=complete, attempt=1, completed_steps=1000, environment_constructor_calls=1",
+      "all 48 BC rows: r53_evaluation_role=BC_POST_SAMPLED_EVAL, model_arm=BC_ONLY_R2, checkpoint_parameter_identity = registered BC parameter sha"
+    ],
+    "launch_accounting": {
+      "first_twelve": 12,
+      "continuation": 372,
+      "candidate_eval": 96,
+      "bc_sampled": 48,
+      "total": 528,
+      "reserve_used": 0,
+      "single_attempt_each": true,
+      "bc_claims_all_fixed_executor": true
+    }
+  },
+  "check4_fix_ledger": {
+    "verdict": "成立",
+    "fixes": [
+      {
+        "fix": "private task-state seeding",
+        "commit": "14b6749",
+        "affected_claims": 0,
+        "affected_episodes": 0
+      },
+      {
+        "fix": "protected dirty-file guard",
+        "commit": "4ab9b1f",
+        "affected_claims": 0,
+        "affected_episodes": 0,
+        "preserved": "raw_launch_failure_task_state_seed_* / dirty_guard_* namespaces"
+      },
+      {
+        "fix": "R53-only private-journal claim verifier",
+        "commit": "86438c9",
+        "affected_claims": 0,
+        "affected_episodes": 0,
+        "preserved": "raw_launch_failure_journal_route_repeat_20261008T011100Z (2 ep0 identity copies)"
+      },
+      {
+        "fix": "frozen-version wiring + gate-only recovery",
+        "commit": "90cced8",
+        "affected_claims": 12,
+        "affected_episodes": 0,
+        "note": "12 committed first-four claims/3 PPO updates audited in place by re-run gate; continuation resumed from committed cursors; nothing re-run"
+      },
+      {
+        "fix": "BC model-only eval init + BC-sampled-only recovery",
+        "commit": "6e971ea",
+        "affected_claims": 0,
+        "affected_episodes": 0,
+        "note": "no BC episode existed before the fix; 48 BC launches ran under the fixed executor"
+      },
+      {
+        "fix": "result-JSON serialization sanitizer",
+        "commit": "39b9ccc",
+        "affected_claims": 0,
+        "affected_episodes": 0
+      }
+    ],
+    "training_math_untouched": true,
+    "changed_files_in_window": [
+      "runs/comm_bc_initialized_constrained_ppo_20261007_r2/round53_critic_isolation_trial_readiness/r53_execute.py"
+    ],
+    "failure_masking": "none: every failure preserved namespace and registry; reserve never used"
+  },
+  "zero_operations": {
+    "environment_constructor_calls": 0,
+    "simulation_runs": 0,
+    "new_flows": 0,
+    "optimizer_updates": 0,
+    "checkpoint_writes": 0,
+    "new_episode_rows": 0,
+    "cpu_model_forwards": 0
+  },
+  "evidence_missing": []
+}

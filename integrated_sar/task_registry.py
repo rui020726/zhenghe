@@ -58,16 +58,30 @@ class _TaskRecord:
 
 
 class TaskRegistry:
-    """Single source of truth for task lifecycle and event deduplication."""
+    """Single source of truth for task lifecycle and event deduplication.
+
+    Every delivered event is classified exactly once:
+
+    * *seen* -- the event id was delivered before (a re-publication); neither
+      accepted nor rejected, and never re-processed;
+    * *accepted* -- the event created a task, updated one in place, or otherwise
+      validly applied to the lifecycle; only these count in
+      ``accepted_event_count``;
+    * *rejected* -- the event is not a legal lifecycle transition (unknown task,
+      a timestamp older than the record's, or an event aimed at a task that has
+      already reached a terminal state); the reason is kept in ``rejection_reason``.
+    """
 
     def __init__(self) -> None:
         self._tasks: dict[str, _TaskRecord] = {}
+        self._seen_event_ids: set[str] = set()
         self._accepted_event_ids: set[str] = set()
+        self._rejected_event_ids: dict[str, str] = {}
 
     def handle_detection(self, event: DetectionEvent) -> None:
-        if event.event_id in self._accepted_event_ids:
+        if event.event_id in self._seen_event_ids:
             return
-        self._accepted_event_ids.add(event.event_id)
+        self._seen_event_ids.add(event.event_id)
 
         record = self._tasks.get(event.target_id)
         if record is None:
@@ -97,24 +111,38 @@ class TaskRegistry:
                 updated_at=event.detected_at,
                 metadata=metadata,
             )
+            self._accepted_event_ids.add(event.event_id)
             return
 
-        if record.status.terminal or event.detected_at < record.updated_at:
+        if record.status.terminal:
+            self._reject(event.event_id, "terminal_task")
             return
+        if event.detected_at < record.updated_at:
+            self._reject(event.event_id, "late_event")
+            return
+
         record.position = event.world_position
         record.confidence = max(record.confidence, event.confidence)
         record.updated_at = event.detected_at
         record.revision += 1
         record.metadata["map_version"] = event.map_version
         record.metadata["last_observed_by"] = event.discovered_by
-
-    def handle_progress(self, event: ProgressEvent) -> None:
-        if event.event_id in self._accepted_event_ids:
-            return
         self._accepted_event_ids.add(event.event_id)
 
+    def handle_progress(self, event: ProgressEvent) -> None:
+        if event.event_id in self._seen_event_ids:
+            return
+        self._seen_event_ids.add(event.event_id)
+
         record = self._tasks.get(event.task_id)
-        if record is None or event.observed_at < record.updated_at:
+        if record is None:
+            self._reject(event.event_id, "unknown_task")
+            return
+        if record.status.terminal:
+            self._reject(event.event_id, "terminal_task")
+            return
+        if event.observed_at < record.updated_at:
+            self._reject(event.event_id, "late_event")
             return
 
         record.current_stage = min(event.stage_index, len(record.stages) - 1)
@@ -132,6 +160,16 @@ class TaskRegistry:
         if event.status == TaskStatus.COMPLETED:
             record.progress = 1.0
             record.remaining_requirements = tuple(0 for _ in record.remaining_requirements)
+        self._accepted_event_ids.add(event.event_id)
+
+    def _reject(self, event_id: str, reason: str) -> None:
+        self._rejected_event_ids[event_id] = reason
+
+    def was_accepted(self, event_id: str) -> bool:
+        return event_id in self._accepted_event_ids
+
+    def rejection_reason(self, event_id: str) -> str | None:
+        return self._rejected_event_ids.get(event_id)
 
     def get(self, task_id: str) -> TaskSnapshot | None:
         record = self._tasks.get(task_id)
@@ -148,7 +186,9 @@ class TaskRegistry:
 
     def clear(self) -> None:
         self._tasks.clear()
+        self._seen_event_ids.clear()
         self._accepted_event_ids.clear()
+        self._rejected_event_ids.clear()
 
     def __len__(self) -> int:
         return len(self._tasks)
@@ -156,3 +196,7 @@ class TaskRegistry:
     @property
     def accepted_event_count(self) -> int:
         return len(self._accepted_event_ids)
+
+    @property
+    def rejected_event_count(self) -> int:
+        return len(self._rejected_event_ids)

@@ -1,0 +1,175 @@
+{
+ "kind": "round72-budget-coverage-receipt/1",
+ "generated_by": "r72_coverage.py",
+ "purpose": "Prove per-row existence+type of budget/refusal fields so the errata 'measured zero' claim is grounded; executor refusals covered on every row, collector pre-mask covered for learned+training and N/A for the immediate rule path.",
+ "zero_side_effects": {
+  "environment": 0,
+  "model_loads": 0,
+  "forward": 0,
+  "rng": 0,
+  "optimizer_or_ppo": 0,
+  "checkpoint_writes": 0,
+  "new_claims": 0
+ },
+ "row_globs": {
+  "dev_eval_learned": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\raw\\rows\\v2_r71eval_model_new_ep128_*.json",
+  "dev_eval_immediate": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round66_bc_early_path_preserving_late_adaptation\\raw\\rows\\v2_r66eval2_rule_immediate_*.json",
+  "training": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round71_critic_initialization_calibration\\raw\\rows\\v2_r71_train_*.json"
+ },
+ "splits": {
+  "dev_eval_learned": {
+   "rows_total": 192,
+   "rows_loaded": 192,
+   "rows_failed": 0,
+   "refusal_sequence_present": 192,
+   "refusal_sequence_type_list": 192,
+   "refusal_sequence_rows_nonempty": 0,
+   "refusal_sequence_len_total": 0,
+   "cost_stream_present": 192,
+   "cost_stream_type_dict": 192,
+   "cost_stream_steps_total": 192000,
+   "steps_missing_budget_refused_sends": 0,
+   "steps_missing_capacity_refused_sends": 0,
+   "measured_budget_refused_sends_total": 0,
+   "measured_capacity_refused_sends_total": 0,
+   "collector_absent": 0,
+   "collector_none": 0,
+   "collector_dict": 192,
+   "dict_rows_missing_one_shot_counts": 0,
+   "dict_rows_missing_eligibility_counts": 0,
+   "dict_rows_missing_masked_budget_or_capacity": 0,
+   "dict_rows_missing_budget_masked_first_reports": 0,
+   "dict_rows_missing_capacity_masked_first_reports": 0,
+   "measured_masked_budget_or_capacity_total": 0,
+   "measured_budget_masked_first_reports_total": 0,
+   "measured_capacity_masked_first_reports_total": 0,
+   "verdict": {
+    "executor_refusal_covered": true,
+    "executor_refusal_measured_zero": true,
+    "collector_premask_status": "covered",
+    "collector_premask_measured_zero": true
+   }
+  },
+  "dev_eval_immediate": {
+   "rows_total": 33,
+   "rows_loaded": 33,
+   "rows_failed": 0,
+   "refusal_sequence_present": 33,
+   "refusal_sequence_type_list": 33,
+   "refusal_sequence_rows_nonempty": 0,
+   "refusal_sequence_len_total": 0,
+   "cost_stream_present": 33,
+   "cost_stream_type_dict": 33,
+   "cost_stream_steps_total": 33000,
+   "steps_missing_budget_refused_sends": 0,
+   "steps_missing_capacity_refused_sends": 0,
+   "measured_budget_refused_sends_total": 0,
+   "measured_capacity_refused_sends_total": 0,
+   "collector_absent": 0,
+   "collector_none": 33,
+   "collector_dict": 0,
+   "dict_rows_missing_one_shot_counts": 0,
+   "dict_rows_missing_eligibility_counts": 0,
+   "dict_rows_missing_masked_budget_or_capacity": 0,
+   "dict_rows_missing_budget_masked_first_reports": 0,
+   "dict_rows_missing_capacity_masked_first_reports": 0,
+   "measured_masked_budget_or_capacity_total": 0,
+   "measured_budget_masked_first_reports_total": 0,
+   "measured_capacity_masked_first_reports_total": 0,
+   "verdict": {
+    "executor_refusal_covered": true,
+    "executor_refusal_measured_zero": true,
+    "collector_premask_status": "not_applicable_rule_path",
+    "collector_premask_measured_zero": null
+   }
+  },
+  "training": {
+   "rows_total": 384,
+   "rows_loaded": 384,
+   "rows_failed": 0,
+   "refusal_sequence_present": 384,
+   "refusal_sequence_type_list": 384,
+   "refusal_sequence_rows_nonempty": 0,
+   "refusal_sequence_len_total": 0,
+   "cost_stream_present": 384,
+   "cost_stream_type_dict": 384,
+   "cost_stream_steps_total": 384000,
+   "steps_missing_budget_refused_sends": 0,
+   "steps_missing_capacity_refused_sends": 0,
+   "measured_budget_refused_sends_total": 0,
+   "measured_capacity_refused_sends_total": 0,
+   "collector_absent": 0,
+   "collector_none": 0,
+   "collector_dict": 384,
+   "dict_rows_missing_one_shot_counts": 0,
+   "dict_rows_missing_eligibility_counts": 0,
+   "dict_rows_missing_masked_budget_or_capacity": 0,
+   "dict_rows_missing_budget_masked_first_reports": 0,
+   "dict_rows_missing_capacity_masked_first_reports": 0,
+   "measured_masked_budget_or_capacity_total": 0,
+   "measured_budget_masked_first_reports_total": 0,
+   "measured_capacity_masked_first_reports_total": 0,
+   "verdict": {
+    "executor_refusal_covered": true,
+    "executor_refusal_measured_zero": true,
+    "collector_premask_status": "covered",
+    "collector_premask_measured_zero": true
+   }
+  }
+ },
+ "composition_notes": {
+  "dev_eval_immediate": {
+   "dev_block_canonical_rows": 32,
+   "dev_block_scene_range": [
+    1800000,
+    1800031
+   ],
+   "extra_repeat_rows": [
+    {
+     "scene": 1800000,
+     "run_token": "a2",
+     "file": "v2_r66eval2_rule_immediate_a2_s1800000_a1.json",
+     "canonical_file": "v2_r66eval2_rule_immediate_a1_s1800000_a1.json",
+     "spent_bytes": 15876,
+     "canonical_spent_bytes": 15876,
+     "spent_equals_canonical": true
+    }
+   ],
+   "focal_scene_1700027_rows": 0,
+   "note": "immediate glob = 32 canonical dev-block rows (scenes 1800000..1800031) + 1 extra re-attempt of scene 1800000 (run immediate_a2). There is NO 1700027 focal row in this glob; the earlier 'focal row' assumption is corrected. All 33 are executor rows with identical field shape; the extra re-attempt must not be folded into a per-scene mean."
+  }
+ },
+ "channel_verdicts": {
+  "executor_refusal_channel": {
+   "covered_all_splits": true,
+   "measured_zero_all_splits": true,
+   "fields": [
+    "refusal_sequence",
+    "cost_stream.*.budget_refused_sends",
+    "cost_stream.*.capacity_refused_sends"
+   ],
+   "note": "present as list/dict on every loaded row; measured zero everywhere."
+  },
+  "collector_premask_channel": {
+   "covered_splits": [
+    "dev_eval_learned",
+    "training"
+   ],
+   "na_splits": [
+    "dev_eval_immediate"
+   ],
+   "measured_zero_where_covered": true,
+   "fields": [
+    "collector_summary.one_shot_counts.masked_budget_or_capacity",
+    "collector_summary.eligibility_counts.budget_masked_first_reports",
+    "collector_summary.eligibility_counts.capacity_masked_first_reports"
+   ],
+   "note": "learned+training rows run the learned collector (dict) and measure zero pre-masks; immediate rows are the rule path with collector_summary=None so these are N/A, not 'measured 0'."
+  }
+ },
+ "manifest_sha256": {
+  "dev_eval_learned": "2b80ac3005f3405c78f5fc2d369c85b71178fabf7c751e652326df4bc5043593",
+  "dev_eval_immediate": "72c4b3a7df779d28de2a147a99564917d1829d85174810513e1135417e82092c",
+  "training": "5878741cb3709e76159e96d015dccaea912f78073b33274088dae4cc3afd0dde"
+ }
+}

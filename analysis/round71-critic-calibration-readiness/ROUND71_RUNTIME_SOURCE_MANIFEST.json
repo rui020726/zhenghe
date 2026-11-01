@@ -1,0 +1,259 @@
+{
+ "kind": "round71-real-runtime-binding/source-manifest/1",
+ "task_id": "ROUND71-REAL-RUNTIME-BINDING-ZERO-EXEC",
+ "branch": "analysis/round71-critic-calibration-readiness",
+ "note": "read-only manifest; .pt files are NOT opened here, only their registered expected identities are recorded",
+ "entries": [
+  {
+   "role": "canonical_trainer",
+   "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_trainer.py",
+   "exists": true,
+   "note": "live trainer the R66/R68 chain imports (r66_frozen.configure_source_imports)",
+   "sha256": "0550b99eb1f10a45d57757caedb4ce365fe858d72e171537e38dc450fb49a841",
+   "functions": {
+    "ppo_update": 179,
+    "save_checkpoint": 331,
+    "load_checkpoint": 389,
+    "batch_samples": 47,
+    "_unassigned_prefix_totals": 135
+   }
+  },
+  {
+   "role": "canonical_common",
+   "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_common.py",
+   "exists": true,
+   "note": "live common module holding the configured GAE_LAMBDA/ETA_LAMBDA living values",
+   "sha256": "66d019a344d9cfef3c67bd8b722f8cc27144b9f71ddc8e5496451929d12f746a",
+   "functions": {}
+  },
+  {
+   "role": "canonical_controller",
+   "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_controller.py",
+   "exists": true,
+   "note": "StageCController factory the runtime calls for a fresh seed controller",
+   "sha256": "9b2362ee5dc436c04e5fd2d841646d637b5b3f371607bd13a759a60c4cb4cab1",
+   "functions": {
+    "fresh_controller": 37
+   }
+  },
+  {
+   "role": "canonical_reward_timing",
+   "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_v2_rerun_20260928\\v2_reward_timing.py",
+   "exists": true,
+   "note": "owns TRAINING_VERSION / REWARD_TIMING_VERSION imported by v2_trainer",
+   "sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+   "functions": {}
+  },
+  {
+   "role": "onpolicy",
+   "path": "D:\\code\\整合\\zhenghe\\runs\\comm_tight_budget_20260919\\onpolicy.py",
+   "exists": true,
+   "note": "frozen PPO math primitives (ALL_ROWS reduction, joint log-prob, entropy)",
+   "sha256": "49a92f6694ba21dd2d0e42950c8b7f91c118b81971d4108a18579eb5b38f5ab3",
+   "functions": {
+    "joint_log_prob": 46,
+    "action_entropy": 59,
+    "restore_rng": 78
+   }
+  },
+  {
+   "role": "stage_b_controller",
+   "path": "D:\\code\\整合\\zhenghe\\runs\\comm_cost_stage_b_20260927\\sb_controller.py",
+   "exists": true,
+   "note": "the base controller the partitioned controller wraps",
+   "sha256": "b253c167cea4365102ba7ba0e5b2c5cfb647c69494b4c97e12bb8dee68f86d49",
+   "functions": {
+    "StageBController": 22
+   }
+  },
+  {
+   "role": "partitioned_controller_and_ppo",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round66_bc_early_path_preserving_late_adaptation\\r66_frozen.py",
+   "exists": true,
+   "note": "five-module controller, model-only R60 loader, frozen-early-path PPO update",
+   "sha256": "a22425729c9327ffcb1d57f4820f3b38f2bb7e35a6d6d81890fe64a75a246b10",
+   "functions": {
+    "PartitionedController": 250,
+    "route_logits": 227,
+    "ready_steps": 221,
+    "load_r60_model": 408,
+    "r60_source_identity": 398,
+    "build_frozen_controller": 617,
+    "frozen_early_ppo_update": 664,
+    "build_optimizer": 612,
+    "fresh_training_state": 1062,
+    "freeze_early_path": 540,
+    "load_r60_checkpoint_read_only": 1033,
+    "configure_source_imports": 184
+   }
+  },
+  {
+   "role": "critic_trunk_detach",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round53_critic_isolation_trial_readiness\\round53_trial_adapter.py",
+   "exists": true,
+   "note": "critic->trunk gradient isolation (forward pre-hook detach on both critic heads)",
+   "sha256": "e2f16bf55478d1a95e0f9ee07338f1cc602041373feaf5e8fadee28ab7a7f0d9",
+   "functions": {
+    "critic_input_detached": 22,
+    "install_on_verified_trainer": 45,
+    "validate_live_binding": 85
+   }
+  },
+  {
+   "role": "r68_identity_and_checkpoint",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round68_late_initial_confidence_ablation\\r68_frozen.py",
+   "exists": true,
+   "note": "R68 late-init identity + five-module checkpoint contract this binding extends",
+   "sha256": "8c90a0b1510f8d91c4e9e3d97385139bb6eb6bf357da8a395aaccd28e8ecbd69",
+   "functions": {
+    "build_frozen_controller": 107,
+    "scale_late_head_init": 75,
+    "fresh_training_state": 139,
+    "save_checkpoint": 156,
+    "load_checkpoint": 252,
+    "load_checkpoint_read_only": 266,
+    "_reject_foreign_contract": 201,
+    "_validate_base": 213,
+    "_restore_controller": 232
+   }
+  },
+  {
+   "role": "r68_executor",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round68_late_initial_confidence_ablation\\r68_execute.py",
+   "exists": true,
+   "note": "runtime stand-up, claim/slot/quota ledger, construction permits, acceptance",
+   "sha256": "c123dfe753effc5b6e35b8ce680e6bb1092a80a0d0deb40a0971df09e1c2cd3e",
+   "functions": {
+    "configure_and_inject": 503,
+    "R68Ledger": 340,
+    "_r68_atomic_run": 244,
+    "_make_permit_guarded_builder": 460,
+    "zero_env_acceptance": 977,
+    "main": 1038
+   }
+  },
+  {
+   "role": "r58_base_runner",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round58_gen2\\r58_execute.py",
+   "exists": true,
+   "note": "frozen R46/R42 sim runtime stand-up reused by configure_and_inject",
+   "sha256": "b5a5eabc94b5c9521777905c3ddee57a53fb79624b3d876e85bca58f31b58a77",
+   "functions": {
+    "load_base_runner": 353,
+    "bind_runner_paths": 363,
+    "install_private_configure_seams": 408
+   }
+  },
+  {
+   "role": "frozen_runner_source",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r46_execute_r2.py",
+   "exists": true,
+   "note": "the frozen ROUND46 runner module loaded by load_base_runner",
+   "sha256": "dc086128aa244f847330bacfd5dbc457907ad987a700c1bd1cae70687886e19c",
+   "functions": {
+    "main": 3895
+   }
+  },
+  {
+   "role": "frozen_collector",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\r42_one_shot.py",
+   "exists": true,
+   "note": "the frozen one-shot collector module (imported for its side effects only)",
+   "sha256": "3c342108148de42f395faeec25544976eed7efdfdd32a99685d73bd59101ab0d",
+   "functions": {}
+  },
+  {
+   "role": "r68_eval",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round68_late_initial_confidence_ablation\\r68_eval.py",
+   "exists": true,
+   "note": "evaluation seam the future licensed evaluation would reuse",
+   "sha256": "ff496305c884ec4ca15cff2e2ebd1ba6c7430ac3303810c78b7459f370c7e6a3",
+   "functions": {
+    "configure_r68_eval": 112,
+    "quota_guard": 133,
+    "eval_model_arms": 378,
+    "eval_focal": 411,
+    "compute_stats": 601,
+    "_load_arm": 338
+   }
+  },
+  {
+   "role": "r60_ep0_model_source_s11",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s11_before_b0.pt",
+   "exists": true,
+   "expected_file_sha256": "f267558d0cc8933987c09576b8d6d6ad512dbc3c73653d059104705c1faca437",
+   "expected_parameter_sha256": "fb82ad80724afa37ff8f3cbd5bd8bae958e221586eb799bdf61701af80878ec4",
+   "expected_episodes_done": 0,
+   "expected_updates": 0,
+   "note": "model-only INIT source"
+  },
+  {
+   "role": "r60_ep128_model_source_s11",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s11_ep128.pt",
+   "exists": true,
+   "expected_file_sha256": "1c765c27294c673aa82b1ab7cd8dd8f379699ede8f924cc3438bfcd73fa0c60e",
+   "expected_parameter_sha256": "809f35f77ae2659526b70a49b543996c68f0f5942c633d8f69e3f00f3e4d06db",
+   "expected_episodes_done": 128,
+   "expected_updates": 32,
+   "note": "read-only CONTROL comparison source"
+  },
+  {
+   "role": "r60_ep0_model_source_s22",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s22_before_b0.pt",
+   "exists": true,
+   "expected_file_sha256": "249f769770fd0bffcc8df345539088890f9323f1338a224e3c8195d35adc8555",
+   "expected_parameter_sha256": "a9e7776171e5581dd0c3c972dbbc9504337b2513d18b691a137d528d6221b46b",
+   "expected_episodes_done": 0,
+   "expected_updates": 0,
+   "note": "model-only INIT source"
+  },
+  {
+   "role": "r60_ep128_model_source_s22",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s22_ep128.pt",
+   "exists": true,
+   "expected_file_sha256": "79bd3769d6382e5e908b22db2794ebfbb22cab430162fb211d87bb196550e234",
+   "expected_parameter_sha256": "286e2f84ab7d0abc65a3201495ff41f3ad8423775b456c5e379765fd43d75365",
+   "expected_episodes_done": 128,
+   "expected_updates": 32,
+   "note": "read-only CONTROL comparison source"
+  },
+  {
+   "role": "r60_ep0_model_source_s33",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s33_before_b0.pt",
+   "exists": true,
+   "expected_file_sha256": "5f47f28b2678a0091e2370345b622aad7bdf1d8064b19d3ed57282bc8f005e93",
+   "expected_parameter_sha256": "10bce624e9fa8079144b1150b6bbc6ece2be17771233a6e7bf3720770bea5b26",
+   "expected_episodes_done": 0,
+   "expected_updates": 0,
+   "note": "model-only INIT source"
+  },
+  {
+   "role": "r60_ep128_model_source_s33",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_bc_initialized_constrained_ppo_20261007_r2\\round60_partitioned_actor_head_ablation\\raw\\checkpoints\\v2_train_s33_ep128.pt",
+   "exists": true,
+   "expected_file_sha256": "573e4c26a4fee6f01405d4386ca73b518eeb1adb9cd8409bc83661e4113f6c5a",
+   "expected_parameter_sha256": "bce71a0e9810122c146950f12cf818a9a359406312d96dfc9c7a457ebb654e2a",
+   "expected_episodes_done": 128,
+   "expected_updates": 32,
+   "note": "read-only CONTROL comparison source"
+  }
+ ],
+ "verification": {
+  "status": "passed",
+  "drift": [],
+  "offline_input_reuse": {
+   "registered_from": "ROUND71_OFFLINE_INPUT_COUNT.json",
+   "teacher_source": {
+    "round": "ROUND68-LATE-INITIAL-CONFIDENCE-ABLATION",
+    "training_scene_range": "1300000..1300047 (real training scenes, not the 180 block)",
+    "batch_records": 96,
+    "episodes": 384,
+    "row_files_read": 384
+   },
+   "joint_decision_rows": 32046,
+   "target_level_19d_input_rows": 58928,
+   "reuse_rule": "reused only while the teacher source and counted totals are unchanged; no number is ever guessed (no 58632-style invention)"
+  }
+ },
+ "note_pt_files": "the six r60_* model-source entries are registered by expected identity only; this generator never opens or hashes a .pt file"
+}

@@ -6,6 +6,8 @@ import sys
 import types
 import unittest
 
+import numpy as np
+
 from integrated_sar.adapters.task03 import Task03Adapter
 from integrated_sar.contracts import (
     CoordinatorInput,
@@ -17,6 +19,35 @@ from integrated_sar.contracts import (
 )
 from integrated_sar.coordinator import HeuristicCoordinator
 from integrated_sar.task_registry import TaskRegistry
+
+
+class _BareEnv:
+    """Minimal stand-in: no depot_dic, no reset, no simulator state.
+
+    Guards the adapter against assuming the full TaskEnv surface -- the mask
+    ordering test builds one of these, and without coverage here the assumption
+    would only fail on a machine that has torch installed.
+    """
+
+    def get_local_obs(self, agent_id, max_tasks=None):
+        del agent_id, max_tasks
+        return (
+            np.zeros(4, dtype=np.float32),
+            np.zeros((1, 4), dtype=np.float32),
+            np.zeros((1, 4), dtype=np.float32),
+            np.array([False]),
+            [("depot", None)],
+        )
+
+
+class BareEnvironmentTests(unittest.TestCase):
+    def test_adapter_tolerates_an_environment_without_depots(self) -> None:
+        # The mask-ordering test builds this stub, and it is torch-gated, so
+        # without coverage here an adapter constructor that assumes env.depot_dic
+        # would only fail on a machine that has torch installed.
+        adapter = Task03Adapter(env=_BareEnv(), clear_initial_tasks=False)
+        self.assertEqual(adapter._depot_positions, {})
+        self.assertIsNone(adapter.comm_relay)
 
 
 REPOSITORY_ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -95,3 +126,41 @@ class Task03AdapterSmokeTests(unittest.TestCase):
         result = adapter.step(1.0, 1.0)
         self.assertTrue(result.progress_events)
         self.assertEqual(result.progress_events[0].task_id, "piloc-target-smoke")
+
+    def test_rounding_noise_at_the_scene_edge_is_clamped_not_fatal(self) -> None:
+        # TaskEnv integrates position by repeated float addition, so a robot that
+        # travels to the edge can land one ulp outside the closed unit square. The
+        # observed production failure was x = -3.469446951953614e-18 at step 81 of
+        # seed 10003, which raised "world coordinates must be normalized to [0, 1]"
+        # and truncated the whole joint episode.
+        env = self.TaskEnv(
+            tasks_range=(0, 0),
+            species_range=(1, 1),
+            per_species_range=(1, 1),
+            enable_tidal_tasks=False,
+            enable_discovered_tasks=False,
+            seed=3,
+        )
+        adapter = Task03Adapter(env=env, clear_initial_tasks=True)
+        agent_key = next(iter(env.agent_dic))
+        env.agent_dic[agent_key]["location"] = np.array(
+            [-3.469446951953614e-18, 1.0 + 2.220446049250313e-16], dtype=float
+        )
+        snapshot = next(a for a in adapter.agent_snapshots() if a.agent_id == str(agent_key))
+        self.assertEqual(snapshot.position.x, 0.0)
+        self.assertEqual(snapshot.position.y, 1.0)
+
+    def test_a_real_coordinate_violation_still_raises(self) -> None:
+        env = self.TaskEnv(
+            tasks_range=(0, 0),
+            species_range=(1, 1),
+            per_species_range=(1, 1),
+            enable_tidal_tasks=False,
+            enable_discovered_tasks=False,
+            seed=3,
+        )
+        adapter = Task03Adapter(env=env, clear_initial_tasks=True)
+        agent_key = next(iter(env.agent_dic))
+        env.agent_dic[agent_key]["location"] = np.array([-0.05, 0.5], dtype=float)
+        with self.assertRaises(ValueError):
+            adapter.agent_snapshots()

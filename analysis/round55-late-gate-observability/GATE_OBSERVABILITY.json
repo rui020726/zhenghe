@@ -1,0 +1,692 @@
+{
+  "kind": "round55-gate-observability/1",
+  "late_rule_identity": {
+    "source": "zhenghe/runs/comm_cost_v2_rerun_20260928/v2_rules.py (LateDiscoveryGatePolicy)",
+    "predicate": "SEND iff item.first_emission AND float(item.ready_step) > LATE_CUT_STEPS",
+    "cut": 147.0,
+    "comparison": "strictly greater (>)",
+    "ready_step_definition": "relay-tick bookkeeping step of the target's first unsent view change (sender-visible SendItem field)",
+    "units": "relay ticks (dt=1.0, integer scale)",
+    "when_decided": "at the target's one-shot first-report decision point (candidate_audit.one_shot_state_before == 'undecided')",
+    "policy_history_dependence": "none: pure function of SendItem.first_emission/ready_step",
+    "budget_refusal": "retried next step; first_emission stays true"
+  },
+  "mapping_A_sender_raw_state": {
+    "verdict": "成立",
+    "note": "SendItem.first_emission/ready_step are fields of the legal pre-action SendObservation the rule policy reads (integrated_sar/comm_policy.py SendItem); decided before any send of the step"
+  },
+  "mapping_B_19dim_recovery": {
+    "verdict": "成立",
+    "function": "first_emission = (f[5]==1.0); step = round(f[18]*1000.0); ready_step = step - round(f[0]); late_sends = first_emission and ready_step > 147.0",
+    "encoding_sources": {
+      "f0": "age_steps = max(0, tick - ready_step) (integrated_sar/comm.py)",
+      "f5": "first_emission flag (integrated_sar/comm_learning.py features())",
+      "f18": "min(1.0, step / EPISODE_HORIZON_STEPS=1000.0)",
+      "frozen_constants": {
+        "LATE_CUT_STEPS": 147.0,
+        "EPISODE_HORIZON_STEPS": 1000.0
+      }
+    },
+    "float32_note": "age is an exact integer-valued float32; f18 = float32(step/1000) round-trips exactly via round(f18*1000) for all steps 0..1000 (see r55_zero_tests.py)"
+  },
+  "validation": {
+    "kind": "round55-gate-observability-validation/1",
+    "tapes_parsed": 48,
+    "first_emission_decisions": 288,
+    "scene_level_agreement": 48,
+    "scene_level_mismatches": [],
+    "byte_identical_vector_collisions_with_opposite_labels": 0,
+    "focal_cells": {
+      "s11/1301010/t5": {
+        "recovered": {
+          "age": 0,
+          "step": 148,
+          "ready_step": 148,
+          "first_emission": true,
+          "late_sends": true
+        },
+        "late_actually_sent": true
+      },
+      "s11/1301014/t5": {
+        "recovered": {
+          "age": 0,
+          "step": 140,
+          "ready_step": 140,
+          "first_emission": true,
+          "late_sends": false
+        },
+        "late_actually_sent": false
+      },
+      "s22/1301010/t5": {
+        "recovered": {
+          "age": 0,
+          "step": 148,
+          "ready_step": 148,
+          "first_emission": true,
+          "late_sends": true
+        },
+        "late_actually_sent": true
+      },
+      "s22/1301014/t5": {
+        "recovered": {
+          "age": 0,
+          "step": 140,
+          "ready_step": 140,
+          "first_emission": true,
+          "late_sends": false
+        },
+        "late_actually_sent": false
+      },
+      "s33/1301010/t5": {
+        "recovered": {
+          "age": 0,
+          "step": 148,
+          "ready_step": 148,
+          "first_emission": true,
+          "late_sends": true
+        },
+        "late_actually_sent": true
+      },
+      "s33/1301014/t5": {
+        "recovered": {
+          "age": 0,
+          "step": 140,
+          "ready_step": 140,
+          "first_emission": true,
+          "late_sends": false
+        },
+        "late_actually_sent": false
+      }
+    },
+    "per_scene": {
+      "s11/1301000": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 467,
+          "piloc-e1-target-1": 9,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 476,
+          "piloc-e1-target-4": 103,
+          "piloc-e1-target-5": 122
+        }
+      },
+      "s11/1301001": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 527,
+          "piloc-e1-target-1": 588,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 445
+        }
+      },
+      "s11/1301002": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 15,
+          "piloc-e1-target-1": 272,
+          "piloc-e1-target-2": 268,
+          "piloc-e1-target-3": 808,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 259
+        }
+      },
+      "s11/1301003": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 13,
+          "piloc-e1-target-1": 5,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 2,
+          "piloc-e1-target-4": 4,
+          "piloc-e1-target-5": 289
+        }
+      },
+      "s11/1301004": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 5,
+          "piloc-e1-target-1": 5,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 10,
+          "piloc-e1-target-4": 15,
+          "piloc-e1-target-5": 12
+        }
+      },
+      "s11/1301005": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 173,
+          "piloc-e1-target-2": 5,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 102,
+          "piloc-e1-target-5": 109
+        }
+      },
+      "s11/1301006": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 6,
+          "piloc-e1-target-4": 207,
+          "piloc-e1-target-5": 1
+        }
+      },
+      "s11/1301007": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 7,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 166,
+          "piloc-e1-target-4": 172,
+          "piloc-e1-target-5": 4
+        }
+      },
+      "s11/1301008": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 9,
+          "piloc-e1-target-2": 6,
+          "piloc-e1-target-3": 918,
+          "piloc-e1-target-4": 251,
+          "piloc-e1-target-5": 240
+        }
+      },
+      "s11/1301009": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 307,
+          "piloc-e1-target-1": 198,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 1
+        }
+      },
+      "s11/1301010": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 815,
+          "piloc-e1-target-1": 2,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 148
+        }
+      },
+      "s11/1301011": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 234,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 15,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 4
+        }
+      },
+      "s11/1301012": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 280,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 258,
+          "piloc-e1-target-3": 7,
+          "piloc-e1-target-4": 4,
+          "piloc-e1-target-5": 7
+        }
+      },
+      "s11/1301013": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 294,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 268,
+          "piloc-e1-target-3": 295,
+          "piloc-e1-target-4": 293,
+          "piloc-e1-target-5": 288
+        }
+      },
+      "s11/1301014": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 33,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 2,
+          "piloc-e1-target-4": 12,
+          "piloc-e1-target-5": 140
+        }
+      },
+      "s11/1301015": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 374,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 6,
+          "piloc-e1-target-3": 2,
+          "piloc-e1-target-4": 2,
+          "piloc-e1-target-5": 905
+        }
+      },
+      "s22/1301000": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 467,
+          "piloc-e1-target-1": 9,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 476,
+          "piloc-e1-target-4": 103,
+          "piloc-e1-target-5": 122
+        }
+      },
+      "s22/1301001": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 527,
+          "piloc-e1-target-1": 588,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 445
+        }
+      },
+      "s22/1301002": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 15,
+          "piloc-e1-target-1": 272,
+          "piloc-e1-target-2": 268,
+          "piloc-e1-target-3": 808,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 259
+        }
+      },
+      "s22/1301003": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 13,
+          "piloc-e1-target-1": 5,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 2,
+          "piloc-e1-target-4": 4,
+          "piloc-e1-target-5": 289
+        }
+      },
+      "s22/1301004": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 5,
+          "piloc-e1-target-1": 5,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 10,
+          "piloc-e1-target-4": 15,
+          "piloc-e1-target-5": 12
+        }
+      },
+      "s22/1301005": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 173,
+          "piloc-e1-target-2": 5,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 102,
+          "piloc-e1-target-5": 109
+        }
+      },
+      "s22/1301006": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 6,
+          "piloc-e1-target-4": 207,
+          "piloc-e1-target-5": 1
+        }
+      },
+      "s22/1301007": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 7,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 166,
+          "piloc-e1-target-4": 172,
+          "piloc-e1-target-5": 4
+        }
+      },
+      "s22/1301008": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 9,
+          "piloc-e1-target-2": 6,
+          "piloc-e1-target-3": 918,
+          "piloc-e1-target-4": 251,
+          "piloc-e1-target-5": 240
+        }
+      },
+      "s22/1301009": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 307,
+          "piloc-e1-target-1": 198,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 1
+        }
+      },
+      "s22/1301010": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 815,
+          "piloc-e1-target-1": 2,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 148
+        }
+      },
+      "s22/1301011": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 234,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 15,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 4
+        }
+      },
+      "s22/1301012": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 280,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 258,
+          "piloc-e1-target-3": 7,
+          "piloc-e1-target-4": 4,
+          "piloc-e1-target-5": 7
+        }
+      },
+      "s22/1301013": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 294,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 268,
+          "piloc-e1-target-3": 295,
+          "piloc-e1-target-4": 293,
+          "piloc-e1-target-5": 288
+        }
+      },
+      "s22/1301014": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 33,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 2,
+          "piloc-e1-target-4": 12,
+          "piloc-e1-target-5": 140
+        }
+      },
+      "s22/1301015": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 374,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 6,
+          "piloc-e1-target-3": 2,
+          "piloc-e1-target-4": 2,
+          "piloc-e1-target-5": 905
+        }
+      },
+      "s33/1301000": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 467,
+          "piloc-e1-target-1": 9,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 476,
+          "piloc-e1-target-4": 103,
+          "piloc-e1-target-5": 122
+        }
+      },
+      "s33/1301001": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 527,
+          "piloc-e1-target-1": 588,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 445
+        }
+      },
+      "s33/1301002": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 15,
+          "piloc-e1-target-1": 272,
+          "piloc-e1-target-2": 268,
+          "piloc-e1-target-3": 808,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 259
+        }
+      },
+      "s33/1301003": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 13,
+          "piloc-e1-target-1": 5,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 2,
+          "piloc-e1-target-4": 4,
+          "piloc-e1-target-5": 289
+        }
+      },
+      "s33/1301004": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 5,
+          "piloc-e1-target-1": 5,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 10,
+          "piloc-e1-target-4": 15,
+          "piloc-e1-target-5": 12
+        }
+      },
+      "s33/1301005": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 173,
+          "piloc-e1-target-2": 5,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 102,
+          "piloc-e1-target-5": 109
+        }
+      },
+      "s33/1301006": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 6,
+          "piloc-e1-target-4": 207,
+          "piloc-e1-target-5": 1
+        }
+      },
+      "s33/1301007": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 7,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 166,
+          "piloc-e1-target-4": 172,
+          "piloc-e1-target-5": 4
+        }
+      },
+      "s33/1301008": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 1,
+          "piloc-e1-target-1": 9,
+          "piloc-e1-target-2": 6,
+          "piloc-e1-target-3": 918,
+          "piloc-e1-target-4": 251,
+          "piloc-e1-target-5": 240
+        }
+      },
+      "s33/1301009": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 307,
+          "piloc-e1-target-1": 198,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 1
+        }
+      },
+      "s33/1301010": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 815,
+          "piloc-e1-target-1": 2,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 1,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 148
+        }
+      },
+      "s33/1301011": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 234,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 2,
+          "piloc-e1-target-3": 15,
+          "piloc-e1-target-4": 1,
+          "piloc-e1-target-5": 4
+        }
+      },
+      "s33/1301012": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 280,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 258,
+          "piloc-e1-target-3": 7,
+          "piloc-e1-target-4": 4,
+          "piloc-e1-target-5": 7
+        }
+      },
+      "s33/1301013": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 294,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 268,
+          "piloc-e1-target-3": 295,
+          "piloc-e1-target-4": 293,
+          "piloc-e1-target-5": 288
+        }
+      },
+      "s33/1301014": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 33,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 1,
+          "piloc-e1-target-3": 2,
+          "piloc-e1-target-4": 12,
+          "piloc-e1-target-5": 140
+        }
+      },
+      "s33/1301015": {
+        "decisions": 6,
+        "predicted_matches_actual": true,
+        "recovered_ready_steps": {
+          "piloc-e1-target-0": 374,
+          "piloc-e1-target-1": 1,
+          "piloc-e1-target-2": 6,
+          "piloc-e1-target-3": 2,
+          "piloc-e1-target-4": 2,
+          "piloc-e1-target-5": 905
+        }
+      }
+    }
+  },
+  "r54_statement_update": "corrects R54's 'the current input cannot explain late's skip': the gate quantity ready_step IS recoverable from the 19-dim vector (f0/f18 + frozen constants). The information is not missing; both learned models failed to use it at that off-path state (in the BC training distribution a ready_step~121 target is decided around step ~121, while the candidate's decision happened at step 140).",
+  "conclusion_category": "category 1: the gate quantity is recoverable from the 19-dim vector -> the next method should study how to USE the existing information, not change the schema",
+  "zero_operations": {
+    "environment_constructor_calls": 0,
+    "simulation_runs": 0,
+    "new_flows": 0,
+    "training_runs": 0,
+    "optimizer_updates": 0,
+    "checkpoint_writes": 0,
+    "new_episode_rows": 0,
+    "cpu_model_forwards": 0
+  }
+}

@@ -1,0 +1,967 @@
+{
+  "kind": "round54-decision-points/1",
+  "same_input_note": "true BC p(SEND) is a same-input mapping comparison on the candidate's saved 19-dim input; it is not a closed-loop counterfactual outcome",
+  "seed_summaries": {
+    "11": {
+      "seed": 11,
+      "saved_vs_reforward_max_abs_error": 5.960464477539063e-08,
+      "disagreement_panels": [
+        {
+          "scene": 1301000,
+          "target": "piloc-e1-target-5",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2508,
+          "candidate_decision": {
+            "step": 122,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              6.0,
+              0.122
+            ],
+            "saved_p_send": 0.41108939051628113,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.41108933091163635,
+            "true_bc_post": 0.7307253479957581
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301014,
+          "target": "piloc-e1-target-5",
+          "control": "late",
+          "class": "A_candidate_only_send",
+          "candidate_sent": true,
+          "control_sent": false,
+          "candidate_bytes": 2514,
+          "control_bytes": null,
+          "candidate_decision": {
+            "step": 140,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.14
+            ],
+            "saved_p_send": 0.9481959342956543,
+            "candidate_action": 1,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "send_now_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.9481959342956543,
+            "true_bc_post": 0.959474503993988
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        }
+      ],
+      "disagreement_panel_count": 2
+    },
+    "22": {
+      "seed": 22,
+      "saved_vs_reforward_max_abs_error": 2.561137080192566e-09,
+      "disagreement_panels": [
+        {
+          "scene": 1301000,
+          "target": "piloc-e1-target-5",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2508,
+          "candidate_decision": {
+            "step": 122,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              6.0,
+              0.122
+            ],
+            "saved_p_send": 5.4300844567478634e-06,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 5.4300844567478634e-06,
+            "true_bc_post": 0.7656524181365967
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301005,
+          "target": "piloc-e1-target-1",
+          "control": "late",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2310,
+          "candidate_decision": {
+            "step": 173,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.173
+            ],
+            "saved_p_send": 0.004558006301522255,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.004558006301522255,
+            "true_bc_post": 0.9840415716171265
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301005,
+          "target": "piloc-e1-target-1",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2310,
+          "candidate_decision": {
+            "step": 173,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.173
+            ],
+            "saved_p_send": 0.004558006301522255,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.004558006301522255,
+            "true_bc_post": 0.9840415716171265
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301006,
+          "target": "piloc-e1-target-4",
+          "control": "late",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2694,
+          "candidate_decision": {
+            "step": 207,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.207
+            ],
+            "saved_p_send": 0.148137167096138,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.148137167096138,
+            "true_bc_post": 0.9999690055847168
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301006,
+          "target": "piloc-e1-target-4",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2694,
+          "candidate_decision": {
+            "step": 207,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.207
+            ],
+            "saved_p_send": 0.148137167096138,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.148137167096138,
+            "true_bc_post": 0.9999690055847168
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301007,
+          "target": "piloc-e1-target-3",
+          "control": "late",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2304,
+          "candidate_decision": {
+            "step": 166,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.166
+            ],
+            "saved_p_send": 0.0018661924405023456,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.0018661924405023456,
+            "true_bc_post": 0.9651163816452026
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301007,
+          "target": "piloc-e1-target-4",
+          "control": "late",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2508,
+          "candidate_decision": {
+            "step": 172,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              6.0,
+              0.172
+            ],
+            "saved_p_send": 0.0027197874151170254,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.002719784853979945,
+            "true_bc_post": 0.9991225600242615
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301007,
+          "target": "piloc-e1-target-3",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2304,
+          "candidate_decision": {
+            "step": 166,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.166
+            ],
+            "saved_p_send": 0.0018661924405023456,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.0018661924405023456,
+            "true_bc_post": 0.9651163816452026
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301007,
+          "target": "piloc-e1-target-4",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2508,
+          "candidate_decision": {
+            "step": 172,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              6.0,
+              0.172
+            ],
+            "saved_p_send": 0.0027197874151170254,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.002719784853979945,
+            "true_bc_post": 0.9991225600242615
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301009,
+          "target": "piloc-e1-target-1",
+          "control": "late",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2514,
+          "candidate_decision": {
+            "step": 198,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.198
+            ],
+            "saved_p_send": 0.04949359968304634,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.04949359968304634,
+            "true_bc_post": 0.999922513961792
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301009,
+          "target": "piloc-e1-target-1",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2514,
+          "candidate_decision": {
+            "step": 198,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.198
+            ],
+            "saved_p_send": 0.04949359968304634,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.04949359968304634,
+            "true_bc_post": 0.999922513961792
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301010,
+          "target": "piloc-e1-target-5",
+          "control": "late",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2310,
+          "candidate_decision": {
+            "step": 148,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.148
+            ],
+            "saved_p_send": 0.00019815888663288206,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.00019815888663288206,
+            "true_bc_post": 0.7750253677368164
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301010,
+          "target": "piloc-e1-target-5",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2310,
+          "candidate_decision": {
+            "step": 148,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.148
+            ],
+            "saved_p_send": 0.00019815888663288206,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.00019815888663288206,
+            "true_bc_post": 0.7750253677368164
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301014,
+          "target": "piloc-e1-target-5",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2514,
+          "candidate_decision": {
+            "step": 140,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.14
+            ],
+            "saved_p_send": 3.23412059515249e-05,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 3.23412059515249e-05,
+            "true_bc_post": 0.9544057250022888
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        }
+      ],
+      "disagreement_panel_count": 14
+    },
+    "33": {
+      "seed": 33,
+      "saved_vs_reforward_max_abs_error": 0.0,
+      "disagreement_panels": [
+        {
+          "scene": 1301000,
+          "target": "piloc-e1-target-5",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2508,
+          "candidate_decision": {
+            "step": 122,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              2.0,
+              1.0,
+              1.0,
+              6.0,
+              0.122
+            ],
+            "saved_p_send": 0.21296223998069763,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.21296223998069763,
+            "true_bc_post": 0.8014132976531982
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301010,
+          "target": "piloc-e1-target-5",
+          "control": "late",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2310,
+          "candidate_decision": {
+            "step": 148,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.148
+            ],
+            "saved_p_send": 0.2644193172454834,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.2644193172454834,
+            "true_bc_post": 0.7628664970397949
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301010,
+          "target": "piloc-e1-target-5",
+          "control": "bc_greedy",
+          "class": "B_control_only_send",
+          "candidate_sent": false,
+          "control_sent": true,
+          "candidate_bytes": null,
+          "control_bytes": 2310,
+          "candidate_decision": {
+            "step": 148,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.148
+            ],
+            "saved_p_send": 0.2644193172454834,
+            "candidate_action": 0,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "skip_episode_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.2644193172454834,
+            "true_bc_post": 0.7628664970397949
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        },
+        {
+          "scene": 1301014,
+          "target": "piloc-e1-target-5",
+          "control": "late",
+          "class": "A_candidate_only_send",
+          "candidate_sent": true,
+          "control_sent": false,
+          "candidate_bytes": 2514,
+          "control_bytes": null,
+          "candidate_decision": {
+            "step": 140,
+            "features_19": [
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              1.0,
+              1.0,
+              0.0,
+              1.0,
+              1.0,
+              1.0,
+              1.0,
+              6.0,
+              0.14
+            ],
+            "saved_p_send": 0.6353409290313721,
+            "candidate_action": 1,
+            "sequentially_affordable_before_action": true,
+            "one_shot_state_after": "send_now_chosen"
+          },
+          "p_send_same_input": {
+            "candidate_ep128": 0.6353409290313721,
+            "true_bc_post": 0.9570950865745544
+          },
+          "task_outcome": {
+            "candidate_on_time": true,
+            "control_on_time": true
+          },
+          "receiver_side_state": "missing_in_saved_rows"
+        }
+      ],
+      "disagreement_panel_count": 4
+    }
+  }
+}

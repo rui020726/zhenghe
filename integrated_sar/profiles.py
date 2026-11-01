@@ -41,7 +41,10 @@ class DeterministicTargetProfileProvider:
         position: GridPosition,
         detected_at: float,
     ) -> TargetProfile:
-        payload = f"{target_id}:{position.row}:{position.col}".encode("utf-8")
+        # Hash the physical location, not the track id: track ids are namespaced
+        # by episode ("piloc-e2-target-3"), and a replayed episode must give the
+        # same hidden target the same stage plan, severity and deadline.
+        payload = f"{position.row}:{position.col}".encode("utf-8")
         seed = int.from_bytes(hashlib.blake2b(payload, digest_size=8).digest(), "big")
         rng = random.Random(seed)
         stage_count = rng.randint(1, self.max_stages)

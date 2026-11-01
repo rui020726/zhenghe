@@ -58,7 +58,6 @@ CTDE 模块负责异构救援机器人任务分配，中间协调模块利用搜
 
 ## 已知问题，修改前先确认
 
-- `piloc/src/Map/timemap.py` 构造函数在 `test=False` 时可能在设置 `self.map` 前访问它。
 - PILOC 当前在发现目标后立即删除 `goals_pos`；适配器只是兼容方案，最终应原生发事件。
 - `piloc/src/DDQN/Agent.py` 的 `normalization` 导入路径可能在仓库根运行时失败。
 - PILOC 当前 critic 并非真正全局 centralized critic。

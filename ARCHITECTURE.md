@@ -10,6 +10,7 @@ flowchart LR
     S[PILOC 搜索]
     B[(事件总线)]
     R[任务注册表]
+    M[通信中转 CommRelay]
     C[协调优化器]
     A[CTDE 分配器]
     X[导航与任务执行]
@@ -19,15 +20,19 @@ flowchart LR
     S -->|DetectionEvent| B
     X -->|ProgressEvent| B
     B --> R
-    B --> C
+    B --> M
+    M -->|投递 DetectionMessage| X
     R -->|TaskSnapshot| A
-    R -->|全局任务态势| C
+    X -->|AgentSnapshot + task belief| C
     C -->|task/pair bias + replan| A
     A -->|AssignmentCommand| X
     C -.后续扩展：搜索热点.-> S
 ```
 
 快通路保证发现后立即进入任务池；慢通路计算优先级、匹配度和重规划建议，不能阻塞救援。
+发现消息只有经通信中转写进机器人 belief 之后才可能被分配。协调优化器的输入是
+`AgentSnapshot` 里的 belief，不是注册表：注册表只把 `TaskSnapshot` 供给分配器（用于闸门
+校验与执行注入），不给协调器供数，避免在线决策绕过通信链读真值。
 
 ## 2. 模块边界
 
@@ -35,6 +40,64 @@ flowchart LR
 
 输入局部障碍/探索地图和信息素，输出搜索动作、覆盖态势和 `DetectionEvent`。
 它不创建 task-03 内部字典，也不决定救援机器人分配。
+
+两条对**任何**搜索侧读数都有约束的环境事实（`piloc/src/Map/timemap.py`，
+由 `runs/real_search_undetected_attribution_20260923/` 逐条核对并用日志独立复现）：
+
+1. **未被发现的目标每步自己移动一格**（`{停, ±1 行, ±1 列}` 中选一个合法空格，`:814-845`）。
+   因此 `run_config` 里 `scenario.goal_positions` 与 B0 探针的 `placed` 记录都是
+   **t=0 的放置格**，不是目标当时所在格；"某个格子有没有被扫过"不能当作
+   "某个目标有没有被发现过"的等价解释。实测（两批真实搜索、708 条发现事件）：
+   只有 35.9 % 的发现发生在放置格上，晚发现的偏移中位 6 格、最大 45 格，
+   且"偏移 > 已过去步数"的违例为 0 条。
+2. **合法观测判据是"切比雪夫距离 ≤ 5 且 Bresenham 视线无遮挡"，并且它在机器人移动之后才评估**
+   （`:577-593`、`:682`、`:778`）。所以"机器人起点处看得见某目标"不等于"第 1 步看得见它"；
+   发现目标后 `goals_pos` 立即被删除（`:776-782`），适配器为此在 `reset()` 时快照放置
+   （`integrated_sar/adapters/piloc.py:95-101`）。
+
+由第 2 条还能得到一个可判定结论：观测者格与目标格之间存在一条内部全空格的离散直线，
+而直线每步至多对角相邻 ⇒ **二者必在同一 8-连通自由域内**；机器人和目标都只做 4-邻移动，
+各自永远留在自己那一域 ⇒ 与所有搜索机器人不同 8-连通域的目标在任何时刻都不可能合法观测到。
+这是"不可达/场景问题"这一桶的判据。
+
+### 被动信息路径探针（`--info-probe`，默认关闭）
+
+`integrated_sar/info_probe.py` 记四类**事后审计**事实：放置目标（含格）、逐接收者送达结局、
+逐 (目标, 机器人) 的知晓来源与时刻、真实到场步。纪律是硬的：写侧文件、
+**不新增生命周期 `event_type`**（生命周期记录因此逐字段不变）、用稳定外部 ID、
+不进 actor 观测、**不消耗任何随机数**（前向信道每个 (发射, 订阅者) 只抽一次数，
+探针只在抽样之后记录结局，不读也不写随机流）。
+开/关探针的成对回放证据在 `runs/comm_info_path_validation_20260923/B0_PAIRED_REPLAY.json`，
+回归在 `integrated_sar/tests/test_info_probe.py`。
+它记录的是真值视角，**不得**被引用成"策略当时可见的信息"。
+它**没有**记录逐时刻的搜索机器人位置与目标位置；那两条路径由 B1（下一节）补齐，
+第十七轮的缺失字段清单与最小补记录方案见
+`runs/real_search_undetected_attribution_20260923/MISSING_FIELDS_AND_PASSIVE_RECORD_PLAN.md`。
+
+### 搜索探测逐时刻旁路（`--search-probe`，默认关闭）
+
+`integrated_sar/search_probe.py` 补的是 B0 到不了的那一段：**"某目标在真正做探测的那一步
+有没有被看见"**。它与 `timemap.Environment.step` 内的探测阶段同步记录三类快照，
+每 episode 写一个侧文件：
+
+| kind | 内容 |
+|---|---|
+| `placed` | reset 顺序固定的稳定 ID（`piloc-e{episode}-target-{index}`）与 t=0 放置格 |
+| `step` | 探测时刻的目标格 + 数组下标 + 稳定 ID、机器人移动前/后位置、**环境自己判定发现并删除的 ID 集合**、由环境原语重数的观察者—目标对、适配器实际发出的 `DetectionEvent` ID、未发现目标移动后的新格、`done`、奖励，以及三视图闭合旗标 |
+| `final` | 终止原因（`all_found` / `step_cap`）、截止时机器人与剩余目标位置 |
+
+三条容易写错的地方，这一版按第十七轮的方案逐条钉住：快照必须取自**删除与移动之前**的数组
+（不能用整步结束后的位置反推可见性）；`goals_pos` 只删不增、下标会左移，因此
+`goal_index_at_reset` 与 `array_index_at_step` 同时记录、一切聚合只按稳定 ID；
+多机器人看见同一目标时按目标 ID 去重，**不要求**"观察者—目标对数 == DetectionEvent 数"。
+纪律与 B0 同级：默认关闭、不新增生命周期 `event_type`、不进 actor 观测、不进奖励、
+不消耗任何随机数；`piloc/src/Map/timemap.py` 的 `search_trace_enabled` 默认 `False`。
+它的被动性是**实测**出来的而不是声明的：两个 seed × 开/关 × 两次重复，1000 步逐步比较
+动作、奖励、`done`、两个位置数组以及 `_py_rng` / `_np_rng` 的状态摘要，全部相同
+（`runs/search_trace_and_policy_20260925/SEARCH_TRACE_IDENTITY_REPORT.md`，
+回归在 `integrated_sar/tests/test_search_probe.py`）。
+探针因此是分析旁路，不是第三条臂：任何用它得到的读数都不改变策略输入，
+也不能被引用成"策略当时可见的信息"。
 
 ### 任务注册表
 
@@ -47,17 +110,147 @@ HIDDEN → DETECTED → VERIFIED → ASSIGNED → EN_ROUTE
 
 异常分支包括 `REPLAN_REQUIRED`、`EXPIRED`、`LOST` 和 `FAILED`。
 
+### 通信中转
+
+`CommRelay` 是搜索发现与救援 belief 之间唯一的**消息**通道。事件总线把每个
+`DetectionEvent` 扇出一次，中转只登记注册表已接受的事件（被拒绝的事件不是新闻），
+随后**每一步由一个发送策略决定哪些任务视图上空气**（`--comm-policy`，默认 `immediate` =
+每条被接受的检测发一次，即历史行为；另有 `periodic`/`event`/`event_maxwait`/`event_priority`
+/`hold_to_bound`/`random_send`，以及权重另存的 `learned`），
+再按显式拓扑（`--comm-subscribers`：默认全救援队，也可指定 `first:N` 或救援机器人
+id 列表）、每包延迟和丢包率（由 seed 驱动）投递；包丢了就丢了，belief 保持原值。
+
+与策略无关、对所有策略一致的传输规则：载荷在**发射时刻**按注册表最新快照构造，
+因此被推迟的变化是被取代而不是被迟到地重发；每目标每步至多一次发射；发射预算超出
+`--comm-sends-per-tick` 时按统一顺序（剩余时间、等待步数、目标 id）裁剪；注册表已终态的
+任务不再播报；`--comm-max-wait-steps`（紧急时收紧到 `--comm-urgent-wait-steps`）规定一条变化
+最长能沉默多久，到点由传输层代发、同样计费、付不起同样被拒——它是**下界**而不是某个策略的
+私有规则，所以任何臂都不能靠"什么都不发"逃开评价。中转不读任何人的位置，也不读任何机器人的
+belief 或投递结果（上行无 ACK），所以搜索队与救援队仍是两组独立实体，救援集结点是否与搜索
+起点重合不影响闭环能否启动。
+
+这条下界属于哪个协议由 `--comm-timing-mode` 明说，两个模式只差"到点这一步谁开口"：
+`legacy_shared_bound` 是上面描述的行为，也是全部历史实验（默认值）；`policy_owned_timing`
+取消的只是传输层的代发——不再因为时间已到就把 HOLD 掩成 SEND，同一套 3/10/25 时机改由
+`first_send_plus_bound_3_10`、`bound_only_3_10` 这样的显式规则去请求，或交给学习策略自己选。
+候选生成、注册表轮询、每步调用、消息合并、硬字节额度、每步发射容量、内容合法性与终态抑制在两个
+模式下完全相同，全沉默允许把任务拖到失败也不用隐含兜底补分。被取消的是固定发送时间约束，
+不是成员一致性、命令校验或预算上限。因此每条发射的主原因标签在新模式下按设计改变
+（旧协议 `forced_maxwait` → 新协议 `policy`，同一批包），两模式之间比较的是包、时刻、顺序、
+扣费与任务结局，不是标签。回归见 `integrated_sar/tests/test_comm_policy_owned_timing.py`，
+实测（含旧模式逐格复现归档转录、以及新模式下代发数为 0）见
+`runs/comm_protocol_v2_20260920/`。
+
+### 反向信道（ACK，`--comm-ack`，默认关闭）
+
+上行一直没有回执，所以发送端无法知道某个视图是否已被应用，"重发还是等待"因此没有反馈可用。
+`--comm-ack` 打开一条独立的**反向信道**，语义由 `COMM_ACK_CONTRACT.md` 固定、
+`integrated_sar/comm_ack.py` 实现、`integrated_sar/tests/test_comm_ack_feedback.py` 回归：
+
+- **ACK 只有一个来源**：接收端把一条上行包真正应用进 belief（`deliver_detection` 返回 True）。
+  包丢失则接收端从未看到，不产生 ACK；送达但被判重复/被取代的，belief 未变，也不产生 ACK。
+- **ACK 证明"新视图已应用"而不是"包到达"**：载荷携带接收端已应用的最高
+  `(sent_at, revision, content_fingerprint)`。重复包可再次确认同一个最高视图，乱序 ACK
+  按三元组字典序取最大，`highest` 永不回退。
+- **ACK 经反向信道传输，延迟与丢包和上行同参数**（`--comm-ack-delay-ticks` /
+  `--comm-ack-delivery-probability` 默认取上行自己的值，不搞第二套更友好的参数）。
+  每步顺序固定为"上行投递 → 反向 ACK 投递 → 发送决策"，所以本步刚产生的 ACK 当步不可见，
+  "包是否在途"永远不会成为策略输入。
+- **每个 ACK 发送尝试都按序列化字节全额计费，丢失也计费**，走独立的反向账本
+  （`AckLedger`：只计数、不设上限、不可为负），**不消耗任务上行额度**。主成本与任何
+  "省通信"结论必须用 `上行尝试字节 + ACK 尝试字节`，两项同时分列。把反向额度与上行额度
+  混成一个动作约束，"省上行"就可以靠"随便确认"伪造。
+- **随机数是 counter-based 的**：key 至少含 `(episode seed, direction, subscriber, target,
+  attempt ordinal)`，两个策略面对同一个 key 抽到同一个数（共同随机数配对）；与 no-ACK
+  历史臂比较时只能称同分布比较，不得称同一串事件。
+- **发送端可见的只有四维**（`comm-send-state/2` 在 19 维之上追加）：已确认比例、最大 ACK age、
+  与最高已确认视图的最大 revision/content gap、未全体确认的广播次数。全部由发送端自己的
+  发送历史与已到达 ACK 推出；**没有任何 ACK 到达时是显式的 unknown 编码（-1），不把未知
+  编码成"接收端肯定没有"**。接收端 belief、在途包、未来到达、真实丢包结果、注册表状态
+  都不得进入特征。旧 `/1` checkpoint 在 `/2` 网络上 fail closed。
+- **ACK 关闭时不构造任何反馈状态**：无状态表、无反向 RNG、无 ACK transcript 记录，
+  `/1` 特征与候选顺序、RNG 消耗逐位相同，历史路径逐字节不变。生产默认继续无 ACK。
+- 与 ACK 一同新增的还有四条**只有反向信道存在才可能存在的规则**：`retry_until_acked`、
+  `event_retry_until_acked`、`exponential_backoff`、`deadline_tightening_retry`。它们读的是
+  `/2` 特征同源的两个事实，所以规则与学习发送端竞争的是同一份信息，不是某一方持有私有通道。
+
+每条发射都带一个互斥主原因：`policy`（发送端自己请求）、`forced_maxwait`（上界到点，传输层
+代发）、`other`（预留给未来的强制协议事件）。发射数、尝试数、字节数与被拒次数都按原因分列并
+要求闭合。这不是记账洁癖，而是这条研究线能否被证伪的关键：一个只学会"闭嘴"的策略，其全部
+上行都是上界替它发的，若不标注原因就是"省了 60% 通信的学习成果"，标注之后才知道它是
+`hold_to_bound` 这条规则本身（`--comm-policy hold_to_bound`，与 `random_send` 一起构成本轮
+新增的两个地板臂）。`--comm-budget-bytes` 是同一执行器给的每 episode 字节额度，规则臂与学习臂
+共用，见 `integrated_sar/comm_budget.py`。
+
+三种"同一件事做两次"的口径必须分开，否则账本会被读反：`coalesced_changes` 是**生产侧**的合并
+（两条新闻装进一封信），`redundant_emissions` 是**发送侧**的重复（一封信的内容与上一封逐字段相同，
+即 `SendItem.changed_view` 为假），`delivery_duplicate` 则是**接收侧**某个机器人拒收它已经相信的包。
+一条被轮询发现的变化若撞上一件仍在排队的旧变化，现在同时计入 `generated_items` 与
+`coalesced_changes`——它确实既是一条新闻、又是一次合并——并且与事件路径共用 `ready_view`，
+所以同一条新闻被事件和轮询各看一次时只计一遍。恒等式因此是
+`generated_items = (emissions - redundant_emissions) + coalesced_changes + 终态抑制 + 终局未说`，
+四项各归其位、不重复计数。回归见 `integrated_sar/tests/test_comm_send_policy.py` 的
+`GenerationAccountingTests`，机制实测见 `runs/comm_tight_budget_20260919/` 的
+`ledger_gap_reproduction.py` 与 `ledger_fix_invariance.py`（后者核对固定 checkpoint 在记账修正前后
+的发射、扣费与任务结局逐值不变）。
+
+收窄拓扑或压低发送频率都只限制**这条消息通道**——机器人仍可能经视距感知或一跳 gossip
+获知同一信息（那两条信道由 `old_task_env` 自己建模，实测份额见
+`runs/comm_control_20260919/INFORMATION_BOUNDARY.md`：默认传感半径下 95.6% 的"首次知晓"
+在没有上行时也成立）。因此评估发送策略必须在关掉这两条旁路的隔离配置下进行
+（`--gossip-interval` 大于步数；该开关同时门控视距刷新与 gossip，因为两者都在
+`propagate_task_completion` 里）。`--comm-transcript` 把接受/发射/投递逐条写盘，
+只用于离线测量，不被任何决策回读。
+
+### 协调与执行的 belief 边界
+
+在线协调器只按每台机器人自己的 belief 打分：`AgentSnapshot.task_beliefs` 携带该机器人
+收到的任务位置、剩余需求、截止时间、阶段、进度、复杂度、置信度与登记版本号，
+`HeuristicCoordinator` 的输出全部由它推出，绝不读注册表快照——注册表只负责闸门与
+生命周期管理，它关闭一个任务并不是任何机器人观察到的事实。任务优先级按机器人分开
+发布（`agent_task_bias`）而不是放进 `task_bias`：后者是会被所有机器人共享的池级修正，
+任何由单台机器人 belief 推出的数值放进去，都等于把该机器人的知识广播给它从未收到过
+消息的机器人。执行侧同理：`apply_action` 用 believed 位置作为导航目标、believed 状态
+作为预期状态，任务真值只在到场核实（`verify_task_on_arrival`）时使用；在途重规划也只看
+belief，真值显示完成而消息未达时机器人继续前往。分配器只在给命令盖上注册表 revision
+时读快照，因为 `AssignmentGate` 需要用它拒绝过期命令，选哪个任务仍来自该机器人自己的
+belief。
+
 ### 协调优化器
 
 输入搜索覆盖/陈旧度、任务阶段/截止时间、机器人能力/位置/工作状态和执行失败；输出：
 
-- `task_bias[task]`：任务优先级修正；
+- `task_bias[task]`：池级任务优先级修正，所有机器人共享，因此只允许放共同知识；
+- `agent_task_bias[agent, task]`：按机器人分开的任务优先级修正，由该机器人的 belief 推出；
 - `pair_bias[agent, task]`：机器人—任务匹配修正；
+- `reservations[agent, task]`：短期团队预约（默认空），指明该机器人覆盖该任务的哪个
+  能力槽位、按该机器人 belief 的任务 revision、有效期与有界分数。pair bias 只能表达
+  “这台机器人与这个任务有多匹配”，同一槽位的两台机器人会得到相同分数；预约把槽位写进
+  契约，占用因此互斥，计划选中的机器人就是实际被派出的机器人。预约与 pair bias 走同一条
+  有界残差通道，因此不变量 5 的形式不变，硬 mask 仍在最后应用（不变量 6）。预约键是
+  (agent, task)，只对持约的机器人可见，不会像池级 `task_bias` 那样把一台机器人的知识
+  广播给没收到消息的机器人（不变量 9）；发约方必须把自己的 `valid_until` 压到最早预约
+  到期之前，过期预约才不可能通过缓存 advice 生效；
 - `replan_agents`：需要重新决策的机器人；
 - 后续可选搜索热点。
 
-第一版 `HeuristicCoordinator` 可解释且可作为无学习基线。学习型协调器必须保持相同接口，
-并对输出进行有界限制。
+规则协调器（`HeuristicCoordinator`）与联盟打分协调器（`CoalitionAwareCoordinator`）都
+不产出预约，默认配置下 `reservations` 为空，残差与旧行为逐位一致。联盟规划协调器
+（`CoalitionPlannerCoordinator`，`--coordinator coalition_planner`）在空闲机器人与任务
+开放槽位之间做确定性的贪心 set-cover，考虑截止时间、行进代价、能力互补与冗余派遣，输出
+本轮团队预约。`CoalitionReservation` 带有身份（`commitment_id`、`created_at`）：规划器每轮
+重建计划，但对同一 (agent, task, slot) 的再次发布视为**同一承诺的续订**——身份保持不变，
+只有有效期、belief revision 与分数随本轮更新；只有槽位改变（真正的重规划）才产生新 id。
+学习型协调器必须保持相同接口，并对输出进行有界限制。
+
+### 承诺的执行侧约束（`--sticky-commitments`，默认关闭）
+
+`Task03Adapter` 在决策时刻对持约机器人做六项有效性检查（belief 中任务仍活动、未过期、
+槽位仍需、hard mask 合法、不在 `replan_agents`、可继续执行），全部通过则该承诺对分配器
+有约束力：机器人已在承诺任务上时不再重复派令；空闲时保持承诺任务；分配器自身的原始选择
+与承诺不同时，以承诺为准并在 trace 中记录 `raw_choice` / `forced_choice` /
+`post_mask_choice` / `actual_assignment`。任一条件失败则按首个失败原因释放并正常重规划。
+硬 mask 仍然最后应用（不变量 6），协调器依旧只提供建议（不变量 5）。
 
 ### CTDE 分配器
 
@@ -80,8 +273,10 @@ HIDDEN → DETECTED → VERIFIED → ASSIGNED → EN_ROUTE
 | 契约 | 生产者 | 消费者 | 关键字段 |
 | --- | --- | --- | --- |
 | `DetectionEvent` | PILOC adapter | Registry/Coordinator | target ID、位置、时间、置信度、目标属性 |
+| `DetectionMessage` | CommRelay | 机器人 belief（经 Task03 adapter） | 发送时快照：位置、阶段、需求、进度、置信度、revision、截止时间 |
 | `TaskSnapshot` | Registry | Coordinator/Allocator/Executor | 阶段、剩余需求、截止时间、revision |
-| `CoordinationAdvice` | Coordinator | Allocator | task bias、pair bias、replan、有效期 |
+| `AgentSnapshot` / `AgentTaskBelief` | Task03 adapter | Coordinator/Allocator | 该机器人收到的任务视图（位置/需求/阶段/进度/置信度/revision） |
+| `CoordinationAdvice` | Coordinator | Allocator | 池级 task bias、按机器人的 agent task bias、pair bias、团队预约 reservations、replan、有效期 |
 | `AssignmentCommand` | Allocator | Executor | agent/task、task revision、TTL |
 | `ProgressEvent` | Executor | Registry/Coordinator | 阶段、剩余需求、进度、失败原因 |
 
@@ -94,9 +289,11 @@ HIDDEN → DETECTED → VERIFIED → ASSIGNED → EN_ROUTE
 1. 搜索环境推进并发布新发现。
 2. 注册表幂等接收发现并创建/更新任务。
 3. 将最新任务快照同步到 task-03 环境。
-4. 救援执行环境推进并发布进度。
-5. 注册表接收进度，协调器按周期或事件重新计算 advice。
-6. 分配器在新任务、进度变化、超时或周期触发时生成命令。
+4. 救援执行环境推进：先让上行按发送策略发射、再投递到期的通信消息（belief 变化被报告为调度信号），
+   再推进模拟器并发布进度。
+5. 注册表接收进度，协调器按周期或事件（新发现、进度、belief 变化、重规划请求）
+   重新计算 advice。
+6. 分配器在新任务、进度变化、belief 变化、超时或周期触发时生成命令。
 7. 执行器应用命令；机器人从下一物理步开始移动。
 
 ## 5. 世界与坐标
@@ -125,5 +322,9 @@ y = row / (height - 1)
 
 ## 7. 部署与信息约束
 
-环境维护 `truth state`，Actor/在线协调器维护 `belief state`。严格 CTDE 实验中，在线模块
-只能使用经过通信图、延迟和丢包后的信息；全局真值只允许训练 Critic 和计算指标使用。
+环境维护 `truth state`，Actor/在线协调器维护 `belief state`。严格 CTDE 实验中，
+在线模块只能使用经过通信链（上行中转、视距感知、gossip）到达的信息：
+观测特征、硬 mask、协调器打分、导航目标与在途重规划全部读 belief 副本，
+断联期间真值推进不改变机器人的决策输入与行动目标。机器人是否听说某任务决定它
+能否选择该任务；belief 中与决策相关的任一字段变化都会立即成为调度信号。
+全局真值只允许模拟器、训练 Critic 和统计指标使用。
