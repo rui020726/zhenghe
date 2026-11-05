@@ -1,0 +1,1703 @@
+{
+ "advantage_mode": "causal_step",
+ "baselines": "execution/baselines/grid_v2/BASELINES.json",
+ "baselines_sha256": "95064c8753881114e00265ddcff81c591f9e4414e19426c9cbac509415d16b2f",
+ "breakers": [],
+ "budget_bytes": 1000000000,
+ "causal_gamma": 0.0,
+ "cells_seen": [
+  "G12_R12_N12",
+  "G12_R12_N3",
+  "G12_R12_N6",
+  "G12_R6_N3",
+  "G12_R6_N6",
+  "G24_R12_N12",
+  "G24_R12_N3",
+  "G24_R12_N6",
+  "G24_R6_N3",
+  "G24_R6_N6",
+  "G48_R12_N12",
+  "G48_R12_N3",
+  "G48_R12_N6",
+  "G48_R6_N3",
+  "G48_R6_N6"
+ ],
+ "credit_mode": "causal_task_id",
+ "end_parameter_sha256": "297b41df51c17bd4fe4ac533eb3ee8428104f0b16be8d47a55025c03b3cff4af",
+ "episodes": [
+  {
+   "bytes_per_on_time": 5700.5,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "cost_scale": 72.0,
+   "emissions": 28,
+   "episode_index": 5000,
+   "generated_goals": 12,
+   "lambda": 2.0,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "scene": 2201901,
+   "seconds": 14.24,
+   "spent_bytes": 68406
+  },
+  {
+   "bytes_per_on_time": 2291.0,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "cost_scale": 36.0,
+   "emissions": 17,
+   "episode_index": 5001,
+   "generated_goals": 12,
+   "lambda": 2.0,
+   "masked_by_credit": 0,
+   "on_time": 9,
+   "on_time_rate": 0.75,
+   "scene": 2201902,
+   "seconds": 14.49,
+   "spent_bytes": 20619
+  },
+  {
+   "bytes_per_on_time": 3172.5,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "cost_scale": 72.0,
+   "emissions": 15,
+   "episode_index": 5002,
+   "generated_goals": 12,
+   "lambda": 2.0,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "scene": 2201903,
+   "seconds": 14.48,
+   "spent_bytes": 38070
+  },
+  {
+   "bytes_per_on_time": 3031.5,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "cost_scale": 72.0,
+   "emissions": 15,
+   "episode_index": 5003,
+   "generated_goals": 12,
+   "lambda": 2.0,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "scene": 2201904,
+   "seconds": 17.53,
+   "spent_bytes": 36378
+  },
+  {
+   "bytes_per_on_time": 14904.333333333334,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "cost_scale": 144.0,
+   "emissions": 111,
+   "episode_index": 5004,
+   "generated_goals": 48,
+   "lambda": 2.1828125,
+   "masked_by_credit": 0,
+   "on_time": 9,
+   "on_time_rate": 0.1875,
+   "scene": 2201905,
+   "seconds": 21.43,
+   "spent_bytes": 134139
+  },
+  {
+   "bytes_per_on_time": 11343.391304347826,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "cost_scale": 288.0,
+   "emissions": 108,
+   "episode_index": 5005,
+   "generated_goals": 48,
+   "lambda": 2.1828125,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.4791666666666667,
+   "scene": 2201906,
+   "seconds": 23.34,
+   "spent_bytes": 260898
+  },
+  {
+   "bytes_per_on_time": 2535.529411764706,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "cost_scale": 144.0,
+   "emissions": 71,
+   "episode_index": 5006,
+   "generated_goals": 48,
+   "lambda": 2.1828125,
+   "masked_by_credit": 0,
+   "on_time": 34,
+   "on_time_rate": 0.7083333333333334,
+   "scene": 2201907,
+   "seconds": 24.24,
+   "spent_bytes": 86208
+  },
+  {
+   "bytes_per_on_time": 4212.63829787234,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "cost_scale": 288.0,
+   "emissions": 82,
+   "episode_index": 5007,
+   "generated_goals": 48,
+   "lambda": 2.1828125,
+   "masked_by_credit": 0,
+   "on_time": 47,
+   "on_time_rate": 0.9791666666666666,
+   "scene": 2201908,
+   "seconds": 30.4,
+   "spent_bytes": 197994
+  },
+  {
+   "bytes_per_on_time": 2861.25,
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "cell_label": "G12_R12_N3",
+   "cost_scale": 36.0,
+   "emissions": 29,
+   "episode_index": 5008,
+   "generated_goals": 12,
+   "lambda": 2.2391927083333334,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "scene": 2201909,
+   "seconds": 15.95,
+   "spent_bytes": 34335
+  },
+  {
+   "bytes_per_on_time": 3840.625,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "cost_scale": 72.0,
+   "emissions": 77,
+   "episode_index": 5009,
+   "generated_goals": 24,
+   "lambda": 2.2391927083333334,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "scene": 2201910,
+   "seconds": 20.66,
+   "spent_bytes": 92175
+  },
+  {
+   "bytes_per_on_time": 5878.953488372093,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "cost_scale": 144.0,
+   "emissions": 213,
+   "episode_index": 5010,
+   "generated_goals": 48,
+   "lambda": 2.2391927083333334,
+   "masked_by_credit": 0,
+   "on_time": 43,
+   "on_time_rate": 0.8958333333333334,
+   "scene": 2201911,
+   "seconds": 30.43,
+   "spent_bytes": 252795
+  },
+  {
+   "bytes_per_on_time": 8868.0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "cost_scale": 144.0,
+   "emissions": 85,
+   "episode_index": 5011,
+   "generated_goals": 24,
+   "lambda": 2.2391927083333334,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "scene": 2201912,
+   "seconds": 22.41,
+   "spent_bytes": 203964
+  },
+  {
+   "bytes_per_on_time": 6588.875,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "cost_scale": 72.0,
+   "emissions": 133,
+   "episode_index": 5012,
+   "generated_goals": 24,
+   "lambda": 2.456785300925926,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "scene": 2201901,
+   "seconds": 16.99,
+   "spent_bytes": 158133
+  },
+  {
+   "bytes_per_on_time": 24841.674418604653,
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "cell_label": "G48_R12_N12",
+   "cost_scale": 576.0,
+   "emissions": 228,
+   "episode_index": 5013,
+   "generated_goals": 48,
+   "lambda": 2.456785300925926,
+   "masked_by_credit": 0,
+   "on_time": 43,
+   "on_time_rate": 0.8958333333333334,
+   "scene": 2201902,
+   "seconds": 53.14,
+   "spent_bytes": 1068192
+  },
+  {
+   "bytes_per_on_time": 8794.5,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "cost_scale": 144.0,
+   "emissions": 14,
+   "episode_index": 5014,
+   "generated_goals": 12,
+   "lambda": 2.456785300925926,
+   "masked_by_credit": 0,
+   "on_time": 8,
+   "on_time_rate": 0.6666666666666666,
+   "scene": 2201903,
+   "seconds": 17.47,
+   "spent_bytes": 70356
+  },
+  {
+   "bytes_per_on_time": 37110.27272727273,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "cost_scale": 144.0,
+   "emissions": 349,
+   "episode_index": 5015,
+   "generated_goals": 48,
+   "lambda": 2.456785300925926,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.22916666666666666,
+   "scene": 2201904,
+   "seconds": 25.82,
+   "spent_bytes": 408213
+  },
+  {
+   "bytes_per_on_time": 9982.363636363636,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "cost_scale": 144.0,
+   "emissions": 186,
+   "episode_index": 5016,
+   "generated_goals": 48,
+   "lambda": 2.559720906986532,
+   "masked_by_credit": 0,
+   "on_time": 22,
+   "on_time_rate": 0.4583333333333333,
+   "scene": 2201905,
+   "seconds": 28.45,
+   "spent_bytes": 219612
+  },
+  {
+   "bytes_per_on_time": 4556.2,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "cost_scale": 72.0,
+   "emissions": 57,
+   "episode_index": 5017,
+   "generated_goals": 24,
+   "lambda": 2.559720906986532,
+   "masked_by_credit": 0,
+   "on_time": 15,
+   "on_time_rate": 0.625,
+   "scene": 2201906,
+   "seconds": 16.98,
+   "spent_bytes": 68343
+  },
+  {
+   "bytes_per_on_time": 9595.615384615385,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "cost_scale": 144.0,
+   "emissions": 105,
+   "episode_index": 5018,
+   "generated_goals": 48,
+   "lambda": 2.559720906986532,
+   "masked_by_credit": 0,
+   "on_time": 13,
+   "on_time_rate": 0.2708333333333333,
+   "scene": 2201907,
+   "seconds": 18.15,
+   "spent_bytes": 124743
+  },
+  {
+   "bytes_per_on_time": 15981.333333333334,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "cost_scale": 288.0,
+   "emissions": 29,
+   "episode_index": 5019,
+   "generated_goals": 24,
+   "lambda": 2.559720906986532,
+   "masked_by_credit": 0,
+   "on_time": 9,
+   "on_time_rate": 0.375,
+   "scene": 2201908,
+   "seconds": 21.17,
+   "spent_bytes": 143832
+  },
+  {
+   "bytes_per_on_time": 13415.538461538461,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "cost_scale": 144.0,
+   "emissions": 72,
+   "episode_index": 5020,
+   "generated_goals": 24,
+   "lambda": 2.133939656986532,
+   "masked_by_credit": 0,
+   "on_time": 13,
+   "on_time_rate": 0.5416666666666666,
+   "scene": 2201909,
+   "seconds": 22.72,
+   "spent_bytes": 174402
+  },
+  {
+   "bytes_per_on_time": 6119.25,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "cost_scale": 72.0,
+   "emissions": 82,
+   "episode_index": 5021,
+   "generated_goals": 24,
+   "lambda": 2.133939656986532,
+   "masked_by_credit": 0,
+   "on_time": 16,
+   "on_time_rate": 0.6666666666666666,
+   "scene": 2201910,
+   "seconds": 21.93,
+   "spent_bytes": 97908
+  },
+  {
+   "bytes_per_on_time": 4534.5,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "cost_scale": 72.0,
+   "emissions": 44,
+   "episode_index": 5022,
+   "generated_goals": 24,
+   "lambda": 2.133939656986532,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 0.5,
+   "scene": 2201911,
+   "seconds": 19.96,
+   "spent_bytes": 54414
+  },
+  {
+   "bytes_per_on_time": 9831.6,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "cost_scale": 72.0,
+   "emissions": 20,
+   "episode_index": 5023,
+   "generated_goals": 12,
+   "lambda": 2.133939656986532,
+   "masked_by_credit": 0,
+   "on_time": 5,
+   "on_time_rate": 0.4166666666666667,
+   "scene": 2201912,
+   "seconds": 17.78,
+   "spent_bytes": 49158
+  },
+  {
+   "bytes_per_on_time": 10798.666666666666,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "cost_scale": 144.0,
+   "emissions": 20,
+   "episode_index": 5024,
+   "generated_goals": 12,
+   "lambda": 1.4592372760341512,
+   "masked_by_credit": 0,
+   "on_time": 9,
+   "on_time_rate": 0.75,
+   "scene": 2201901,
+   "seconds": 18.17,
+   "spent_bytes": 97188
+  },
+  {
+   "bytes_per_on_time": 24536.428571428572,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "cost_scale": 288.0,
+   "emissions": 442,
+   "episode_index": 5025,
+   "generated_goals": 48,
+   "lambda": 1.4592372760341512,
+   "masked_by_credit": 0,
+   "on_time": 42,
+   "on_time_rate": 0.875,
+   "scene": 2201902,
+   "seconds": 56.03,
+   "spent_bytes": 1030530
+  },
+  {
+   "bytes_per_on_time": 2479.5,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "cost_scale": 36.0,
+   "emissions": 20,
+   "episode_index": 5026,
+   "generated_goals": 12,
+   "lambda": 1.4592372760341512,
+   "masked_by_credit": 0,
+   "on_time": 10,
+   "on_time_rate": 0.8333333333333334,
+   "scene": 2201903,
+   "seconds": 13.57,
+   "spent_bytes": 24795
+  },
+  {
+   "bytes_per_on_time": 56687.2,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "cost_scale": 288.0,
+   "emissions": 363,
+   "episode_index": 5027,
+   "generated_goals": 48,
+   "lambda": 1.4592372760341512,
+   "masked_by_credit": 0,
+   "on_time": 15,
+   "on_time_rate": 0.3125,
+   "scene": 2201904,
+   "seconds": 34.34,
+   "spent_bytes": 850308
+  },
+  {
+   "bytes_per_on_time": 109432.5,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "cost_scale": 144.0,
+   "emissions": 187,
+   "episode_index": 5028,
+   "generated_goals": 24,
+   "lambda": 1.4572581093674846,
+   "masked_by_credit": 0,
+   "on_time": 4,
+   "on_time_rate": 0.16666666666666666,
+   "scene": 2201905,
+   "seconds": 21.71,
+   "spent_bytes": 437730
+  },
+  {
+   "bytes_per_on_time": 56307.0,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "cost_scale": 288.0,
+   "emissions": 431,
+   "episode_index": 5029,
+   "generated_goals": 48,
+   "lambda": 1.4572581093674846,
+   "masked_by_credit": 0,
+   "on_time": 18,
+   "on_time_rate": 0.375,
+   "scene": 2201906,
+   "seconds": 38.92,
+   "spent_bytes": 1013526
+  },
+  {
+   "bytes_per_on_time": 3419.75,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "cost_scale": 36.0,
+   "emissions": 33,
+   "episode_index": 5030,
+   "generated_goals": 12,
+   "lambda": 1.4572581093674846,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "scene": 2201907,
+   "seconds": 13.4,
+   "spent_bytes": 41037
+  },
+  {
+   "bytes_per_on_time": 50083.68,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "cost_scale": 288.0,
+   "emissions": 538,
+   "episode_index": 5031,
+   "generated_goals": 48,
+   "lambda": 1.4572581093674846,
+   "masked_by_credit": 0,
+   "on_time": 25,
+   "on_time_rate": 0.5208333333333334,
+   "scene": 2201908,
+   "seconds": 42.96,
+   "spent_bytes": 1252092
+  },
+  {
+   "bytes_per_on_time": 116234.66666666667,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "cost_scale": 288.0,
+   "emissions": 446,
+   "episode_index": 5032,
+   "generated_goals": 48,
+   "lambda": 1.4947581093674847,
+   "masked_by_credit": 0,
+   "on_time": 9,
+   "on_time_rate": 0.1875,
+   "scene": 2201909,
+   "seconds": 40.76,
+   "spent_bytes": 1046112
+  },
+  {
+   "bytes_per_on_time": 27253.8,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "cost_scale": 72.0,
+   "emissions": 224,
+   "episode_index": 5033,
+   "generated_goals": 24,
+   "lambda": 1.4947581093674847,
+   "masked_by_credit": 0,
+   "on_time": 10,
+   "on_time_rate": 0.4166666666666667,
+   "scene": 2201910,
+   "seconds": 19.57,
+   "spent_bytes": 272538
+  },
+  {
+   "bytes_per_on_time": 12464.0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "cost_scale": 288.0,
+   "emissions": 60,
+   "episode_index": 5034,
+   "generated_goals": 24,
+   "lambda": 1.4947581093674847,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "scene": 2201911,
+   "seconds": 23.9,
+   "spent_bytes": 299136
+  },
+  {
+   "bytes_per_on_time": 9046.173913043478,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "cost_scale": 72.0,
+   "emissions": 175,
+   "episode_index": 5035,
+   "generated_goals": 24,
+   "lambda": 1.4947581093674847,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "scene": 2201912,
+   "seconds": 23.12,
+   "spent_bytes": 208062
+  },
+  {
+   "bytes_per_on_time": 25712.5,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "cost_scale": 288.0,
+   "emissions": 509,
+   "episode_index": 5036,
+   "generated_goals": 48,
+   "lambda": 1.3557997760341514,
+   "masked_by_credit": 0,
+   "on_time": 48,
+   "on_time_rate": 1.0,
+   "scene": 2201901,
+   "seconds": 53.2,
+   "spent_bytes": 1234200
+  },
+  {
+   "bytes_per_on_time": 7830.272727272727,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "cost_scale": 36.0,
+   "emissions": 70,
+   "episode_index": 5037,
+   "generated_goals": 12,
+   "lambda": 1.3557997760341514,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.9166666666666666,
+   "scene": 2201902,
+   "seconds": 13.85,
+   "spent_bytes": 86133
+  },
+  {
+   "bytes_per_on_time": 12829.0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "cost_scale": 72.0,
+   "emissions": 256,
+   "episode_index": 5038,
+   "generated_goals": 24,
+   "lambda": 1.3557997760341514,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "scene": 2201903,
+   "seconds": 25.25,
+   "spent_bytes": 307896
+  },
+  {
+   "bytes_per_on_time": 7089.5,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "cost_scale": 36.0,
+   "emissions": 72,
+   "episode_index": 5039,
+   "generated_goals": 12,
+   "lambda": 1.3557997760341514,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "scene": 2201904,
+   "seconds": 13.88,
+   "spent_bytes": 85074
+  }
+ ],
+ "episodes_attempted": 40,
+ "episodes_completed": 40,
+ "evaluation_points": [],
+ "identity_sha256": "bf02580f38527c34c354aee14d7aad00c55151a800820d6e442a6c6a33973086",
+ "lambda_final": 1.7095758177008182,
+ "lambda_initial": 2.0,
+ "root": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_02",
+ "scale_features": "scaled",
+ "schema": "stage5b-revision02-train/1",
+ "start_checkpoint": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_09b\\revision_01\\execution\\checkpoints\\T2_s91002\\milestone_5000.pth",
+ "start_checkpoint_sha256": "645126abfbb91be7734eac618e869746eed380b633a89b0d6c1556fb7d8c77c6",
+ "start_episode": 5000,
+ "stopping_reason": "max_episodes",
+ "tag": "probe40",
+ "update_history": [
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 0.186503,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "raise_price",
+    "error": 0.09140625000000002,
+    "lambda_after": 2.1828125,
+    "lambda_before": 2.0,
+    "per_cell": {
+     "G12_R12_N6": {
+      "generated": 12,
+      "on_time": 12,
+      "q": 1.0
+     },
+     "G12_R6_N3": {
+      "generated": 12,
+      "on_time": 9,
+      "q": 0.75
+     },
+     "G12_R6_N6": {
+      "generated": 24,
+      "on_time": 24,
+      "q": 1.0
+     }
+    },
+    "q_batch": 0.9375,
+    "q_ref": 0.890625,
+    "q_target": 0.84609375,
+    "reference": {
+     "cells": [
+      "G12_R12_N6",
+      "G12_R6_N3",
+      "G12_R6_N6"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.013894,
+   "epochs": 4,
+   "gradient_norm_mean": 2778.4631,
+   "lambda": 2.0,
+   "minibatches": 24,
+   "objective": {
+    "advantage": "1.0 * A_task - 2.0000 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 2.0,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 2.0,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 24,
+   "policy_surrogate": -6.199892,
+   "samples": 1484,
+   "toward_episode": 5003,
+   "update_index": 1250,
+   "value_loss_cost": 7.295752,
+   "value_loss_task": 104.647482
+  },
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 0.606009,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "raise_price",
+    "error": 0.028190104166666674,
+    "lambda_after": 2.2391927083333334,
+    "lambda_before": 2.1828125,
+    "per_cell": {
+     "G48_R12_N3": {
+      "generated": 48,
+      "on_time": 34,
+      "q": 0.7083333333333334
+     },
+     "G48_R12_N6": {
+      "generated": 48,
+      "on_time": 47,
+      "q": 0.9791666666666666
+     },
+     "G48_R6_N3": {
+      "generated": 48,
+      "on_time": 9,
+      "q": 0.1875
+     },
+     "G48_R6_N6": {
+      "generated": 48,
+      "on_time": 23,
+      "q": 0.4791666666666667
+     }
+    },
+    "q_batch": 0.5885416666666666,
+    "q_ref": 0.58984375,
+    "q_target": 0.5603515625,
+    "reference": {
+     "cells": [
+      "G48_R12_N3",
+      "G48_R12_N6",
+      "G48_R6_N3",
+      "G48_R6_N6"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.087287,
+   "epochs": 4,
+   "gradient_norm_mean": 166.0751,
+   "lambda": 2.1828125,
+   "minibatches": 40,
+   "objective": {
+    "advantage": "1.0 * A_task - 2.1828 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 2.1828125,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 2.1828125,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 40,
+   "policy_surrogate": -1.26787,
+   "samples": 2542,
+   "toward_episode": 5007,
+   "update_index": 1251,
+   "value_loss_cost": 0.89392,
+   "value_loss_task": 12.864997
+  },
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 1.855639,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "raise_price",
+    "error": 0.10879629629629628,
+    "lambda_after": 2.456785300925926,
+    "lambda_before": 2.2391927083333334,
+    "per_cell": {
+     "G12_R12_N3": {
+      "generated": 12,
+      "on_time": 12,
+      "q": 1.0
+     },
+     "G24_R12_N3": {
+      "generated": 24,
+      "on_time": 24,
+      "q": 1.0
+     },
+     "G24_R12_N6": {
+      "generated": 24,
+      "on_time": 23,
+      "q": 0.9583333333333334
+     },
+     "G48_R12_N3": {
+      "generated": 48,
+      "on_time": 43,
+      "q": 0.8958333333333334
+     }
+    },
+    "q_batch": 0.9444444444444444,
+    "q_ref": 0.8796296296296297,
+    "q_target": 0.8356481481481481,
+    "reference": {
+     "cells": [
+      "G12_R12_N3",
+      "G24_R12_N3",
+      "G24_R12_N6",
+      "G48_R12_N3"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.162334,
+   "epochs": 4,
+   "gradient_norm_mean": 13.25,
+   "lambda": 2.2391927083333334,
+   "minibatches": 24,
+   "objective": {
+    "advantage": "1.0 * A_task - 2.2392 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 2.2391927083333334,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 2.2391927083333334,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 24,
+   "policy_surrogate": -0.189283,
+   "samples": 1306,
+   "toward_episode": 5011,
+   "update_index": 1252,
+   "value_loss_cost": 0.204247,
+   "value_loss_task": 1.217513
+  },
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 2.584461,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "raise_price",
+    "error": 0.05146780303030307,
+    "lambda_after": 2.559720906986532,
+    "lambda_before": 2.456785300925926,
+    "per_cell": {
+     "G12_R12_N12": {
+      "generated": 12,
+      "on_time": 8,
+      "q": 0.6666666666666666
+     },
+     "G24_R6_N3": {
+      "generated": 24,
+      "on_time": 24,
+      "q": 1.0
+     },
+     "G48_R12_N12": {
+      "generated": 48,
+      "on_time": 43,
+      "q": 0.8958333333333334
+     },
+     "G48_R6_N3": {
+      "generated": 48,
+      "on_time": 11,
+      "q": 0.22916666666666666
+     }
+    },
+    "q_batch": 0.6515151515151515,
+    "q_ref": 0.6316287878787878,
+    "q_target": 0.6000473484848484,
+    "reference": {
+     "cells": [
+      "G12_R12_N12",
+      "G24_R6_N3",
+      "G48_R12_N12",
+      "G48_R6_N3"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.100726,
+   "epochs": 4,
+   "gradient_norm_mean": 54.398,
+   "lambda": 2.456785300925926,
+   "minibatches": 40,
+   "objective": {
+    "advantage": "1.0 * A_task - 2.4568 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 2.456785300925926,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 2.456785300925926,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 40,
+   "policy_surrogate": -0.768144,
+   "samples": 2431,
+   "toward_episode": 5015,
+   "update_index": 1253,
+   "value_loss_cost": 0.203871,
+   "value_loss_task": 2.361313
+  },
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 0.80766,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "lower_price",
+    "error": -0.212890625,
+    "lambda_after": 2.133939656986532,
+    "lambda_before": 2.559720906986532,
+    "per_cell": {
+     "G24_R12_N12": {
+      "generated": 24,
+      "on_time": 9,
+      "q": 0.375
+     },
+     "G24_R6_N3": {
+      "generated": 24,
+      "on_time": 15,
+      "q": 0.625
+     },
+     "G48_R12_N3": {
+      "generated": 48,
+      "on_time": 22,
+      "q": 0.4583333333333333
+     },
+     "G48_R6_N3": {
+      "generated": 48,
+      "on_time": 13,
+      "q": 0.2708333333333333
+     }
+    },
+    "q_batch": 0.4097222222222222,
+    "q_ref": 0.6553819444444444,
+    "q_target": 0.6226128472222222,
+    "reference": {
+     "cells": [
+      "G24_R12_N12",
+      "G24_R6_N3",
+      "G48_R12_N3",
+      "G48_R6_N3"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.202949,
+   "epochs": 4,
+   "gradient_norm_mean": 2.0547,
+   "lambda": 2.559720906986532,
+   "minibatches": 60,
+   "objective": {
+    "advantage": "1.0 * A_task - 2.5597 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 2.559720906986532,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 2.559720906986532,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 60,
+   "policy_surrogate": -0.383914,
+   "samples": 3640,
+   "toward_episode": 5019,
+   "update_index": 1254,
+   "value_loss_cost": 0.008629,
+   "value_loss_task": 0.086009
+  },
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 0.350881,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "lower_price",
+    "error": -0.33735119047619044,
+    "lambda_after": 1.4592372760341512,
+    "lambda_before": 2.133939656986532,
+    "per_cell": {
+     "G12_R12_N6": {
+      "generated": 12,
+      "on_time": 5,
+      "q": 0.4166666666666667
+     },
+     "G24_R12_N3": {
+      "generated": 48,
+      "on_time": 28,
+      "q": 0.5833333333333334
+     },
+     "G24_R12_N6": {
+      "generated": 24,
+      "on_time": 13,
+      "q": 0.5416666666666666
+     }
+    },
+    "q_batch": 0.5476190476190477,
+    "q_ref": 0.9315476190476191,
+    "q_target": 0.8849702380952381,
+    "reference": {
+     "cells": [
+      "G12_R12_N6",
+      "G24_R12_N3",
+      "G24_R12_N6"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.096843,
+   "epochs": 4,
+   "gradient_norm_mean": 0.5432,
+   "lambda": 2.133939656986532,
+   "minibatches": 64,
+   "objective": {
+    "advantage": "1.0 * A_task - 2.1339 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 2.133939656986532,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 2.133939656986532,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 64,
+   "policy_surrogate": -0.159366,
+   "samples": 4000,
+   "toward_episode": 5023,
+   "update_index": 1255,
+   "value_loss_cost": 0.004487,
+   "value_loss_task": 0.025381
+  },
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 3.005935,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "lower_price",
+    "error": -0.0009895833333333215,
+    "lambda_after": 1.4572581093674846,
+    "lambda_before": 1.4592372760341512,
+    "per_cell": {
+     "G12_R12_N12": {
+      "generated": 12,
+      "on_time": 9,
+      "q": 0.75
+     },
+     "G12_R6_N3": {
+      "generated": 12,
+      "on_time": 10,
+      "q": 0.8333333333333334
+     },
+     "G48_R12_N6": {
+      "generated": 48,
+      "on_time": 42,
+      "q": 0.875
+     },
+     "G48_R6_N6": {
+      "generated": 48,
+      "on_time": 15,
+      "q": 0.3125
+     }
+    },
+    "q_batch": 0.6333333333333333,
+    "q_ref": 0.6677083333333333,
+    "q_target": 0.6343229166666666,
+    "reference": {
+     "cells": [
+      "G12_R12_N12",
+      "G12_R6_N3",
+      "G48_R12_N6",
+      "G48_R6_N6"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.151252,
+   "epochs": 4,
+   "gradient_norm_mean": 1.1174,
+   "lambda": 1.4592372760341512,
+   "minibatches": 48,
+   "objective": {
+    "advantage": "1.0 * A_task - 1.4592 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 1.4592372760341512,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 1.4592372760341512,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 48,
+   "policy_surrogate": -0.169634,
+   "samples": 2967,
+   "toward_episode": 5027,
+   "update_index": 1256,
+   "value_loss_cost": 0.01429,
+   "value_loss_task": 0.115924
+  },
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 5.081226,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "raise_price",
+    "error": 0.018750000000000044,
+    "lambda_after": 1.4947581093674847,
+    "lambda_before": 1.4572581093674846,
+    "per_cell": {
+     "G12_R6_N3": {
+      "generated": 12,
+      "on_time": 12,
+      "q": 1.0
+     },
+     "G24_R6_N6": {
+      "generated": 24,
+      "on_time": 4,
+      "q": 0.16666666666666666
+     },
+     "G48_R6_N6": {
+      "generated": 96,
+      "on_time": 43,
+      "q": 0.4479166666666667
+     }
+    },
+    "q_batch": 0.44696969696969696,
+    "q_ref": 0.45075757575757575,
+    "q_target": 0.4282196969696969,
+    "reference": {
+     "cells": [
+      "G12_R6_N3",
+      "G24_R6_N6",
+      "G48_R6_N6"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.022486,
+   "epochs": 4,
+   "gradient_norm_mean": 0.9349,
+   "lambda": 1.4572581093674846,
+   "minibatches": 40,
+   "objective": {
+    "advantage": "1.0 * A_task - 1.4573 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 1.4572581093674846,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 1.4572581093674846,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 40,
+   "policy_surrogate": -0.322665,
+   "samples": 2469,
+   "toward_episode": 5031,
+   "update_index": 1257,
+   "value_loss_cost": 0.016285,
+   "value_loss_task": 0.046569
+  },
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 3.336059,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "lower_price",
+    "error": -0.06947916666666665,
+    "lambda_after": 1.3557997760341514,
+    "lambda_before": 1.4947581093674847,
+    "per_cell": {
+     "G24_R12_N12": {
+      "generated": 24,
+      "on_time": 24,
+      "q": 1.0
+     },
+     "G24_R12_N3": {
+      "generated": 24,
+      "on_time": 23,
+      "q": 0.9583333333333334
+     },
+     "G24_R6_N3": {
+      "generated": 24,
+      "on_time": 10,
+      "q": 0.4166666666666667
+     },
+     "G48_R6_N6": {
+      "generated": 48,
+      "on_time": 9,
+      "q": 0.1875
+     }
+    },
+    "q_batch": 0.55,
+    "q_ref": 0.6520833333333333,
+    "q_target": 0.6194791666666667,
+    "reference": {
+     "cells": [
+      "G24_R12_N12",
+      "G24_R12_N3",
+      "G24_R6_N3",
+      "G48_R6_N6"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.020798,
+   "epochs": 4,
+   "gradient_norm_mean": 0.6803,
+   "lambda": 1.4947581093674847,
+   "minibatches": 40,
+   "objective": {
+    "advantage": "1.0 * A_task - 1.4948 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 1.4947581093674847,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 1.4947581093674847,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 40,
+   "policy_surrogate": -0.538022,
+   "samples": 2536,
+   "toward_episode": 5035,
+   "update_index": 1258,
+   "value_loss_cost": 0.013588,
+   "value_loss_task": 0.058876
+  },
+  {
+   "advantage_normalisation": "none",
+   "approx_kl": 12.143884,
+   "arm": "dual",
+   "dual": {
+    "applied": true,
+    "clamped": false,
+    "direction": "raise_price",
+    "error": 0.17688802083333344,
+    "lambda_after": 1.7095758177008182,
+    "lambda_before": 1.3557997760341514,
+    "per_cell": {
+     "G12_R6_N3": {
+      "generated": 24,
+      "on_time": 23,
+      "q": 0.9583333333333334
+     },
+     "G24_R12_N3": {
+      "generated": 24,
+      "on_time": 24,
+      "q": 1.0
+     },
+     "G48_R12_N6": {
+      "generated": 48,
+      "on_time": 48,
+      "q": 1.0
+     }
+    },
+    "q_batch": 0.9895833333333334,
+    "q_ref": 0.85546875,
+    "q_target": 0.8126953124999999,
+    "reference": {
+     "cells": [
+      "G12_R6_N3",
+      "G24_R12_N3",
+      "G48_R12_N6"
+     ],
+     "missing": [],
+     "mode": "weighted_by_generated_goals"
+    }
+   },
+   "entropy": 0.115048,
+   "epochs": 4,
+   "gradient_norm_mean": 1.5097,
+   "lambda": 1.3557997760341514,
+   "minibatches": 12,
+   "objective": {
+    "advantage": "1.0 * A_task - 1.3558 * A_cost",
+    "advantage_mode": "causal_step",
+    "advantage_normalisation": "none",
+    "arm": "dual",
+    "budget_bytes": 1000000000,
+    "budget_is_ceiling": true,
+    "causal_gamma": 0.0,
+    "cost_multiplier": 1.3557997760341514,
+    "cost_pacing": "none",
+    "cost_scale": "bytes / (N * G)",
+    "credit_mode": "causal_task_id",
+    "credit_rule": "first_accepted_send",
+    "critic_loss_weights": {
+     "cost": 0.5,
+     "task": 0.5
+    },
+    "dual_update": "at_update_boundary",
+    "lambda": 1.3557997760341514,
+    "lambda_bounds": [
+     0.25,
+     8.0
+    ],
+    "lambda_initial": 2.0,
+    "lambda_step": 2.0,
+    "q_target_fraction": 0.95,
+    "task_multiplier": 1.0
+   },
+   "optimizer_steps": 12,
+   "policy_surrogate": -1.00749,
+   "samples": 650,
+   "toward_episode": 5039,
+   "update_index": 1259,
+   "value_loss_cost": 0.111761,
+   "value_loss_task": 0.205062
+  }
+ ],
+ "updates": 10,
+ "wall_seconds": 1023.7
+}
