@@ -526,14 +526,9 @@ def _run_episode_body(layout, *, label, kind, scene, policy, attach, rule, contr
     #: Arbitrary-N feature transform (SCALE_INVARIANT).  Installed on every learned world,
     #: including "off", so an off world proves the wrapper itself is inert rather than
     #: proving that nothing was installed.  At "off" the transform writes nothing back.
+    #: It wraps ``controller.inner.trunk``, which the network observer below also needs as a
+    #: real module, so the install happens after the observer is registered.
     scale_features = None
-    if controller is not None and C.SCALE_INVARIANT in ("off", "norm_only"):
-        from . import scale_features as _sf
-        live_subscribers = len(getattr(run.task_adapter.comm_relay, "_subscribers", ()))
-        scale_features = _sf.ScaleInvariantFeatures(
-            mode=C.SCALE_INVARIANT, subscribers=live_subscribers)
-        taps["scale_restore_forward"] = scale_features.install(controller)
-        taps["scale_features"] = scale_features
     network = {"status": "NOT_APPLICABLE_RULE"}
     hook = None
     if controller is not None:
@@ -555,6 +550,13 @@ def _run_episode_body(layout, *, label, kind, scene, policy, attach, rule, contr
             network["calls"] = int(network["calls"]) + 1
 
         hook = trunk.register_forward_pre_hook(_observe)
+        if C.SCALE_INVARIANT in ("off", "norm_only"):
+            from . import scale_features as _sf
+            live_subscribers = len(getattr(run.task_adapter.comm_relay, "_subscribers", ()))
+            scale_features = _sf.ScaleInvariantFeatures(
+                mode=C.SCALE_INVARIANT, subscribers=live_subscribers)
+            taps["scale_restore_forward"] = scale_features.install(controller)
+            taps["scale_features"] = scale_features
     started = time.time()
     if action_rng_seed is not None:
         torch.manual_seed(int(action_rng_seed))

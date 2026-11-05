@@ -1,0 +1,354 @@
+{
+ "baseline": {
+  "arm": "normal_immediate",
+  "completed_per_send": 1.0,
+  "denominator": 192,
+  "emissions": 90,
+  "mismatch": {},
+  "n": 12,
+  "on_time": 90,
+  "per_scene": {
+   "2301901": {
+    "completed": 11,
+    "emissions": 11,
+    "on_time": 11,
+    "spent_bytes": 55344
+   },
+   "2301902": {
+    "completed": 11,
+    "emissions": 11,
+    "on_time": 11,
+    "spent_bytes": 56724
+   },
+   "2301903": {
+    "completed": 11,
+    "emissions": 11,
+    "on_time": 11,
+    "spent_bytes": 56172
+   },
+   "2301904": {
+    "completed": 12,
+    "emissions": 12,
+    "on_time": 12,
+    "spent_bytes": 58572
+   },
+   "2301905": {
+    "completed": 11,
+    "emissions": 11,
+    "on_time": 11,
+    "spent_bytes": 55236
+   },
+   "2301906": {
+    "completed": 12,
+    "emissions": 12,
+    "on_time": 12,
+    "spent_bytes": 58512
+   },
+   "2301907": {
+    "completed": 11,
+    "emissions": 11,
+    "on_time": 11,
+    "spent_bytes": 55464
+   },
+   "2301908": {
+    "completed": 11,
+    "emissions": 11,
+    "on_time": 11,
+    "spent_bytes": 54168
+   }
+  },
+  "source": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\RESULTS.json",
+  "source_sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+  "spent_bytes": 450192,
+  "totals_verified_against_P2": true
+ },
+ "budget_bytes": 58600,
+ "caveat": "N=12 moves the roster to 12 robots (rescue_per_species=4), so on-time differences confound target selection with execution labour. P2 already records this. The licensed claim is about the cost/on-time trade against normal_immediate at identical N, not about selection quality in isolation.",
+ "checkpoint": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\p4_tight_n12\\T2\\milestone_5300.pth",
+ "checkpoint_episode": 5300,
+ "checkpoint_sha256": "e416abba53b9c40860e80124c21a3db935628fcb15cf89012b652cc92172a307",
+ "identity": "local experiment level, no identity built",
+ "learned": {
+  "bytes_per_completed_task": 5674.1,
+  "completed": 80,
+  "completed_per_send": 0.8791,
+  "denominator": 192,
+  "emissions": 91,
+  "every_world_generated_24_goals": true,
+  "first_masked_credit_ticks": {
+   "2301901": 4,
+   "2301902": 2,
+   "2301903": 2,
+   "2301904": 3,
+   "2301905": 1,
+   "2301906": 3,
+   "2301907": 5,
+   "2301908": 1
+  },
+  "masked_by_credit_total": 100844,
+  "on_time": 80,
+  "spent_bytes": 453924,
+  "worlds_ok": 8
+ },
+ "n_subscribers": 12,
+ "paired": {
+  "mean_delta_on_time": -1.25,
+  "per_scene": [
+   {
+    "baseline_bytes": 55344,
+    "baseline_emissions": 11,
+    "baseline_on_time": 11,
+    "delta_bytes": 684,
+    "delta_on_time": -1,
+    "learned_bytes": 56028,
+    "learned_emissions": 11,
+    "learned_on_time": 10,
+    "scene": 2301901
+   },
+   {
+    "baseline_bytes": 56724,
+    "baseline_emissions": 11,
+    "baseline_on_time": 11,
+    "delta_bytes": -504,
+    "delta_on_time": 0,
+    "learned_bytes": 56220,
+    "learned_emissions": 11,
+    "learned_on_time": 11,
+    "scene": 2301902
+   },
+   {
+    "baseline_bytes": 56172,
+    "baseline_emissions": 11,
+    "baseline_on_time": 11,
+    "delta_bytes": 0,
+    "delta_on_time": 0,
+    "learned_bytes": 56172,
+    "learned_emissions": 11,
+    "learned_on_time": 11,
+    "scene": 2301903
+   },
+   {
+    "baseline_bytes": 58572,
+    "baseline_emissions": 12,
+    "baseline_on_time": 12,
+    "delta_bytes": -864,
+    "delta_on_time": -3,
+    "learned_bytes": 57708,
+    "learned_emissions": 12,
+    "learned_on_time": 9,
+    "scene": 2301904
+   },
+   {
+    "baseline_bytes": 55236,
+    "baseline_emissions": 11,
+    "baseline_on_time": 11,
+    "delta_bytes": -420,
+    "delta_on_time": 0,
+    "learned_bytes": 54816,
+    "learned_emissions": 11,
+    "learned_on_time": 11,
+    "scene": 2301905
+   },
+   {
+    "baseline_bytes": 58512,
+    "baseline_emissions": 12,
+    "baseline_on_time": 12,
+    "delta_bytes": -120,
+    "delta_on_time": -4,
+    "learned_bytes": 58392,
+    "learned_emissions": 12,
+    "learned_on_time": 8,
+    "scene": 2301906
+   },
+   {
+    "baseline_bytes": 55464,
+    "baseline_emissions": 11,
+    "baseline_on_time": 11,
+    "delta_bytes": 768,
+    "delta_on_time": -3,
+    "learned_bytes": 56232,
+    "learned_emissions": 11,
+    "learned_on_time": 8,
+    "scene": 2301907
+   },
+   {
+    "baseline_bytes": 54168,
+    "baseline_emissions": 11,
+    "baseline_on_time": 11,
+    "delta_bytes": 4188,
+    "delta_on_time": 1,
+    "learned_bytes": 58356,
+    "learned_emissions": 12,
+    "learned_on_time": 12,
+    "scene": 2301908
+   }
+  ],
+  "sign_test": {
+   "n": 5,
+   "negative": 4,
+   "p_two_sided": 0.375,
+   "positive": 1
+  },
+  "total_delta_bytes": 3732,
+  "total_delta_on_time": -10
+ },
+ "replays": 8,
+ "results": [
+  {
+   "checkpoint_episode": 5300,
+   "completed": 10,
+   "elapsed_seconds": 25.29,
+   "emissions": 11,
+   "expired": 14,
+   "first_masked_credit_tick": 4,
+   "generated_goals": 24,
+   "masked_by_credit_total": 11334,
+   "on_time": 10,
+   "scale_matrix_calls": 1000,
+   "scale_mode": "norm_only",
+   "scene": 2301901,
+   "spent_bytes": 56028,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "checkpoint_episode": 5300,
+   "completed": 11,
+   "elapsed_seconds": 26.06,
+   "emissions": 11,
+   "expired": 13,
+   "first_masked_credit_tick": 2,
+   "generated_goals": 24,
+   "masked_by_credit_total": 11771,
+   "on_time": 11,
+   "scale_matrix_calls": 1000,
+   "scale_mode": "norm_only",
+   "scene": 2301902,
+   "spent_bytes": 56220,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "checkpoint_episode": 5300,
+   "completed": 11,
+   "elapsed_seconds": 25.81,
+   "emissions": 11,
+   "expired": 13,
+   "first_masked_credit_tick": 2,
+   "generated_goals": 24,
+   "masked_by_credit_total": 12127,
+   "on_time": 11,
+   "scale_matrix_calls": 1000,
+   "scale_mode": "norm_only",
+   "scene": 2301903,
+   "spent_bytes": 56172,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "checkpoint_episode": 5300,
+   "completed": 9,
+   "elapsed_seconds": 20.34,
+   "emissions": 12,
+   "expired": 15,
+   "first_masked_credit_tick": 3,
+   "generated_goals": 24,
+   "masked_by_credit_total": 12984,
+   "on_time": 9,
+   "scale_matrix_calls": 1000,
+   "scale_mode": "norm_only",
+   "scene": 2301904,
+   "spent_bytes": 57708,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "checkpoint_episode": 5300,
+   "completed": 11,
+   "elapsed_seconds": 21.25,
+   "emissions": 11,
+   "expired": 13,
+   "first_masked_credit_tick": 1,
+   "generated_goals": 24,
+   "masked_by_credit_total": 12926,
+   "on_time": 11,
+   "scale_matrix_calls": 1000,
+   "scale_mode": "norm_only",
+   "scene": 2301905,
+   "spent_bytes": 54816,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "checkpoint_episode": 5300,
+   "completed": 8,
+   "elapsed_seconds": 20.25,
+   "emissions": 12,
+   "expired": 16,
+   "first_masked_credit_tick": 3,
+   "generated_goals": 24,
+   "masked_by_credit_total": 13509,
+   "on_time": 8,
+   "scale_matrix_calls": 1000,
+   "scale_mode": "norm_only",
+   "scene": 2301906,
+   "spent_bytes": 58392,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "checkpoint_episode": 5300,
+   "completed": 8,
+   "elapsed_seconds": 19.97,
+   "emissions": 11,
+   "expired": 16,
+   "first_masked_credit_tick": 5,
+   "generated_goals": 24,
+   "masked_by_credit_total": 15168,
+   "on_time": 8,
+   "scale_matrix_calls": 1000,
+   "scale_mode": "norm_only",
+   "scene": 2301907,
+   "spent_bytes": 56232,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "checkpoint_episode": 5300,
+   "completed": 12,
+   "elapsed_seconds": 20.35,
+   "emissions": 12,
+   "expired": 12,
+   "first_masked_credit_tick": 1,
+   "generated_goals": 24,
+   "masked_by_credit_total": 11025,
+   "on_time": 12,
+   "scale_matrix_calls": 1000,
+   "scale_mode": "norm_only",
+   "scene": 2301908,
+   "spent_bytes": 58356,
+   "status": "ok",
+   "subscribers_live": 12
+  }
+ ],
+ "scale_invariant": "norm_only",
+ "scenes": [
+  2301901,
+  2301902,
+  2301903,
+  2301904,
+  2301905,
+  2301906,
+  2301907,
+  2301908
+ ],
+ "schema": "stage5b-p4-tight-budget-eval/1",
+ "seam": {
+  "comm_subscribers": "all",
+  "expectation_overrides": {
+   "rescue_robots": 12
+  },
+  "rescue_per_species": 4
+ },
+ "tag": "p4_tight_n12"
+}
