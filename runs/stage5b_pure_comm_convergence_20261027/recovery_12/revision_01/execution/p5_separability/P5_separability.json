@@ -1,0 +1,6708 @@
+{
+ "billed_first_step": {
+  "auc": 0.93125,
+  "n_billed": 69,
+  "n_not_billed": 123,
+  "on_time_rate_billed": 1.0,
+  "on_time_rate_not_billed": 0.08943089430894309
+ },
+ "bucket_by_detection_tick": [
+  {
+   "bucket": "detected at tick 1",
+   "n": 71,
+   "negatives": 2,
+   "on_time": 69,
+   "rate": 0.971830985915493
+  },
+  {
+   "bucket": "detected ticks 2-10",
+   "n": 44,
+   "negatives": 33,
+   "on_time": 11,
+   "rate": 0.25
+  },
+  {
+   "bucket": "detected ticks 11-100",
+   "n": 30,
+   "negatives": 30,
+   "on_time": 0,
+   "rate": 0.0
+  },
+  {
+   "bucket": "detected after tick 100",
+   "n": 47,
+   "negatives": 47,
+   "on_time": 0,
+   "rate": 0.0
+  }
+ ],
+ "candidate_features_all192": {
+  "A_min_idle_distance": {
+   "auc": 0.091796875,
+   "auc_best": 0.908203125,
+   "rho": -0.6971818124416995
+  },
+  "B_remaining_time_unclipped": {
+   "auc": 0.44765625,
+   "auc_best": 0.55234375,
+   "rho": -0.08939544927665924
+  },
+  "C_work_over_slack": {
+   "auc": 0.5227678571428571,
+   "auc_best": 0.5227678571428571,
+   "rho": 0.038884161305838986
+  },
+  "D_reach_plus_work_ratio": {
+   "auc": 0.507421875,
+   "auc_best": 0.507421875,
+   "rho": 0.0126754526602471
+  },
+  "existing_11_remaining_over_horizon": {
+   "auc": 0.5,
+   "auc_best": 0.5,
+   "rho": null
+  }
+ },
+ "candidate_features_tick1": {
+  "A_min_idle_distance": {
+   "auc": 0.34782608695652173,
+   "auc_best": 0.6521739130434783,
+   "rho": -0.0872505163176078,
+   "sd": 0.021080450663485923,
+   "unique": 22
+  },
+  "B_remaining_time_unclipped": {
+   "auc": 0.2898550724637681,
+   "auc_best": 0.7101449275362319,
+   "rho": -0.12045749001747982,
+   "sd": 34.41277623300519,
+   "unique": 71
+  },
+  "C_work_over_slack": {
+   "auc": 0.2753623188405797,
+   "auc_best": 0.7246376811594203,
+   "rho": -0.1287649031221336,
+   "sd": 0.08214111069507055,
+   "unique": 71
+  },
+  "D_reach_plus_work_ratio": {
+   "auc": 0.26811594202898553,
+   "auc_best": 0.7318840579710144,
+   "rho": -0.13291860967446048,
+   "sd": 0.08261662895200483,
+   "unique": 71
+  },
+  "existing_11_remaining_over_horizon": {
+   "auc": 0.5,
+   "auc_best": 0.5,
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  }
+ },
+ "candidate_features_ticks2to10": {
+  "A_min_idle_distance": {
+   "auc": 0.31955922865013775,
+   "auc_best": 0.6804407713498623,
+   "n": 44,
+   "positives": 11,
+   "rho": -0.2708169826607945
+  },
+  "B_remaining_time_unclipped": {
+   "auc": 0.4669421487603306,
+   "auc_best": 0.5330578512396694,
+   "n": 44,
+   "positives": 11,
+   "rho": -0.04960133611265254
+  },
+  "C_work_over_slack": {
+   "auc": 0.5606060606060606,
+   "auc_best": 0.5606060606060606,
+   "n": 44,
+   "positives": 11,
+   "rho": 0.09093578287319633
+  },
+  "D_reach_plus_work_ratio": {
+   "auc": 0.5633608815426997,
+   "auc_best": 0.5633608815426997,
+   "n": 44,
+   "positives": 11,
+   "rho": 0.0950692275492507
+  }
+ },
+ "ceilings_top11": {
+  "A_min_idle_distance": 66,
+  "B_remaining_time_unclipped": 33,
+  "C_work_over_slack": 36,
+  "D_reach_plus_work_ratio": 37,
+  "all_send_now (both arms' behaviour)": null,
+  "combo min(C,D)": 36,
+  "oracle_labels": 79
+ },
+ "confound_A_vs_detection_time": {
+  "auc_detection_vs_label": 0.018861607142857142,
+  "spearman": 0.748605698053854,
+  "spearman_detection_vs_label": -0.8435197063626044
+ },
+ "coset_sweep": {
+  "8": {
+   "A": 55,
+   "C": 27,
+   "oracle": 64
+  },
+  "9": {
+   "A": 59,
+   "C": 31,
+   "oracle": 70
+  },
+  "10": {
+   "A": 65,
+   "C": 36,
+   "oracle": 75
+  },
+  "11": {
+   "A": 66,
+   "C": 36,
+   "oracle": 79
+  },
+  "12": {
+   "A": 69,
+   "C": 38,
+   "oracle": 80
+  },
+  "13": {
+   "A": 73,
+   "C": 40,
+   "oracle": 80
+  },
+  "16": {
+   "A": 80,
+   "C": 49,
+   "oracle": 80
+  },
+  "20": {
+   "A": 80,
+   "C": 65,
+   "oracle": 80
+  },
+  "24": {
+   "A": 80,
+   "C": 80,
+   "oracle": 80
+  }
+ },
+ "denominator": 192,
+ "existing_dimensions": [
+  {
+   "auc_best": 0.5,
+   "dim": "pending_event",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "changed_view",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "first_emission",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "stage_changed",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "requirements_changed",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "members_changed",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "progress_delta_abs",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "revision_delta",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "remaining_time_over_horizon",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "urgency_now",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.6666666666666667,
+   "dim": "has_future_requirements",
+   "rho": -0.11785113019775793,
+   "sd": 0.9359576183569662,
+   "unique": 2
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "queue_backlog_targets",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "budget_remaining_fraction",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "capacity_remaining_fraction",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "subscribers",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "age_steps",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  },
+  {
+   "auc_best": 0.5,
+   "dim": "sent_count",
+   "rho": null,
+   "sd": 0.0,
+   "unique": 1
+  }
+ ],
+ "identity_on_time_equals_unique_targets": {
+  "counterfactual_gain_from_dedupe": 4,
+  "counterfactual_per_scene": [
+   {
+    "duplicates": 1,
+    "fresh_feasible": 2,
+    "gain": 1,
+    "scene": 2301901
+   },
+   {
+    "duplicates": 0,
+    "gain": 0,
+    "scene": 2301902
+   },
+   {
+    "duplicates": 0,
+    "gain": 0,
+    "scene": 2301903
+   },
+   {
+    "duplicates": 3,
+    "fresh_feasible": 2,
+    "gain": 2,
+    "scene": 2301904
+   },
+   {
+    "duplicates": 0,
+    "gain": 0,
+    "scene": 2301905
+   },
+   {
+    "duplicates": 4,
+    "fresh_feasible": 0,
+    "gain": 0,
+    "scene": 2301906
+   },
+   {
+    "duplicates": 3,
+    "fresh_feasible": 1,
+    "gain": 1,
+    "scene": 2301907
+   },
+   {
+    "duplicates": 0,
+    "gain": 0,
+    "scene": 2301908
+   }
+  ],
+  "immediate_completed_set_equals_billed_set": true,
+  "immediate_duplicate_sends": 0,
+  "learned_completed_set_equals_billed_set": true,
+  "learned_duplicate_sends": 11,
+  "per_scene": [
+   {
+    "immediate": {
+     "billed": 11,
+     "completed": 11,
+     "sends": 11
+    },
+    "learned": {
+     "billed": 10,
+     "completed": 10,
+     "sends": 11
+    },
+    "scene": 2301901
+   },
+   {
+    "immediate": {
+     "billed": 11,
+     "completed": 11,
+     "sends": 11
+    },
+    "learned": {
+     "billed": 11,
+     "completed": 11,
+     "sends": 11
+    },
+    "scene": 2301902
+   },
+   {
+    "immediate": {
+     "billed": 11,
+     "completed": 11,
+     "sends": 11
+    },
+    "learned": {
+     "billed": 11,
+     "completed": 11,
+     "sends": 11
+    },
+    "scene": 2301903
+   },
+   {
+    "immediate": {
+     "billed": 12,
+     "completed": 12,
+     "sends": 12
+    },
+    "learned": {
+     "billed": 9,
+     "completed": 9,
+     "sends": 12
+    },
+    "scene": 2301904
+   },
+   {
+    "immediate": {
+     "billed": 11,
+     "completed": 11,
+     "sends": 11
+    },
+    "learned": {
+     "billed": 11,
+     "completed": 11,
+     "sends": 11
+    },
+    "scene": 2301905
+   },
+   {
+    "immediate": {
+     "billed": 12,
+     "completed": 12,
+     "sends": 12
+    },
+    "learned": {
+     "billed": 8,
+     "completed": 8,
+     "sends": 12
+    },
+    "scene": 2301906
+   },
+   {
+    "immediate": {
+     "billed": 11,
+     "completed": 11,
+     "sends": 11
+    },
+    "learned": {
+     "billed": 8,
+     "completed": 8,
+     "sends": 11
+    },
+    "scene": 2301907
+   },
+   {
+    "immediate": {
+     "billed": 11,
+     "completed": 11,
+     "sends": 11
+    },
+    "learned": {
+     "billed": 12,
+     "completed": 12,
+     "sends": 12
+    },
+    "scene": 2301908
+   }
+  ],
+  "unbilled_completions": 0
+ },
+ "on_time_total": 80,
+ "oracle_ceiling": 79,
+ "per_scene": [
+  {
+   "detected": 24,
+   "on_time": 10,
+   "scene": 2301901,
+   "tick1": 5,
+   "tick1_on_time": 5
+  },
+  {
+   "detected": 24,
+   "on_time": 11,
+   "scene": 2301902,
+   "tick1": 10,
+   "tick1_on_time": 10
+  },
+  {
+   "detected": 24,
+   "on_time": 11,
+   "scene": 2301903,
+   "tick1": 11,
+   "tick1_on_time": 11
+  },
+  {
+   "detected": 24,
+   "on_time": 9,
+   "scene": 2301904,
+   "tick1": 7,
+   "tick1_on_time": 7
+  },
+  {
+   "detected": 24,
+   "on_time": 11,
+   "scene": 2301905,
+   "tick1": 12,
+   "tick1_on_time": 11
+  },
+  {
+   "detected": 24,
+   "on_time": 8,
+   "scene": 2301906,
+   "tick1": 8,
+   "tick1_on_time": 8
+  },
+  {
+   "detected": 24,
+   "on_time": 8,
+   "scene": 2301907,
+   "tick1": 5,
+   "tick1_on_time": 5
+  },
+  {
+   "detected": 24,
+   "on_time": 12,
+   "scene": 2301908,
+   "tick1": 13,
+   "tick1_on_time": 12
+  }
+ ],
+ "physical_feasibility": {
+  "completed_among_feasible": 80,
+  "completed_among_infeasible": 0,
+  "feasible": 192,
+  "max_travel_steps": 7.0710678118654755
+ },
+ "reconstruction_mismatches": [],
+ "references": {
+  "learned": 80,
+  "normal_immediate": 90
+ },
+ "rows": [
+  {
+   "A_min_idle_distance": 0.0677966101694915,
+   "B_remaining_time_unclipped": 141.38985736419602,
+   "C_work_over_slack": 0.1314377378046677,
+   "D_reach_plus_work_ratio": 0.13482832350055848,
+   "_min_dist_world": 0.09587888558461659,
+   "_remaining": 141.38985736419602,
+   "_travel_steps": 0.4793944279230829,
+   "_work_needed": 18.583963000474558,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.1314377378046677,
+   "completed": 1,
+   "completed_at": 37.0,
+   "deadline": 142.38985736419602,
+   "deadline_offset": 141.38985736419602,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    36,
+    49
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-8",
+   "total_stages": 2,
+   "work_needed": 18.583963000474558,
+   "world": [
+    0.8305084745762712,
+    0.6101694915254238
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.03595458209423121,
+   "B_remaining_time_unclipped": 92.60324864345007,
+   "C_work_over_slack": 0.2879364501127458,
+   "D_reach_plus_work_ratio": 0.290681896863912,
+   "_min_dist_world": 0.05084745762711862,
+   "_remaining": 92.60324864345007,
+   "_travel_steps": 0.2542372881355931,
+   "_work_needed": 26.66385068330296,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.2879364501127458,
+   "completed": 1,
+   "completed_at": 29.0,
+   "deadline": 93.60324864345007,
+   "deadline_offset": 92.60324864345007,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    37,
+    45
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-10",
+   "total_stages": 3,
+   "work_needed": 26.66385068330296,
+   "world": [
+    0.7627118644067796,
+    0.6271186440677966
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.01694915254237289,
+   "B_remaining_time_unclipped": 80.10098999123721,
+   "C_work_over_slack": 0.03758227003381103,
+   "D_reach_plus_work_ratio": 0.039078488832029155,
+   "_min_dist_world": 0.023969721396154168,
+   "_remaining": 80.10098999123721,
+   "_travel_steps": 0.11984860698077084,
+   "_work_needed": 3.010377035826272,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.03758227003381103,
+   "completed": 1,
+   "completed_at": 5.0,
+   "deadline": 81.10098999123721,
+   "deadline_offset": 80.10098999123721,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    40,
+    47
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-14",
+   "total_stages": 1,
+   "work_needed": 3.010377035826272,
+   "world": [
+    0.7966101694915254,
+    0.6779661016949152
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.016949152542372833,
+   "B_remaining_time_unclipped": 137.4625786825348,
+   "C_work_over_slack": 0.15587408317910575,
+   "D_reach_plus_work_ratio": 0.1567459466937395,
+   "_min_dist_world": 0.023969721396154088,
+   "_remaining": 137.4625786825348,
+   "_travel_steps": 0.11984860698077043,
+   "_work_needed": 21.4268534235758,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.15587408317910575,
+   "completed": 1,
+   "completed_at": 42.0,
+   "deadline": 138.4625786825348,
+   "deadline_offset": 137.4625786825348,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    42,
+    47
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-17",
+   "total_stages": 3,
+   "work_needed": 21.4268534235758,
+   "world": [
+    0.7966101694915254,
+    0.711864406779661
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.05359792644353178,
+   "B_remaining_time_unclipped": 164.15153264377216,
+   "C_work_over_slack": 0.12187824559673578,
+   "D_reach_plus_work_ratio": 0.12418705481924881,
+   "_min_dist_world": 0.0757989144915182,
+   "_remaining": 164.15153264377216,
+   "_travel_steps": 0.37899457245759094,
+   "_work_needed": 20.006500810638254,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.12187824559673578,
+   "completed": 1,
+   "completed_at": 22.0,
+   "deadline": 165.15153264377216,
+   "deadline_offset": 164.15153264377216,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    43,
+    50
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-19",
+   "total_stages": 3,
+   "work_needed": 20.006500810638254,
+   "world": [
+    0.847457627118644,
+    0.7288135593220338
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.03595458209423121,
+   "B_remaining_time_unclipped": 155.77516727659548,
+   "C_work_over_slack": 0.09421276203960882,
+   "D_reach_plus_work_ratio": 0.09584484045480428,
+   "_min_dist_world": 0.05084745762711862,
+   "_remaining": 155.77516727659548,
+   "_travel_steps": 0.2542372881355931,
+   "_work_needed": 14.676008766310149,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.09421276203960882,
+   "completed": 1,
+   "completed_at": 37.0,
+   "deadline": 157.77516727659548,
+   "deadline_offset": 155.77516727659548,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    40,
+    42
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-13",
+   "total_stages": 2,
+   "work_needed": 14.676008766310149,
+   "world": [
+    0.711864406779661,
+    0.6779661016949152
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07579891449151827,
+   "B_remaining_time_unclipped": 60.77540527604058,
+   "C_work_over_slack": 0.20180731640132218,
+   "D_reach_plus_work_ratio": 0.21062633228448926,
+   "_min_dist_world": 0.10719585288706367,
+   "_remaining": 60.77540527604058,
+   "_travel_steps": 0.5359792644353183,
+   "_work_needed": 12.264921441960507,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.20180731640132218,
+   "completed": 1,
+   "completed_at": 25.0,
+   "deadline": 62.77540527604058,
+   "deadline_offset": 60.77540527604058,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    42,
+    39
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-16",
+   "total_stages": 2,
+   "work_needed": 12.264921441960507,
+   "world": [
+    0.6610169491525424,
+    0.711864406779661
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.05359792644353181,
+   "B_remaining_time_unclipped": 93.8579757549902,
+   "C_work_over_slack": 0.1901692005779494,
+   "D_reach_plus_work_ratio": 0.19420715866738153,
+   "_min_dist_world": 0.07579891449151824,
+   "_remaining": 93.8579757549902,
+   "_travel_steps": 0.37899457245759116,
+   "_work_needed": 17.848896217191044,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1901692005779494,
+   "completed": 1,
+   "completed_at": 20.0,
+   "deadline": 95.8579757549902,
+   "deadline_offset": 93.8579757549902,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    45,
+    48
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-20",
+   "total_stages": 2,
+   "work_needed": 17.848896217191044,
+   "world": [
+    0.8135593220338984,
+    0.7627118644067796
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11984860698077071,
+   "B_remaining_time_unclipped": 172.70758549207392,
+   "C_work_over_slack": 0.14108744251203736,
+   "D_reach_plus_work_ratio": 0.14599433542414708,
+   "_min_dist_world": 0.16949152542372875,
+   "_remaining": 172.70758549207392,
+   "_travel_steps": 0.8474576271186437,
+   "_work_needed": 24.366871539505755,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.14108744251203736,
+   "completed": 1,
+   "completed_at": 51.0,
+   "deadline": 176.70758549207392,
+   "deadline_offset": 172.70758549207392,
+   "detected_at": 4.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    32,
+    39
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-2",
+   "total_stages": 3,
+   "work_needed": 24.366871539505755,
+   "world": [
+    0.6610169491525424,
+    0.5423728813559322
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08642405955242002,
+   "B_remaining_time_unclipped": 128.10658254728997,
+   "C_work_over_slack": 0.14194522236456633,
+   "D_reach_plus_work_ratio": 0.14671555011447937,
+   "_min_dist_world": 0.12222207713437244,
+   "_remaining": 128.10658254728997,
+   "_travel_steps": 0.6111103856718622,
+   "_work_needed": 18.18411734603975,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.14194522236456633,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 132.10658254728997,
+   "deadline_offset": 128.10658254728997,
+   "detected_at": 4.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    34,
+    41
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-3",
+   "total_stages": 2,
+   "work_needed": 18.18411734603975,
+   "world": [
+    0.6949152542372882,
+    0.576271186440678
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.10239869469147943,
+   "B_remaining_time_unclipped": 121.8345225350014,
+   "C_work_over_slack": 0.03391461129562741,
+   "D_reach_plus_work_ratio": 0.03985765682118397,
+   "_min_dist_world": 0.14481362280199206,
+   "_remaining": 121.8345225350014,
+   "_travel_steps": 0.7240681140099603,
+   "_work_needed": 4.13197047416293,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.03391461129562741,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 125.8345225350014,
+   "deadline_offset": 121.8345225350014,
+   "detected_at": 4.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    32,
+    48
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-4",
+   "total_stages": 1,
+   "work_needed": 4.13197047416293,
+   "world": [
+    0.8135593220338984,
+    0.5423728813559322
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535065,
+   "B_remaining_time_unclipped": 88.23455174890145,
+   "C_work_over_slack": 0.2861441519960269,
+   "D_reach_plus_work_ratio": 0.29388762854253414,
+   "_min_dist_world": 0.1366484364118398,
+   "_remaining": 88.23455174890145,
+   "_travel_steps": 0.683242182059199,
+   "_work_needed": 25.247800986938955,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.2861441519960269,
+   "completed": 1,
+   "completed_at": 49.0,
+   "deadline": 92.23455174890145,
+   "deadline_offset": 88.23455174890145,
+   "detected_at": 4.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    41,
+    37
+   ],
+   "on_time": 1,
+   "scene": 2301901,
+   "target": "piloc-e1-target-15",
+   "total_stages": 3,
+   "work_needed": 25.247800986938955,
+   "world": [
+    0.6271186440677966,
+    0.6949152542372882
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.135593220338983,
+   "B_remaining_time_unclipped": 104.55024894628116,
+   "C_work_over_slack": 0.26793016762766997,
+   "D_reach_plus_work_ratio": 0.27710077090704427,
+   "_min_dist_world": 0.19175777116923318,
+   "_remaining": 104.55024894628116,
+   "_travel_steps": 0.9587888558461658,
+   "_work_needed": 28.012165725691737,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.26793016762766997,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 113.55024894628116,
+   "deadline_offset": 104.55024894628116,
+   "detected_at": 9.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    32,
+    37
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-0",
+   "total_stages": 3,
+   "work_needed": 28.012165725691737,
+   "world": [
+    0.6271186440677966,
+    0.5423728813559322
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.14629386865789887,
+   "B_remaining_time_unclipped": 70.91762218063694,
+   "C_work_over_slack": 0.259950646043742,
+   "D_reach_plus_work_ratio": 0.27453734303007427,
+   "_min_dist_world": 0.20689077314802887,
+   "_remaining": 70.91762218063694,
+   "_travel_steps": 1.0344538657401443,
+   "_work_needed": 18.435081701742583,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.259950646043742,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 81.91762218063694,
+   "deadline_offset": 70.91762218063694,
+   "detected_at": 11.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    33,
+    35
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-6",
+   "total_stages": 2,
+   "work_needed": 18.435081701742583,
+   "world": [
+    0.5932203389830508,
+    0.559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07290106158510697,
+   "B_remaining_time_unclipped": 121.19676674665686,
+   "C_work_over_slack": 0.14430605088034323,
+   "D_reach_plus_work_ratio": 0.14855936855426122,
+   "_min_dist_world": 0.10309767000505451,
+   "_remaining": 121.19676674665686,
+   "_travel_steps": 0.5154883500252725,
+   "_work_needed": 17.489426788676155,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.14430605088034323,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 265.19676674665686,
+   "deadline_offset": 121.19676674665686,
+   "detected_at": 144.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    47,
+    47
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-21",
+   "total_stages": 3,
+   "work_needed": 17.489426788676155,
+   "world": [
+    0.7966101694915254,
+    0.7966101694915254
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1204463593521347,
+   "B_remaining_time_unclipped": 67.00975107592143,
+   "C_work_over_slack": 0.09402141540232896,
+   "D_reach_plus_work_ratio": 0.10673127271408514,
+   "_min_dist_world": 0.17033687493425237,
+   "_remaining": 67.00975107592143,
+   "_travel_steps": 0.8516843746712618,
+   "_work_needed": 6.300351641915869,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.09402141540232896,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 224.00975107592143,
+   "deadline_offset": 67.00975107592141,
+   "detected_at": 157.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    40,
+    56
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-18",
+   "total_stages": 1,
+   "work_needed": 6.300351641915869,
+   "world": [
+    0.9491525423728814,
+    0.6779661016949152
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.2209899120407677,
+   "B_remaining_time_unclipped": 142.14056683544413,
+   "C_work_over_slack": 0.07721959244102229,
+   "D_reach_plus_work_ratio": 0.08821317920212979,
+   "_min_dist_world": 0.31252693075569105,
+   "_remaining": 142.14056683544413,
+   "_travel_steps": 1.5626346537784552,
+   "_work_needed": 10.976036640368886,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.07721959244102229,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 355.14056683544413,
+   "deadline_offset": 142.14056683544416,
+   "detected_at": 213.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    55,
+    34
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-22",
+   "total_stages": 1,
+   "work_needed": 10.976036640368886,
+   "world": [
+    0.576271186440678,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535065,
+   "B_remaining_time_unclipped": 171.50222075264207,
+   "C_work_over_slack": 0.05093986520263849,
+   "D_reach_plus_work_ratio": 0.05492373304447035,
+   "_min_dist_world": 0.1366484364118398,
+   "_remaining": 171.50222075264207,
+   "_travel_steps": 0.683242182059199,
+   "_work_needed": 8.736300007092737,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.05093986520263849,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 421.5022207526421,
+   "deadline_offset": 171.50222075264207,
+   "detected_at": 250.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    32,
+    44
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-5",
+   "total_stages": 1,
+   "work_needed": 8.736300007092737,
+   "world": [
+    0.7457627118644068,
+    0.5423728813559322
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.16949152542372878,
+   "B_remaining_time_unclipped": 176.50734834092793,
+   "C_work_over_slack": 0.14077221989893385,
+   "D_reach_plus_work_ratio": 0.14756222655346024,
+   "_min_dist_world": 0.2396972139615415,
+   "_remaining": 176.50734834092793,
+   "_travel_steps": 1.1984860698077076,
+   "_work_needed": 24.847331254426823,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.14077221989893385,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 426.50734834092793,
+   "deadline_offset": 176.50734834092793,
+   "detected_at": 250.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    26,
+    47
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-7",
+   "total_stages": 3,
+   "work_needed": 24.847331254426823,
+   "world": [
+    0.7966101694915254,
+    0.4406779661016949
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.22098991204076773,
+   "B_remaining_time_unclipped": 84.6803109347112,
+   "C_work_over_slack": 0.20314544391092842,
+   "D_reach_plus_work_ratio": 0.22159878491227702,
+   "_min_dist_world": 0.3125269307556911,
+   "_remaining": 84.6803109347112,
+   "_travel_steps": 1.5626346537784555,
+   "_work_needed": 17.202419355347352,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.20314544391092842,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 344.6803109347112,
+   "deadline_offset": 84.6803109347112,
+   "detected_at": 260.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    26,
+    57
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-1",
+   "total_stages": 3,
+   "work_needed": 17.202419355347352,
+   "world": [
+    0.9661016949152542,
+    0.4406779661016949
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.2960042236707285,
+   "B_remaining_time_unclipped": 157.1172058371195,
+   "C_work_over_slack": 0.11456390093524466,
+   "D_reach_plus_work_ratio": 0.1278855860239176,
+   "_min_dist_world": 0.4186131876348634,
+   "_remaining": 157.1172058371195,
+   "_travel_steps": 2.0930659381743166,
+   "_work_needed": 17.999960004746203,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.11456390093524466,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 426.1172058371195,
+   "deadline_offset": 157.11720583711949,
+   "detected_at": 269.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    19,
+    58
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-11",
+   "total_stages": 2,
+   "work_needed": 17.999960004746203,
+   "world": [
+    0.9830508474576272,
+    0.3220338983050847
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1233916930386528,
+   "B_remaining_time_unclipped": 148.0551011968456,
+   "C_work_over_slack": 0.1351347133424324,
+   "D_reach_plus_work_ratio": 0.1410278640805293,
+   "_min_dist_world": 0.17450220577944062,
+   "_remaining": 148.0551011968456,
+   "_travel_steps": 0.872511028897203,
+   "_work_needed": 20.007383659120553,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1351347133424324,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 523.0551011968456,
+   "deadline_offset": 148.0551011968456,
+   "detected_at": 375.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    50,
+    51
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-9",
+   "total_stages": 3,
+   "work_needed": 20.007383659120553,
+   "world": [
+    0.864406779661017,
+    0.847457627118644
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.05359792644353181,
+   "B_remaining_time_unclipped": 177.3947175997297,
+   "C_work_over_slack": 0.09519064498138546,
+   "D_reach_plus_work_ratio": 0.09732709288460176,
+   "_min_dist_world": 0.07579891449151824,
+   "_remaining": 177.3947175997297,
+   "_travel_steps": 0.37899457245759116,
+   "_work_needed": 16.886317584609,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.09519064498138546,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 576.3947175997297,
+   "deadline_offset": 177.39471759972972,
+   "detected_at": 399.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    36,
+    47
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-12",
+   "total_stages": 2,
+   "work_needed": 16.886317584609,
+   "world": [
+    0.7966101694915254,
+    0.6101694915254238
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.155803189075002,
+   "B_remaining_time_unclipped": 99.88264756498131,
+   "C_work_over_slack": 0.1394105284279896,
+   "D_reach_plus_work_ratio": 0.15044042142854808,
+   "_min_dist_world": 0.22033898305084748,
+   "_remaining": 99.88264756498131,
+   "_travel_steps": 1.1016949152542372,
+   "_work_needed": 13.924692677820694,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1394105284279896,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 713.8826475649813,
+   "deadline_offset": 99.88264756498134,
+   "detected_at": 614.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    53,
+    51
+   ],
+   "on_time": 0,
+   "scene": 2301901,
+   "target": "piloc-e1-target-23",
+   "total_stages": 2,
+   "work_needed": 13.924692677820694,
+   "world": [
+    0.864406779661017,
+    0.8983050847457628
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.03789945724575912,
+   "B_remaining_time_unclipped": 99.23491653113629,
+   "C_work_over_slack": 0.19294443012865944,
+   "D_reach_plus_work_ratio": 0.1956449879724661,
+   "_min_dist_world": 0.05359792644353181,
+   "_remaining": 99.23491653113629,
+   "_travel_steps": 0.26798963221765904,
+   "_work_needed": 19.146824418965178,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.19294443012865944,
+   "completed": 1,
+   "completed_at": 51.0,
+   "deadline": 100.23491653113629,
+   "deadline_offset": 99.23491653113629,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    54,
+    29
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-9",
+   "total_stages": 3,
+   "work_needed": 19.146824418965178,
+   "world": [
+    0.4915254237288136,
+    0.9152542372881356
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07579891449151827,
+   "B_remaining_time_unclipped": 89.03914136687138,
+   "C_work_over_slack": 0.19547212758559765,
+   "D_reach_plus_work_ratio": 0.2014917191518157,
+   "_min_dist_world": 0.10719585288706367,
+   "_remaining": 89.03914136687138,
+   "_travel_steps": 0.5359792644353183,
+   "_work_needed": 17.404670401377146,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.19547212758559765,
+   "completed": 1,
+   "completed_at": 20.0,
+   "deadline": 90.03914136687138,
+   "deadline_offset": 89.03914136687138,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    55,
+    24
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-11",
+   "total_stages": 3,
+   "work_needed": 17.404670401377146,
+   "world": [
+    0.4067796610169492,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06454045004969414,
+   "B_remaining_time_unclipped": 100.08105274185488,
+   "C_work_over_slack": 0.14385258927444533,
+   "D_reach_plus_work_ratio": 0.14841259225609707,
+   "_min_dist_world": 0.09127397978194075,
+   "_remaining": 100.08105274185488,
+   "_travel_steps": 0.45636989890970375,
+   "_work_needed": 14.396918574228149,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.14385258927444533,
+   "completed": 1,
+   "completed_at": 37.0,
+   "deadline": 101.08105274185488,
+   "deadline_offset": 100.08105274185488,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    55,
+    25
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-12",
+   "total_stages": 3,
+   "work_needed": 14.396918574228149,
+   "world": [
+    0.423728813559322,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.04321202977621003,
+   "B_remaining_time_unclipped": 113.4944824551597,
+   "C_work_over_slack": 0.07224057229986834,
+   "D_reach_plus_work_ratio": 0.07493281941378996,
+   "_min_dist_world": 0.06111103856718625,
+   "_remaining": 113.4944824551597,
+   "_travel_steps": 0.30555519283593124,
+   "_work_needed": 8.198906365438104,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.07224057229986834,
+   "completed": 1,
+   "completed_at": 42.0,
+   "deadline": 114.4944824551597,
+   "deadline_offset": 113.4944824551597,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    55,
+    27
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-13",
+   "total_stages": 1,
+   "work_needed": 8.198906365438104,
+   "world": [
+    0.4576271186440678,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.03389830508474575,
+   "B_remaining_time_unclipped": 68.43916760144197,
+   "C_work_over_slack": 0.22873439955466757,
+   "D_reach_plus_work_ratio": 0.23223673925811672,
+   "_min_dist_world": 0.047939442792308294,
+   "_remaining": 68.43916760144197,
+   "_travel_steps": 0.23969721396154145,
+   "_work_needed": 15.654391907337086,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.22873439955466757,
+   "completed": 1,
+   "completed_at": 17.0,
+   "deadline": 69.43916760144197,
+   "deadline_offset": 68.43916760144197,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    55,
+    28
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-14",
+   "total_stages": 2,
+   "work_needed": 15.654391907337086,
+   "world": [
+    0.4745762711864407,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.026798963221765924,
+   "B_remaining_time_unclipped": 117.85699392248125,
+   "C_work_over_slack": 0.1972256768966807,
+   "D_reach_plus_work_ratio": 0.19883353469045267,
+   "_min_dist_world": 0.03789945724575915,
+   "_remaining": 117.85699392248125,
+   "_travel_steps": 0.18949728622879572,
+   "_work_needed": 23.24442540336935,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.1972256768966807,
+   "completed": 1,
+   "completed_at": 47.0,
+   "deadline": 118.85699392248125,
+   "deadline_offset": 117.85699392248125,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    55,
+    29
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-15",
+   "total_stages": 3,
+   "work_needed": 23.24442540336935,
+   "world": [
+    0.4915254237288136,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.04941484656648558,
+   "B_remaining_time_unclipped": 88.30871370821873,
+   "C_work_over_slack": 0.042596331525831185,
+   "D_reach_plus_work_ratio": 0.04655308410790427,
+   "_min_dist_world": 0.06988314619690948,
+   "_remaining": 88.30871370821873,
+   "_travel_steps": 0.34941573098454737,
+   "_work_needed": 3.7616272457349984,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.042596331525831185,
+   "completed": 1,
+   "completed_at": 21.0,
+   "deadline": 89.30871370821873,
+   "deadline_offset": 88.30871370821873,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    56,
+    26
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-17",
+   "total_stages": 1,
+   "work_needed": 3.7616272457349984,
+   "world": [
+    0.4406779661016949,
+    0.9491525423728814
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.047939442792308294,
+   "B_remaining_time_unclipped": 74.23659787175443,
+   "C_work_over_slack": 0.20781825201845588,
+   "D_reach_plus_work_ratio": 0.21238450452147412,
+   "_min_dist_world": 0.06779661016949151,
+   "_remaining": 74.23659787175443,
+   "_travel_steps": 0.33898305084745756,
+   "_work_needed": 15.427720005505027,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.20781825201845588,
+   "completed": 1,
+   "completed_at": 39.0,
+   "deadline": 75.23659787175443,
+   "deadline_offset": 74.23659787175443,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    58,
+    26
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-20",
+   "total_stages": 3,
+   "work_needed": 15.427720005505027,
+   "world": [
+    0.4406779661016949,
+    0.9830508474576272
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.011984860698077044,
+   "B_remaining_time_unclipped": 97.53435549432112,
+   "C_work_over_slack": 0.25321716869937194,
+   "D_reach_plus_work_ratio": 0.2540860498467621,
+   "_min_dist_world": 0.016949152542372836,
+   "_remaining": 97.53435549432112,
+   "_travel_steps": 0.08474576271186418,
+   "_work_needed": 24.697373349190023,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.25321716869937194,
+   "completed": 1,
+   "completed_at": 58.0,
+   "deadline": 98.53435549432112,
+   "deadline_offset": 97.53435549432112,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    58,
+    29
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-21",
+   "total_stages": 3,
+   "work_needed": 24.697373349190023,
+   "world": [
+    0.4915254237288136,
+    0.9830508474576272
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.02679896322176589,
+   "B_remaining_time_unclipped": 142.461131652557,
+   "C_work_over_slack": 0.16150255937414287,
+   "D_reach_plus_work_ratio": 0.16283272770869572,
+   "_min_dist_world": 0.0378994572457591,
+   "_remaining": 142.461131652557,
+   "_travel_steps": 0.18949728622879547,
+   "_work_needed": 23.007837373224667,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.16150255937414287,
+   "completed": 1,
+   "completed_at": 72.0,
+   "deadline": 143.461131652557,
+   "deadline_offset": 142.461131652557,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    59,
+    28
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-23",
+   "total_stages": 3,
+   "work_needed": 23.007837373224667,
+   "world": [
+    0.4745762711864407,
+    1.0
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535069,
+   "B_remaining_time_unclipped": 141.91215782766287,
+   "C_work_over_slack": 0.19552874936787545,
+   "D_reach_plus_work_ratio": 0.20034329233951376,
+   "_min_dist_world": 0.13664843641183985,
+   "_remaining": 141.91215782766287,
+   "_travel_steps": 0.6832421820591992,
+   "_work_needed": 27.747906740139477,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.19552874936787545,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 143.91215782766287,
+   "deadline_offset": 141.91215782766287,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    50,
+    34
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-6",
+   "total_stages": 3,
+   "work_needed": 27.747906740139477,
+   "world": [
+    0.576271186440678,
+    0.847457627118644
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08474576271186438,
+   "B_remaining_time_unclipped": 173.36682129616423,
+   "C_work_over_slack": 0.08632924271733373,
+   "D_reach_plus_work_ratio": 0.08978574627680179,
+   "_min_dist_world": 0.11984860698077072,
+   "_remaining": 173.36682129616423,
+   "_travel_steps": 0.5992430349038536,
+   "_work_needed": 14.966626394809186,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.08632924271733373,
+   "completed": 1,
+   "completed_at": 58.0,
+   "deadline": 175.36682129616423,
+   "deadline_offset": 173.36682129616423,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    59,
+    23
+   ],
+   "on_time": 1,
+   "scene": 2301902,
+   "target": "piloc-e1-target-22",
+   "total_stages": 2,
+   "work_needed": 14.966626394809186,
+   "world": [
+    0.3898305084745763,
+    1.0
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.12512561915452033,
+   "B_remaining_time_unclipped": 139.16697300624213,
+   "C_work_over_slack": 0.04546806694059916,
+   "D_reach_plus_work_ratio": 0.051825694177368785,
+   "_min_dist_world": 0.1769543476086534,
+   "_remaining": 139.16697300624213,
+   "_travel_steps": 0.8847717380432669,
+   "_work_needed": 6.327653244568374,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.04546806694059916,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 147.16697300624213,
+   "deadline_offset": 139.16697300624213,
+   "detected_at": 8.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    47,
+    27
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-1",
+   "total_stages": 1,
+   "work_needed": 6.327653244568374,
+   "world": [
+    0.4576271186440678,
+    0.7966101694915254
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.13664843641183977,
+   "B_remaining_time_unclipped": 162.4889963610209,
+   "C_work_over_slack": 0.10032295155665599,
+   "D_reach_plus_work_ratio": 0.10626951028920349,
+   "_min_dist_world": 0.19325007205070127,
+   "_remaining": 162.4889963610209,
+   "_travel_steps": 0.9662503602535063,
+   "_work_needed": 16.30137571041635,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.10032295155665599,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 174.4889963610209,
+   "deadline_offset": 162.4889963610209,
+   "detected_at": 12.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    48,
+    23
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-0",
+   "total_stages": 2,
+   "work_needed": 16.30137571041635,
+   "world": [
+    0.3898305084745763,
+    0.8135593220338984
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11984860698077071,
+   "B_remaining_time_unclipped": 164.99700677839456,
+   "C_work_over_slack": 0.06675523656093851,
+   "D_reach_plus_work_ratio": 0.07189143656641409,
+   "_min_dist_world": 0.16949152542372875,
+   "_remaining": 164.99700677839456,
+   "_travel_steps": 0.8474576271186437,
+   "_work_needed": 11.014414219338505,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.06675523656093851,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 176.99700677839456,
+   "deadline_offset": 164.99700677839456,
+   "detected_at": 12.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    49,
+    24
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-3",
+   "total_stages": 1,
+   "work_needed": 11.014414219338505,
+   "world": [
+    0.4067796610169492,
+    0.8305084745762712
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.13664843641183982,
+   "B_remaining_time_unclipped": 157.60038621687698,
+   "C_work_over_slack": 0.12359172067749029,
+   "D_reach_plus_work_ratio": 0.12972273585738858,
+   "_min_dist_world": 0.19325007205070135,
+   "_remaining": 157.60038621687698,
+   "_travel_steps": 0.9662503602535067,
+   "_work_needed": 19.47810291198085,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.12359172067749029,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 170.60038621687698,
+   "deadline_offset": 157.60038621687698,
+   "detected_at": 13.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    50,
+    21
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-2",
+   "total_stages": 3,
+   "work_needed": 19.47810291198085,
+   "world": [
+    0.3559322033898305,
+    0.847457627118644
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1562634653778455,
+   "B_remaining_time_unclipped": 127.20325087085087,
+   "C_work_over_slack": 0.20293754014602022,
+   "D_reach_plus_work_ratio": 0.2116240285230012,
+   "_min_dist_world": 0.22098991204076768,
+   "_remaining": 127.20325087085087,
+   "_travel_steps": 1.1049495602038384,
+   "_work_needed": 25.81431483030758,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.20293754014602022,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 141.20325087085087,
+   "deadline_offset": 127.20325087085087,
+   "detected_at": 14.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    46,
+    23
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-4",
+   "total_stages": 3,
+   "work_needed": 25.81431483030758,
+   "world": [
+    0.3898305084745763,
+    0.7796610169491526
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.19213193302973952,
+   "B_remaining_time_unclipped": 130.3913080904082,
+   "C_work_over_slack": 0.20550860542084584,
+   "D_reach_plus_work_ratio": 0.21592784230998036,
+   "_min_dist_world": 0.27171558545561686,
+   "_remaining": 130.3913080904082,
+   "_travel_steps": 1.3585779272780842,
+   "_work_needed": 26.79653588465964,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.20550860542084584,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 317.3913080904082,
+   "deadline_offset": 130.39130809040822,
+   "detected_at": 187.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    56,
+    14
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-16",
+   "total_stages": 3,
+   "work_needed": 26.79653588465964,
+   "world": [
+    0.23728813559322035,
+    0.9491525423728814
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.19175777116923318,
+   "B_remaining_time_unclipped": 148.25906428814568,
+   "C_work_over_slack": 0.11399647941368908,
+   "D_reach_plus_work_ratio": 0.12314217455145508,
+   "_min_dist_world": 0.27118644067796605,
+   "_remaining": 148.25906428814568,
+   "_travel_steps": 1.3559322033898302,
+   "_work_needed": 16.901011370016406,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.11399647941368908,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 376.2590642881457,
+   "deadline_offset": 148.25906428814568,
+   "detected_at": 228.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    41,
+    30
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-5",
+   "total_stages": 2,
+   "work_needed": 16.901011370016406,
+   "world": [
+    0.5084745762711864,
+    0.6949152542372882
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1860550711872894,
+   "B_remaining_time_unclipped": 149.12334703474664,
+   "C_work_over_slack": 0.12704915498796646,
+   "D_reach_plus_work_ratio": 0.1358714356788648,
+   "_min_dist_world": 0.26312160502135634,
+   "_remaining": 149.12334703474664,
+   "_travel_steps": 1.3156080251067817,
+   "_work_needed": 18.945995229741836,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.12704915498796646,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 378.12334703474664,
+   "deadline_offset": 149.12334703474664,
+   "detected_at": 229.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    42,
+    26
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-7",
+   "total_stages": 3,
+   "work_needed": 18.945995229741836,
+   "world": [
+    0.4406779661016949,
+    0.711864406779661
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.16821553594304414,
+   "B_remaining_time_unclipped": 134.53500887581492,
+   "C_work_over_slack": 0.05233415014883097,
+   "D_reach_plus_work_ratio": 0.06117544336761327,
+   "_min_dist_world": 0.2378926923325119,
+   "_remaining": 134.53500887581492,
+   "_travel_steps": 1.1894634616625595,
+   "_work_needed": 7.040775354781205,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.05233415014883097,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 364.5350088758149,
+   "deadline_offset": 134.53500887581495,
+   "detected_at": 230.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    43,
+    31
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-19",
+   "total_stages": 2,
+   "work_needed": 7.040775354781205,
+   "world": [
+    0.5254237288135594,
+    0.7288135593220338
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.28487688667748495,
+   "B_remaining_time_unclipped": 179.37560277917555,
+   "C_work_over_slack": 0.08048765843725414,
+   "D_reach_plus_work_ratio": 0.09171763482489849,
+   "_min_dist_world": 0.40287675674592255,
+   "_remaining": 179.37560277917555,
+   "_travel_steps": 2.014383783729613,
+   "_work_needed": 14.437522248466856,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.08048765843725414,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 416.37560277917555,
+   "deadline_offset": 179.37560277917555,
+   "detected_at": 237.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    51,
+    53
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-8",
+   "total_stages": 2,
+   "work_needed": 14.437522248466856,
+   "world": [
+    0.8983050847457628,
+    0.864406779661017
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.2636669353576957,
+   "B_remaining_time_unclipped": 74.81363452670234,
+   "C_work_over_slack": 0.09835661301408562,
+   "D_reach_plus_work_ratio": 0.12327729480499067,
+   "_min_dist_world": 0.3728813559322034,
+   "_remaining": 74.81363452670234,
+   "_travel_steps": 1.8644067796610169,
+   "_work_needed": 7.358415699320097,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.09835661301408562,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 311.81363452670234,
+   "deadline_offset": 74.81363452670233,
+   "detected_at": 237.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    57,
+    52
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-10",
+   "total_stages": 1,
+   "work_needed": 7.358415699320097,
+   "world": [
+    0.8813559322033898,
+    0.9661016949152542
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.144813622801992,
+   "B_remaining_time_unclipped": 125.53760071445765,
+   "C_work_over_slack": 0.15793778665698072,
+   "D_reach_plus_work_ratio": 0.16609460135701554,
+   "_min_dist_world": 0.2047973893829588,
+   "_remaining": 125.53760071445765,
+   "_travel_steps": 1.023986946914794,
+   "_work_needed": 19.82713079906924,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.15793778665698072,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 400.53760071445765,
+   "deadline_offset": 125.53760071445762,
+   "detected_at": 275.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    46,
+    35
+   ],
+   "on_time": 0,
+   "scene": 2301902,
+   "target": "piloc-e1-target-18",
+   "total_stages": 2,
+   "work_needed": 19.82713079906924,
+   "world": [
+    0.5932203389830508,
+    0.7796610169491526
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06454045004969411,
+   "B_remaining_time_unclipped": 120.8367586723036,
+   "C_work_over_slack": 0.17093645457626738,
+   "D_reach_plus_work_ratio": 0.1747132018502267,
+   "_min_dist_world": 0.09127397978194071,
+   "_remaining": 120.8367586723036,
+   "_travel_steps": 0.45636989890970353,
+   "_work_needed": 20.65540710993161,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.17093645457626738,
+   "completed": 1,
+   "completed_at": 57.0,
+   "deadline": 121.8367586723036,
+   "deadline_offset": 120.8367586723036,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    10,
+    38
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-4",
+   "total_stages": 3,
+   "work_needed": 20.65540710993161,
+   "world": [
+    0.6440677966101694,
+    0.1694915254237288
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.026798963221765938,
+   "B_remaining_time_unclipped": 75.38141789957072,
+   "C_work_over_slack": 0.24647989153959357,
+   "D_reach_plus_work_ratio": 0.2489937376771292,
+   "_min_dist_world": 0.03789945724575917,
+   "_remaining": 75.38141789957072,
+   "_travel_steps": 0.18949728622879583,
+   "_work_needed": 18.580003707986968,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.24647989153959357,
+   "completed": 1,
+   "completed_at": 32.0,
+   "deadline": 76.38141789957072,
+   "deadline_offset": 75.38141789957072,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    13,
+    35
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-7",
+   "total_stages": 2,
+   "work_needed": 18.580003707986968,
+   "world": [
+    0.5932203389830508,
+    0.22033898305084745
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.0378994572457592,
+   "B_remaining_time_unclipped": 88.01314210170511,
+   "C_work_over_slack": 0.08352109507380594,
+   "D_reach_plus_work_ratio": 0.08656597707458691,
+   "_min_dist_world": 0.05359792644353193,
+   "_remaining": 88.01314210170511,
+   "_travel_steps": 0.26798963221765965,
+   "_work_needed": 7.350954009220905,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.08352109507380594,
+   "completed": 1,
+   "completed_at": 9.0,
+   "deadline": 89.01314210170511,
+   "deadline_offset": 88.01314210170511,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    14,
+    33
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-8",
+   "total_stages": 1,
+   "work_needed": 7.350954009220905,
+   "world": [
+    0.559322033898305,
+    0.23728813559322035
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.016949152542372864,
+   "B_remaining_time_unclipped": 95.23667603141985,
+   "C_work_over_slack": 0.08113232085688782,
+   "D_reach_plus_work_ratio": 0.08239074998288158,
+   "_min_dist_world": 0.02396972139615413,
+   "_remaining": 95.23667603141985,
+   "_travel_steps": 0.11984860698077064,
+   "_work_needed": 7.726772557124632,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.08113232085688782,
+   "completed": 1,
+   "completed_at": 22.0,
+   "deadline": 96.23667603141985,
+   "deadline_offset": 95.23667603141985,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    15,
+    38
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-10",
+   "total_stages": 1,
+   "work_needed": 7.726772557124632,
+   "world": [
+    0.6440677966101694,
+    0.2542372881355932
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.026798963221765938,
+   "B_remaining_time_unclipped": 174.67161292227667,
+   "C_work_over_slack": 0.07005246489748215,
+   "D_reach_plus_work_ratio": 0.07113734230290873,
+   "_min_dist_world": 0.03789945724575917,
+   "_remaining": 174.67161292227667,
+   "_travel_steps": 0.18949728622879583,
+   "_work_needed": 12.236177032824376,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.07005246489748215,
+   "completed": 1,
+   "completed_at": 14.0,
+   "deadline": 175.67161292227667,
+   "deadline_offset": 174.67161292227667,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    17,
+    35
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-11",
+   "total_stages": 2,
+   "work_needed": 12.236177032824376,
+   "world": [
+    0.5932203389830508,
+    0.288135593220339
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08039688966529782,
+   "B_remaining_time_unclipped": 92.77839038173502,
+   "C_work_over_slack": 0.1948884468075605,
+   "D_reach_plus_work_ratio": 0.20101586350823117,
+   "_min_dist_world": 0.11369837173727751,
+   "_remaining": 92.77839038173502,
+   "_travel_steps": 0.5684918586863875,
+   "_work_needed": 18.08143639880185,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.1948884468075605,
+   "completed": 1,
+   "completed_at": 52.0,
+   "deadline": 93.77839038173502,
+   "deadline_offset": 92.77839038173502,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    18,
+    30
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-12",
+   "total_stages": 3,
+   "work_needed": 18.08143639880185,
+   "world": [
+    0.5084745762711864,
+    0.3050847457627119
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.023969721396154168,
+   "B_remaining_time_unclipped": 87.04215198013003,
+   "C_work_over_slack": 0.23106632781239117,
+   "D_reach_plus_work_ratio": 0.2330135628194303,
+   "_min_dist_world": 0.03389830508474578,
+   "_remaining": 87.04215198013003,
+   "_travel_steps": 0.16949152542372892,
+   "_work_needed": 20.112510422936698,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.23106632781239117,
+   "completed": 1,
+   "completed_at": 46.0,
+   "deadline": 88.04215198013003,
+   "deadline_offset": 87.04215198013003,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    18,
+    37
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-13",
+   "total_stages": 3,
+   "work_needed": 20.112510422936698,
+   "world": [
+    0.6271186440677966,
+    0.3050847457627119
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08642405955242011,
+   "B_remaining_time_unclipped": 77.52944462897516,
+   "C_work_over_slack": 0.31366716619728224,
+   "D_reach_plus_work_ratio": 0.3215494667683284,
+   "_min_dist_world": 0.12222207713437257,
+   "_remaining": 77.52944462897516,
+   "_travel_steps": 0.6111103856718628,
+   "_work_needed": 24.31844119361974,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.31366716619728224,
+   "completed": 1,
+   "completed_at": 47.0,
+   "deadline": 78.52944462897516,
+   "deadline_offset": 77.52944462897516,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    19,
+    30
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-14",
+   "total_stages": 3,
+   "work_needed": 24.31844119361974,
+   "world": [
+    0.5084745762711864,
+    0.3220338983050847
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.059924303490385356,
+   "B_remaining_time_unclipped": 63.69025169171263,
+   "C_work_over_slack": 0.35832784444445404,
+   "D_reach_plus_work_ratio": 0.364980806276201,
+   "_min_dist_world": 0.08474576271186438,
+   "_remaining": 63.69025169171263,
+   "_travel_steps": 0.42372881355932185,
+   "_work_needed": 22.82199060081613,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.35832784444445404,
+   "completed": 1,
+   "completed_at": 35.0,
+   "deadline": 64.69025169171263,
+   "deadline_offset": 63.690251691712625,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    20,
+    40
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-15",
+   "total_stages": 3,
+   "work_needed": 22.82199060081613,
+   "world": [
+    0.6779661016949152,
+    0.3389830508474576
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07290106158510701,
+   "B_remaining_time_unclipped": 156.79277834485296,
+   "C_work_over_slack": 0.09588225397426184,
+   "D_reach_plus_work_ratio": 0.09916995864705931,
+   "_min_dist_world": 0.10309767000505457,
+   "_remaining": 156.79277834485296,
+   "_travel_steps": 0.5154883500252728,
+   "_work_needed": 15.033644994591333,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.09588225397426184,
+   "completed": 1,
+   "completed_at": 53.0,
+   "deadline": 157.79277834485296,
+   "deadline_offset": 156.79277834485296,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    22,
+    36
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-19",
+   "total_stages": 2,
+   "work_needed": 15.033644994591333,
+   "world": [
+    0.6101694915254238,
+    0.3728813559322034
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09360475438294287,
+   "B_remaining_time_unclipped": 95.88815175141877,
+   "C_work_over_slack": 0.14309074622227308,
+   "D_reach_plus_work_ratio": 0.14999342975162797,
+   "_min_dist_world": 0.13237711315096024,
+   "_remaining": 95.88815175141877,
+   "_travel_steps": 0.6618855657548012,
+   "_work_needed": 13.720707187985074,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.14309074622227308,
+   "completed": 1,
+   "completed_at": 64.0,
+   "deadline": 96.88815175141877,
+   "deadline_offset": 95.88815175141877,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    22,
+    42
+   ],
+   "on_time": 1,
+   "scene": 2301903,
+   "target": "piloc-e1-target-20",
+   "total_stages": 3,
+   "work_needed": 13.720707187985074,
+   "world": [
+    0.711864406779661,
+    0.3728813559322034
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.059924303490385356,
+   "B_remaining_time_unclipped": 63.69025169171263,
+   "C_work_over_slack": 0.35832784444445404,
+   "D_reach_plus_work_ratio": 0.364980806276201,
+   "_min_dist_world": 0.08474576271186438,
+   "_remaining": 63.69025169171263,
+   "_travel_steps": 0.42372881355932185,
+   "_work_needed": 22.82199060081613,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.35832784444445404,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 65.69025169171263,
+   "deadline_offset": 63.690251691712625,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    20,
+    40
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-16",
+   "total_stages": 3,
+   "work_needed": 22.82199060081613,
+   "world": [
+    0.6779661016949152,
+    0.3389830508474576
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09360475438294287,
+   "B_remaining_time_unclipped": 174.27879791808903,
+   "C_work_over_slack": 0.04523968329969034,
+   "D_reach_plus_work_ratio": 0.049037538079856356,
+   "_min_dist_world": 0.13237711315096024,
+   "_remaining": 174.27879791808903,
+   "_travel_steps": 0.6618855657548012,
+   "_work_needed": 7.88431762366508,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.04523968329969034,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 176.27879791808903,
+   "deadline_offset": 174.27879791808903,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    22,
+    32
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-18",
+   "total_stages": 1,
+   "work_needed": 7.88431762366508,
+   "world": [
+    0.5423728813559322,
+    0.3728813559322034
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07290106158510698,
+   "B_remaining_time_unclipped": 95.17815887872311,
+   "C_work_over_slack": 0.11258259793690024,
+   "D_reach_plus_work_ratio": 0.11799863409580633,
+   "_min_dist_world": 0.10309767000505454,
+   "_remaining": 95.17815887872311,
+   "_travel_steps": 0.5154883500252727,
+   "_work_needed": 10.715404393417696,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.11258259793690024,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 100.17815887872311,
+   "deadline_offset": 95.17815887872311,
+   "detected_at": 5.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    9,
+    37
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-3",
+   "total_stages": 2,
+   "work_needed": 10.715404393417696,
+   "world": [
+    0.6271186440677966,
+    0.15254237288135594
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535065,
+   "B_remaining_time_unclipped": 175.33019584962713,
+   "C_work_over_slack": 0.07211754109511413,
+   "D_reach_plus_work_ratio": 0.07601442935642187,
+   "_min_dist_world": 0.1366484364118398,
+   "_remaining": 175.33019584962713,
+   "_travel_steps": 0.683242182059199,
+   "_work_needed": 12.644382604399894,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.07211754109511413,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 183.33019584962713,
+   "deadline_offset": 175.33019584962713,
+   "detected_at": 8.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    7,
+    35
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-1",
+   "total_stages": 2,
+   "work_needed": 12.644382604399894,
+   "world": [
+    0.5932203389830508,
+    0.11864406779661017
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535066,
+   "B_remaining_time_unclipped": 74.16925173807356,
+   "C_work_over_slack": 0.1104022833863723,
+   "D_reach_plus_work_ratio": 0.11961421644553337,
+   "_min_dist_world": 0.13664843641183982,
+   "_remaining": 74.16925173807356,
+   "_travel_steps": 0.6832421820591991,
+   "_work_needed": 8.188454748941982,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1104022833863723,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 85.16925173807356,
+   "deadline_offset": 74.16925173807356,
+   "detected_at": 11.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    11,
+    29
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-6",
+   "total_stages": 1,
+   "work_needed": 8.188454748941982,
+   "world": [
+    0.4915254237288136,
+    0.1864406779661017
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11803718878969592,
+   "B_remaining_time_unclipped": 176.31635864857017,
+   "C_work_over_slack": 0.053219313170894324,
+   "D_reach_plus_work_ratio": 0.05795312784725972,
+   "_min_dist_world": 0.16692979325078144,
+   "_remaining": 176.31635864857017,
+   "_travel_steps": 0.8346489662539072,
+   "_work_needed": 9.383435508069978,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.053219313170894324,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 188.31635864857017,
+   "deadline_offset": 176.31635864857017,
+   "detected_at": 12.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    25,
+    33
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-23",
+   "total_stages": 2,
+   "work_needed": 9.383435508069978,
+   "world": [
+    0.559322033898305,
+    0.423728813559322
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11369837173727744,
+   "B_remaining_time_unclipped": 139.8995174269042,
+   "C_work_over_slack": 0.034951050595450193,
+   "D_reach_plus_work_ratio": 0.040697810208635006,
+   "_min_dist_world": 0.16079377933059558,
+   "_remaining": 139.8995174269042,
+   "_travel_steps": 0.8039688966529779,
+   "_work_needed": 4.889635111866795,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.034951050595450193,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 155.8995174269042,
+   "deadline_offset": 139.8995174269042,
+   "detected_at": 16.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    12,
+    27
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-9",
+   "total_stages": 1,
+   "work_needed": 4.889635111866795,
+   "world": [
+    0.4576271186440678,
+    0.2033898305084746
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.22771235326346442,
+   "B_remaining_time_unclipped": 162.89034810835102,
+   "C_work_over_slack": 0.0344254698209171,
+   "D_reach_plus_work_ratio": 0.04431046000127067,
+   "_min_dist_world": 0.3220338983050847,
+   "_remaining": 162.89034810835102,
+   "_travel_steps": 1.6101694915254234,
+   "_work_needed": 5.607576762922719,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.0344254698209171,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 335.890348108351,
+   "deadline_offset": 162.89034810835102,
+   "detected_at": 173.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    35,
+    37
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-21",
+   "total_stages": 1,
+   "work_needed": 5.607576762922719,
+   "world": [
+    0.6271186440677966,
+    0.5932203389830508
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.15580318907500199,
+   "B_remaining_time_unclipped": 78.74405426086821,
+   "C_work_over_slack": 0.34215383558539614,
+   "D_reach_plus_work_ratio": 0.3561446686152078,
+   "_min_dist_world": 0.22033898305084745,
+   "_remaining": 78.74405426086821,
+   "_travel_steps": 1.1016949152542372,
+   "_work_needed": 26.942580194900614,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.34215383558539614,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 259.7440542608682,
+   "deadline_offset": 78.7440542608682,
+   "detected_at": 181.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    3,
+    31
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-0",
+   "total_stages": 3,
+   "work_needed": 26.942580194900614,
+   "world": [
+    0.5254237288135594,
+    0.05084745762711865
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.25648721949867037,
+   "B_remaining_time_unclipped": 112.24457592102476,
+   "C_work_over_slack": 0.14303221911256578,
+   "D_reach_plus_work_ratio": 0.15919013593901446,
+   "_min_dist_world": 0.36272770439038465,
+   "_remaining": 112.24457592102476,
+   "_travel_steps": 1.813638521951923,
+   "_work_needed": 16.05459077733304,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.14303221911256578,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 301.24457592102476,
+   "deadline_offset": 112.24457592102473,
+   "detected_at": 189.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    33,
+    50
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-17",
+   "total_stages": 3,
+   "work_needed": 16.05459077733304,
+   "world": [
+    0.847457627118644,
+    0.559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.011984860698077044,
+   "B_remaining_time_unclipped": 177.9987151285692,
+   "C_work_over_slack": 0.1495634477629662,
+   "D_reach_plus_work_ratio": 0.15003955099017574,
+   "_min_dist_world": 0.016949152542372836,
+   "_remaining": 177.9987151285692,
+   "_travel_steps": 0.08474576271186418,
+   "_work_needed": 26.62210153200686,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1495634477629662,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 382.9987151285692,
+   "deadline_offset": 177.9987151285692,
+   "detected_at": 205.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    16,
+    38
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-5",
+   "total_stages": 3,
+   "work_needed": 26.62210153200686,
+   "world": [
+    0.6440677966101694,
+    0.2711864406779661
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.05359792644353185,
+   "B_remaining_time_unclipped": 130.20625961664973,
+   "C_work_over_slack": 0.0882246398007373,
+   "D_reach_plus_work_ratio": 0.09113536447383226,
+   "_min_dist_world": 0.0757989144915183,
+   "_remaining": 130.20625961664973,
+   "_travel_steps": 0.37899457245759144,
+   "_work_needed": 11.48740035448021,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.0882246398007373,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 335.20625961664973,
+   "deadline_offset": 130.2062596166497,
+   "detected_at": 205.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    20,
+    39
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-22",
+   "total_stages": 2,
+   "work_needed": 11.48740035448021,
+   "world": [
+    0.6610169491525424,
+    0.3389830508474576
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.159897985289095,
+   "B_remaining_time_unclipped": 145.14827627431237,
+   "C_work_over_slack": 0.1393930486339172,
+   "D_reach_plus_work_ratio": 0.14718266574809544,
+   "_min_dist_world": 0.22612989939197178,
+   "_remaining": 145.14827627431237,
+   "_travel_steps": 1.1306494969598588,
+   "_work_needed": 20.23266073383447,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1393930486339172,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 442.14827627431237,
+   "deadline_offset": 145.1482762743124,
+   "detected_at": 297.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    2,
+    33
+   ],
+   "on_time": 0,
+   "scene": 2301903,
+   "target": "piloc-e1-target-2",
+   "total_stages": 3,
+   "work_needed": 20.23266073383447,
+   "world": [
+    0.559322033898305,
+    0.03389830508474576
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09360475438294291,
+   "B_remaining_time_unclipped": 174.72786996388646,
+   "C_work_over_slack": 0.09677931279595227,
+   "D_reach_plus_work_ratio": 0.10056740662375205,
+   "_min_dist_world": 0.1323771131509603,
+   "_remaining": 174.72786996388646,
+   "_travel_steps": 0.6618855657548014,
+   "_work_needed": 16.91004318140544,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.09677931279595227,
+   "completed": 1,
+   "completed_at": 37.0,
+   "deadline": 175.72786996388646,
+   "deadline_offset": 174.72786996388646,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    52,
+    20
+   ],
+   "on_time": 1,
+   "scene": 2301904,
+   "target": "piloc-e1-target-8",
+   "total_stages": 2,
+   "work_needed": 16.91004318140544,
+   "world": [
+    0.3389830508474576,
+    0.8813559322033898
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.043212029776210074,
+   "B_remaining_time_unclipped": 129.79871498676792,
+   "C_work_over_slack": 0.1334573610332689,
+   "D_reach_plus_work_ratio": 0.13581143050820232,
+   "_min_dist_world": 0.06111103856718631,
+   "_remaining": 129.79871498676792,
+   "_travel_steps": 0.3055551928359315,
+   "_work_needed": 17.32259396764346,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.1334573610332689,
+   "completed": 1,
+   "completed_at": 19.0,
+   "deadline": 130.79871498676792,
+   "deadline_offset": 129.79871498676792,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    55,
+    23
+   ],
+   "on_time": 1,
+   "scene": 2301904,
+   "target": "piloc-e1-target-14",
+   "total_stages": 3,
+   "work_needed": 17.32259396764346,
+   "world": [
+    0.3898305084745763,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.05359792644353185,
+   "B_remaining_time_unclipped": 97.76706669329205,
+   "C_work_over_slack": 0.1971813074454676,
+   "D_reach_plus_work_ratio": 0.20105781295264977,
+   "_min_dist_world": 0.0757989144915183,
+   "_remaining": 97.76706669329205,
+   "_travel_steps": 0.37899457245759144,
+   "_work_needed": 19.277838035691556,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.1971813074454676,
+   "completed": 1,
+   "completed_at": 35.0,
+   "deadline": 98.76706669329205,
+   "deadline_offset": 97.76706669329205,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    56,
+    21
+   ],
+   "on_time": 1,
+   "scene": 2301904,
+   "target": "piloc-e1-target-15",
+   "total_stages": 2,
+   "work_needed": 19.277838035691556,
+   "world": [
+    0.3559322033898305,
+    0.9491525423728814
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.04321202977621003,
+   "B_remaining_time_unclipped": 107.69478930077656,
+   "C_work_over_slack": 0.10425551954099899,
+   "D_reach_plus_work_ratio": 0.1070927523803944,
+   "_min_dist_world": 0.06111103856718625,
+   "_remaining": 107.69478930077656,
+   "_travel_steps": 0.30555519283593124,
+   "_work_needed": 11.22777621041088,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.10425551954099899,
+   "completed": 1,
+   "completed_at": 13.0,
+   "deadline": 108.69478930077656,
+   "deadline_offset": 107.69478930077656,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    56,
+    22
+   ],
+   "on_time": 1,
+   "scene": 2301904,
+   "target": "piloc-e1-target-16",
+   "total_stages": 1,
+   "work_needed": 11.22777621041088,
+   "world": [
+    0.3728813559322034,
+    0.9491525423728814
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.03389830508474575,
+   "B_remaining_time_unclipped": 92.24967384720924,
+   "C_work_over_slack": 0.08426441535883905,
+   "D_reach_plus_work_ratio": 0.08686276832817905,
+   "_min_dist_world": 0.047939442792308294,
+   "_remaining": 92.24967384720924,
+   "_travel_steps": 0.23969721396154145,
+   "_work_needed": 7.773364833778671,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.08426441535883905,
+   "completed": 1,
+   "completed_at": 15.0,
+   "deadline": 93.24967384720924,
+   "deadline_offset": 92.24967384720924,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    56,
+    23
+   ],
+   "on_time": 1,
+   "scene": 2301904,
+   "target": "piloc-e1-target-17",
+   "total_stages": 1,
+   "work_needed": 7.773364833778671,
+   "world": [
+    0.3898305084745763,
+    0.9491525423728814
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.03595458209423125,
+   "B_remaining_time_unclipped": 99.89077306220327,
+   "C_work_over_slack": 0.08013388008551511,
+   "D_reach_plus_work_ratio": 0.08267903295941745,
+   "_min_dist_world": 0.050847457627118675,
+   "_remaining": 99.89077306220327,
+   "_travel_steps": 0.2542372881355934,
+   "_work_needed": 8.004635230216,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.08013388008551511,
+   "completed": 1,
+   "completed_at": 10.0,
+   "deadline": 100.89077306220327,
+   "deadline_offset": 99.89077306220327,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    58,
+    28
+   ],
+   "on_time": 1,
+   "scene": 2301904,
+   "target": "piloc-e1-target-20",
+   "total_stages": 1,
+   "work_needed": 8.004635230216,
+   "world": [
+    0.4745762711864407,
+    0.9830508474576272
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.047939442792308294,
+   "B_remaining_time_unclipped": 96.59853279720434,
+   "C_work_over_slack": 0.05654783350249495,
+   "D_reach_plus_work_ratio": 0.060057028114788975,
+   "_min_dist_world": 0.06779661016949151,
+   "_remaining": 96.59853279720434,
+   "_travel_steps": 0.33898305084745756,
+   "_work_needed": 5.462437749201609,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.05654783350249495,
+   "completed": 1,
+   "completed_at": 7.0,
+   "deadline": 97.59853279720434,
+   "deadline_offset": 96.59853279720434,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    59,
+    21
+   ],
+   "on_time": 1,
+   "scene": 2301904,
+   "target": "piloc-e1-target-23",
+   "total_stages": 1,
+   "work_needed": 5.462437749201609,
+   "world": [
+    0.3559322033898305,
+    1.0
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07674055201811371,
+   "B_remaining_time_unclipped": 98.03255472100687,
+   "C_work_over_slack": 0.10518981201366075,
+   "D_reach_plus_work_ratio": 0.11072509209265467,
+   "_min_dist_world": 0.1085275294480144,
+   "_remaining": 98.03255472100687,
+   "_travel_steps": 0.542637647240072,
+   "_work_needed": 10.312026002321623,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.10518981201366075,
+   "completed": 1,
+   "completed_at": 21.0,
+   "deadline": 100.03255472100687,
+   "deadline_offset": 98.03255472100687,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    54,
+    20
+   ],
+   "on_time": 1,
+   "scene": 2301904,
+   "target": "piloc-e1-target-11",
+   "total_stages": 2,
+   "work_needed": 10.312026002321623,
+   "world": [
+    0.3389830508474576,
+    0.9152542372881356
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09882969313297124,
+   "B_remaining_time_unclipped": 139.3831722027478,
+   "C_work_over_slack": 0.1510077197874585,
+   "D_reach_plus_work_ratio": 0.15602146320371948,
+   "_min_dist_world": 0.13976629239381907,
+   "_remaining": 139.3831722027478,
+   "_travel_steps": 0.6988314619690953,
+   "_work_needed": 21.047935011079616,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1510077197874585,
+   "completed": 1,
+   "completed_at": 46.0,
+   "deadline": 142.3831722027478,
+   "deadline_offset": 139.3831722027478,
+   "detected_at": 3.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    50,
+    27
+   ],
+   "on_time": 1,
+   "scene": 2301904,
+   "target": "piloc-e1-target-0",
+   "total_stages": 2,
+   "work_needed": 21.047935011079616,
+   "world": [
+    0.4576271186440678,
+    0.847457627118644
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09882969313297124,
+   "B_remaining_time_unclipped": 139.3831722027478,
+   "C_work_over_slack": 0.1510077197874585,
+   "D_reach_plus_work_ratio": 0.15602146320371948,
+   "_min_dist_world": 0.13976629239381907,
+   "_remaining": 139.3831722027478,
+   "_travel_steps": 0.6988314619690953,
+   "_work_needed": 21.047935011079616,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1510077197874585,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 142.3831722027478,
+   "deadline_offset": 139.3831722027478,
+   "detected_at": 3.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    50,
+    27
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-3",
+   "total_stages": 2,
+   "work_needed": 21.047935011079616,
+   "world": [
+    0.4576271186440678,
+    0.847457627118644
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.10309767000505457,
+   "B_remaining_time_unclipped": 65.10483703808188,
+   "C_work_over_slack": 0.355646296156612,
+   "D_reach_plus_work_ratio": 0.36684378391661737,
+   "_min_dist_world": 0.14580212317021402,
+   "_remaining": 65.10483703808188,
+   "_travel_steps": 0.7290106158510701,
+   "_work_needed": 23.15429415447363,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.355646296156612,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 68.10483703808188,
+   "deadline_offset": 65.10483703808188,
+   "detected_at": 3.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    51,
+    20
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-7",
+   "total_stages": 3,
+   "work_needed": 23.15429415447363,
+   "world": [
+    0.3389830508474576,
+    0.864406779661017
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.10719585288706375,
+   "B_remaining_time_unclipped": 115.5118786591259,
+   "C_work_over_slack": 0.12961253264983685,
+   "D_reach_plus_work_ratio": 0.13617453435662236,
+   "_min_dist_world": 0.15159782898303667,
+   "_remaining": 115.5118786591259,
+   "_travel_steps": 0.7579891449151833,
+   "_work_needed": 14.97178714414995,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.12961253264983685,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 120.5118786591259,
+   "deadline_offset": 115.5118786591259,
+   "detected_at": 5.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    50,
+    29
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-4",
+   "total_stages": 2,
+   "work_needed": 14.97178714414995,
+   "world": [
+    0.4915254237288136,
+    0.847457627118644
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.12908090009938827,
+   "B_remaining_time_unclipped": 171.9700478307679,
+   "C_work_over_slack": 0.12905358533383413,
+   "D_reach_plus_work_ratio": 0.13436113632502542,
+   "_min_dist_world": 0.1825479595638815,
+   "_remaining": 171.9700478307679,
+   "_travel_steps": 0.9127397978194075,
+   "_work_needed": 22.19335124259154,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.12905358533383413,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 176.9700478307679,
+   "deadline_offset": 171.9700478307679,
+   "detected_at": 5.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    54,
+    15
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-10",
+   "total_stages": 2,
+   "work_needed": 22.19335124259154,
+   "world": [
+    0.2542372881355932,
+    0.9152542372881356
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11369837173727744,
+   "B_remaining_time_unclipped": 170.8725728620916,
+   "C_work_over_slack": 0.06694347458176055,
+   "D_reach_plus_work_ratio": 0.0716485532446882,
+   "_min_dist_world": 0.16079377933059558,
+   "_remaining": 170.8725728620916,
+   "_travel_steps": 0.8039688966529779,
+   "_work_needed": 11.438803738113457,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.06694347458176055,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 175.8725728620916,
+   "deadline_offset": 170.8725728620916,
+   "detected_at": 5.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    55,
+    16
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-13",
+   "total_stages": 1,
+   "work_needed": 11.438803738113457,
+   "world": [
+    0.2711864406779661,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.10852752944801437,
+   "B_remaining_time_unclipped": 154.18575638078175,
+   "C_work_over_slack": 0.11272339453744327,
+   "D_reach_plus_work_ratio": 0.11770054377738946,
+   "_min_dist_world": 0.1534811040362274,
+   "_remaining": 154.18575638078175,
+   "_travel_steps": 0.767405520181137,
+   "_work_needed": 17.380341848564974,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.11272339453744327,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 159.18575638078175,
+   "deadline_offset": 154.18575638078175,
+   "detected_at": 5.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    57,
+    16
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-18",
+   "total_stages": 3,
+   "work_needed": 17.380341848564974,
+   "world": [
+    0.2711864406779661,
+    0.9661016949152542
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.14431683360954575,
+   "B_remaining_time_unclipped": 69.53515034832535,
+   "C_work_over_slack": 0.3052442354859362,
+   "D_reach_plus_work_ratio": 0.31991989393687653,
+   "_min_dist_world": 0.20409482336936094,
+   "_remaining": 69.53515034832535,
+   "_travel_steps": 1.0204741168468046,
+   "_work_needed": 21.2252038074742,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.3052442354859362,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 80.53515034832535,
+   "deadline_offset": 69.53515034832535,
+   "detected_at": 11.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    49,
+    33
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-2",
+   "total_stages": 3,
+   "work_needed": 21.2252038074742,
+   "world": [
+    0.559322033898305,
+    0.8305084745762712
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11306494969598586,
+   "B_remaining_time_unclipped": 67.62791038124276,
+   "C_work_over_slack": 0.3255312592573713,
+   "D_reach_plus_work_ratio": 0.33735315234764224,
+   "_min_dist_world": 0.15989798528909496,
+   "_remaining": 67.62791038124276,
+   "_travel_steps": 0.7994899264454748,
+   "_work_needed": 22.01499882735061,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.3255312592573713,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 79.62791038124276,
+   "deadline_offset": 67.62791038124276,
+   "detected_at": 12.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    53,
+    33
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-9",
+   "total_stages": 2,
+   "work_needed": 22.01499882735061,
+   "world": [
+    0.559322033898305,
+    0.8983050847457628
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.16123981008847837,
+   "B_remaining_time_unclipped": 176.1501468331243,
+   "C_work_over_slack": 0.03426833755180134,
+   "D_reach_plus_work_ratio": 0.04074087051078916,
+   "_min_dist_world": 0.22802752622158834,
+   "_remaining": 176.1501468331243,
+   "_travel_steps": 1.1401376311079416,
+   "_work_needed": 6.036372691476872,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.03426833755180134,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 191.1501468331243,
+   "deadline_offset": 176.1501468331243,
+   "detected_at": 15.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    49,
+    35
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-1",
+   "total_stages": 1,
+   "work_needed": 6.036372691476872,
+   "world": [
+    0.5932203389830508,
+    0.8305084745762712
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11984860698077077,
+   "B_remaining_time_unclipped": 111.63156505045953,
+   "C_work_over_slack": 0.06187285359472639,
+   "D_reach_plus_work_ratio": 0.06946441272708809,
+   "_min_dist_world": 0.16949152542372883,
+   "_remaining": 111.63156505045953,
+   "_travel_steps": 0.8474576271186441,
+   "_work_needed": 6.906963480917258,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.06187285359472639,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 126.63156505045953,
+   "deadline_offset": 111.63156505045953,
+   "detected_at": 15.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    52,
+    33
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-6",
+   "total_stages": 1,
+   "work_needed": 6.906963480917258,
+   "world": [
+    0.559322033898305,
+    0.8813559322033898
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.12339169303865287,
+   "B_remaining_time_unclipped": 68.13375924728197,
+   "C_work_over_slack": 0.3772090714335618,
+   "D_reach_plus_work_ratio": 0.39001492624821466,
+   "_min_dist_world": 0.17450220577944073,
+   "_remaining": 68.13375924728197,
+   "_travel_steps": 0.8725110288972036,
+   "_work_needed": 25.700672058945088,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.3772090714335618,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 83.13375924728197,
+   "deadline_offset": 68.13375924728197,
+   "detected_at": 15.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    53,
+    34
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-12",
+   "total_stages": 3,
+   "work_needed": 25.700672058945088,
+   "world": [
+    0.576271186440678,
+    0.8983050847457628
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.17159709094336092,
+   "B_remaining_time_unclipped": 113.4193221343811,
+   "C_work_over_slack": 0.14811528362859092,
+   "D_reach_plus_work_ratio": 0.1588134137491512,
+   "_min_dist_world": 0.24267493327587045,
+   "_remaining": 113.4193221343811,
+   "_travel_steps": 1.213374666379352,
+   "_work_needed": 16.799135066896376,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.14811528362859092,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 373.4193221343811,
+   "deadline_offset": 113.4193221343811,
+   "detected_at": 260.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    55,
+    39
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-22",
+   "total_stages": 2,
+   "work_needed": 16.799135066896376,
+   "world": [
+    0.6610169491525424,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.15626346537784558,
+   "B_remaining_time_unclipped": 107.33515268889391,
+   "C_work_over_slack": 0.23897213320797847,
+   "D_reach_plus_work_ratio": 0.24926651983270787,
+   "_min_dist_world": 0.22098991204076782,
+   "_remaining": 107.33515268889391,
+   "_travel_steps": 1.104949560203839,
+   "_work_needed": 25.650110406269064,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.23897213320797847,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 627.3351526888939,
+   "deadline_offset": 107.33515268889394,
+   "detected_at": 520.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    51,
+    36
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-19",
+   "total_stages": 3,
+   "work_needed": 25.650110406269064,
+   "world": [
+    0.6101694915254238,
+    0.864406779661017
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.5950335485268461,
+   "B_remaining_time_unclipped": 178.70789579556902,
+   "C_work_over_slack": 0.05068177821130415,
+   "D_reach_plus_work_ratio": 0.0742259118000149,
+   "_min_dist_world": 0.8415045143936549,
+   "_remaining": 178.70789579556902,
+   "_travel_steps": 4.2075225719682745,
+   "_work_needed": 9.057233939319882,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.05068177821130415,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 838.707895795569,
+   "deadline_offset": 178.70789579556904,
+   "detected_at": 660.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    9,
+    33
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-21",
+   "total_stages": 1,
+   "work_needed": 9.057233939319882,
+   "world": [
+    0.559322033898305,
+    0.15254237288135594
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.44923248409147704,
+   "B_remaining_time_unclipped": 111.99970536908859,
+   "C_work_over_slack": 0.13612454908174887,
+   "D_reach_plus_work_ratio": 0.16448670724846423,
+   "_min_dist_world": 0.6353106716607225,
+   "_remaining": 111.99970536908859,
+   "_travel_steps": 3.1765533583036123,
+   "_work_needed": 15.24590939065591,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.13612454908174887,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 785.9997053690886,
+   "deadline_offset": 111.99970536908864,
+   "detected_at": 674.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    21,
+    31
+   ],
+   "on_time": 0,
+   "scene": 2301904,
+   "target": "piloc-e1-target-5",
+   "total_stages": 2,
+   "work_needed": 15.24590939065591,
+   "world": [
+    0.5254237288135594,
+    0.3559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.04941484656648559,
+   "B_remaining_time_unclipped": 119.33634317704765,
+   "C_work_over_slack": 0.22428978572337818,
+   "D_reach_plus_work_ratio": 0.22721777665792653,
+   "_min_dist_world": 0.0698831461969095,
+   "_remaining": 119.33634317704765,
+   "_travel_steps": 0.3494157309845475,
+   "_work_needed": 26.765922840191543,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.22428978572337818,
+   "completed": 1,
+   "completed_at": 44.0,
+   "deadline": 120.33634317704765,
+   "deadline_offset": 119.33634317704765,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    16,
+    5
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-2",
+   "total_stages": 3,
+   "work_needed": 26.765922840191543,
+   "world": [
+    0.0847457627118644,
+    0.2711864406779661
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.059924303490385376,
+   "B_remaining_time_unclipped": 66.89532598195628,
+   "C_work_over_slack": 0.16522170892238108,
+   "D_reach_plus_work_ratio": 0.17155591549570154,
+   "_min_dist_world": 0.0847457627118644,
+   "_remaining": 66.89532598195628,
+   "_travel_steps": 0.423728813559322,
+   "_work_needed": 11.052560077658576,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.16522170892238108,
+   "completed": 1,
+   "completed_at": 13.0,
+   "deadline": 67.89532598195628,
+   "deadline_offset": 66.89532598195628,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    16,
+    9
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-3",
+   "total_stages": 1,
+   "work_needed": 11.052560077658576,
+   "world": [
+    0.15254237288135594,
+    0.2711864406779661
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.04321202977621002,
+   "B_remaining_time_unclipped": 104.12879277110181,
+   "C_work_over_slack": 0.23319349757930782,
+   "D_reach_plus_work_ratio": 0.236127894346085,
+   "_min_dist_world": 0.061111038567186235,
+   "_remaining": 104.12879277110181,
+   "_travel_steps": 0.30555519283593113,
+   "_work_needed": 24.282157385004176,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.23319349757930782,
+   "completed": 1,
+   "completed_at": 54.0,
+   "deadline": 105.12879277110181,
+   "deadline_offset": 104.12879277110181,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    17,
+    8
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-4",
+   "total_stages": 3,
+   "work_needed": 24.282157385004176,
+   "world": [
+    0.13559322033898305,
+    0.288135593220339
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06111103856718626,
+   "B_remaining_time_unclipped": 177.84182509988727,
+   "C_work_over_slack": 0.07631523476078818,
+   "D_reach_plus_work_ratio": 0.07874503606045093,
+   "_min_dist_world": 0.0864240595524201,
+   "_remaining": 177.84182509988727,
+   "_travel_steps": 0.4321202977621004,
+   "_work_needed": 13.57204063278493,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.07631523476078818,
+   "completed": 1,
+   "completed_at": 27.0,
+   "deadline": 178.84182509988727,
+   "deadline_offset": 177.84182509988727,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    20,
+    12
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-5",
+   "total_stages": 2,
+   "work_needed": 13.57204063278493,
+   "world": [
+    0.2033898305084746,
+    0.3389830508474576
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07290106158510701,
+   "B_remaining_time_unclipped": 82.95967859723034,
+   "C_work_over_slack": 0.2872957909130052,
+   "D_reach_plus_work_ratio": 0.29350951255153723,
+   "_min_dist_world": 0.10309767000505457,
+   "_remaining": 82.95967859723034,
+   "_travel_steps": 0.5154883500252728,
+   "_work_needed": 23.83396647648,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.2872957909130052,
+   "completed": 1,
+   "completed_at": 26.0,
+   "deadline": 83.95967859723034,
+   "deadline_offset": 82.95967859723034,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    20,
+    13
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-6",
+   "total_stages": 3,
+   "work_needed": 23.83396647648,
+   "world": [
+    0.22033898305084745,
+    0.3389830508474576
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.0494148465664856,
+   "B_remaining_time_unclipped": 161.1374630960611,
+   "C_work_over_slack": 0.04477359725915384,
+   "D_reach_plus_work_ratio": 0.046942029877310706,
+   "_min_dist_world": 0.06988314619690951,
+   "_remaining": 161.1374630960611,
+   "_travel_steps": 0.34941573098454753,
+   "_work_needed": 7.214703876024805,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.04477359725915384,
+   "completed": 1,
+   "completed_at": 46.0,
+   "deadline": 162.1374630960611,
+   "deadline_offset": 161.1374630960611,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    21,
+    2
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-7",
+   "total_stages": 1,
+   "work_needed": 7.214703876024805,
+   "world": [
+    0.03389830508474576,
+    0.3559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.016949152542372885,
+   "B_remaining_time_unclipped": 124.16892971734421,
+   "C_work_over_slack": 0.18933056358341374,
+   "D_reach_plus_work_ratio": 0.19029576967203504,
+   "_min_dist_world": 0.023969721396154157,
+   "_remaining": 124.16892971734421,
+   "_travel_steps": 0.11984860698077078,
+   "_work_needed": 23.50897344293407,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.18933056358341374,
+   "completed": 1,
+   "completed_at": 28.0,
+   "deadline": 125.16892971734421,
+   "deadline_offset": 124.16892971734421,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    22,
+    8
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-8",
+   "total_stages": 3,
+   "work_needed": 23.50897344293407,
+   "world": [
+    0.13559322033898305,
+    0.3728813559322034
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06111103856718626,
+   "B_remaining_time_unclipped": 170.94452189670056,
+   "C_work_over_slack": 0.18801643608773608,
+   "D_reach_plus_work_ratio": 0.1905442754883062,
+   "_min_dist_world": 0.0864240595524201,
+   "_remaining": 170.94452189670056,
+   "_travel_steps": 0.4321202977621004,
+   "_work_needed": 32.1403797757396,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.18801643608773608,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 171.94452189670056,
+   "deadline_offset": 170.94452189670056,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    22,
+    12
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-9",
+   "total_stages": 3,
+   "work_needed": 32.1403797757396,
+   "world": [
+    0.2033898305084746,
+    0.3728813559322034
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08039688966529779,
+   "B_remaining_time_unclipped": 145.89316855687758,
+   "C_work_over_slack": 0.05065656814970302,
+   "D_reach_plus_work_ratio": 0.05455319925525582,
+   "_min_dist_world": 0.11369837173727747,
+   "_remaining": 145.89316855687758,
+   "_travel_steps": 0.5684918586863873,
+   "_work_needed": 7.390447235577579,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.05065656814970302,
+   "completed": 1,
+   "completed_at": 36.0,
+   "deadline": 146.89316855687758,
+   "deadline_offset": 145.89316855687758,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    23,
+    0
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-11",
+   "total_stages": 1,
+   "work_needed": 7.390447235577579,
+   "world": [
+    0.0,
+    0.3898305084745763
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.033898305084745776,
+   "B_remaining_time_unclipped": 71.41100176437331,
+   "C_work_over_slack": 0.25854716295903485,
+   "D_reach_plus_work_ratio": 0.26190374959189633,
+   "_min_dist_world": 0.04793944279230833,
+   "_remaining": 71.41100176437331,
+   "_travel_steps": 0.23969721396154164,
+   "_work_needed": 18.463111910241352,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.25854716295903485,
+   "completed": 1,
+   "completed_at": 38.0,
+   "deadline": 72.41100176437331,
+   "deadline_offset": 71.41100176437331,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    23,
+    5
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-12",
+   "total_stages": 3,
+   "work_needed": 18.463111910241352,
+   "world": [
+    0.0847457627118644,
+    0.3898305084745763
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.05359792644353186,
+   "B_remaining_time_unclipped": 111.03703278030275,
+   "C_work_over_slack": 0.10245763440362646,
+   "D_reach_plus_work_ratio": 0.10587086117101917,
+   "_min_dist_world": 0.07579891449151831,
+   "_remaining": 111.03703278030275,
+   "_travel_steps": 0.3789945724575915,
+   "_work_needed": 11.376591709867746,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.10245763440362646,
+   "completed": 1,
+   "completed_at": 38.0,
+   "deadline": 112.03703278030275,
+   "deadline_offset": 111.03703278030275,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    23,
+    11
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-13",
+   "total_stages": 2,
+   "work_needed": 11.376591709867746,
+   "world": [
+    0.1864406779661017,
+    0.3898305084745763
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08039688966529779,
+   "B_remaining_time_unclipped": 144.4090877776897,
+   "C_work_over_slack": 0.0406676845602252,
+   "D_reach_plus_work_ratio": 0.044604361035611224,
+   "_min_dist_world": 0.11369837173727745,
+   "_remaining": 144.4090877776897,
+   "_travel_steps": 0.5684918586863872,
+   "_work_needed": 5.872783229372957,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.0406676845602252,
+   "completed": 1,
+   "completed_at": 7.0,
+   "deadline": 145.4090877776897,
+   "deadline_offset": 144.4090877776897,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    24,
+    13
+   ],
+   "on_time": 1,
+   "scene": 2301905,
+   "target": "piloc-e1-target-14",
+   "total_stages": 1,
+   "work_needed": 5.872783229372957,
+   "world": [
+    0.22033898305084745,
+    0.4067796610169492
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.0847457627118644,
+   "B_remaining_time_unclipped": 154.80903784918925,
+   "C_work_over_slack": 0.04262303371543515,
+   "D_reach_plus_work_ratio": 0.04649388675624805,
+   "_min_dist_world": 0.11984860698077077,
+   "_remaining": 154.80903784918925,
+   "_travel_steps": 0.5992430349038538,
+   "_work_needed": 6.59843083970007,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.04262303371543515,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 156.80903784918925,
+   "deadline_offset": 154.80903784918925,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    22,
+    14
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-10",
+   "total_stages": 1,
+   "work_needed": 6.59843083970007,
+   "world": [
+    0.23728813559322035,
+    0.3728813559322034
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06454045004969412,
+   "B_remaining_time_unclipped": 150.80178940398488,
+   "C_work_over_slack": 0.08284648050412909,
+   "D_reach_plus_work_ratio": 0.08587277018353819,
+   "_min_dist_world": 0.09127397978194074,
+   "_remaining": 150.80178940398488,
+   "_travel_steps": 0.4563698989097037,
+   "_work_needed": 12.493397505845014,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.08284648050412909,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 152.80178940398488,
+   "deadline_offset": 150.80178940398488,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    26,
+    9
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-17",
+   "total_stages": 2,
+   "work_needed": 12.493397505845014,
+   "world": [
+    0.15254237288135594,
+    0.4406779661016949
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.0599243034903854,
+   "B_remaining_time_unclipped": 85.62601669297663,
+   "C_work_over_slack": 0.03953270030866597,
+   "D_reach_plus_work_ratio": 0.04448129922666373,
+   "_min_dist_world": 0.08474576271186443,
+   "_remaining": 85.62601669297663,
+   "_travel_steps": 0.4237288135593221,
+   "_work_needed": 3.385027656548275,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.03953270030866597,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 89.62601669297663,
+   "deadline_offset": 85.62601669297663,
+   "detected_at": 4.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    24,
+    3
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-16",
+   "total_stages": 1,
+   "work_needed": 3.385027656548275,
+   "world": [
+    0.05084745762711865,
+    0.4067796610169492
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11306494969598586,
+   "B_remaining_time_unclipped": 72.53976156815452,
+   "C_work_over_slack": 0.3299981949121182,
+   "D_reach_plus_work_ratio": 0.3410195976457668,
+   "_min_dist_world": 0.15989798528909496,
+   "_remaining": 72.53976156815452,
+   "_travel_steps": 0.7994899264454748,
+   "_work_needed": 23.937990376846436,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.3299981949121182,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 76.53976156815452,
+   "deadline_offset": 72.53976156815452,
+   "detected_at": 4.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    26,
+    15
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-18",
+   "total_stages": 3,
+   "work_needed": 23.937990376846436,
+   "world": [
+    0.2542372881355932,
+    0.4406779661016949
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.13399481610882963,
+   "B_remaining_time_unclipped": 138.36183572341017,
+   "C_work_over_slack": 0.0692452026707409,
+   "D_reach_plus_work_ratio": 0.07609309122461956,
+   "_min_dist_world": 0.18949728622879575,
+   "_remaining": 138.36183572341017,
+   "_travel_steps": 0.9474864311439787,
+   "_work_needed": 9.580893356563296,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.0692452026707409,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 144.36183572341017,
+   "deadline_offset": 138.36183572341017,
+   "detected_at": 6.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    23,
+    18
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-15",
+   "total_stages": 1,
+   "work_needed": 9.580893356563296,
+   "world": [
+    0.3050847457627119,
+    0.3898305084745763
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1339948161088296,
+   "B_remaining_time_unclipped": 97.62015867931638,
+   "C_work_over_slack": 0.24739964721328175,
+   "D_reach_plus_work_ratio": 0.25710549530820737,
+   "_min_dist_world": 0.18949728622879572,
+   "_remaining": 97.62015867931638,
+   "_travel_steps": 0.9474864311439786,
+   "_work_needed": 24.151192818167456,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.24739964721328175,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 105.62015867931638,
+   "deadline_offset": 97.62015867931638,
+   "detected_at": 8.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    26,
+    17
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-19",
+   "total_stages": 3,
+   "work_needed": 24.151192818167456,
+   "world": [
+    0.288135593220339,
+    0.4406779661016949
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1016949152542373,
+   "B_remaining_time_unclipped": 143.14632330319,
+   "C_work_over_slack": 0.0961499866219034,
+   "D_reach_plus_work_ratio": 0.10117345928463856,
+   "_min_dist_world": 0.14381832837692493,
+   "_remaining": 143.14632330319,
+   "_travel_steps": 0.7190916418846246,
+   "_work_needed": 13.763517070576377,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.0961499866219034,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 152.14632330319,
+   "deadline_offset": 143.14632330319,
+   "detected_at": 9.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    27,
+    13
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-22",
+   "total_stages": 2,
+   "work_needed": 13.763517070576377,
+   "world": [
+    0.22033898305084745,
+    0.4576271186440678
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11803718878969591,
+   "B_remaining_time_unclipped": 82.1052472452552,
+   "C_work_over_slack": 0.2243046830604228,
+   "D_reach_plus_work_ratio": 0.23447028141445664,
+   "_min_dist_world": 0.16692979325078142,
+   "_remaining": 82.1052472452552,
+   "_travel_steps": 0.834648966253907,
+   "_work_needed": 18.41659146094462,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.2243046830604228,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 95.1052472452552,
+   "deadline_offset": 82.1052472452552,
+   "detected_at": 13.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    30,
+    11
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-23",
+   "total_stages": 2,
+   "work_needed": 18.41659146094462,
+   "world": [
+    0.1864406779661017,
+    0.5084745762711864
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08474576271186442,
+   "B_remaining_time_unclipped": 114.32095315002726,
+   "C_work_over_slack": 0.07518163101670218,
+   "D_reach_plus_work_ratio": 0.08042339132740783,
+   "_min_dist_world": 0.11984860698077078,
+   "_remaining": 114.32095315002726,
+   "_travel_steps": 0.5992430349038539,
+   "_work_needed": 8.594835717203047,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.07518163101670218,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 129.32095315002726,
+   "deadline_offset": 114.32095315002725,
+   "detected_at": 15.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    28,
+    6
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-20",
+   "total_stages": 1,
+   "work_needed": 8.594835717203047,
+   "world": [
+    0.1016949152542373,
+    0.4745762711864407
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1296360893286301,
+   "B_remaining_time_unclipped": 160.70556273858824,
+   "C_work_over_slack": 0.1437912381805049,
+   "D_reach_plus_work_ratio": 0.14949524470577305,
+   "_min_dist_world": 0.18333311570155875,
+   "_remaining": 160.70556273858824,
+   "_travel_steps": 0.9166655785077937,
+   "_work_needed": 23.108051848676418,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1437912381805049,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 176.70556273858824,
+   "deadline_offset": 160.70556273858824,
+   "detected_at": 16.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    30,
+    13
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-21",
+   "total_stages": 3,
+   "work_needed": 23.108051848676418,
+   "world": [
+    0.22033898305084745,
+    0.5084745762711864
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.17284811910484013,
+   "B_remaining_time_unclipped": 103.15216563783702,
+   "C_work_over_slack": 0.1095313886727894,
+   "D_reach_plus_work_ratio": 0.1213801052148627,
+   "_min_dist_world": 0.24444415426874502,
+   "_remaining": 103.15216563783702,
+   "_travel_steps": 1.222220771343725,
+   "_work_needed": 11.298399946917877,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1095313886727894,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 277.152165637837,
+   "deadline_offset": 103.15216563783699,
+   "detected_at": 174.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    8,
+    14
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-1",
+   "total_stages": 2,
+   "work_needed": 11.298399946917877,
+   "world": [
+    0.23728813559322035,
+    0.13559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.050847457627118633,
+   "B_remaining_time_unclipped": 172.77415027489877,
+   "C_work_over_slack": 0.052079412149094124,
+   "D_reach_plus_work_ratio": 0.054160428437527566,
+   "_min_dist_world": 0.07190916418846245,
+   "_remaining": 172.77415027489877,
+   "_travel_steps": 0.35954582094231224,
+   "_work_needed": 8.997976180875977,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.052079412149094124,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 351.7741502748988,
+   "deadline_offset": 172.77415027489877,
+   "detected_at": 179.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    17,
+    9
+   ],
+   "on_time": 0,
+   "scene": 2301905,
+   "target": "piloc-e1-target-0",
+   "total_stages": 2,
+   "work_needed": 8.997976180875977,
+   "world": [
+    0.15254237288135594,
+    0.288135593220339
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.0599243034903854,
+   "B_remaining_time_unclipped": 151.88846324097744,
+   "C_work_over_slack": 0.051182740437241504,
+   "D_reach_plus_work_ratio": 0.053972477093455214,
+   "_min_dist_world": 0.08474576271186443,
+   "_remaining": 151.88846324097744,
+   "_travel_steps": 0.4237288135593221,
+   "_work_needed": 7.774067789474446,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.051182740437241504,
+   "completed": 1,
+   "completed_at": 9.0,
+   "deadline": 152.88846324097744,
+   "deadline_offset": 151.88846324097744,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    30,
+    45
+   ],
+   "on_time": 1,
+   "scene": 2301906,
+   "target": "piloc-e1-target-7",
+   "total_stages": 1,
+   "work_needed": 7.774067789474446,
+   "world": [
+    0.7627118644067796,
+    0.5084745762711864
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06988314619690948,
+   "B_remaining_time_unclipped": 170.65695372693898,
+   "C_work_over_slack": 0.09149539221184735,
+   "D_reach_plus_work_ratio": 0.09439095816959626,
+   "_min_dist_world": 0.09882969313297117,
+   "_remaining": 170.65695372693898,
+   "_travel_steps": 0.4941484656648558,
+   "_work_needed": 15.614324914925367,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.09149539221184735,
+   "completed": 1,
+   "completed_at": 29.0,
+   "deadline": 171.65695372693898,
+   "deadline_offset": 170.65695372693898,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    31,
+    37
+   ],
+   "on_time": 1,
+   "scene": 2301906,
+   "target": "piloc-e1-target-9",
+   "total_stages": 3,
+   "work_needed": 15.614324914925367,
+   "world": [
+    0.6271186440677966,
+    0.5254237288135594
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.0599243034903854,
+   "B_remaining_time_unclipped": 84.167761696513,
+   "C_work_over_slack": 0.07472377957173844,
+   "D_reach_plus_work_ratio": 0.07975811581899636,
+   "_min_dist_world": 0.08474576271186443,
+   "_remaining": 84.167761696513,
+   "_travel_steps": 0.4237288135593221,
+   "_work_needed": 6.289333272056847,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.07472377957173844,
+   "completed": 1,
+   "completed_at": 8.0,
+   "deadline": 85.167761696513,
+   "deadline_offset": 84.167761696513,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    32,
+    47
+   ],
+   "on_time": 1,
+   "scene": 2301906,
+   "target": "piloc-e1-target-10",
+   "total_stages": 1,
+   "work_needed": 6.289333272056847,
+   "world": [
+    0.7966101694915254,
+    0.5423728813559322
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.011984860698077122,
+   "B_remaining_time_unclipped": 108.55918328595001,
+   "C_work_over_slack": 0.16210557501428866,
+   "D_reach_plus_work_ratio": 0.16288621613691612,
+   "_min_dist_world": 0.016949152542372947,
+   "_remaining": 108.55918328595001,
+   "_travel_steps": 0.08474576271186474,
+   "_work_needed": 17.59804882965048,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.16210557501428866,
+   "completed": 1,
+   "completed_at": 19.0,
+   "deadline": 109.55918328595001,
+   "deadline_offset": 108.55918328595001,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    35,
+    44
+   ],
+   "on_time": 1,
+   "scene": 2301906,
+   "target": "piloc-e1-target-11",
+   "total_stages": 2,
+   "work_needed": 17.59804882965048,
+   "world": [
+    0.7457627118644068,
+    0.5932203389830508
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.02679896322176589,
+   "B_remaining_time_unclipped": 177.98423052396998,
+   "C_work_over_slack": 0.14243824291951787,
+   "D_reach_plus_work_ratio": 0.14350292873842965,
+   "_min_dist_world": 0.0378994572457591,
+   "_remaining": 177.98423052396998,
+   "_travel_steps": 0.18949728622879547,
+   "_work_needed": 25.351761063216706,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.14243824291951787,
+   "completed": 1,
+   "completed_at": 29.0,
+   "deadline": 178.98423052396998,
+   "deadline_offset": 177.98423052396998,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    36,
+    41
+   ],
+   "on_time": 1,
+   "scene": 2301906,
+   "target": "piloc-e1-target-12",
+   "total_stages": 3,
+   "work_needed": 25.351761063216706,
+   "world": [
+    0.6949152542372882,
+    0.6101694915254238
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.05992430349038544,
+   "B_remaining_time_unclipped": 113.90749502949798,
+   "C_work_over_slack": 0.04848131550535774,
+   "D_reach_plus_work_ratio": 0.05220125345544252,
+   "_min_dist_world": 0.08474576271186449,
+   "_remaining": 113.90749502949798,
+   "_travel_steps": 0.4237288135593224,
+   "_work_needed": 5.52238520495006,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.04848131550535774,
+   "completed": 1,
+   "completed_at": 7.0,
+   "deadline": 114.90749502949798,
+   "deadline_offset": 113.90749502949798,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    39,
+    46
+   ],
+   "on_time": 1,
+   "scene": 2301906,
+   "target": "piloc-e1-target-16",
+   "total_stages": 1,
+   "work_needed": 5.52238520495006,
+   "world": [
+    0.7796610169491526,
+    0.6610169491525424
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07674055201811365,
+   "B_remaining_time_unclipped": 160.58385511622316,
+   "C_work_over_slack": 0.06636692450364323,
+   "D_reach_plus_work_ratio": 0.06974607894508653,
+   "_min_dist_world": 0.10852752944801433,
+   "_remaining": 160.58385511622316,
+   "_travel_steps": 0.5426376472400716,
+   "_work_needed": 10.657456589002365,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.06636692450364323,
+   "completed": 1,
+   "completed_at": 12.0,
+   "deadline": 161.58385511622316,
+   "deadline_offset": 160.58385511622316,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    40,
+    39
+   ],
+   "on_time": 1,
+   "scene": 2301906,
+   "target": "piloc-e1-target-17",
+   "total_stages": 1,
+   "work_needed": 10.657456589002365,
+   "world": [
+    0.6610169491525424,
+    0.6779661016949152
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06454045004969411,
+   "B_remaining_time_unclipped": 154.7772830575209,
+   "C_work_over_slack": 0.13146801103380257,
+   "D_reach_plus_work_ratio": 0.13441656969754456,
+   "_min_dist_world": 0.09127397978194071,
+   "_remaining": 154.7772830575209,
+   "_travel_steps": 0.45636989890970353,
+   "_work_needed": 20.348261556788138,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.13146801103380257,
+   "completed": 1,
+   "completed_at": 22.0,
+   "deadline": 155.7772830575209,
+   "deadline_offset": 154.7772830575209,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    40,
+    41
+   ],
+   "on_time": 1,
+   "scene": 2301906,
+   "target": "piloc-e1-target-18",
+   "total_stages": 2,
+   "work_needed": 20.348261556788138,
+   "world": [
+    0.6949152542372882,
+    0.6779661016949152
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08474576271186442,
+   "B_remaining_time_unclipped": 136.4139346676516,
+   "C_work_over_slack": 0.1719154276502708,
+   "D_reach_plus_work_ratio": 0.17630825625948732,
+   "_min_dist_world": 0.11984860698077078,
+   "_remaining": 136.4139346676516,
+   "_travel_steps": 0.5992430349038539,
+   "_work_needed": 23.451659915845426,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1719154276502708,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 144.4139346676516,
+   "deadline_offset": 136.4139346676516,
+   "detected_at": 8.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    34,
+    50
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-14",
+   "total_stages": 3,
+   "work_needed": 23.451659915845426,
+   "world": [
+    0.847457627118644,
+    0.576271186440678
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.12339169303865287,
+   "B_remaining_time_unclipped": 131.58519600894175,
+   "C_work_over_slack": 0.1728319890386422,
+   "D_reach_plus_work_ratio": 0.17946275796524633,
+   "_min_dist_world": 0.17450220577944073,
+   "_remaining": 131.58519600894175,
+   "_travel_steps": 0.8725110288972036,
+   "_work_needed": 22.742131154265007,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1728319890386422,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 141.58519600894175,
+   "deadline_offset": 131.58519600894175,
+   "detected_at": 10.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    25,
+    47
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-4",
+   "total_stages": 2,
+   "work_needed": 22.742131154265007,
+   "world": [
+    0.7966101694915254,
+    0.423728813559322
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.12222207713437251,
+   "B_remaining_time_unclipped": 79.77688094136448,
+   "C_work_over_slack": 0.055910507966716066,
+   "D_reach_plus_work_ratio": 0.06674372913713777,
+   "_min_dist_world": 0.17284811910484016,
+   "_remaining": 79.77688094136448,
+   "_travel_steps": 0.8642405955242007,
+   "_work_needed": 4.460365937431918,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.055910507966716066,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 91.77688094136448,
+   "deadline_offset": 79.77688094136448,
+   "detected_at": 12.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    24,
+    40
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-1",
+   "total_stages": 1,
+   "work_needed": 4.460365937431918,
+   "world": [
+    0.6779661016949152,
+    0.4067796610169492
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.17284811910484013,
+   "B_remaining_time_unclipped": 110.80600270079596,
+   "C_work_over_slack": 0.15228360237026314,
+   "D_reach_plus_work_ratio": 0.16331387818161994,
+   "_min_dist_world": 0.24444415426874502,
+   "_remaining": 110.80600270079596,
+   "_travel_steps": 1.222220771343725,
+   "_work_needed": 16.873937255526315,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.15228360237026314,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 123.80600270079596,
+   "deadline_offset": 110.80600270079596,
+   "detected_at": 13.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    22,
+    50
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-2",
+   "total_stages": 2,
+   "work_needed": 16.873937255526315,
+   "world": [
+    0.847457627118644,
+    0.3728813559322034
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1534811040362274,
+   "B_remaining_time_unclipped": 109.1010911690214,
+   "C_work_over_slack": 0.09711911538621938,
+   "D_reach_plus_work_ratio": 0.10706654380193355,
+   "_min_dist_world": 0.21705505889602877,
+   "_remaining": 109.1010911690214,
+   "_travel_steps": 1.0852752944801438,
+   "_work_needed": 10.59580146200663,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.09711911538621938,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 127.1010911690214,
+   "deadline_offset": 109.1010911690214,
+   "detected_at": 18.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    26,
+    32
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-3",
+   "total_stages": 1,
+   "work_needed": 10.59580146200663,
+   "world": [
+    0.5423728813559322,
+    0.4406779661016949
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.13664843641183982,
+   "B_remaining_time_unclipped": 125.82847947138589,
+   "C_work_over_slack": 0.07984213710268485,
+   "D_reach_plus_work_ratio": 0.0875212441245037,
+   "_min_dist_world": 0.19325007205070138,
+   "_remaining": 125.82847947138589,
+   "_travel_steps": 0.9662503602535069,
+   "_work_needed": 10.046414709376759,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.07984213710268485,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 146.8284794713859,
+   "deadline_offset": 125.82847947138589,
+   "detected_at": 21.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    25,
+    35
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-0",
+   "total_stages": 1,
+   "work_needed": 10.046414709376759,
+   "world": [
+    0.5932203389830508,
+    0.423728813559322
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.13976629239381896,
+   "B_remaining_time_unclipped": 153.39061914290068,
+   "C_work_over_slack": 0.13527635951121092,
+   "D_reach_plus_work_ratio": 0.14171936715308633,
+   "_min_dist_world": 0.19765938626594234,
+   "_remaining": 153.39061914290068,
+   "_travel_steps": 0.9882969313297116,
+   "_work_needed": 20.750124540822263,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.13527635951121092,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 174.39061914290068,
+   "deadline_offset": 153.39061914290068,
+   "detected_at": 21.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    24,
+    36
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-5",
+   "total_stages": 2,
+   "work_needed": 20.750124540822263,
+   "world": [
+    0.6101694915254238,
+    0.4067796610169492
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.13559322033898305,
+   "B_remaining_time_unclipped": 127.27095673962191,
+   "C_work_over_slack": 0.1222524813483342,
+   "D_reach_plus_work_ratio": 0.1297859271588164,
+   "_min_dist_world": 0.19175777116923323,
+   "_remaining": 127.27095673962191,
+   "_travel_steps": 0.9587888558461661,
+   "_work_needed": 15.559190264995276,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1222524813483342,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 148.2709567396219,
+   "deadline_offset": 127.27095673962192,
+   "detected_at": 21.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    26,
+    34
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-6",
+   "total_stages": 2,
+   "work_needed": 15.559190264995276,
+   "world": [
+    0.576271186440678,
+    0.4406779661016949
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.20409482336936094,
+   "B_remaining_time_unclipped": 177.49689920382525,
+   "C_work_over_slack": 0.12500424801504095,
+   "D_reach_plus_work_ratio": 0.13313491588906518,
+   "_min_dist_world": 0.28863366721909156,
+   "_remaining": 177.49689920382525,
+   "_travel_steps": 1.4431683360954577,
+   "_work_needed": 22.187866409975697,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.12500424801504095,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 352.49689920382525,
+   "deadline_offset": 177.49689920382528,
+   "detected_at": 175.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    52,
+    42
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-20",
+   "total_stages": 2,
+   "work_needed": 22.187866409975697,
+   "world": [
+    0.711864406779661,
+    0.8813559322033898
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.16079377933059558,
+   "B_remaining_time_unclipped": 87.47689630740928,
+   "C_work_over_slack": 0.260799733763971,
+   "D_reach_plus_work_ratio": 0.27379726528792003,
+   "_min_dist_world": 0.22739674347455494,
+   "_remaining": 87.47689630740928,
+   "_travel_steps": 1.1369837173727746,
+   "_work_needed": 22.813951267470834,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.260799733763971,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 267.4768963074093,
+   "deadline_offset": 87.47689630740926,
+   "detected_at": 180.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    47,
+    49
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-15",
+   "total_stages": 3,
+   "work_needed": 22.813951267470834,
+   "world": [
+    0.8305084745762712,
+    0.7966101694915254
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535065,
+   "B_remaining_time_unclipped": 167.39485660418535,
+   "C_work_over_slack": 0.055508657396808804,
+   "D_reach_plus_work_ratio": 0.05959027732181501,
+   "_min_dist_world": 0.1366484364118398,
+   "_remaining": 167.39485660418535,
+   "_travel_steps": 0.683242182059199,
+   "_work_needed": 9.291863745229662,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.055508657396808804,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 371.39485660418535,
+   "deadline_offset": 167.39485660418535,
+   "detected_at": 204.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    38,
+    35
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-21",
+   "total_stages": 1,
+   "work_needed": 9.291863745229662,
+   "world": [
+    0.5932203389830508,
+    0.6440677966101694
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06454045004969414,
+   "B_remaining_time_unclipped": 104.55024894628116,
+   "C_work_over_slack": 0.26793016762766997,
+   "D_reach_plus_work_ratio": 0.2722952447413954,
+   "_min_dist_world": 0.09127397978194075,
+   "_remaining": 104.55024894628116,
+   "_travel_steps": 0.45636989890970375,
+   "_work_needed": 28.012165725691737,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.26793016762766997,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 313.55024894628116,
+   "deadline_offset": 104.55024894628116,
+   "detected_at": 209.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    32,
+    37
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-22",
+   "total_stages": 3,
+   "work_needed": 28.012165725691737,
+   "world": [
+    0.6271186440677966,
+    0.5423728813559322
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.14431683360954578,
+   "B_remaining_time_unclipped": 140.25801481070448,
+   "C_work_over_slack": 0.06875211606345095,
+   "D_reach_plus_work_ratio": 0.07602780806739141,
+   "_min_dist_world": 0.20409482336936097,
+   "_remaining": 140.25801481070448,
+   "_travel_steps": 1.0204741168468048,
+   "_work_needed": 9.643035313094778,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.06875211606345095,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 497.2580148107045,
+   "deadline_offset": 140.25801481070448,
+   "detected_at": 357.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    36,
+    55
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-8",
+   "total_stages": 1,
+   "work_needed": 9.643035313094778,
+   "world": [
+    0.9322033898305084,
+    0.6101694915254238
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1813638521951924,
+   "B_remaining_time_unclipped": 91.6269010026001,
+   "C_work_over_slack": 0.2046589009586788,
+   "D_reach_plus_work_ratio": 0.21865518462058026,
+   "_min_dist_world": 0.25648721949867054,
+   "_remaining": 91.6269010026001,
+   "_travel_steps": 1.2824360974933526,
+   "_work_needed": 18.752260857441804,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.2046589009586788,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 464.6269010026001,
+   "deadline_offset": 91.6269010026001,
+   "detected_at": 373.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    33,
+    58
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-13",
+   "total_stages": 2,
+   "work_needed": 18.752260857441804,
+   "world": [
+    0.9830508474576272,
+    0.559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.22098991204076773,
+   "B_remaining_time_unclipped": 157.565669587284,
+   "C_work_over_slack": 0.028990886652629458,
+   "D_reach_plus_work_ratio": 0.03890824147916944,
+   "_min_dist_world": 0.3125269307556911,
+   "_remaining": 157.565669587284,
+   "_travel_steps": 1.5626346537784555,
+   "_work_needed": 4.567968467350615,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.028990886652629458,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 543.565669587284,
+   "deadline_offset": 157.56566958728394,
+   "detected_at": 386.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    23,
+    57
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-23",
+   "total_stages": 1,
+   "work_needed": 4.567968467350615,
+   "world": [
+    0.9661016949152542,
+    0.3898305084745763
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.31160637815000397,
+   "B_remaining_time_unclipped": 94.18574949787194,
+   "C_work_over_slack": 0.2479606167649223,
+   "D_reach_plus_work_ratio": 0.2713547060221114,
+   "_min_dist_world": 0.4406779661016949,
+   "_remaining": 94.18574949787194,
+   "_travel_steps": 2.2033898305084745,
+   "_work_needed": 23.354356535958797,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.2479606167649223,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 706.1857494978719,
+   "deadline_offset": 94.18574949787198,
+   "detected_at": 612.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    34,
+    16
+   ],
+   "on_time": 0,
+   "scene": 2301906,
+   "target": "piloc-e1-target-19",
+   "total_stages": 3,
+   "work_needed": 23.354356535958797,
+   "world": [
+    0.2711864406779661,
+    0.576271186440678
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.037899457245759126,
+   "B_remaining_time_unclipped": 69.81264882478727,
+   "C_work_over_slack": 0.2578867448318354,
+   "D_reach_plus_work_ratio": 0.26172544221302557,
+   "_min_dist_world": 0.053597926443531826,
+   "_remaining": 69.81264882478727,
+   "_travel_steps": 0.2679896322176591,
+   "_work_needed": 18.003756753512448,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.2578867448318354,
+   "completed": 1,
+   "completed_at": 20.0,
+   "deadline": 70.81264882478727,
+   "deadline_offset": 69.81264882478727,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    24,
+    14
+   ],
+   "on_time": 1,
+   "scene": 2301907,
+   "target": "piloc-e1-target-8",
+   "total_stages": 2,
+   "work_needed": 18.003756753512448,
+   "world": [
+    0.23728813559322035,
+    0.4067796610169492
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.023969721396154147,
+   "B_remaining_time_unclipped": 143.14632330319,
+   "C_work_over_slack": 0.0961499866219034,
+   "D_reach_plus_work_ratio": 0.09733403048354515,
+   "_min_dist_world": 0.033898305084745756,
+   "_remaining": 143.14632330319,
+   "_travel_steps": 0.16949152542372878,
+   "_work_needed": 13.763517070576377,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.0961499866219034,
+   "completed": 1,
+   "completed_at": 28.0,
+   "deadline": 144.14632330319,
+   "deadline_offset": 143.14632330319,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    27,
+    13
+   ],
+   "on_time": 1,
+   "scene": 2301907,
+   "target": "piloc-e1-target-10",
+   "total_stages": 2,
+   "work_needed": 13.763517070576377,
+   "world": [
+    0.22033898305084745,
+    0.4576271186440678
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.047939442792308294,
+   "B_remaining_time_unclipped": 99.38397649647179,
+   "C_work_over_slack": 0.05233235331402632,
+   "D_reach_plus_work_ratio": 0.0557431954114895,
+   "_min_dist_world": 0.06779661016949151,
+   "_remaining": 99.38397649647179,
+   "_travel_steps": 0.33898305084745756,
+   "_work_needed": 5.200997371766249,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.05233235331402632,
+   "completed": 1,
+   "completed_at": 7.0,
+   "deadline": 100.38397649647179,
+   "deadline_offset": 99.38397649647179,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    28,
+    20
+   ],
+   "on_time": 1,
+   "scene": 2301907,
+   "target": "piloc-e1-target-11",
+   "total_stages": 1,
+   "work_needed": 5.200997371766249,
+   "world": [
+    0.3389830508474576,
+    0.4745762711864407
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.043212029776210054,
+   "B_remaining_time_unclipped": 96.99184067220487,
+   "C_work_over_slack": 0.256497793580554,
+   "D_reach_plus_work_ratio": 0.2596481121096001,
+   "_min_dist_world": 0.061111038567186284,
+   "_remaining": 96.99184067220487,
+   "_travel_steps": 0.3055551928359314,
+   "_work_needed": 24.87819312773719,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.256497793580554,
+   "completed": 1,
+   "completed_at": 42.0,
+   "deadline": 97.99184067220487,
+   "deadline_offset": 96.99184067220487,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    31,
+    14
+   ],
+   "on_time": 1,
+   "scene": 2301907,
+   "target": "piloc-e1-target-13",
+   "total_stages": 3,
+   "work_needed": 24.87819312773719,
+   "world": [
+    0.23728813559322035,
+    0.5254237288135594
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06988314619690945,
+   "B_remaining_time_unclipped": 80.05474047711928,
+   "C_work_over_slack": 0.27144058947811933,
+   "D_reach_plus_work_ratio": 0.2776132216385608,
+   "_min_dist_world": 0.09882969313297113,
+   "_remaining": 80.05474047711928,
+   "_travel_steps": 0.49414846566485565,
+   "_work_needed": 21.73010594562712,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.27144058947811933,
+   "completed": 1,
+   "completed_at": 38.0,
+   "deadline": 81.05474047711928,
+   "deadline_offset": 80.05474047711928,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    33,
+    19
+   ],
+   "on_time": 1,
+   "scene": 2301907,
+   "target": "piloc-e1-target-15",
+   "total_stages": 3,
+   "work_needed": 21.73010594562712,
+   "world": [
+    0.3220338983050847,
+    0.559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08389402488653955,
+   "B_remaining_time_unclipped": 114.492818781958,
+   "C_work_over_slack": 0.056201827513055164,
+   "D_reach_plus_work_ratio": 0.06138311613267409,
+   "_min_dist_world": 0.11864406779661019,
+   "_remaining": 114.492818781958,
+   "_travel_steps": 0.5932203389830509,
+   "_work_needed": 6.434705652667086,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.056201827513055164,
+   "completed": 1,
+   "completed_at": 14.0,
+   "deadline": 116.492818781958,
+   "deadline_offset": 114.492818781958,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    28,
+    23
+   ],
+   "on_time": 1,
+   "scene": 2301907,
+   "target": "piloc-e1-target-12",
+   "total_stages": 1,
+   "work_needed": 6.434705652667086,
+   "world": [
+    0.3898305084745763,
+    0.4745762711864407
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535065,
+   "B_remaining_time_unclipped": 111.71871901927936,
+   "C_work_over_slack": 0.131911236297107,
+   "D_reach_plus_work_ratio": 0.13802697221009477,
+   "_min_dist_world": 0.1366484364118398,
+   "_remaining": 111.71871901927936,
+   "_travel_steps": 0.683242182059199,
+   "_work_needed": 14.73695434336226,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.131911236297107,
+   "completed": 1,
+   "completed_at": 28.0,
+   "deadline": 114.71871901927936,
+   "deadline_offset": 111.71871901927936,
+   "detected_at": 3.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    28,
+    7
+   ],
+   "on_time": 1,
+   "scene": 2301907,
+   "target": "piloc-e1-target-9",
+   "total_stages": 3,
+   "work_needed": 14.73695434336226,
+   "world": [
+    0.11864406779661017,
+    0.4745762711864407
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11306494969598586,
+   "B_remaining_time_unclipped": 127.00795280341447,
+   "C_work_over_slack": 0.15439696212151102,
+   "D_reach_plus_work_ratio": 0.16069176420908535,
+   "_min_dist_world": 0.15989798528909496,
+   "_remaining": 127.00795280341447,
+   "_travel_steps": 0.7994899264454748,
+   "_work_needed": 19.609642078119442,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.15439696212151102,
+   "completed": 1,
+   "completed_at": 51.0,
+   "deadline": 131.00795280341447,
+   "deadline_offset": 127.00795280341447,
+   "detected_at": 4.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    33,
+    24
+   ],
+   "on_time": 1,
+   "scene": 2301907,
+   "target": "piloc-e1-target-16",
+   "total_stages": 3,
+   "work_needed": 19.609642078119442,
+   "world": [
+    0.4067796610169492,
+    0.559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08039688966529779,
+   "B_remaining_time_unclipped": 97.63562002058075,
+   "C_work_over_slack": 0.23624820827082674,
+   "D_reach_plus_work_ratio": 0.24207079493096728,
+   "_min_dist_world": 0.11369837173727747,
+   "_remaining": 97.63562002058075,
+   "_travel_steps": 0.5684918586863873,
+   "_work_needed": 23.06624029327346,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.23624820827082674,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 102.63562002058075,
+   "deadline_offset": 97.63562002058075,
+   "detected_at": 5.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    31,
+    22
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-14",
+   "total_stages": 3,
+   "work_needed": 23.06624029327346,
+   "world": [
+    0.3728813559322034,
+    0.5254237288135594
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1339948161088296,
+   "B_remaining_time_unclipped": 62.44893457103264,
+   "C_work_over_slack": 0.1671394683103697,
+   "D_reach_plus_work_ratio": 0.18231164759016602,
+   "_min_dist_world": 0.1894972862287957,
+   "_remaining": 62.44893457103264,
+   "_travel_steps": 0.9474864311439785,
+   "_work_needed": 10.43768172075146,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1671394683103697,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 68.44893457103264,
+   "deadline_offset": 62.44893457103264,
+   "detected_at": 6.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    33,
+    26
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-17",
+   "total_stages": 2,
+   "work_needed": 10.43768172075146,
+   "world": [
+    0.4406779661016949,
+    0.559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11984860698077071,
+   "B_remaining_time_unclipped": 93.83019560051281,
+   "C_work_over_slack": 0.07628468458024411,
+   "D_reach_plus_work_ratio": 0.0853165066040065,
+   "_min_dist_world": 0.16949152542372875,
+   "_remaining": 93.83019560051281,
+   "_travel_steps": 0.8474576271186437,
+   "_work_needed": 7.157806875487728,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.07628468458024411,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 99.83019560051281,
+   "deadline_offset": 93.83019560051281,
+   "detected_at": 6.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    33,
+    7
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-18",
+   "total_stages": 1,
+   "work_needed": 7.157806875487728,
+   "world": [
+    0.11864406779661017,
+    0.559322033898305
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08642405955242007,
+   "B_remaining_time_unclipped": 96.89194254122421,
+   "C_work_over_slack": 0.24995368531462142,
+   "D_reach_plus_work_ratio": 0.2562608184945745,
+   "_min_dist_world": 0.12222207713437251,
+   "_remaining": 96.89194254122421,
+   "_travel_steps": 0.6111103856718625,
+   "_work_needed": 24.218498115471537,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.24995368531462142,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 105.89194254122421,
+   "deadline_offset": 96.89194254122421,
+   "detected_at": 9.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    34,
+    12
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-19",
+   "total_stages": 3,
+   "work_needed": 24.218498115471537,
+   "world": [
+    0.2033898305084746,
+    0.576271186440678
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.13237711315096024,
+   "B_remaining_time_unclipped": 70.33545433410455,
+   "C_work_over_slack": 0.11006228379594785,
+   "D_reach_plus_work_ratio": 0.1233706153151139,
+   "_min_dist_world": 0.18720950876588577,
+   "_remaining": 70.33545433410455,
+   "_travel_steps": 0.9360475438294288,
+   "_work_needed": 7.741280735837146,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.11006228379594785,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 91.33545433410455,
+   "deadline_offset": 70.33545433410455,
+   "detected_at": 21.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    39,
+    17
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-20",
+   "total_stages": 1,
+   "work_needed": 7.741280735837146,
+   "world": [
+    0.288135593220339,
+    0.6610169491525424
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.2302216560543411,
+   "B_remaining_time_unclipped": 81.41287263641088,
+   "C_work_over_slack": 0.30635122338304566,
+   "D_reach_plus_work_ratio": 0.3263469917302757,
+   "_min_dist_world": 0.3255825883440432,
+   "_remaining": 81.41287263641088,
+   "_travel_steps": 1.6279129417202158,
+   "_work_needed": 24.940933131292557,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.30635122338304566,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 107.41287263641088,
+   "deadline_offset": 81.41287263641088,
+   "detected_at": 26.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    16,
+    31
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-4",
+   "total_stages": 3,
+   "work_needed": 24.940933131292557,
+   "world": [
+    0.5254237288135594,
+    0.2711864406779661
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.16123981008847832,
+   "B_remaining_time_unclipped": 96.06312420131536,
+   "C_work_over_slack": 0.13114470534002676,
+   "D_reach_plus_work_ratio": 0.1430133348540805,
+   "_min_dist_world": 0.22802752622158826,
+   "_remaining": 96.06312420131536,
+   "_travel_steps": 1.1401376311079412,
+   "_work_needed": 12.598170117423896,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.13114470534002676,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 125.06312420131536,
+   "deadline_offset": 96.06312420131536,
+   "detected_at": 29.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    38,
+    25
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-22",
+   "total_stages": 2,
+   "work_needed": 12.598170117423896,
+   "world": [
+    0.423728813559322,
+    0.6440677966101694
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.16301172933619784,
+   "B_remaining_time_unclipped": 99.18091971361176,
+   "C_work_over_slack": 0.1477677116068946,
+   "D_reach_plus_work_ratio": 0.15938957391260902,
+   "_min_dist_world": 0.23053339845314313,
+   "_remaining": 99.18091971361176,
+   "_travel_steps": 1.1526669922657156,
+   "_work_needed": 14.655737541147548,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1477677116068946,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 129.18091971361176,
+   "deadline_offset": 99.18091971361176,
+   "detected_at": 30.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    39,
+    24
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-23",
+   "total_stages": 2,
+   "work_needed": 14.655737541147548,
+   "world": [
+    0.4067796610169492,
+    0.6610169491525424
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1864406779661017,
+   "B_remaining_time_unclipped": 122.75399039987542,
+   "C_work_over_slack": 0.14930324133627074,
+   "D_reach_plus_work_ratio": 0.16004288957494678,
+   "_min_dist_world": 0.2636669353576957,
+   "_remaining": 122.75399039987542,
+   "_travel_steps": 1.3183346767884785,
+   "_work_needed": 18.327568653662862,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.14930324133627074,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 160.75399039987542,
+   "deadline_offset": 122.75399039987542,
+   "detected_at": 38.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    17,
+    27
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-3",
+   "total_stages": 3,
+   "work_needed": 18.327568653662862,
+   "world": [
+    0.4576271186440678,
+    0.288135593220339
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.15254237288135594,
+   "B_remaining_time_unclipped": 115.87211163580332,
+   "C_work_over_slack": 0.029579534237589925,
+   "D_reach_plus_work_ratio": 0.03888839594382338,
+   "_min_dist_world": 0.2157274925653874,
+   "_remaining": 115.87211163580332,
+   "_travel_steps": 1.0786374628269368,
+   "_work_needed": 3.4274430933130864,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.029579534237589925,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 202.87211163580332,
+   "deadline_offset": 115.87211163580331,
+   "detected_at": 87.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    18,
+    24
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-1",
+   "total_stages": 1,
+   "work_needed": 3.4274430933130864,
+   "world": [
+    0.4067796610169492,
+    0.3050847457627119
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11306494969598588,
+   "B_remaining_time_unclipped": 94.85121315312153,
+   "C_work_over_slack": 0.12249810035899678,
+   "D_reach_plus_work_ratio": 0.1309269849232335,
+   "_min_dist_world": 0.159897985289095,
+   "_remaining": 94.85121315312153,
+   "_travel_steps": 0.7994899264454749,
+   "_work_needed": 11.619093428003676,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.12249810035899678,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 190.85121315312153,
+   "deadline_offset": 94.85121315312152,
+   "detected_at": 96.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    19,
+    20
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-7",
+   "total_stages": 1,
+   "work_needed": 11.619093428003676,
+   "world": [
+    0.3389830508474576,
+    0.3220338983050847
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.023969721396154147,
+   "B_remaining_time_unclipped": 143.14632330319,
+   "C_work_over_slack": 0.0961499866219034,
+   "D_reach_plus_work_ratio": 0.09733403048354515,
+   "_min_dist_world": 0.033898305084745756,
+   "_remaining": 143.14632330319,
+   "_travel_steps": 0.16949152542372878,
+   "_work_needed": 13.763517070576377,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.0961499866219034,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 251.14632330319,
+   "deadline_offset": 143.14632330319,
+   "detected_at": 108.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    27,
+    13
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-5",
+   "total_stages": 2,
+   "work_needed": 13.763517070576377,
+   "world": [
+    0.22033898305084745,
+    0.4576271186440678
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.20619534001010914,
+   "B_remaining_time_unclipped": 85.08548665180462,
+   "C_work_over_slack": 0.13385801762355282,
+   "D_reach_plus_work_ratio": 0.1509939745191019,
+   "_min_dist_world": 0.29160424634042803,
+   "_remaining": 85.08548665180462,
+   "_travel_steps": 1.4580212317021402,
+   "_work_needed": 11.38937457174583,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.13385801762355282,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 216.08548665180462,
+   "deadline_offset": 85.08548665180463,
+   "detected_at": 131.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    13,
+    5
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-0",
+   "total_stages": 2,
+   "work_needed": 11.38937457174583,
+   "world": [
+    0.0847457627118644,
+    0.22033898305084745
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.11803718878969591,
+   "B_remaining_time_unclipped": 76.8642590861341,
+   "C_work_over_slack": 0.2276970405192844,
+   "D_reach_plus_work_ratio": 0.23855578001898609,
+   "_min_dist_world": 0.16692979325078142,
+   "_remaining": 76.8642590861341,
+   "_travel_steps": 0.834648966253907,
+   "_work_needed": 17.50176431562025,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.2276970405192844,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 219.8642590861341,
+   "deadline_offset": 76.86425908613408,
+   "detected_at": 143.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    18,
+    11
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-2",
+   "total_stages": 2,
+   "work_needed": 17.50176431562025,
+   "world": [
+    0.1864406779661017,
+    0.3050847457627119
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.026798963221765924,
+   "B_remaining_time_unclipped": 121.43348292320377,
+   "C_work_over_slack": 0.1917293069366117,
+   "D_reach_plus_work_ratio": 0.19328980970460558,
+   "_min_dist_world": 0.03789945724575915,
+   "_remaining": 121.43348292320377,
+   "_travel_steps": 0.18949728622879572,
+   "_work_needed": 23.28235751976473,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1917293069366117,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 273.43348292320377,
+   "deadline_offset": 121.43348292320377,
+   "detected_at": 152.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    26,
+    13
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-6",
+   "total_stages": 3,
+   "work_needed": 23.28235751976473,
+   "world": [
+    0.22033898305084745,
+    0.4406779661016949
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.04941484656648559,
+   "B_remaining_time_unclipped": 104.93503541601126,
+   "C_work_over_slack": 0.1864216009912351,
+   "D_reach_plus_work_ratio": 0.18975143005737397,
+   "_min_dist_world": 0.0698831461969095,
+   "_remaining": 104.93503541601126,
+   "_travel_steps": 0.3494157309845475,
+   "_work_needed": 19.562157302324774,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.1864216009912351,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 257.93503541601126,
+   "deadline_offset": 104.93503541601126,
+   "detected_at": 153.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    28,
+    11
+   ],
+   "on_time": 0,
+   "scene": 2301907,
+   "target": "piloc-e1-target-21",
+   "total_stages": 2,
+   "work_needed": 19.562157302324774,
+   "world": [
+    0.1864406779661017,
+    0.4745762711864407
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06454045004969414,
+   "B_remaining_time_unclipped": 166.99531098149606,
+   "C_work_over_slack": 0.09716160686652436,
+   "D_reach_plus_work_ratio": 0.09989443748450663,
+   "_min_dist_world": 0.09127397978194075,
+   "_remaining": 166.99531098149606,
+   "_travel_steps": 0.45636989890970375,
+   "_work_needed": 16.2255327541371,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.09716160686652436,
+   "completed": 1,
+   "completed_at": 36.0,
+   "deadline": 167.99531098149606,
+   "deadline_offset": 166.99531098149606,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    53,
+    49
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-4",
+   "total_stages": 2,
+   "work_needed": 16.2255327541371,
+   "world": [
+    0.8305084745762712,
+    0.8983050847457628
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07674055201811365,
+   "B_remaining_time_unclipped": 85.80986376041653,
+   "C_work_over_slack": 0.3157276866539182,
+   "D_reach_plus_work_ratio": 0.3220514077677884,
+   "_min_dist_world": 0.10852752944801433,
+   "_remaining": 85.80986376041653,
+   "_travel_steps": 0.5426376472400716,
+   "_work_needed": 27.0925497771642,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.3157276866539182,
+   "completed": 1,
+   "completed_at": 30.0,
+   "deadline": 86.80986376041653,
+   "deadline_offset": 85.80986376041653,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    53,
+    55
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-5",
+   "total_stages": 3,
+   "work_needed": 27.0925497771642,
+   "world": [
+    0.9322033898305084,
+    0.8983050847457628
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.0599243034903854,
+   "B_remaining_time_unclipped": 102.11594134047492,
+   "C_work_over_slack": 0.22615501305817132,
+   "D_reach_plus_work_ratio": 0.23030450047411283,
+   "_min_dist_world": 0.08474576271186443,
+   "_remaining": 102.11594134047492,
+   "_travel_steps": 0.4237288135593221,
+   "_work_needed": 23.094032047302562,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.22615501305817132,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 103.11594134047492,
+   "deadline_offset": 102.11594134047492,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    54,
+    48
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-9",
+   "total_stages": 3,
+   "work_needed": 23.094032047302562,
+   "world": [
+    0.8135593220338984,
+    0.9152542372881356
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07674055201811371,
+   "B_remaining_time_unclipped": 60.609732028842906,
+   "C_work_over_slack": 0.09822951369721226,
+   "D_reach_plus_work_ratio": 0.10718249251886161,
+   "_min_dist_world": 0.1085275294480144,
+   "_remaining": 60.609732028842906,
+   "_travel_steps": 0.542637647240072,
+   "_work_needed": 5.9536645025115895,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.09822951369721226,
+   "completed": 1,
+   "completed_at": 7.0,
+   "deadline": 61.609732028842906,
+   "deadline_offset": 60.609732028842906,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    54,
+    56
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-10",
+   "total_stages": 1,
+   "work_needed": 5.9536645025115895,
+   "world": [
+    0.9491525423728814,
+    0.9152542372881356
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.05992430349038544,
+   "B_remaining_time_unclipped": 142.04982659340155,
+   "C_work_over_slack": 0.07802295426234025,
+   "D_reach_plus_work_ratio": 0.08100591329665283,
+   "_min_dist_world": 0.08474576271186449,
+   "_remaining": 142.04982659340155,
+   "_travel_steps": 0.4237288135593224,
+   "_work_needed": 11.083147123270333,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.07802295426234025,
+   "completed": 1,
+   "completed_at": 13.0,
+   "deadline": 143.04982659340155,
+   "deadline_offset": 142.04982659340155,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    55,
+    47
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-12",
+   "total_stages": 1,
+   "work_needed": 11.083147123270333,
+   "world": [
+    0.7966101694915254,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06454045004969414,
+   "B_remaining_time_unclipped": 96.90141848953634,
+   "C_work_over_slack": 0.10437253544623941,
+   "D_reach_plus_work_ratio": 0.10908216618254267,
+   "_min_dist_world": 0.09127397978194075,
+   "_remaining": 96.90141848953634,
+   "_travel_steps": 0.45636989890970375,
+   "_work_needed": 10.11384673609001,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.10437253544623941,
+   "completed": 1,
+   "completed_at": 20.0,
+   "deadline": 97.90141848953634,
+   "deadline_offset": 96.90141848953634,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    56,
+    56
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-14",
+   "total_stages": 1,
+   "work_needed": 10.11384673609001,
+   "world": [
+    0.9491525423728814,
+    0.9491525423728814
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07290106158510705,
+   "B_remaining_time_unclipped": 150.86635453563687,
+   "C_work_over_slack": 0.11905382979080177,
+   "D_reach_plus_work_ratio": 0.12247068407625152,
+   "_min_dist_world": 0.10309767000505464,
+   "_remaining": 150.86635453563687,
+   "_travel_steps": 0.5154883500252732,
+   "_work_needed": 17.961217294044467,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.11905382979080177,
+   "completed": 1,
+   "completed_at": 46.0,
+   "deadline": 151.86635453563687,
+   "deadline_offset": 150.86635453563687,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    57,
+    45
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-15",
+   "total_stages": 2,
+   "work_needed": 17.961217294044467,
+   "world": [
+    0.7627118644067796,
+    0.9661016949152542
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.011984860698077122,
+   "B_remaining_time_unclipped": 66.85845381852707,
+   "C_work_over_slack": 0.2819879965757024,
+   "D_reach_plus_work_ratio": 0.28325553654816255,
+   "_min_dist_world": 0.016949152542372947,
+   "_remaining": 66.85845381852707,
+   "_travel_steps": 0.08474576271186474,
+   "_work_needed": 18.853281446435567,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.2819879965757024,
+   "completed": 1,
+   "completed_at": 31.0,
+   "deadline": 67.85845381852707,
+   "deadline_offset": 66.85845381852707,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    57,
+    51
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-16",
+   "total_stages": 2,
+   "work_needed": 18.853281446435567,
+   "world": [
+    0.864406779661017,
+    0.9661016949152542
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.02679896322176596,
+   "B_remaining_time_unclipped": 99.84170193631716,
+   "C_work_over_slack": 0.17913465561283984,
+   "D_reach_plus_work_ratio": 0.18103263293648028,
+   "_min_dist_world": 0.037899457245759195,
+   "_remaining": 99.84170193631716,
+   "_travel_steps": 0.18949728622879597,
+   "_work_needed": 17.88510889216198,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.17913465561283984,
+   "completed": 1,
+   "completed_at": 43.0,
+   "deadline": 100.84170193631716,
+   "deadline_offset": 99.84170193631716,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    57,
+    53
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-17",
+   "total_stages": 3,
+   "work_needed": 17.88510889216198,
+   "world": [
+    0.8983050847457628,
+    0.9661016949152542
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06111103856718626,
+   "B_remaining_time_unclipped": 159.14403612031236,
+   "C_work_over_slack": 0.04081670016246205,
+   "D_reach_plus_work_ratio": 0.04353197814771698,
+   "_min_dist_world": 0.0864240595524201,
+   "_remaining": 159.14403612031236,
+   "_travel_steps": 0.4321202977621004,
+   "_work_needed": 6.49573440496682,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.04081670016246205,
+   "completed": 1,
+   "completed_at": 30.0,
+   "deadline": 160.14403612031236,
+   "deadline_offset": 159.14403612031236,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    57,
+    56
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-18",
+   "total_stages": 1,
+   "work_needed": 6.49573440496682,
+   "world": [
+    0.9491525423728814,
+    0.9661016949152542
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.023969721396154168,
+   "B_remaining_time_unclipped": 149.28378563126324,
+   "C_work_over_slack": 0.12000006139751432,
+   "D_reach_plus_work_ratio": 0.12113542599660335,
+   "_min_dist_world": 0.03389830508474578,
+   "_remaining": 149.28378563126324,
+   "_travel_steps": 0.16949152542372892,
+   "_work_needed": 17.914063441404956,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.12000006139751432,
+   "completed": 1,
+   "completed_at": 30.0,
+   "deadline": 150.28378563126324,
+   "deadline_offset": 149.28378563126324,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "Cannot contribute",
+   "grid": [
+    58,
+    49
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-20",
+   "total_stages": 2,
+   "work_needed": 17.914063441404956,
+   "world": [
+    0.8305084745762712,
+    0.9830508474576272
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.059924303490385376,
+   "B_remaining_time_unclipped": 178.90452252158516,
+   "C_work_over_slack": 0.02071192856058251,
+   "D_reach_plus_work_ratio": 0.023080391959869682,
+   "_min_dist_world": 0.0847457627118644,
+   "_remaining": 178.90452252158516,
+   "_travel_steps": 0.423728813559322,
+   "_work_needed": 3.7054576896321962,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.02071192856058251,
+   "completed": 1,
+   "completed_at": 17.0,
+   "deadline": 179.90452252158516,
+   "deadline_offset": 178.90452252158516,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    58,
+    56
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-21",
+   "total_stages": 1,
+   "work_needed": 3.7054576896321962,
+   "world": [
+    0.9491525423728814,
+    0.9830508474576272
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.059924303490385376,
+   "B_remaining_time_unclipped": 124.9886662716017,
+   "C_work_over_slack": 0.18507640633837194,
+   "D_reach_plus_work_ratio": 0.1884665442300633,
+   "_min_dist_world": 0.0847457627118644,
+   "_remaining": 124.9886662716017,
+   "_travel_steps": 0.423728813559322,
+   "_work_needed": 23.13245318657412,
+   "billed_first_step": 1,
+   "combo_min_CD": 0.18507640633837194,
+   "completed": 1,
+   "completed_at": 42.0,
+   "deadline": 125.9886662716017,
+   "deadline_offset": 124.9886662716017,
+   "detected_at": 1.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": null,
+   "grid": [
+    59,
+    56
+   ],
+   "on_time": 1,
+   "scene": 2301908,
+   "target": "piloc-e1-target-23",
+   "total_stages": 2,
+   "work_needed": 23.13245318657412,
+   "world": [
+    0.9491525423728814,
+    1.0
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06988314619690952,
+   "B_remaining_time_unclipped": 174.49542223660148,
+   "C_work_over_slack": 0.10904774719735823,
+   "D_reach_plus_work_ratio": 0.11187961785236504,
+   "_min_dist_world": 0.09882969313297124,
+   "_remaining": 174.49542223660148,
+   "_travel_steps": 0.4941484656648562,
+   "_work_needed": 19.0283326911532,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.10904774719735823,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 176.49542223660148,
+   "deadline_offset": 174.49542223660148,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    55,
+    46
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-11",
+   "total_stages": 3,
+   "work_needed": 19.0283326911532,
+   "world": [
+    0.7796610169491526,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.08389402488653955,
+   "B_remaining_time_unclipped": 146.84120691064663,
+   "C_work_over_slack": 0.10364712015915556,
+   "D_reach_plus_work_ratio": 0.10768699664521596,
+   "_min_dist_world": 0.11864406779661019,
+   "_remaining": 146.84120691064663,
+   "_travel_steps": 0.5932203389830509,
+   "_work_needed": 15.219668216983216,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.10364712015915556,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 148.84120691064663,
+   "deadline_offset": 146.84120691064663,
+   "detected_at": 2.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    58,
+    44
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-19",
+   "total_stages": 2,
+   "work_needed": 15.219668216983216,
+   "world": [
+    0.7457627118644068,
+    0.9830508474576272
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535073,
+   "B_remaining_time_unclipped": 142.12959507113163,
+   "C_work_over_slack": 0.06038809722248868,
+   "D_reach_plus_work_ratio": 0.06519527465599405,
+   "_min_dist_world": 0.1366484364118399,
+   "_remaining": 142.12959507113163,
+   "_travel_steps": 0.6832421820591995,
+   "_work_needed": 8.582935805348445,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.06038809722248868,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 145.12959507113163,
+   "deadline_offset": 142.12959507113163,
+   "detected_at": 3.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    50,
+    52
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-1",
+   "total_stages": 1,
+   "work_needed": 8.582935805348445,
+   "world": [
+    0.8813559322033898,
+    0.847457627118644
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09127397978194078,
+   "B_remaining_time_unclipped": 140.86799331200092,
+   "C_work_over_slack": 0.13243645148241712,
+   "D_reach_plus_work_ratio": 0.1370180777647442,
+   "_min_dist_world": 0.12908090009938833,
+   "_remaining": 140.86799331200092,
+   "_travel_steps": 0.6454045004969416,
+   "_work_needed": 18.656057161690267,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.13243645148241712,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 143.86799331200092,
+   "deadline_offset": 140.86799331200092,
+   "detected_at": 3.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    55,
+    44
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-8",
+   "total_stages": 3,
+   "work_needed": 18.656057161690267,
+   "world": [
+    0.7457627118644068,
+    0.9322033898305084
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.10719585288706374,
+   "B_remaining_time_unclipped": 83.80449155580277,
+   "C_work_over_slack": 0.12095186435241974,
+   "D_reach_plus_work_ratio": 0.12999659609463743,
+   "_min_dist_world": 0.15159782898303664,
+   "_remaining": 83.80449155580277,
+   "_travel_steps": 0.7579891449151832,
+   "_work_needed": 10.136309494780962,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.12095186435241974,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 92.80449155580277,
+   "deadline_offset": 83.80449155580277,
+   "detected_at": 9.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    50,
+    55
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-0",
+   "total_stages": 2,
+   "work_needed": 10.136309494780962,
+   "world": [
+    0.9322033898305084,
+    0.847457627118644
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1781677630646495,
+   "B_remaining_time_unclipped": 159.49670203034276,
+   "C_work_over_slack": 0.11450867291162843,
+   "D_reach_plus_work_ratio": 0.12240749663952498,
+   "_min_dist_world": 0.2519672669037035,
+   "_remaining": 159.49670203034276,
+   "_travel_steps": 1.2598363345185175,
+   "_work_needed": 18.26375568327598,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.11450867291162843,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 176.49670203034276,
+   "deadline_offset": 159.49670203034276,
+   "detected_at": 17.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    53,
+    37
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-7",
+   "total_stages": 2,
+   "work_needed": 18.26375568327598,
+   "world": [
+    0.6271186440677966,
+    0.8983050847457628
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535073,
+   "B_remaining_time_unclipped": 64.11652414198562,
+   "C_work_over_slack": 0.17551081684024228,
+   "D_reach_plus_work_ratio": 0.18616707419671039,
+   "_min_dist_world": 0.1366484364118399,
+   "_remaining": 64.11652414198562,
+   "_travel_steps": 0.6832421820591995,
+   "_work_needed": 11.25314352511701,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.17551081684024228,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 276.1165241419856,
+   "deadline_offset": 64.11652414198562,
+   "detected_at": 212.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    50,
+    50
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-13",
+   "total_stages": 1,
+   "work_needed": 11.25314352511701,
+   "world": [
+    0.847457627118644,
+    0.847457627118644
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.07579891449151833,
+   "B_remaining_time_unclipped": 126.03685036836134,
+   "C_work_over_slack": 0.16927603501063576,
+   "D_reach_plus_work_ratio": 0.17352859497915957,
+   "_min_dist_world": 0.10719585288706378,
+   "_remaining": 126.03685036836134,
+   "_travel_steps": 0.5359792644353188,
+   "_work_needed": 21.335018295584995,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.16927603501063576,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 341.03685036836134,
+   "deadline_offset": 126.03685036836131,
+   "detected_at": 215.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    52,
+    53
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-22",
+   "total_stages": 3,
+   "work_needed": 21.335018295584995,
+   "world": [
+    0.8983050847457628,
+    0.8813559322033898
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.09662503602535065,
+   "B_remaining_time_unclipped": 60.62755210207462,
+   "C_work_over_slack": 0.17370777064796078,
+   "D_reach_plus_work_ratio": 0.18497727037819678,
+   "_min_dist_world": 0.1366484364118398,
+   "_remaining": 60.62755210207462,
+   "_travel_steps": 0.683242182059199,
+   "_work_needed": 10.53147691549447,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.17370777064796078,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 282.6275521020746,
+   "deadline_offset": 60.62755210207464,
+   "detected_at": 222.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    51,
+    55
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-3",
+   "total_stages": 1,
+   "work_needed": 10.53147691549447,
+   "world": [
+    0.9322033898305084,
+    0.864406779661017
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.1875927425523615,
+   "B_remaining_time_unclipped": 81.924993775095,
+   "C_work_over_slack": 0.18233952091911462,
+   "D_reach_plus_work_ratio": 0.1985309289678366,
+   "_min_dist_world": 0.26529620072031407,
+   "_remaining": 81.924993775095,
+   "_travel_steps": 1.3264810036015702,
+   "_work_needed": 14.93816411625227,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.18233952091911462,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 308.924993775095,
+   "deadline_offset": 81.92499377509499,
+   "detected_at": 227.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    44,
+    58
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-2",
+   "total_stages": 2,
+   "work_needed": 14.93816411625227,
+   "world": [
+    0.9830508474576272,
+    0.7457627118644068
+   ]
+  },
+  {
+   "A_min_idle_distance": 0.06779661016949157,
+   "B_remaining_time_unclipped": 92.36988502543,
+   "C_work_over_slack": 0.045107467478325246,
+   "D_reach_plus_work_ratio": 0.0502974103670828,
+   "_min_dist_world": 0.09587888558461667,
+   "_remaining": 92.36988502543,
+   "_travel_steps": 0.47939442792308334,
+   "_work_needed": 4.1665715847612255,
+   "billed_first_step": 0,
+   "combo_min_CD": 0.045107467478325246,
+   "completed": 0,
+   "completed_at": null,
+   "deadline": 499.36988502543,
+   "deadline_offset": 92.36988502543,
+   "detected_at": 407.0,
+   "existing_11_remaining_over_horizon": 1.0,
+   "failure_reason": "deadline_expired",
+   "grid": [
+    54,
+    47
+   ],
+   "on_time": 0,
+   "scene": 2301908,
+   "target": "piloc-e1-target-6",
+   "total_stages": 1,
+   "work_needed": 4.1665715847612255,
+   "world": [
+    0.7966101694915254,
+    0.9152542372881356
+   ]
+  }
+ ],
+ "schema": "stage5b-p5-separability/1",
+ "source": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\p4_tight_n12\\eval_5300\\world_logs",
+ "source_files": {
+  "s2301901": "47703ea43a6541948c5997af61305c86448c84a4b6781826ba0d1303e1ad1212",
+  "s2301902": "3bcacec1bd2933e5bd848f1a76f95ee609fd14d212159ec10f6f9d4e4ea951f2",
+  "s2301903": "7effe474a4510b0db48ad3410147dcc20e681febace1edbbf6edeaf0297e73a8",
+  "s2301904": "73df7a6741d973041fa26f0fcb689a2cd1dd719f8cd53229f953a2624b90142a",
+  "s2301905": "65e3f702756451441f4ed774651bbd56fdd4da4adafed065ee395fe166d9981d",
+  "s2301906": "8cd5db83589f08d097b20d64d06f3ffd35f2abef4714caf596a652e8d03bd3f3",
+  "s2301907": "46b5dcd401e1d01832f4925e76f074abf82592b8a48c3c6c8c08abb3570cd82d",
+  "s2301908": "8c0656d5c104c62cc9a069063040f9d03b4605354c696c12fda5b51cc86e29e9"
+ },
+ "tick1_cohort": 71,
+ "tick1_negatives": 2,
+ "tick1_on_time": 69
+}

@@ -1,0 +1,302 @@
+================================================================================================
+P5 separability probe -- zero worlds, zero training, archive only
+================================================================================================
+source: D:\code\整合\zhenghe-round42\runs\stage5b_pure_comm_convergence_20261027\recovery_12\revision_01\execution\p4_tight_n12\eval_5300\world_logs
+
+------------------------------------------------------------------------------------------------
+A  data availability
+------------------------------------------------------------------------------------------------
+  scenes 8   targets 192   (denominator 192 = 8 x 24)
+  exactness of the profile reconstruction: 0 mismatches over 192 targets
+  targets with a rebuilt work total: 192/192
+  rescue staging cells per scene (world coords, from archived scenario):
+    2301901  [(0.78, 0.695), (0.763, 0.678), (0.78, 0.695)]
+    2301902  [(0.508, 0.983), (0.508, 0.966), (0.508, 0.983)]
+    2301903  [(0.627, 0.271), (0.61, 0.254), (0.627, 0.271)]
+    2301904  [(0.424, 1.0), (0.424, 0.983), (0.424, 1.0)]
+    2301905  [(0.119, 0.356), (0.102, 0.339), (0.119, 0.356)]
+    2301906  [(0.729, 0.593), (0.712, 0.576), (0.729, 0.593)]
+    2301907  [(0.271, 0.475), (0.254, 0.458), (0.271, 0.475)]
+    2301908  [(0.864, 1.0), (0.864, 0.983), (0.864, 1.0)]
+
+  on-time label over all 192: 80/192 = 0.4167
+
+------------------------------------------------------------------------------------------------
+1  degeneracy of the existing 19-dim row at the tick-1 cohort
+------------------------------------------------------------------------------------------------
+  tick-1 cohort: 71 targets (detected_at <= 1)
+  labels in cohort: 69 on-time / 69 completed / 71
+
+  dimension                            sd   unique        rho        AUC AUC(best dir)
+  pending_event                    0.0000        1  undefined     0.5000     0.5000
+  changed_view                     0.0000        1  undefined     0.5000     0.5000
+  first_emission                   0.0000        1  undefined     0.5000     0.5000
+  stage_changed                    0.0000        1  undefined     0.5000     0.5000
+  requirements_changed             0.0000        1  undefined     0.5000     0.5000
+  members_changed                  0.0000        1  undefined     0.5000     0.5000
+  progress_delta_abs               0.0000        1  undefined     0.5000     0.5000
+  revision_delta                   0.0000        1  undefined     0.5000     0.5000
+  remaining_time_over_horizon      0.0000        1  undefined     0.5000     0.5000
+  urgency_now                      0.0000        1  undefined     0.5000     0.5000
+  has_future_requirements          0.9360        2    -0.1179     0.6667     0.6667
+  queue_backlog_targets            0.0000        1  undefined     0.5000     0.5000
+  budget_remaining_fraction        0.0000        1  undefined     0.5000     0.5000
+  capacity_remaining_fraction      0.0000        1  undefined     0.5000     0.5000
+  subscribers                      0.0000        1  undefined     0.5000     0.5000
+  age_steps                        0.0000        1  undefined     0.5000     0.5000
+  sent_count                       0.0000        1  undefined     0.5000     0.5000
+
+  non-constant dimensions in the cohort: 1 of 17
+  their best-direction AUC: [0.6667]
+
+------------------------------------------------------------------------------------------------
+2  candidate physics features at the tick-1 cohort
+------------------------------------------------------------------------------------------------
+  feature                                        sd   unique        rho        AUC
+  A_min_idle_distance                        0.0211       22    -0.0873     0.3478
+  B_remaining_time_unclipped                34.4128       71    -0.1205     0.2899
+  C_work_over_slack                          0.0821       71    -0.1288     0.2754
+  D_reach_plus_work_ratio                    0.0826       71    -0.1329     0.2681
+  existing_11_remaining_over_horizon         0.0000        1  undefined     0.5000
+  Negative-feature direction: A/C/D are 'smaller is better', so an AUC below 0.5 is
+  the good direction; the JSON keeps both the raw and the best-direction value.
+
+------------------------------------------------------------------------------------------------
+2b why the tick-1 AUC is unmeasurable, and where the failures actually are
+------------------------------------------------------------------------------------------------
+  bucket                          n  on_time     rate  negatives
+  detected at tick 1             71       69    0.972          2
+  detected ticks 2-10            44       11    0.250         33
+  detected ticks 11-100          30        0    0.000         30
+  detected after tick 100        47        0    0.000         47
+
+  At tick 1 there are 2 negatives in 71 targets: a univariate AUC on that cohort
+  cannot separate anything, because almost nothing fails. This is not 'AUC ~ 0.5'
+  (which would mean chance); it is an absence of negative examples, and any AUC
+  computed there is a ratio of two very small integers.
+
+  all targets NOT in the tick-1 cohort: 121, on-time 11/121 = 0.091
+  of the 80 on-time targets, 69 were already detected at tick 1
+
+------------------------------------------------------------------------------------------------
+2c the same features over all 192 targets, where the label has both classes
+------------------------------------------------------------------------------------------------
+  feature                                       rho        AUC AUC(best dir)
+  A_min_idle_distance                       -0.6972     0.0918     0.9082
+  B_remaining_time_unclipped                -0.0894     0.4477     0.5523
+  C_work_over_slack                         +0.0389     0.5228     0.5228
+  D_reach_plus_work_ratio                   +0.0127     0.5074     0.5074
+  existing_11_remaining_over_horizon      undefined     0.5000     0.5000
+  These are horizon-of-episode features scored on a label that depends on WHAT WAS
+  SENT, so a high AUC here would partly measure 'the arm sent to it', not physics.
+  The 'billed_first_step' flag below is the control for that: it is the arm's own
+  action, and if it alone predicts the label the feature AUC is confounded.
+  billed at the first send step: n=69, on-time rate 1.000
+  not billed there          : n=123, on-time rate 0.089
+  AUC of 'billed at the first send step' against on-time: 0.9313
+
+------------------------------------------------------------------------------------------------
+2d the only bucket with both classes and with budget left: ticks 2-10
+------------------------------------------------------------------------------------------------
+  n=44  on-time 11  negatives 33
+  feature                                       rho        AUC AUC(best dir)
+  A_min_idle_distance                       -0.2708     0.3196     0.6804
+  B_remaining_time_unclipped                -0.0496     0.4669     0.5331
+  C_work_over_slack                         +0.0909     0.5606     0.5606
+  D_reach_plus_work_ratio                   +0.0951     0.5634     0.5634
+  A/C/D: an AUC below 0.5 is the good direction (smaller value -> more likely on-time).
+
+------------------------------------------------------------------------------------------------
+3b K sweep: the oracle ceiling against the budget that is actually affordable
+------------------------------------------------------------------------------------------------
+  The learned arm spent 69 sends over 8 scenes (8.62/scene); 58,600 B at N=12 buys 11-12.
+
+      K     oracle/192     A-rank/192     C-rank/192
+      8             64             55             27
+      9             70             59             31
+     10             75             65             36
+     11             79             66             36
+     12             80             69             38
+     13             80             73             40
+     16             80             80             49
+     20             80             80             65
+     24             80             80             80
+
+  readings that matter:
+    learned arm achieved 80/192 with ~91 sends.
+    oracle at K=12 (the affordable ceiling) = 80/192
+    oracle at K=13                           = 80/192
+    headroom for ANY selector at the affordable K = +0 tasks
+    detections per scene = 24; sends affordable = 11-12; so 47.9% of targets can
+    ever be billed at this budget whatever the ranking says.
+
+------------------------------------------------------------------------------------------------
+3c per-scene structure: detections, tick-1 detections, on-time, budget
+------------------------------------------------------------------------------------------------
+     scene   detected  tick-1 dets    on-time tick-1 on-time
+   2301901         24            5         10          5
+   2301902         24           10         11         10
+   2301903         24           11         11         11
+   2301904         24            7          9          7
+   2301905         24           12         11         11
+   2301906         24            8          8          8
+   2301907         24            5          8          5
+   2301908         24           13         12         12
+
+  Every scene detects 24 targets and can bill 11-12. The tick-1 detections alone are
+  69 of the 80 on-time tasks, so the budget is spent on the cohort that already works.
+
+------------------------------------------------------------------------------------------------
+3e the identity that actually explains the 10-task gap
+------------------------------------------------------------------------------------------------
+  scene      sends billed complt unbill |  sends billed complt
+            learned arm                      | normal_immediate              
+  2301901       11     10     10      0 |     11     11     11
+  2301902       11     11     11      0 |     11     11     11
+  2301903       11     11     11      0 |     11     11     11
+  2301904       12      9      9      0 |     12     12     12
+  2301905       11     11     11      0 |     11     11     11
+  2301906       12      8      8      0 |     12     12     12
+  2301907       11      8      8      0 |     11     11     11
+  2301908       12     12     12      0 |     11     11     11
+
+  completed set == billed set, learned arm   : True
+  completed set == billed set, immediate     : True
+  completions that were never billed         : 0 (both arms)
+  duplicate sends  learned 11 / immediate 0
+
+  This is the answer the separability question was reaching for, and it is not about
+  feature quality. Every target that gets a first send completes on time; no target
+  that is never billed ever completes. So the score IS the number of distinct targets
+  the budget reaches, and a duplicate is a send that buys exactly nothing. The learned
+  arm spent 11 of its 91 sends re-broadcasting a target already on the air, reached
+  80 distinct targets against immediate's 90, and finished 10 tasks behind.
+  No new feature fixes that: the same 19 dims already carry #2 sent_count and #12
+  urgency; the policy simply did not condition on them, and the budget ran out first.
+
+  Counterfactual, bounded by the same archive: if every duplicate had instead gone to
+  a distinct target that was still detected by the last send step and still physically
+  feasible there, the arm would have gained at most 4 tasks (80 -> 84), not 10.
+  So dedupe alone explains at most half the gap; the other half is the order and the
+  timing in which distinct targets were taken, which is exactly where a ranking
+  feature could act.
+
+------------------------------------------------------------------------------------------------
+3d the two controls that decide how to read all of the above
+------------------------------------------------------------------------------------------------
+  CONTROL 1 -- is feature A just 'how early it was detected'?
+    spearman(A, detected_at)        = +0.7486
+    spearman(detected_at, on_time)  = -0.8435
+    AUC(detected_at, on_time)       = 0.0189  (earlier -> more on-time)
+    A's headline AUC of 0.908 is therefore not a distance effect: distance and
+    detection time move together, and detection time alone reaches AUC 0.0189.
+
+  CONTROL 2 -- physical feasibility, computed without reference to any policy
+    worst-case travel bound = sqrt(2)/0.2 = 7.071 steps
+    physically feasible at detection (work + worst travel <= slack): 192/192
+    of those, actually completed: 80; of the infeasible ones, completed: 0
+    Verdict: at these 8 scenes *every* target is physically reachable. The binding
+    constraint is not distance or slack -- it is how many sends 58,600 B buys and
+    what the arm chose to spend them on.
+
+------------------------------------------------------------------------------------------------
+3  per-scene Top-11 ceiling for each ranking
+------------------------------------------------------------------------------------------------
+  measured references over the same 8 scenes: learned 80/192, normal_immediate 90/192
+
+  ranking                                        on-time kept /192
+  A_min_idle_distance (lower better)             66/192
+  B_remaining_time_unclipped (higher better)     33/192
+  C_work_over_slack (lower better)               36/192
+  D_reach_plus_work_ratio (lower better)         37/192
+  combo min(C,D)                                 36/192
+  ORACLE (rank by the label itself)              79/192
+
+------------------------------------------------------------------------------------------------
+4  verdict
+------------------------------------------------------------------------------------------------
+  best existing-dimension AUC in the tick-1 cohort : 0.6667
+  best candidate-feature AUC                       : 0.7319
+  ceiling gain of the best single feature over 90  : -11
+  ceiling gain of the oracle over 90               : -11
+
+  The probe's premise, checked against the archive:
+  ------------------------------------------------------------------------------------------
+  (a) 'the 19-dim row is blind at tick 1' -- CONFIRMED but for a different reason than
+      assumed: 16 of 17 dimensions have exactly one value (only #13 moves), #17 is
+      constant at 12.0, and #11 saturates at +1.0 because every tick-1 deadline is
+      longer than the 50-step urgency scale.
+  (b) 'the tick-1 cohort is roughly 50/50' -- REFUTED. It is 69 on-time out of 71.
+      The AUC there is unmeasurable for lack of negatives, not uninformative at 0.5.
+  (c) 'new physics features would separate tick-1 targets' -- NOT TESTABLE, because
+      (b) leaves nothing to separate. On the whole 192 the best is A at 0.908, but A
+      correlates 0.75 with detection time, which alone reaches 0.019.
+  (d) 'a Top-K selector could beat 90/192' -- NOT answerable from this archive, and the
+      naive oracle would mislead. Ranking by the observed label at K=12 keeps 80, and
+      the best possible over all 24 keeps 80 -- but those labels were realized under
+      the learned arm's own sends, so an oracle over them can never exceed what that
+      arm achieved. normal_immediate's 90/192 comes from a different world entirely,
+      which is proof that a better allocation exists but not proof of its ceiling.
+      What the sweep does show is the shape: K=11 -> 79, K=12 -> 80, K=13 -> 80,
+      K=16 -> 80. The curve is still climbing at the affordable K, so the binding
+      constraint is the send count, not the ranking.
+
+  The one comparison this archive does license, arm to arm on the same 192:
+    normal_immediate 90 sends -> 90 on-time; learned 91 sends -> 80 on-time.
+    Immediate is ahead by 10 tasks on nearly identical spend, so the learned policy's
+    problem is not the budget alone -- it is which targets it buys with it.
+
+  DECISION against the two criteria stated before the probe ran:
+  ------------------------------------------------------------------------------------------
+  Criterion A ('AUC >= 0.65 at tick 1 AND a Top-K ceiling well above 90/192' ->
+  environment is already separable, just swap the dims and retrain):
+    * tick-1 AUC >= 0.65: reached only by a feature with 2 negatives out of 71, and
+      the best first-order value (A, 0.73) collapses once detection time is held fixed.
+      At ticks 2-10, where both classes exist, the best is 0.680.
+    * Top-K ceiling well above 90/192: NOT reachable at this budget. The label oracle
+      at K=12 keeps 80, and the answer to 'could a better ranking have done more' is
+      'no better than what the arm already did, in the worlds the arm created'.
+    => Criterion A is NOT met. Swapping in these four features would not have moved
+       the P4 score, because the loss is spent budget, not missed ranking.
+
+  Criterion B ('even with real distance and unclipped slack the AUC stays ~0.50,
+  so all targets are physically alike and the outcome is downstream lottery'):
+    * Physically the targets are NOT alike: feasibility is 192/192, so no target is
+      ruled out by geometry, and the spread in work and slack is real.
+    * But the outcomes are also NOT a lottery among equals: on_time equals the number
+      of DISTINCT targets billed, exactly, in 16 of 16 worlds. The deciding variable
+      is not a target property at all -- it is whether that target got a first send.
+    => Criterion B is also NOT met as stated, but its conclusion holds for a different
+       reason than either branch anticipated.
+
+  What the evidence actually supports, stated at its own strength:
+    The binding constraint in these 8 scenes is that 58,600 B at N=12 bills 11-12 of
+    24 targets, and every distinct target billed finishes on time. A policy's score is
+    therefore determined almost entirely by (a) not wasting sends on duplicates and
+    (b) covering as many distinct targets as the budget allows. The learned arm wasted
+    11 sends on duplicates and covered 80 distinct targets; immediate wasted 0 and
+    covered 90. The 10-task gap is that difference, and no feature from a richer
+    state can close it. Only a change to what an emission IS (one send per distinct
+    target, i.e. a sender-side dedupe), or to the budget/target ratio, moves it.
+
+  Recommendation, and this is a change of plan: do NOT open full_features on the
+  strength of this probe. The probe cannot distinguish 'the policy never learned to
+  dedupe' from 'the policy was never given the chance', but it shows the reward is
+  dominated by a dedupe/coverage term that is already representable in the 19 dims
+  (#2 sent_count, #12 urgency). The informative next experiment is a dedupe control:
+  forbid re-sending a target that is already on the air, and see whether the learned
+  arm then matches immediate. If it does, the 10-task gap was pure duplicate waste and
+  the separability question is moot at this operating point. If it does not, the
+  ranking question comes back and full_features earns a real test.
+  Either way this does not substitute for the deadline-separable world if the goal is
+  to study target SELECTION: at 11 sends against 24 always-feasible targets, selection
+  has almost no room to express itself.
+
+  What this licenses: the environment as generated is NOT separable in the way the
+  full_features plan assumed, but the reason is the budget-to-target ratio plus a
+  detection schedule that front-loads the easy tasks -- not per-target physics.
+  What it does not license: any claim that full_features would or would not help, or
+  that a deadline-separable world would move the ceiling. Both need new worlds.
+  See the DECISION block above for the recommended next step.
+wrote D:\code\整合\zhenghe-round42\runs\stage5b_pure_comm_convergence_20261027\recovery_12\revision_01\execution\p5_separability\P5_separability.json
+sha256 6281941bffb651e5242ba532dd3f63d5dab0e5dd4d4ad8f1a5a60655b746986b
