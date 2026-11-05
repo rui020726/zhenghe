@@ -1,0 +1,26 @@
+{
+ "checkpoint": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\smoke500\\control\\milestone_5500.pth",
+ "checkpoint_sha256": "57e76a0689e5cce4efcbb2be75cf3741f19cc5baf40e5cef56bee3aab60928de",
+ "identity": "local experiment level, no identity built",
+ "mode": "norm_only",
+ "n": 6,
+ "replays": 1,
+ "results": [
+  {
+   "elapsed_seconds": 4.5,
+   "error": "FileExistsError: [WinError 183] 当文件已存在时，无法创建该文件。: 'D:\\\\code\\\\整合\\\\zhenghe-round42\\\\runs\\\\stage5b_pure_comm_convergence_20261027\\\\recovery_12\\\\revision_01\\\\execution\\\\scale_probe\\\\P3_norm_n6\\\\world_logs\\\\eval__norm_n6__none__2301901\\\\s5b_p3_norm_n6_s2301901'",
+   "mode": "norm_only",
+   "n": 6,
+   "scene": 2301901,
+   "status": "error",
+   "tag": "norm_n6",
+   "traceback": "Traceback (most recent call last):\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\diagnostics_20261104\\p3_scale_features.py\", line 144, in worker\n    row = world.run_episode(\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\stage5b_comm\\world.py\", line 449, in run_episode\n    row = _run_episode_body(\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\stage5b_comm\\world.py\", line 469, in _run_episode_body\n    out_dir = reserve_artifact_directory(layout, label, tag, artifact_namespace)\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\stage5b_comm\\world.py\", line 433, in reserve_artifact_directory\n    target.mkdir(exist_ok=False)\n  File \"D:\\project_env\\lib\\pathlib.py\", line 1175, in mkdir\n    self._accessor.mkdir(self, mode)\nFileExistsError: [WinError 183] 当文件已存在时，无法创建该文件。: 'D:\\\\code\\\\整合\\\\zhenghe-round42\\\\runs\\\\stage5b_pure_comm_convergence_20261027\\\\recovery_12\\\\revision_01\\\\execution\\\\scale_probe\\\\P3_norm_n6\\\\world_logs\\\\eval__norm_n6__none__2301901\\\\s5b_p3_norm_n6_s2301901'\n"
+  }
+ ],
+ "scenes": [
+  2301901
+ ],
+ "schema": "scale-probe-p3-worlds/1",
+ "stage": "P3",
+ "tag": "norm_n6"
+}

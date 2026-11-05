@@ -1,0 +1,329 @@
+{
+ "checks": [
+  {
+   "actual": 46,
+   "check": "fixed.affordable_sends[N=3]",
+   "denominator": "budget_bytes // cost_per_send = 58600 // 1249.336957",
+   "expected": 46,
+   "pass": true
+  },
+  {
+   "actual": 2.131974,
+   "check": "fixed.share_per_send_pct[N=3]",
+   "denominator": "100 * cost_per_send / budget_bytes, tolerance +-0.01 pp",
+   "expected": 2.134,
+   "note": "protocol literal derived from a rounded 2500.6 B/send; measured is 2498.6739 B/send",
+   "pass": true
+  },
+  {
+   "actual": 0.1249337,
+   "check": "fixed.advantage_cost_per_send[N=3]",
+   "denominator": "cost_per_send / b0_bytes, tolerance +-0.0005",
+   "expected": 0.125,
+   "pass": true
+  },
+  {
+   "actual": 23,
+   "check": "fixed.affordable_sends[N=6]",
+   "denominator": "budget_bytes // cost_per_send = 58600 // 2498.673913",
+   "expected": 23,
+   "pass": true
+  },
+  {
+   "actual": 4.263949,
+   "check": "fixed.share_per_send_pct[N=6]",
+   "denominator": "100 * cost_per_send / budget_bytes, tolerance +-0.01 pp",
+   "expected": 4.268,
+   "note": "protocol literal derived from a rounded 2500.6 B/send; measured is 2498.6739 B/send",
+   "pass": true
+  },
+  {
+   "actual": 0.2498674,
+   "check": "fixed.advantage_cost_per_send[N=6]",
+   "denominator": "cost_per_send / b0_bytes, tolerance +-0.0005",
+   "expected": 0.25,
+   "pass": true
+  },
+  {
+   "actual": 11,
+   "check": "fixed.affordable_sends[N=12]",
+   "denominator": "budget_bytes // cost_per_send = 58600 // 4997.347826",
+   "expected": 11,
+   "pass": true
+  },
+  {
+   "actual": 8.527897,
+   "check": "fixed.share_per_send_pct[N=12]",
+   "denominator": "100 * cost_per_send / budget_bytes, tolerance +-0.01 pp",
+   "expected": 8.536,
+   "note": "protocol literal derived from a rounded 2500.6 B/send; measured is 2498.6739 B/send",
+   "pass": true
+  },
+  {
+   "actual": 0.4997348,
+   "check": "fixed.advantage_cost_per_send[N=12]",
+   "denominator": "cost_per_send / b0_bytes, tolerance +-0.0005",
+   "expected": 0.5,
+   "pass": true
+  },
+  {
+   "actual": 0.0,
+   "check": "proportional.share_equal_across_N",
+   "denominator": "max-min over N=3/6/12, exact float equality",
+   "expected": 0.0,
+   "pass": true
+  },
+  {
+   "actual": [
+    4.263949,
+    4.263949,
+    4.263949
+   ],
+   "check": "proportional.share_equals_4.268pct",
+   "denominator": "each of N=3/6/12 against the protocol literal",
+   "expected": "4.268 +-0.01 pp",
+   "pass": true
+  },
+  {
+   "actual": [
+    23,
+    23,
+    23
+   ],
+   "check": "proportional.affordable_equal_across_N",
+   "denominator": "budget_bytes // cost_per_send per N",
+   "expected": 23,
+   "pass": true
+  },
+  {
+   "actual": 0.0,
+   "check": "proportional.advantage_equal_across_N",
+   "denominator": "max-min over N=3/6/12",
+   "expected": 0.0,
+   "pass": true
+  },
+  {
+   "actual": [
+    0.2498674,
+    0.2498674,
+    0.2498674
+   ],
+   "check": "proportional.advantage_equals_0.25",
+   "denominator": "cost_per_send / b0_bytes per N",
+   "expected": "0.25 +-0.0005",
+   "pass": true
+  },
+  {
+   "actual": 58600.0,
+   "check": "fixed.budget_bytes[N=6]",
+   "denominator": "frozen BUDGET_BYTES",
+   "expected": 58600,
+   "pass": true
+  },
+  {
+   "actual": 10000.0,
+   "check": "fixed.b0_bytes[N=6]",
+   "denominator": "frozen B0_BYTES",
+   "expected": 10000,
+   "pass": true
+  },
+  {
+   "actual": 23,
+   "check": "fixed.affordable_sends[N=6]",
+   "denominator": "58600 // 2498.673913",
+   "expected": 23,
+   "pass": true
+  },
+  {
+   "actual": 4.263949,
+   "check": "fixed.share_per_send_pct[N=6]",
+   "denominator": "100 * cost_per_send / 58600",
+   "expected": "4.268 +-0.01 pp",
+   "pass": true
+  },
+  {
+   "actual": 58600.0,
+   "check": "proportional.budget_bytes[N=6]",
+   "denominator": "frozen BUDGET_BYTES",
+   "expected": 58600,
+   "pass": true
+  },
+  {
+   "actual": 10000.0,
+   "check": "proportional.b0_bytes[N=6]",
+   "denominator": "frozen B0_BYTES",
+   "expected": 10000,
+   "pass": true
+  },
+  {
+   "actual": 23,
+   "check": "proportional.affordable_sends[N=6]",
+   "denominator": "58600 // 2498.673913",
+   "expected": 23,
+   "pass": true
+  },
+  {
+   "actual": 4.263949,
+   "check": "proportional.share_per_send_pct[N=6]",
+   "denominator": "100 * cost_per_send / 58600",
+   "expected": "4.268 +-0.01 pp",
+   "pass": true
+  }
+ ],
+ "checks_passed": 22,
+ "checks_total": 22,
+ "grid": {
+  "fixed": {
+   "12": {
+    "advantage_cost_per_send": 0.4997347826086957,
+    "affordable_sends": 11,
+    "b0_bytes": 10000.0,
+    "budget_bytes": 58600.0,
+    "cost_per_send_bytes": 4997.347826086957,
+    "denominators": {
+     "advantage_cost_per_send": "cost_per_send_bytes / b0_bytes",
+     "affordable_sends": "budget_bytes // cost_per_send_bytes",
+     "share_per_send": "cost_per_send_bytes / budget_bytes"
+    },
+    "mode": "fixed",
+    "n": 12,
+    "payload_bytes": 416.44565217391306,
+    "share_per_send": 0.08527897314141565,
+    "share_per_send_pct": 8.527897314141565
+   },
+   "3": {
+    "advantage_cost_per_send": 0.12493369565217392,
+    "affordable_sends": 46,
+    "b0_bytes": 10000.0,
+    "budget_bytes": 58600.0,
+    "cost_per_send_bytes": 1249.3369565217392,
+    "denominators": {
+     "advantage_cost_per_send": "cost_per_send_bytes / b0_bytes",
+     "affordable_sends": "budget_bytes // cost_per_send_bytes",
+     "share_per_send": "cost_per_send_bytes / budget_bytes"
+    },
+    "mode": "fixed",
+    "n": 3,
+    "payload_bytes": 416.44565217391306,
+    "share_per_send": 0.021319743285353913,
+    "share_per_send_pct": 2.1319743285353914
+   },
+   "6": {
+    "advantage_cost_per_send": 0.24986739130434785,
+    "affordable_sends": 23,
+    "b0_bytes": 10000.0,
+    "budget_bytes": 58600.0,
+    "cost_per_send_bytes": 2498.6739130434785,
+    "denominators": {
+     "advantage_cost_per_send": "cost_per_send_bytes / b0_bytes",
+     "affordable_sends": "budget_bytes // cost_per_send_bytes",
+     "share_per_send": "cost_per_send_bytes / budget_bytes"
+    },
+    "mode": "fixed",
+    "n": 6,
+    "payload_bytes": 416.44565217391306,
+    "share_per_send": 0.042639486570707825,
+    "share_per_send_pct": 4.263948657070783
+   }
+  },
+  "proportional": {
+   "12": {
+    "advantage_cost_per_send": 0.24986739130434785,
+    "affordable_sends": 23,
+    "b0_bytes": 20000.0,
+    "budget_bytes": 117200.0,
+    "cost_per_send_bytes": 4997.347826086957,
+    "denominators": {
+     "advantage_cost_per_send": "cost_per_send_bytes / b0_bytes",
+     "affordable_sends": "budget_bytes // cost_per_send_bytes",
+     "share_per_send": "cost_per_send_bytes / budget_bytes"
+    },
+    "mode": "proportional",
+    "n": 12,
+    "payload_bytes": 416.44565217391306,
+    "share_per_send": 0.042639486570707825,
+    "share_per_send_pct": 4.263948657070783
+   },
+   "3": {
+    "advantage_cost_per_send": 0.24986739130434785,
+    "affordable_sends": 23,
+    "b0_bytes": 5000.0,
+    "budget_bytes": 29300.0,
+    "cost_per_send_bytes": 1249.3369565217392,
+    "denominators": {
+     "advantage_cost_per_send": "cost_per_send_bytes / b0_bytes",
+     "affordable_sends": "budget_bytes // cost_per_send_bytes",
+     "share_per_send": "cost_per_send_bytes / budget_bytes"
+    },
+    "mode": "proportional",
+    "n": 3,
+    "payload_bytes": 416.44565217391306,
+    "share_per_send": 0.042639486570707825,
+    "share_per_send_pct": 4.263948657070783
+   },
+   "6": {
+    "advantage_cost_per_send": 0.24986739130434785,
+    "affordable_sends": 23,
+    "b0_bytes": 10000.0,
+    "budget_bytes": 58600.0,
+    "cost_per_send_bytes": 2498.6739130434785,
+    "denominators": {
+     "advantage_cost_per_send": "cost_per_send_bytes / b0_bytes",
+     "affordable_sends": "budget_bytes // cost_per_send_bytes",
+     "share_per_send": "cost_per_send_bytes / budget_bytes"
+    },
+    "mode": "proportional",
+    "n": 6,
+    "payload_bytes": 416.44565217391306,
+    "share_per_send": 0.042639486570707825,
+    "share_per_send_pct": 4.263948657070783
+   }
+  }
+ },
+ "identity": "local experiment level, no identity built",
+ "module": {
+  "path": "recovery_12\\revision_01\\stage5b_comm\\scale_invariant.py",
+  "sha256": "bbed54eb918027abc5c907157657eb15b05caf6912dc7f170bea15e287a86632"
+ },
+ "payload_bytes": 416.44565217391306,
+ "payload_provenance": {
+  "cost_per_send_at_ref": 2498.6739130434785,
+  "denominator_emissions": 184,
+  "denominator_subscribers": 6,
+  "fields": "paid_bytes == charged_bytes == airtime_bytes on all 8 rows, so the recorded byte total is already payload * fan-out; dividing by emissions and by SUBSCRIBERS_REF recovers the mean payload",
+  "note": "estimate_message_bytes() prices the canonical JSON of one DetectionMessage, so the true payload is a distribution (per-scene mean 408.61..423.61 B); the pooled mean over all 184 frozen sends is what the algebra below uses.",
+  "numerator_paid_bytes": 459756,
+  "source": "runs/stage5b_pure_comm_budget58600_20261026/revision_02/execution/rows/eval/eval_normal_immediate_none_<scene>.json, scenes 2301901..2301908"
+ },
+ "replay_quota_used": 0,
+ "schema": "scale-probe-p1-analytic/1",
+ "spec_literal_reconstruction": {
+  "12": {
+   "advantage_cost_per_send_fixed": 0.50012,
+   "affordable_sends_fixed": 11,
+   "cost_per_send_bytes": 5001.2,
+   "payload_bytes": 416.76666666666665,
+   "share_per_send_pct_fixed": 8.534470989761092
+  },
+  "3": {
+   "advantage_cost_per_send_fixed": 0.12503,
+   "affordable_sends_fixed": 46,
+   "cost_per_send_bytes": 1250.3,
+   "payload_bytes": 416.76666666666665,
+   "share_per_send_pct_fixed": 2.133617747440273
+  },
+  "6": {
+   "advantage_cost_per_send_fixed": 0.25006,
+   "affordable_sends_fixed": 23,
+   "cost_per_send_bytes": 2500.6,
+   "payload_bytes": 416.76666666666665,
+   "share_per_send_pct_fixed": 4.267235494880546
+  }
+ },
+ "stage": "P1",
+ "tolerances": {
+  "advantage": 0.0005,
+  "share_pp": 0.01
+ },
+ "verdict": "pass"
+}

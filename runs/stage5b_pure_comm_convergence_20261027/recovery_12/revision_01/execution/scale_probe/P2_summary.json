@@ -1,0 +1,2423 @@
+{
+ "budget_authority_observed": {
+  "12": [
+   58600
+  ],
+  "3": [
+   58600
+  ],
+  "6": [
+   58600
+  ]
+ },
+ "budget_bytes": 58600,
+ "checks": [
+  {
+   "criterion": 1,
+   "delta_vs_protocol_literal_pct": -0.025243941454047392,
+   "denominator": "239997 B over 192 emissions, 8 scenes",
+   "measured": 1249.984375,
+   "n": 3,
+   "name": "cost_per_send_proportional_to_N",
+   "p1_value_at_measured_payload": 1249.337,
+   "pass": true,
+   "protocol_literal": 1250.3,
+   "ratio_measured_over_P1": 1.0005181748399352,
+   "tolerance": "+-0.5%"
+  },
+  {
+   "affordable_sends_P1": 46,
+   "criterion": 2,
+   "denominator_worlds": 8,
+   "every_shortfall_explained": true,
+   "n": 3,
+   "name": "emissions_approach_affordable_sends",
+   "note": "N=3: target-limited, not budget-limited.",
+   "pass": true,
+   "per_world_budget_refusals": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "per_world_emissions": [
+    24,
+    24,
+    24,
+    24,
+    24,
+    24,
+    24,
+    24
+   ],
+   "per_world_generated_targets": [
+    24,
+    24,
+    24,
+    24,
+    24,
+    24,
+    24,
+    24
+   ],
+   "per_world_realized_spend_bytes": [
+    30363,
+    30489,
+    30360,
+    29598,
+    29925,
+    29541,
+    30198,
+    29523
+   ],
+   "realized_spend_never_exceeds_budget": true,
+   "truncation_reason_per_scene": {
+    "2301901": "no_candidate_target(all_generated_targets_addressed)",
+    "2301902": "no_candidate_target(all_generated_targets_addressed)",
+    "2301903": "no_candidate_target(all_generated_targets_addressed)",
+    "2301904": "no_candidate_target(all_generated_targets_addressed)",
+    "2301905": "no_candidate_target(all_generated_targets_addressed)",
+    "2301906": "no_candidate_target(all_generated_targets_addressed)",
+    "2301907": "no_candidate_target(all_generated_targets_addressed)",
+    "2301908": "no_candidate_target(all_generated_targets_addressed)"
+   },
+   "worlds_at_affordable_sends": 0,
+   "worlds_at_budget_cap": 0,
+   "worlds_at_or_above": 0
+  },
+  {
+   "criterion": 3,
+   "denominator": "8 scenes",
+   "emissions_total": 0,
+   "n": 3,
+   "name": "always_hold_emits_and_spends_nothing",
+   "pass": true,
+   "spent_bytes_total": 0
+  },
+  {
+   "criterion": 4,
+   "denominator": 192,
+   "headroom": 123,
+   "lower_always_hold": 0,
+   "n": 3,
+   "name": "on_time_bound_interval_and_headroom",
+   "note": "criterion 4 asks for the interval and the no_headroom flag, not for a direction; both bounds are reported and the flag is derived",
+   "pass": true,
+   "upper_immediate": 123,
+   "verdict": "has_headroom"
+  },
+  {
+   "criterion": 1,
+   "delta_vs_protocol_literal_pct": -0.07702499226271418,
+   "denominator": "459756 B over 184 emissions, 8 scenes",
+   "measured": 2498.6739130434785,
+   "n": 6,
+   "name": "cost_per_send_proportional_to_N",
+   "p1_value_at_measured_payload": 2498.674,
+   "pass": true,
+   "protocol_literal": 2500.6,
+   "ratio_measured_over_P1": 0.9999999651989329,
+   "tolerance": "+-0.5%"
+  },
+  {
+   "affordable_sends_P1": 23,
+   "criterion": 2,
+   "denominator_worlds": 8,
+   "every_shortfall_explained": true,
+   "n": 6,
+   "name": "emissions_approach_affordable_sends",
+   "note": "N=6 is the only calibre where the credit, not the target count, binds: the 24th target never fits, which is why every world stops at 23.",
+   "pass": true,
+   "per_world_budget_refusals": [
+    387,
+    726,
+    704,
+    327,
+    822,
+    389,
+    848,
+    594
+   ],
+   "per_world_emissions": [
+    23,
+    23,
+    23,
+    23,
+    23,
+    23,
+    23,
+    23
+   ],
+   "per_world_generated_targets": [
+    24,
+    24,
+    24,
+    24,
+    24,
+    24,
+    24,
+    24
+   ],
+   "per_world_realized_spend_bytes": [
+    58224,
+    58458,
+    58008,
+    56694,
+    57354,
+    56388,
+    57882,
+    56748
+   ],
+   "realized_spend_never_exceeds_budget": true,
+   "truncation_reason_per_scene": {
+    "2301901": "at_or_above_predicted",
+    "2301902": "at_or_above_predicted",
+    "2301903": "at_or_above_predicted",
+    "2301904": "at_or_above_predicted",
+    "2301905": "at_or_above_predicted",
+    "2301906": "at_or_above_predicted",
+    "2301907": "at_or_above_predicted",
+    "2301908": "at_or_above_predicted"
+   },
+   "worlds_at_affordable_sends": 8,
+   "worlds_at_budget_cap": 8,
+   "worlds_at_or_above": 8
+  },
+  {
+   "criterion": 3,
+   "denominator": "8 scenes",
+   "emissions_total": 0,
+   "n": 6,
+   "name": "always_hold_emits_and_spends_nothing",
+   "pass": true,
+   "spent_bytes_total": 0
+  },
+  {
+   "criterion": 4,
+   "denominator": 192,
+   "headroom": 108,
+   "lower_always_hold": 0,
+   "n": 6,
+   "name": "on_time_bound_interval_and_headroom",
+   "note": "criterion 4 asks for the interval and the no_headroom flag, not for a direction; both bounds are reported and the flag is derived",
+   "pass": true,
+   "upper_immediate": 108,
+   "verdict": "has_headroom"
+  },
+  {
+   "criterion": 1,
+   "delta_vs_protocol_literal_pct": 0.018662187741609895,
+   "denominator": "450192 B over 90 emissions, 8 scenes",
+   "measured": 5002.133333333333,
+   "n": 12,
+   "name": "cost_per_send_proportional_to_N",
+   "p1_value_at_measured_payload": 4997.348,
+   "pass": true,
+   "protocol_literal": 5001.2,
+   "ratio_measured_over_P1": 1.0009575745642154,
+   "tolerance": "+-0.5%"
+  },
+  {
+   "affordable_sends_P1": 11,
+   "criterion": 2,
+   "denominator_worlds": 8,
+   "every_shortfall_explained": true,
+   "n": 12,
+   "name": "emissions_approach_affordable_sends",
+   "note": "NUM_GOALS=24 is the candidate ceiling: at N=3 the credit buys 46 sends but only 24 targets exist, so the ceiling is the target count, not the budget. At N=12 the pooled floor of 11 is a *mean-payload* figure; the observed per-message cost spans 4,404-5,376 B, so 12 emissions can still fit inside 58,600 B and two worlds realise 58,572 / 58,512 B.",
+   "pass": true,
+   "per_world_budget_refusals": [
+    10058,
+    11329,
+    11707,
+    9815,
+    12580,
+    9440,
+    11990,
+    11692
+   ],
+   "per_world_emissions": [
+    11,
+    11,
+    11,
+    12,
+    11,
+    12,
+    11,
+    11
+   ],
+   "per_world_generated_targets": [
+    24,
+    24,
+    24,
+    24,
+    24,
+    24,
+    24,
+    24
+   ],
+   "per_world_realized_spend_bytes": [
+    55344,
+    56724,
+    56172,
+    58572,
+    55236,
+    58512,
+    55464,
+    54168
+   ],
+   "realized_spend_never_exceeds_budget": true,
+   "truncation_reason_per_scene": {
+    "2301901": "at_or_above_predicted",
+    "2301902": "at_or_above_predicted",
+    "2301903": "at_or_above_predicted",
+    "2301904": "at_or_above_predicted",
+    "2301905": "at_or_above_predicted",
+    "2301906": "at_or_above_predicted",
+    "2301907": "at_or_above_predicted",
+    "2301908": "at_or_above_predicted"
+   },
+   "worlds_at_affordable_sends": 6,
+   "worlds_at_budget_cap": 8,
+   "worlds_at_or_above": 8
+  },
+  {
+   "criterion": 3,
+   "denominator": "8 scenes",
+   "emissions_total": 0,
+   "n": 12,
+   "name": "always_hold_emits_and_spends_nothing",
+   "pass": true,
+   "spent_bytes_total": 0
+  },
+  {
+   "criterion": 4,
+   "denominator": 192,
+   "headroom": 90,
+   "lower_always_hold": 0,
+   "n": 12,
+   "name": "on_time_bound_interval_and_headroom",
+   "note": "criterion 4 asks for the interval and the no_headroom flag, not for a direction; both bounds are reported and the flag is derived",
+   "pass": true,
+   "upper_immediate": 90,
+   "verdict": "has_headroom"
+  },
+  {
+   "cells_compared": 16,
+   "criterion": 5,
+   "denominator": "16 cells x 3 quantities",
+   "detail": {
+    "always_hold": {
+     "2301901": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_always_hold_none_2301901.json",
+      "p2": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      }
+     },
+     "2301902": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_always_hold_none_2301902.json",
+      "p2": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      }
+     },
+     "2301903": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_always_hold_none_2301903.json",
+      "p2": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      }
+     },
+     "2301904": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_always_hold_none_2301904.json",
+      "p2": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      }
+     },
+     "2301905": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_always_hold_none_2301905.json",
+      "p2": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      }
+     },
+     "2301906": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_always_hold_none_2301906.json",
+      "p2": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      }
+     },
+     "2301907": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_always_hold_none_2301907.json",
+      "p2": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      }
+     },
+     "2301908": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_always_hold_none_2301908.json",
+      "p2": {
+       "emissions": 0,
+       "on_time": 0,
+       "paid_bytes": 0
+      }
+     }
+    },
+    "normal_immediate": {
+     "2301901": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 23,
+       "on_time": 17,
+       "paid_bytes": 58224
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301901.json",
+      "p2": {
+       "emissions": 23,
+       "on_time": 17,
+       "paid_bytes": 58224
+      }
+     },
+     "2301902": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 23,
+       "on_time": 7,
+       "paid_bytes": 58458
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301902.json",
+      "p2": {
+       "emissions": 23,
+       "on_time": 7,
+       "paid_bytes": 58458
+      }
+     },
+     "2301903": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 23,
+       "on_time": 11,
+       "paid_bytes": 58008
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301903.json",
+      "p2": {
+       "emissions": 23,
+       "on_time": 11,
+       "paid_bytes": 58008
+      }
+     },
+     "2301904": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 23,
+       "on_time": 19,
+       "paid_bytes": 56694
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301904.json",
+      "p2": {
+       "emissions": 23,
+       "on_time": 19,
+       "paid_bytes": 56694
+      }
+     },
+     "2301905": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 23,
+       "on_time": 8,
+       "paid_bytes": 57354
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301905.json",
+      "p2": {
+       "emissions": 23,
+       "on_time": 8,
+       "paid_bytes": 57354
+      }
+     },
+     "2301906": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 23,
+       "on_time": 23,
+       "paid_bytes": 56388
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301906.json",
+      "p2": {
+       "emissions": 23,
+       "on_time": 23,
+       "paid_bytes": 56388
+      }
+     },
+     "2301907": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 23,
+       "on_time": 10,
+       "paid_bytes": 57882
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301907.json",
+      "p2": {
+       "emissions": 23,
+       "on_time": 10,
+       "paid_bytes": 57882
+      }
+     },
+     "2301908": {
+      "differing": [],
+      "equal": true,
+      "frozen": {
+       "emissions": 23,
+       "on_time": 13,
+       "paid_bytes": 56748
+      },
+      "frozen_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301908.json",
+      "p2": {
+       "emissions": 23,
+       "on_time": 13,
+       "paid_bytes": 56748
+      }
+     }
+    }
+   },
+   "mismatches": [],
+   "n": 6,
+   "name": "N6_equals_frozen_artifacts_per_scene",
+   "pass": true
+  },
+  {
+   "authority_values_after_exit": [
+    "(\"v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']\", 29300)",
+    "('a4_hooks.RELAY_BUDGET_BYTES', 29300)",
+    "('a4_world_adapter.RELAY_BUDGET_BYTES', 29300)"
+   ],
+   "criterion": 6,
+   "denominator": "48 worlds x 5 live budget reads (row.budget_bytes + the four budget_credit fields)",
+   "live_authority_observed_per_n": {
+    "12": [
+     58600
+    ],
+    "3": [
+     58600
+    ],
+    "6": [
+     58600
+    ]
+   },
+   "n": null,
+   "name": "budget_authority_did_not_drift_with_N",
+   "note": "world.budget_authority() rebinds all three in-memory authorities for each world and restores them in a finally block, so the observed values are recorded twice: while the world ran (must be 58600) and after exit (must be the frozen 29300). The stored module attributes are the post-exit figure.",
+   "pass": true,
+   "worlds_checked": 48,
+   "worlds_with_all_five_budget_reads_at_58600": 48
+  }
+ ],
+ "checks_passed": 14,
+ "checks_total": 14,
+ "comparability_note": "N!=6 is a new config and a new world: config_hash and behaviour_sha256 both move, so the N=3 and N=12 on-time counts are NOT comparable with the archived 108/192 or 131/192 figures. The N=6 equality check (criterion 5) is the one comparison this stage licenses.",
+ "identity": "local experiment level, no identity built",
+ "labour_coupling": {
+  "12": true,
+  "3": false,
+  "6": false
+ },
+ "mode": "fixed",
+ "p1_predictions": {
+  "affordable_sends": {
+   "3": 46,
+   "6": 23,
+   "12": 11
+  },
+  "cost_per_send_at_measured_payload": {
+   "3": 1249.337,
+   "6": 2498.674,
+   "12": 4997.348
+  },
+  "protocol_literals": {
+   "3": 1250.3,
+   "6": 2500.6,
+   "12": 5001.2
+  }
+ },
+ "per_n": {
+  "12": {
+   "arms": {
+    "always_hold": {
+     "2301901": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__always_hold__none__2301901\\s5b_always_hold_s2301901\\relay_transcript.jsonl.gz"
+     },
+     "2301902": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__always_hold__none__2301902\\s5b_always_hold_s2301902\\relay_transcript.jsonl.gz"
+     },
+     "2301903": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__always_hold__none__2301903\\s5b_always_hold_s2301903\\relay_transcript.jsonl.gz"
+     },
+     "2301904": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__always_hold__none__2301904\\s5b_always_hold_s2301904\\relay_transcript.jsonl.gz"
+     },
+     "2301905": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__always_hold__none__2301905\\s5b_always_hold_s2301905\\relay_transcript.jsonl.gz"
+     },
+     "2301906": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__always_hold__none__2301906\\s5b_always_hold_s2301906\\relay_transcript.jsonl.gz"
+     },
+     "2301907": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__always_hold__none__2301907\\s5b_always_hold_s2301907\\relay_transcript.jsonl.gz"
+     },
+     "2301908": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__always_hold__none__2301908\\s5b_always_hold_s2301908\\relay_transcript.jsonl.gz"
+     }
+    },
+    "normal_immediate": {
+     "2301901": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 10058,
+      "budget_share": 0.9444368600682593,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 5031.272727272727,
+      "emissions": 11,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 11,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 55344,
+      "refusal_reasons": {
+       "budget_exhausted": 10058
+      },
+      "spent_bytes": 55344,
+      "transcript_emissions": 11,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__normal_immediate__none__2301901\\s5b_normal_immediate_s2301901\\relay_transcript.jsonl.gz"
+     },
+     "2301902": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 11329,
+      "budget_share": 0.9679863481228669,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 5156.727272727273,
+      "emissions": 11,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 11,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 56724,
+      "refusal_reasons": {
+       "budget_exhausted": 11329
+      },
+      "spent_bytes": 56724,
+      "transcript_emissions": 11,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__normal_immediate__none__2301902\\s5b_normal_immediate_s2301902\\relay_transcript.jsonl.gz"
+     },
+     "2301903": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 11707,
+      "budget_share": 0.9585665529010239,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 5106.545454545455,
+      "emissions": 11,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 11,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 56172,
+      "refusal_reasons": {
+       "budget_exhausted": 11707
+      },
+      "spent_bytes": 56172,
+      "transcript_emissions": 11,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__normal_immediate__none__2301903\\s5b_normal_immediate_s2301903\\relay_transcript.jsonl.gz"
+     },
+     "2301904": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 9815,
+      "budget_share": 0.9995221843003413,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 4881.0,
+      "emissions": 12,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 12,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 58572,
+      "refusal_reasons": {
+       "budget_exhausted": 9815
+      },
+      "spent_bytes": 58572,
+      "transcript_emissions": 12,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__normal_immediate__none__2301904\\s5b_normal_immediate_s2301904\\relay_transcript.jsonl.gz"
+     },
+     "2301905": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 12580,
+      "budget_share": 0.94259385665529,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 5021.454545454545,
+      "emissions": 11,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 11,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 55236,
+      "refusal_reasons": {
+       "budget_exhausted": 12580
+      },
+      "spent_bytes": 55236,
+      "transcript_emissions": 11,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__normal_immediate__none__2301905\\s5b_normal_immediate_s2301905\\relay_transcript.jsonl.gz"
+     },
+     "2301906": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 9440,
+      "budget_share": 0.9984982935153583,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 4876.0,
+      "emissions": 12,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 12,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 58512,
+      "refusal_reasons": {
+       "budget_exhausted": 9440
+      },
+      "spent_bytes": 58512,
+      "transcript_emissions": 12,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__normal_immediate__none__2301906\\s5b_normal_immediate_s2301906\\relay_transcript.jsonl.gz"
+     },
+     "2301907": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 11990,
+      "budget_share": 0.9464846416382252,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 5042.181818181818,
+      "emissions": 11,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 11,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 55464,
+      "refusal_reasons": {
+       "budget_exhausted": 11990
+      },
+      "spent_bytes": 55464,
+      "transcript_emissions": 11,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__normal_immediate__none__2301907\\s5b_normal_immediate_s2301907\\relay_transcript.jsonl.gz"
+     },
+     "2301908": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 11692,
+      "budget_share": 0.9243686006825939,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 4924.363636363636,
+      "emissions": 11,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 11,
+      "provenance": {
+       "dir": "P2_12_fixed_p2",
+       "sha256": "c83d87726bb7e1fdbf70340c91f3e2186f19020b979dce17db2a3be9b6050a9a",
+       "tag": "p2"
+      },
+      "realized_spend": 54168,
+      "refusal_reasons": {
+       "budget_exhausted": 11692
+      },
+      "spent_bytes": 54168,
+      "transcript_emissions": 11,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_12_fixed_p2\\world_logs\\eval__normal_immediate__none__2301908\\s5b_normal_immediate_s2301908\\relay_transcript.jsonl.gz"
+     }
+    }
+   },
+   "immediate_totals": {
+    "cost_per_send_mean": 5002.133333333333,
+    "denominator_emissions": 90,
+    "emissions": 90,
+    "spent_bytes": 450192
+   },
+   "n": 12,
+   "on_time_interval": {
+    "denominator": 192,
+    "headroom": 90,
+    "lower_always_hold": 0,
+    "upper_immediate": 90
+   },
+   "per_world_budget_refusals": {
+    "2301901": 10058,
+    "2301902": 11329,
+    "2301903": 11707,
+    "2301904": 9815,
+    "2301905": 12580,
+    "2301906": 9440,
+    "2301907": 11990,
+    "2301908": 11692
+   },
+   "per_world_emissions": {
+    "2301901": 11,
+    "2301902": 11,
+    "2301903": 11,
+    "2301904": 12,
+    "2301905": 11,
+    "2301906": 12,
+    "2301907": 11,
+    "2301908": 11
+   },
+   "worlds_at_budget_cap": {
+    "count": 8,
+    "denominator": 8
+   }
+  },
+  "3": {
+   "arms": {
+    "always_hold": {
+     "2301901": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__always_hold__none__2301901\\s5b_always_hold_s2301901\\relay_transcript.jsonl.gz"
+     },
+     "2301902": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__always_hold__none__2301902\\s5b_always_hold_s2301902\\relay_transcript.jsonl.gz"
+     },
+     "2301903": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__always_hold__none__2301903\\s5b_always_hold_s2301903\\relay_transcript.jsonl.gz"
+     },
+     "2301904": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__always_hold__none__2301904\\s5b_always_hold_s2301904\\relay_transcript.jsonl.gz"
+     },
+     "2301905": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__always_hold__none__2301905\\s5b_always_hold_s2301905\\relay_transcript.jsonl.gz"
+     },
+     "2301906": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__always_hold__none__2301906\\s5b_always_hold_s2301906\\relay_transcript.jsonl.gz"
+     },
+     "2301907": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__always_hold__none__2301907\\s5b_always_hold_s2301907\\relay_transcript.jsonl.gz"
+     },
+     "2301908": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__always_hold__none__2301908\\s5b_always_hold_s2301908\\relay_transcript.jsonl.gz"
+     }
+    },
+    "normal_immediate": {
+     "2301901": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.5181399317406143,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 1265.125,
+      "emissions": 24,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 23,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 30363,
+      "refusal_reasons": {},
+      "spent_bytes": 30363,
+      "transcript_emissions": 24,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__normal_immediate__none__2301901\\s5b_normal_immediate_s2301901\\relay_transcript.jsonl.gz"
+     },
+     "2301902": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.5202901023890785,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 1270.375,
+      "emissions": 24,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 19,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 30489,
+      "refusal_reasons": {},
+      "spent_bytes": 30489,
+      "transcript_emissions": 24,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__normal_immediate__none__2301902\\s5b_normal_immediate_s2301902\\relay_transcript.jsonl.gz"
+     },
+     "2301903": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.5180887372013652,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 1265.0,
+      "emissions": 24,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 7,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 30360,
+      "refusal_reasons": {},
+      "spent_bytes": 30360,
+      "transcript_emissions": 24,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__normal_immediate__none__2301903\\s5b_normal_immediate_s2301903\\relay_transcript.jsonl.gz"
+     },
+     "2301904": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.5050853242320819,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 1233.25,
+      "emissions": 24,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 21,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 29598,
+      "refusal_reasons": {},
+      "spent_bytes": 29598,
+      "transcript_emissions": 24,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__normal_immediate__none__2301904\\s5b_normal_immediate_s2301904\\relay_transcript.jsonl.gz"
+     },
+     "2301905": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.5106655290102389,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 1246.875,
+      "emissions": 24,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 6,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 29925,
+      "refusal_reasons": {},
+      "spent_bytes": 29925,
+      "transcript_emissions": 24,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__normal_immediate__none__2301905\\s5b_normal_immediate_s2301905\\relay_transcript.jsonl.gz"
+     },
+     "2301906": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.5041126279863481,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 1230.875,
+      "emissions": 24,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 23,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 29541,
+      "refusal_reasons": {},
+      "spent_bytes": 29541,
+      "transcript_emissions": 24,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__normal_immediate__none__2301906\\s5b_normal_immediate_s2301906\\relay_transcript.jsonl.gz"
+     },
+     "2301907": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.5153242320819112,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 1258.25,
+      "emissions": 24,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 10,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 30198,
+      "refusal_reasons": {},
+      "spent_bytes": 30198,
+      "transcript_emissions": 24,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__normal_immediate__none__2301907\\s5b_normal_immediate_s2301907\\relay_transcript.jsonl.gz"
+     },
+     "2301908": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.5038054607508532,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 1230.125,
+      "emissions": 24,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 14,
+      "provenance": {
+       "dir": "P2_3_fixed_p2",
+       "sha256": "344bdeba1cf35ba6137244695bed4d03a98d7e2266f5c907d032046df69b3bf6",
+       "tag": "p2"
+      },
+      "realized_spend": 29523,
+      "refusal_reasons": {},
+      "spent_bytes": 29523,
+      "transcript_emissions": 24,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_3_fixed_p2\\world_logs\\eval__normal_immediate__none__2301908\\s5b_normal_immediate_s2301908\\relay_transcript.jsonl.gz"
+     }
+    }
+   },
+   "immediate_totals": {
+    "cost_per_send_mean": 1249.984375,
+    "denominator_emissions": 192,
+    "emissions": 192,
+    "spent_bytes": 239997
+   },
+   "n": 3,
+   "on_time_interval": {
+    "denominator": 192,
+    "headroom": 123,
+    "lower_always_hold": 0,
+    "upper_immediate": 123
+   },
+   "per_world_budget_refusals": {
+    "2301901": 0,
+    "2301902": 0,
+    "2301903": 0,
+    "2301904": 0,
+    "2301905": 0,
+    "2301906": 0,
+    "2301907": 0,
+    "2301908": 0
+   },
+   "per_world_emissions": {
+    "2301901": 24,
+    "2301902": 24,
+    "2301903": 24,
+    "2301904": 24,
+    "2301905": 24,
+    "2301906": 24,
+    "2301907": 24,
+    "2301908": 24
+   },
+   "worlds_at_budget_cap": {
+    "count": 0,
+    "denominator": 8
+   }
+  },
+  "6": {
+   "arms": {
+    "always_hold": {
+     "2301901": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_6_fixed_pilot2",
+       "sha256": "a52e618367fc7d75b6eb8cde5e4ae9e0678920b6d43490aa12300e6003e6af6d",
+       "tag": "pilot2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_pilot2\\world_logs\\eval__always_hold__none__2301901\\s5b_always_hold_s2301901\\relay_transcript.jsonl.gz"
+     },
+     "2301902": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__always_hold__none__2301902\\s5b_always_hold_s2301902\\relay_transcript.jsonl.gz"
+     },
+     "2301903": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__always_hold__none__2301903\\s5b_always_hold_s2301903\\relay_transcript.jsonl.gz"
+     },
+     "2301904": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__always_hold__none__2301904\\s5b_always_hold_s2301904\\relay_transcript.jsonl.gz"
+     },
+     "2301905": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__always_hold__none__2301905\\s5b_always_hold_s2301905\\relay_transcript.jsonl.gz"
+     },
+     "2301906": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__always_hold__none__2301906\\s5b_always_hold_s2301906\\relay_transcript.jsonl.gz"
+     },
+     "2301907": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__always_hold__none__2301907\\s5b_always_hold_s2301907\\relay_transcript.jsonl.gz"
+     },
+     "2301908": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 0,
+      "budget_share": 0.0,
+      "capacity_refused_sends": 0,
+      "cost_per_send": null,
+      "emissions": 0,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 0,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 0,
+      "refusal_reasons": {},
+      "spent_bytes": 0,
+      "transcript_emissions": 0,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__always_hold__none__2301908\\s5b_always_hold_s2301908\\relay_transcript.jsonl.gz"
+     }
+    },
+    "normal_immediate": {
+     "2301901": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 387,
+      "budget_share": 0.9935836177474403,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 2531.478260869565,
+      "emissions": 23,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 17,
+      "provenance": {
+       "dir": "P2_6_fixed_pilot2",
+       "sha256": "a52e618367fc7d75b6eb8cde5e4ae9e0678920b6d43490aa12300e6003e6af6d",
+       "tag": "pilot2"
+      },
+      "realized_spend": 58224,
+      "refusal_reasons": {
+       "budget_exhausted": 387
+      },
+      "spent_bytes": 58224,
+      "transcript_emissions": 23,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_pilot2\\world_logs\\eval__normal_immediate__none__2301901\\s5b_normal_immediate_s2301901\\relay_transcript.jsonl.gz"
+     },
+     "2301902": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 726,
+      "budget_share": 0.9975767918088737,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 2541.6521739130435,
+      "emissions": 23,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 7,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 58458,
+      "refusal_reasons": {
+       "budget_exhausted": 726
+      },
+      "spent_bytes": 58458,
+      "transcript_emissions": 23,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__normal_immediate__none__2301902\\s5b_normal_immediate_s2301902\\relay_transcript.jsonl.gz"
+     },
+     "2301903": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 704,
+      "budget_share": 0.9898976109215017,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 2522.086956521739,
+      "emissions": 23,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 11,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 58008,
+      "refusal_reasons": {
+       "budget_exhausted": 704
+      },
+      "spent_bytes": 58008,
+      "transcript_emissions": 23,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__normal_immediate__none__2301903\\s5b_normal_immediate_s2301903\\relay_transcript.jsonl.gz"
+     },
+     "2301904": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 327,
+      "budget_share": 0.9674744027303754,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 2464.9565217391305,
+      "emissions": 23,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 19,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 56694,
+      "refusal_reasons": {
+       "budget_exhausted": 327
+      },
+      "spent_bytes": 56694,
+      "transcript_emissions": 23,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__normal_immediate__none__2301904\\s5b_normal_immediate_s2301904\\relay_transcript.jsonl.gz"
+     },
+     "2301905": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 822,
+      "budget_share": 0.9787372013651877,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 2493.6521739130435,
+      "emissions": 23,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 8,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 57354,
+      "refusal_reasons": {
+       "budget_exhausted": 822
+      },
+      "spent_bytes": 57354,
+      "transcript_emissions": 23,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__normal_immediate__none__2301905\\s5b_normal_immediate_s2301905\\relay_transcript.jsonl.gz"
+     },
+     "2301906": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 389,
+      "budget_share": 0.9622525597269624,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 2451.6521739130435,
+      "emissions": 23,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 23,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 56388,
+      "refusal_reasons": {
+       "budget_exhausted": 389
+      },
+      "spent_bytes": 56388,
+      "transcript_emissions": 23,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__normal_immediate__none__2301906\\s5b_normal_immediate_s2301906\\relay_transcript.jsonl.gz"
+     },
+     "2301907": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 848,
+      "budget_share": 0.9877474402730375,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 2516.608695652174,
+      "emissions": 23,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 10,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 57882,
+      "refusal_reasons": {
+       "budget_exhausted": 848
+      },
+      "spent_bytes": 57882,
+      "transcript_emissions": 23,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__normal_immediate__none__2301907\\s5b_normal_immediate_s2301907\\relay_transcript.jsonl.gz"
+     },
+     "2301908": {
+      "budget_authority_after_exit": {
+       "a4_hooks.RELAY_BUDGET_BYTES": 29300,
+       "a4_world_adapter.RELAY_BUDGET_BYTES": 29300,
+       "v2_common.STAGE_B_INHERITED_OVERRIDES['comm_budget_bytes']": 29300
+      },
+      "budget_bytes_in_world": 58600,
+      "budget_credit": {
+       "context_budget_bytes": 58600,
+       "executor_budget_bytes": 58600,
+       "protocol_budget_bytes": 58600,
+       "run_configuration_budget_bytes": 58600
+      },
+      "budget_refused_sends": 594,
+      "budget_share": 0.9683959044368601,
+      "capacity_refused_sends": 0,
+      "cost_per_send": 2467.304347826087,
+      "emissions": 23,
+      "first_masked_credit_tick": null,
+      "generated_goals": 24,
+      "masked_by_credit_total": null,
+      "on_time": 13,
+      "provenance": {
+       "dir": "P2_6_fixed_p2",
+       "sha256": "d023992dd67bc2012ca17568142cd109138c6381bd0240bb6e2ea5c5f2ec8bff",
+       "tag": "p2"
+      },
+      "realized_spend": 56748,
+      "refusal_reasons": {
+       "budget_exhausted": 594
+      },
+      "spent_bytes": 56748,
+      "transcript_emissions": 23,
+      "transcript_found": true,
+      "transcript_path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\scale_probe\\P2_6_fixed_p2\\world_logs\\eval__normal_immediate__none__2301908\\s5b_normal_immediate_s2301908\\relay_transcript.jsonl.gz"
+     }
+    }
+   },
+   "immediate_totals": {
+    "cost_per_send_mean": 2498.6739130434785,
+    "denominator_emissions": 184,
+    "emissions": 184,
+    "spent_bytes": 459756
+   },
+   "n": 6,
+   "on_time_interval": {
+    "denominator": 192,
+    "headroom": 108,
+    "lower_always_hold": 0,
+    "upper_immediate": 108
+   },
+   "per_world_budget_refusals": {
+    "2301901": 387,
+    "2301902": 726,
+    "2301903": 704,
+    "2301904": 327,
+    "2301905": 822,
+    "2301906": 389,
+    "2301907": 848,
+    "2301908": 594
+   },
+   "per_world_emissions": {
+    "2301901": 23,
+    "2301902": 23,
+    "2301903": 23,
+    "2301904": 23,
+    "2301905": 23,
+    "2301906": 23,
+    "2301907": 23,
+    "2301908": 23
+   },
+   "worlds_at_budget_cap": {
+    "count": 8,
+    "denominator": 8
+   }
+  }
+ },
+ "replays": 48,
+ "schema": "scale-probe-p2-summary/1",
+ "stage": "P2",
+ "verdict": "pass"
+}

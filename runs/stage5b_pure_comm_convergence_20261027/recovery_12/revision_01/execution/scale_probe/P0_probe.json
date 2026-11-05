@@ -1,0 +1,365 @@
+{
+ "identity": "local experiment level, no identity built",
+ "p0": {
+  "gates": {
+   "A4_TRANSPORT_OVERRIDES_keys": [
+    "comm_ack",
+    "comm_budget_bytes",
+    "comm_delay_ticks",
+    "comm_delivery_probability",
+    "comm_max_wait_steps",
+    "comm_policy",
+    "comm_sends_per_tick",
+    "comm_subscribers",
+    "comm_timing_mode",
+    "comm_urgent_wait_steps",
+    "gossip_interval",
+    "steps"
+   ],
+   "a1_metrics_CONFIG_EXPECTATIONS_keys": [
+    "comm_ack",
+    "comm_budget_bytes",
+    "comm_delay_ticks",
+    "comm_delivery_probability",
+    "num_goals",
+    "rescue_robots",
+    "search_agents",
+    "steps"
+   ],
+   "a1_metrics_names_comm_subscribers": false,
+   "a1_metrics_names_rescue_robots": true,
+   "rescue_robots_derivation": "world.py verify_resolved_configuration computes rescue_species * rescue_per_species",
+   "world_FROZEN_CONFIG_EXPECTATIONS_keys": [
+    "comm_ack",
+    "comm_budget_bytes",
+    "comm_delay_ticks",
+    "comm_delivery_probability",
+    "num_goals",
+    "rescue_robots",
+    "search_agents",
+    "steps"
+   ],
+   "world_names_comm_subscribers": false
+  },
+  "payload_preview": {
+   "fixed": {
+    "3": {
+     "advantage_cost_per_send": 0.12493369565217392,
+     "affordable_sends": 46,
+     "b0_bytes": 10000,
+     "budget_bytes": 58600,
+     "cost_per_send": 1249.3369565217392,
+     "share_per_send_pct": 2.131974328535391
+    },
+    "6": {
+     "advantage_cost_per_send": 0.24986739130434785,
+     "affordable_sends": 23,
+     "b0_bytes": 10000,
+     "budget_bytes": 58600,
+     "cost_per_send": 2498.6739130434785,
+     "share_per_send_pct": 4.263948657070782
+    },
+    "12": {
+     "advantage_cost_per_send": 0.4997347826086957,
+     "affordable_sends": 11,
+     "b0_bytes": 10000,
+     "budget_bytes": 58600,
+     "cost_per_send": 4997.347826086957,
+     "share_per_send_pct": 8.527897314141564
+    }
+   },
+   "proportional": {
+    "3": {
+     "advantage_cost_per_send": 0.24986739130434785,
+     "affordable_sends": 23,
+     "b0_bytes": 5000.0,
+     "budget_bytes": 29300.0,
+     "cost_per_send": 1249.3369565217392,
+     "share_per_send_pct": 4.263948657070782
+    },
+    "6": {
+     "advantage_cost_per_send": 0.24986739130434785,
+     "affordable_sends": 23,
+     "b0_bytes": 10000.0,
+     "budget_bytes": 58600.0,
+     "cost_per_send": 2498.6739130434785,
+     "share_per_send_pct": 4.263948657070782
+    },
+    "12": {
+     "advantage_cost_per_send": 0.24986739130434785,
+     "affordable_sends": 23,
+     "b0_bytes": 20000.0,
+     "budget_bytes": 117200.0,
+     "cost_per_send": 4997.347826086957,
+     "share_per_send_pct": 4.263948657070782
+    }
+   }
+  },
+  "question": "can N (subscriber count) move while rescue_robots stays 6?",
+  "registration_chain": [
+   {
+    "file": "integrated_sar/comm.py",
+    "sha256": "386fadcda10967641aac7bfee2808ced6498e84246a1125dd3a994c04645c226",
+    "sites": [
+     {
+      "line": 257,
+      "text": "self._subscribers = tuple(str(agent_id) for agent_id in subscribers)"
+     },
+     {
+      "line": 908,
+      "text": "cost_bytes = payload_bytes * len(self._subscribers)"
+     }
+    ]
+   },
+   {
+    "file": "integrated_sar/joint_driver.py",
+    "sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+    "sites": [
+     {
+      "line": 131,
+      "text": "comm_subscribers: str = \"all\""
+     },
+     {
+      "line": 355,
+      "text": "subscribers = parse_comm_subscribers(self.comm_subscribers)"
+     },
+     {
+      "line": 359,
+      "text": "f\"comma-separated list of rescue robot ids, got {self.comm_subscribers!r}\""
+     },
+     {
+      "line": 672,
+      "text": "comm_subscribers=str(args.comm_subscribers),"
+     },
+     {
+      "line": 697,
+      "text": "def parse_comm_subscribers(spec: str) -> tuple[str, ...] | None:"
+     },
+     {
+      "line": 1041,
+      "text": "requested = parse_comm_subscribers(configuration.comm_subscribers)"
+     },
+     {
+      "line": 1042,
+      "text": "available = tuple(str(agent_id) for agent_id in task_adapter.env.agent_dic)"
+     },
+     {
+      "line": 1044,
+      "text": "subscribers = available"
+     },
+     {
+      "line": 1052,
+      "text": "subscribers = requested"
+     }
+    ]
+   },
+   {
+    "file": "recovery_12/revision_01/stage5b_comm/world.py",
+    "sha256": "911e480ec126a5dfb7a33d73767671e5f1ad7e00dfd336f39542ff6e0f5520b5",
+    "sites": [
+     {
+      "line": 31,
+      "text": "\"comm_subscribers\": \"all\","
+     },
+     {
+      "line": 57,
+      "text": "REGISTERED_EXPECTATION_OVERRIDE = \"comm_budget_bytes\""
+     },
+     {
+      "line": 282,
+      "text": "if set(divergence) != {REGISTERED_EXPECTATION_OVERRIDE}:"
+     }
+    ]
+   }
+  ],
+  "seam": {
+   "current_value": "comm_subscribers = 'all'",
+   "location": "recovery_12/revision_01/stage5b_comm/world.py A4_TRANSPORT_OVERRIDES",
+   "minimal_diff_not_applied": [
+    "-    \"comm_subscribers\": \"all\",",
+    "+    \"comm_subscribers\": SCALE_SUBSCRIBERS,   # 'all' | 'first:3'"
+   ],
+   "pin_file_touched": false,
+   "revision_local": true
+  },
+  "subscriber_ceiling": {
+   "consequence": "N can be narrowed below the robot count, never widened above it",
+   "rule": "joint_driver.py:1041-1052 -- requested ids are checked against task_adapter.env.agent_dic and any unknown id raises ConfigurationError"
+  },
+  "verdict": {
+   "N_gt_robot_count": {
+    "decoupled": false,
+    "on_time_status": "confounded indicator (labour moves with N)",
+    "reason": "N=12 needs rescue_per_species=4, which sets rescue_robots=12; joint_driver refuses subscriber ids that are not real robots"
+   },
+   "N_le_robot_count": {
+    "decoupled": true,
+    "on_time_status": "valid indicator (labour held at 6 robots)",
+    "reason": "comm_subscribers is a RunConfiguration field with a CLI flag and a parser, and it is absent from both frozen expectation sets, so narrowing the uplink changes no registered key and no rescue_robots"
+   },
+   "label": "P0-A-partly"
+  }
+ },
+ "payload": {
+  "analytic_preview": {
+   "fixed": {
+    "3": {
+     "advantage_cost_per_send": 0.12493369565217392,
+     "affordable_sends": 46,
+     "b0_bytes": 10000,
+     "budget_bytes": 58600,
+     "cost_per_send": 1249.3369565217392,
+     "share_per_send_pct": 2.131974328535391
+    },
+    "6": {
+     "advantage_cost_per_send": 0.24986739130434785,
+     "affordable_sends": 23,
+     "b0_bytes": 10000,
+     "budget_bytes": 58600,
+     "cost_per_send": 2498.6739130434785,
+     "share_per_send_pct": 4.263948657070782
+    },
+    "12": {
+     "advantage_cost_per_send": 0.4997347826086957,
+     "affordable_sends": 11,
+     "b0_bytes": 10000,
+     "budget_bytes": 58600,
+     "cost_per_send": 4997.347826086957,
+     "share_per_send_pct": 8.527897314141564
+    }
+   },
+   "proportional": {
+    "3": {
+     "advantage_cost_per_send": 0.24986739130434785,
+     "affordable_sends": 23,
+     "b0_bytes": 5000.0,
+     "budget_bytes": 29300.0,
+     "cost_per_send": 1249.3369565217392,
+     "share_per_send_pct": 4.263948657070782
+    },
+    "6": {
+     "advantage_cost_per_send": 0.24986739130434785,
+     "affordable_sends": 23,
+     "b0_bytes": 10000.0,
+     "budget_bytes": 58600.0,
+     "cost_per_send": 2498.6739130434785,
+     "share_per_send_pct": 4.263948657070782
+    },
+    "12": {
+     "advantage_cost_per_send": 0.24986739130434785,
+     "affordable_sends": 23,
+     "b0_bytes": 20000.0,
+     "budget_bytes": 117200.0,
+     "cost_per_send": 4997.347826086957,
+     "share_per_send_pct": 4.263948657070782
+    }
+   }
+  },
+  "cost_per_send_max": 2541.6521739130435,
+  "cost_per_send_mean": 2498.6739130434785,
+  "cost_per_send_min": 2451.6521739130435,
+  "denominator_emissions": 184,
+  "note": "estimate_message_bytes() prices the canonical JSON of one DetectionMessage, so the payload is a distribution, not a constant; the mean over the frozen 184 sends is what P1 uses, and the spread is reported beside it.",
+  "numerator_paid_bytes": 459756,
+  "payload_per_send_max": 423.60869565217394,
+  "payload_per_send_mean": 416.44565217391306,
+  "payload_per_send_min": 408.60869565217394,
+  "per_scene": {
+   "2301901": {
+    "cost_per_send": 2531.478260869565,
+    "emissions": 23,
+    "paid_bytes": 58224,
+    "payload_per_send": 421.9130434782608
+   },
+   "2301902": {
+    "cost_per_send": 2541.6521739130435,
+    "emissions": 23,
+    "paid_bytes": 58458,
+    "payload_per_send": 423.60869565217394
+   },
+   "2301903": {
+    "cost_per_send": 2522.086956521739,
+    "emissions": 23,
+    "paid_bytes": 58008,
+    "payload_per_send": 420.3478260869565
+   },
+   "2301904": {
+    "cost_per_send": 2464.9565217391305,
+    "emissions": 23,
+    "paid_bytes": 56694,
+    "payload_per_send": 410.82608695652175
+   },
+   "2301905": {
+    "cost_per_send": 2493.6521739130435,
+    "emissions": 23,
+    "paid_bytes": 57354,
+    "payload_per_send": 415.60869565217394
+   },
+   "2301906": {
+    "cost_per_send": 2451.6521739130435,
+    "emissions": 23,
+    "paid_bytes": 56388,
+    "payload_per_send": 408.60869565217394
+   },
+   "2301907": {
+    "cost_per_send": 2516.608695652174,
+    "emissions": 23,
+    "paid_bytes": 57882,
+    "payload_per_send": 419.4347826086957
+   },
+   "2301908": {
+    "cost_per_send": 2467.304347826087,
+    "emissions": 23,
+    "paid_bytes": 56748,
+    "payload_per_send": 411.2173913043478
+   }
+  },
+  "row_keys_send_or_byte_related": [
+   "airtime_bytes",
+   "budget_bytes",
+   "budget_refused_sends",
+   "capacity_refused_sends",
+   "charged_bytes",
+   "emissions",
+   "paid_bytes",
+   "paid_emissions"
+  ],
+  "row_provenance": {
+   "2301901": {
+    "path": "runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301901.json",
+    "sha256": "078bf3b543af81d52cb97099f9320022d5a9d9f61bc53805c8f16421bee6721c"
+   },
+   "2301902": {
+    "path": "runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301902.json",
+    "sha256": "4a66342f3b7ef675e64b4e2c494c0b14659e9e52a87365d15108d97f4120a966"
+   },
+   "2301903": {
+    "path": "runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301903.json",
+    "sha256": "9a57c23ab21b09bc673dab4683f83619a10778f54d2ccda14cf972a9f560fe62"
+   },
+   "2301904": {
+    "path": "runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301904.json",
+    "sha256": "ddfffa9f02935014662a6eb00b124435900cd0161d27728cb56d551251fe487d"
+   },
+   "2301905": {
+    "path": "runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301905.json",
+    "sha256": "475760d97c15dfa05c07445086997a13c3ca8992c7f8e8666eb60ffcd7a1d6b7"
+   },
+   "2301906": {
+    "path": "runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301906.json",
+    "sha256": "e14aa353cea37395b3bf93aa3cb813a73e82ef71aff7a3cb7b8cb22ed8e6d0c0"
+   },
+   "2301907": {
+    "path": "runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301907.json",
+    "sha256": "bb7b7688158aa7ea10a6175ba92c976f2a10d6f8f77e266677ffed3ad5b48a6d"
+   },
+   "2301908": {
+    "path": "runs\\stage5b_pure_comm_budget58600_20261026\\revision_02\\execution\\rows\\eval\\eval_normal_immediate_none_2301908.json",
+    "sha256": "6a83e6c8b105c9c4f1e96480a75d691f4c9f17834102b14d4de0a2bde51cbe4d"
+   }
+  },
+  "source_schema": "frozen rule-arm rows, normal_immediate, 8 scenes"
+ },
+ "replay_quota_used": 0,
+ "schema": "scale-probe-p0/1"
+}

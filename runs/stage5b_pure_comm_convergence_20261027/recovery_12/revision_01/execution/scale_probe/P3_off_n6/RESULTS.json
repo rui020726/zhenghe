@@ -1,0 +1,446 @@
+{
+ "checkpoint": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\smoke500\\control\\milestone_5500.pth",
+ "checkpoint_sha256": "57e76a0689e5cce4efcbb2be75cf3741f19cc5baf40e5cef56bee3aab60928de",
+ "identity": "local experiment level, no identity built",
+ "mode": "off",
+ "n": 6,
+ "replays": 8,
+ "results": [
+  {
+   "elapsed_seconds": 4.82,
+   "error": "FileExistsError: [WinError 183] 当文件已存在时，无法创建该文件。: 'D:\\\\code\\\\整合\\\\zhenghe-round42\\\\runs\\\\stage5b_pure_comm_convergence_20261027\\\\recovery_12\\\\revision_01\\\\execution\\\\scale_probe\\\\P3_off_n6\\\\world_logs\\\\eval__off_n6__none__2301901\\\\s5b_p3_off_n6_s2301901'",
+   "mode": "off",
+   "n": 6,
+   "scene": 2301901,
+   "status": "error",
+   "tag": "off_n6",
+   "traceback": "Traceback (most recent call last):\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\diagnostics_20261104\\p3_scale_features.py\", line 140, in worker\n    row = world.run_episode(\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\stage5b_comm\\world.py\", line 449, in run_episode\n    row = _run_episode_body(\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\stage5b_comm\\world.py\", line 469, in _run_episode_body\n    out_dir = reserve_artifact_directory(layout, label, tag, artifact_namespace)\n  File \"D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\stage5b_comm\\world.py\", line 433, in reserve_artifact_directory\n    target.mkdir(exist_ok=False)\n  File \"D:\\project_env\\lib\\pathlib.py\", line 1175, in mkdir\n    self._accessor.mkdir(self, mode)\nFileExistsError: [WinError 183] 当文件已存在时，无法创建该文件。: 'D:\\\\code\\\\整合\\\\zhenghe-round42\\\\runs\\\\stage5b_pure_comm_convergence_20261027\\\\recovery_12\\\\revision_01\\\\execution\\\\scale_probe\\\\P3_off_n6\\\\world_logs\\\\eval__off_n6__none__2301901\\\\s5b_p3_off_n6_s2301901'\n"
+  },
+  {
+   "checkpoint_episode": 5500,
+   "elapsed_seconds": 22.58,
+   "emissions": 7,
+   "first_masked_credit_tick": null,
+   "generated_goals": 24,
+   "masked_by_credit_total": 0,
+   "mode": "off",
+   "n": 6,
+   "on_time": 7,
+   "scale_invariant": {
+    "dims": {
+     "queue_backlog_targets(#14)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 16194,
+       "max": 24.0,
+       "mean": 22.610349512164998,
+       "min": 10.0,
+       "sd": 2.784900195879624
+      },
+      "rewritten": {
+       "count": 16194,
+       "max": 24.0,
+       "mean": 22.610349512164998,
+       "min": 10.0,
+       "sd": 2.784900195879624
+      },
+      "values_changed": 0
+     },
+     "subscribers(#17)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 16194,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "rewritten": {
+       "count": 16194,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "values_changed": 0
+     }
+    },
+    "matrix_calls": 1000,
+    "mode": "off",
+    "subscribers": 6
+   },
+   "scene": 2301902,
+   "spent_bytes": 16512,
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": "off_n6"
+  },
+  {
+   "checkpoint_episode": 5500,
+   "elapsed_seconds": 21.8,
+   "emissions": 8,
+   "first_masked_credit_tick": null,
+   "generated_goals": 24,
+   "masked_by_credit_total": 0,
+   "mode": "off",
+   "n": 6,
+   "on_time": 8,
+   "scale_invariant": {
+    "dims": {
+     "queue_backlog_targets(#14)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 15415,
+       "max": 24.0,
+       "mean": 22.859552384041518,
+       "min": 11.0,
+       "sd": 2.317443351080122
+      },
+      "rewritten": {
+       "count": 15415,
+       "max": 24.0,
+       "mean": 22.859552384041518,
+       "min": 11.0,
+       "sd": 2.317443351080122
+      },
+      "values_changed": 0
+     },
+     "subscribers(#17)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 15415,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "rewritten": {
+       "count": 15415,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "values_changed": 0
+     }
+    },
+    "matrix_calls": 1000,
+    "mode": "off",
+    "subscribers": 6
+   },
+   "scene": 2301903,
+   "spent_bytes": 18966,
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": "off_n6"
+  },
+  {
+   "checkpoint_episode": 5500,
+   "elapsed_seconds": 16.85,
+   "emissions": 9,
+   "first_masked_credit_tick": null,
+   "generated_goals": 24,
+   "masked_by_credit_total": 0,
+   "mode": "off",
+   "n": 6,
+   "on_time": 9,
+   "scale_invariant": {
+    "dims": {
+     "queue_backlog_targets(#14)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 13649,
+       "max": 24.0,
+       "mean": 21.915451681441866,
+       "min": 4.0,
+       "sd": 1.9251970571150931
+      },
+      "rewritten": {
+       "count": 13649,
+       "max": 24.0,
+       "mean": 21.915451681441866,
+       "min": 4.0,
+       "sd": 1.9251970571150931
+      },
+      "values_changed": 0
+     },
+     "subscribers(#17)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 13649,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "rewritten": {
+       "count": 13649,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "values_changed": 0
+     }
+    },
+    "matrix_calls": 1000,
+    "mode": "off",
+    "subscribers": 6
+   },
+   "scene": 2301904,
+   "spent_bytes": 20958,
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": "off_n6"
+  },
+  {
+   "checkpoint_episode": 5500,
+   "elapsed_seconds": 17.09,
+   "emissions": 10,
+   "first_masked_credit_tick": null,
+   "generated_goals": 24,
+   "masked_by_credit_total": 0,
+   "mode": "off",
+   "n": 6,
+   "on_time": 10,
+   "scale_invariant": {
+    "dims": {
+     "queue_backlog_targets(#14)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 14148,
+       "max": 24.0,
+       "mean": 23.47766468758835,
+       "min": 10.0,
+       "sd": 1.4177562053152408
+      },
+      "rewritten": {
+       "count": 14148,
+       "max": 24.0,
+       "mean": 23.47766468758835,
+       "min": 10.0,
+       "sd": 1.4177562053152408
+      },
+      "values_changed": 0
+     },
+     "subscribers(#17)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 14148,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "rewritten": {
+       "count": 14148,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "values_changed": 0
+     }
+    },
+    "matrix_calls": 1000,
+    "mode": "off",
+    "subscribers": 6
+   },
+   "scene": 2301905,
+   "spent_bytes": 23286,
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": "off_n6"
+  },
+  {
+   "checkpoint_episode": 5500,
+   "elapsed_seconds": 17.08,
+   "emissions": 10,
+   "first_masked_credit_tick": null,
+   "generated_goals": 24,
+   "masked_by_credit_total": 0,
+   "mode": "off",
+   "n": 6,
+   "on_time": 10,
+   "scale_invariant": {
+    "dims": {
+     "queue_backlog_targets(#14)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 12508,
+       "max": 24.0,
+       "mean": 21.821474256475856,
+       "min": 4.0,
+       "sd": 3.0895952773512247
+      },
+      "rewritten": {
+       "count": 12508,
+       "max": 24.0,
+       "mean": 21.821474256475856,
+       "min": 4.0,
+       "sd": 3.0895952773512247
+      },
+      "values_changed": 0
+     },
+     "subscribers(#17)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 12508,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "rewritten": {
+       "count": 12508,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "values_changed": 0
+     }
+    },
+    "matrix_calls": 1000,
+    "mode": "off",
+    "subscribers": 6
+   },
+   "scene": 2301906,
+   "spent_bytes": 22962,
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": "off_n6"
+  },
+  {
+   "checkpoint_episode": 5500,
+   "elapsed_seconds": 16.95,
+   "emissions": 10,
+   "first_masked_credit_tick": null,
+   "generated_goals": 24,
+   "masked_by_credit_total": 0,
+   "mode": "off",
+   "n": 6,
+   "on_time": 10,
+   "scale_invariant": {
+    "dims": {
+     "queue_backlog_targets(#14)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 13843,
+       "max": 24.0,
+       "mean": 23.102434443401,
+       "min": 5.0,
+       "sd": 2.5085960423761957
+      },
+      "rewritten": {
+       "count": 13843,
+       "max": 24.0,
+       "mean": 23.102434443401,
+       "min": 5.0,
+       "sd": 2.5085960423761957
+      },
+      "values_changed": 0
+     },
+     "subscribers(#17)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 13843,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "rewritten": {
+       "count": 13843,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "values_changed": 0
+     }
+    },
+    "matrix_calls": 1000,
+    "mode": "off",
+    "subscribers": 6
+   },
+   "scene": 2301907,
+   "spent_bytes": 23994,
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": "off_n6"
+  },
+  {
+   "checkpoint_episode": 5500,
+   "elapsed_seconds": 16.44,
+   "emissions": 10,
+   "first_masked_credit_tick": null,
+   "generated_goals": 24,
+   "masked_by_credit_total": 0,
+   "mode": "off",
+   "n": 6,
+   "on_time": 10,
+   "scale_invariant": {
+    "dims": {
+     "queue_backlog_targets(#14)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 13696,
+       "max": 24.0,
+       "mean": 22.75540303738318,
+       "min": 10.0,
+       "sd": 2.0748726204996575
+      },
+      "rewritten": {
+       "count": 13696,
+       "max": 24.0,
+       "mean": 22.75540303738318,
+       "min": 10.0,
+       "sd": 2.0748726204996575
+      },
+      "values_changed": 0
+     },
+     "subscribers(#17)": {
+      "diff_histogram": {},
+      "original": {
+       "count": 13696,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "rewritten": {
+       "count": 13696,
+       "max": 6.0,
+       "mean": 6.0,
+       "min": 6.0,
+       "sd": 0.0
+      },
+      "values_changed": 0
+     }
+    },
+    "matrix_calls": 1000,
+    "mode": "off",
+    "subscribers": 6
+   },
+   "scene": 2301908,
+   "spent_bytes": 23166,
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": "off_n6"
+  }
+ ],
+ "scenes": [
+  2301901,
+  2301902,
+  2301903,
+  2301904,
+  2301905,
+  2301906,
+  2301907,
+  2301908
+ ],
+ "schema": "scale-probe-p3-worlds/1",
+ "stage": "P3",
+ "tag": "off_n6"
+}

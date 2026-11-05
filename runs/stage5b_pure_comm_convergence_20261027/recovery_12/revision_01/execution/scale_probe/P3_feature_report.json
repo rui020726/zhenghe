@@ -1,0 +1,404 @@
+{
+ "cannot_say": [
+  "that the 19-dim distribution is aligned across N: only two dims were rewritten, and #10 revision_delta / #14 in its raw form / #2 sent_count still carry N-dependent scale by construction",
+  "that normalisation preserves on-time: the N=6 delta above is one checkpoint on 8 development scenes, not a population estimate"
+ ],
+ "checks": [
+  {
+   "cells": "8 scenes x 3 quantities",
+   "check": "A_off_N6_equals_archived_rows",
+   "mismatches": [],
+   "note": "a mismatch is stop-loss rule 3 and voids P3",
+   "pass": true
+  },
+  {
+   "check": "B_norm_only_drop_at_N6_within_limit",
+   "delta": 22,
+   "denominator": 192,
+   "limit": -2,
+   "note": "the protocol voids the normalisation if it costs more than 2 tasks at N=6",
+   "on_time_norm": 91,
+   "on_time_off": 69,
+   "pass": true
+  },
+  {
+   "check": "B_dim17_is_identity_at_N6",
+   "norm_mean": 1.0,
+   "note": "#17 holds 6.0 at N=6, so n/6 must land on exactly 1.0",
+   "pass": true
+  },
+  {
+   "check": "B_dim14_is_not_identity_at_N6",
+   "note": "backlog/24 must actually move at N=6; if it did not, the transform never ran and B is vacuous",
+   "pass": true,
+   "values_changed": 63925
+  },
+  {
+   "check": "C_N3_and_N12_report_only",
+   "note": "P3 asks for feature statistics and cost-side metrics at these N; on-time is recorded but is only a clean indicator at N=3 (labour held at 6) and is confounded at N=12 (roster is 12)",
+   "pass": true
+  },
+  {
+   "check": "D_pin_files_unchanged",
+   "files": {
+    "a1_metrics.py": {
+     "actual_sha256": "066459fb489507ceda3ca5fa306a7e80949bc4fba55761829194d26d3364f86d",
+     "manifest_sha256": "066459fb489507ceda3ca5fa306a7e80949bc4fba55761829194d26d3364f86d",
+     "path": "D:\\code\\整合\\zhenghe-round42\\runs\\attribution_and_gossip_probe_20261020\\a1_metrics.py",
+     "unchanged": true
+    },
+    "budget_masked.py": {
+     "actual_sha256": "73c251cdb98011f7762908f92a969f75e5584b3e7106a782f1ddc7b6bb05c7b8",
+     "manifest_sha256": "73c251cdb98011f7762908f92a969f75e5584b3e7106a782f1ddc7b6bb05c7b8",
+     "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_budget_action_mask_fix_20260922\\budget_masked.py",
+     "unchanged": true
+    },
+    "comm.py": {
+     "actual_sha256": "386fadcda10967641aac7bfee2808ced6498e84246a1125dd3a994c04645c226",
+     "manifest_sha256": "386fadcda10967641aac7bfee2808ced6498e84246a1125dd3a994c04645c226",
+     "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm.py",
+     "unchanged": true
+    },
+    "comm_learning.py": {
+     "actual_sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f",
+     "manifest_sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f",
+     "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm_learning.py",
+     "unchanged": true
+    },
+    "joint_driver.py": {
+     "actual_sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+     "manifest_sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+     "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\joint_driver.py",
+     "unchanged": true
+    },
+    "sb_collector.py": {
+     "actual_sha256": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+     "manifest_sha256": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+     "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_cost_stage_b_20260927\\sb_collector.py",
+     "unchanged": true
+    },
+    "v2_reward_timing.py": {
+     "actual_sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+     "manifest_sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+     "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_cost_v2_rerun_20260928\\v2_reward_timing.py",
+     "unchanged": true
+    },
+    "v2_run.py": {
+     "actual_sha256": "8356fb68661962263bb82513e4197e75f242f0c7cbc0af8a02487332899d9c61",
+     "manifest_sha256": "8356fb68661962263bb82513e4197e75f242f0c7cbc0af8a02487332899d9c61",
+     "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_cost_v2_rerun_20260928\\v2_run.py",
+     "unchanged": true
+    }
+   },
+   "manifest_sweep": {
+    "files_checked": 95,
+    "files_drifted": []
+   },
+   "note": "the rewrite lives in revision-local scale_features.py plus an instance-level forward shadow, so no pinned file moved",
+   "pass": true
+  }
+ ],
+ "checks_passed": 6,
+ "checks_total": 6,
+ "configs": {
+  "norm_n12_v2": {
+   "results_sha256": "8e59ab38a6ac960a4dce50238b9a12f4c30c9b5f71fef7c839ce6b88f3b78a82",
+   "worlds": 8
+  },
+  "norm_n3_v2": {
+   "results_sha256": "ba2faa00a8c7da47bc2869ab78a4104b0f1bbdd599649dbaa090e55eaadd0f53",
+   "worlds": 8
+  },
+  "norm_n6_v2": {
+   "results_sha256": "6812bfc4f5f767fa3331b62f1ccd23291347a5e8a7fb716d253bf727e9fab34b",
+   "worlds": 8
+  },
+  "off_n6": {
+   "results_sha256": "3b1b9fdde435ed8ce09e07f83f5b620bf29a2a4beb7a86bc701412ff56121b82",
+   "worlds": 8
+  }
+ },
+ "drift_at_n6": {
+  "denominator": 192,
+  "emissions_norm": 125,
+  "emissions_off": 69,
+  "on_time_delta": 22,
+  "on_time_norm": 91,
+  "on_time_off": 69,
+  "paid_bytes_norm": 307032,
+  "paid_bytes_off": 161364,
+  "per_dim": {
+   "queue_backlog_targets(#14)": {
+    "diff_histogram_top": {
+     "-11.5": 1714,
+     "-15.3333": 2049,
+     "-20.125": 1761,
+     "-21.0833": 2410,
+     "-22.0417": 3828,
+     "-23.0": 39971
+    },
+    "norm_only": {
+     "count": 63933,
+     "max": 1.0,
+     "mean": 0.8937611764258228,
+     "min": 0.0,
+     "sd": 0.18353364734359298
+    },
+    "off": {
+     "count": 99453,
+     "max": 24.0,
+     "mean": 22.66624435663077,
+     "min": 4.0,
+     "sd": 2.4194807816074886
+    },
+    "values_changed": 63925
+   },
+   "subscribers(#17)": {
+    "diff_histogram_top": {
+     "-5.0": 63933
+    },
+    "norm_only": {
+     "count": 63933,
+     "max": 1.0,
+     "mean": 1.0,
+     "min": 1.0,
+     "sd": 0.0
+    },
+    "off": {
+     "count": 99453,
+     "max": 6.0,
+     "mean": 6.0,
+     "min": 6.0,
+     "sd": 0.0
+    },
+    "values_changed": 63933
+   }
+  }
+ },
+ "identity": "local experiment level, no identity built",
+ "inertness_per_scene": {
+  "2301901": {
+   "differing": [],
+   "equal": true,
+   "off_n6": {
+    "emissions": 5,
+    "on_time": 5,
+    "paid_bytes": 11520
+   },
+   "reference": {
+    "emissions": 5,
+    "on_time": 5,
+    "paid_bytes": 11520
+   }
+  },
+  "2301902": {
+   "differing": [],
+   "equal": true,
+   "off_n6": {
+    "emissions": 7,
+    "on_time": 7,
+    "paid_bytes": 16512
+   },
+   "reference": {
+    "emissions": 7,
+    "on_time": 7,
+    "paid_bytes": 16512
+   }
+  },
+  "2301903": {
+   "differing": [],
+   "equal": true,
+   "off_n6": {
+    "emissions": 8,
+    "on_time": 8,
+    "paid_bytes": 18966
+   },
+   "reference": {
+    "emissions": 8,
+    "on_time": 8,
+    "paid_bytes": 18966
+   }
+  },
+  "2301904": {
+   "differing": [],
+   "equal": true,
+   "off_n6": {
+    "emissions": 9,
+    "on_time": 9,
+    "paid_bytes": 20958
+   },
+   "reference": {
+    "emissions": 9,
+    "on_time": 9,
+    "paid_bytes": 20958
+   }
+  },
+  "2301905": {
+   "differing": [],
+   "equal": true,
+   "off_n6": {
+    "emissions": 10,
+    "on_time": 10,
+    "paid_bytes": 23286
+   },
+   "reference": {
+    "emissions": 10,
+    "on_time": 10,
+    "paid_bytes": 23286
+   }
+  },
+  "2301906": {
+   "differing": [],
+   "equal": true,
+   "off_n6": {
+    "emissions": 10,
+    "on_time": 10,
+    "paid_bytes": 22962
+   },
+   "reference": {
+    "emissions": 10,
+    "on_time": 10,
+    "paid_bytes": 22962
+   }
+  },
+  "2301907": {
+   "differing": [],
+   "equal": true,
+   "off_n6": {
+    "emissions": 10,
+    "on_time": 10,
+    "paid_bytes": 23994
+   },
+   "reference": {
+    "emissions": 10,
+    "on_time": 10,
+    "paid_bytes": 23994
+   }
+  },
+  "2301908": {
+   "differing": [],
+   "equal": true,
+   "off_n6": {
+    "emissions": 10,
+    "on_time": 10,
+    "paid_bytes": 23166
+   },
+   "reference": {
+    "emissions": 10,
+    "on_time": 10,
+    "paid_bytes": 23166
+   }
+  }
+ },
+ "other_n": {
+  "norm_n12_v2": {
+   "budget_share": 0.8907337883959044,
+   "cost_per_send": 4912.658823529412,
+   "dim14_original": {
+    "count": 12833,
+    "max": 24.0,
+    "mean": 21.745266110808075,
+    "min": 3.0,
+    "sd": 3.4231698791962835
+   },
+   "dim14_rewritten": {
+    "count": 12833,
+    "max": 1.0,
+    "mean": 0.9060527491258793,
+    "min": 0.125,
+    "sd": 0.14263207953179707
+   },
+   "dim17_original": 12.0,
+   "dim17_rewritten": 2.0,
+   "emissions": 85,
+   "n": 12,
+   "on_time": 85,
+   "on_time_denominator": 192,
+   "spent_bytes": 417576,
+   "subscribers_live": 12
+  },
+  "norm_n3_v2": {
+   "budget_share": 0.4237819965870307,
+   "cost_per_send": 1241.68125,
+   "dim14_original": {
+    "count": 6788,
+    "max": 23.0,
+    "mean": 18.759870359457867,
+    "min": 3.0,
+    "sd": 5.891808240585374
+   },
+   "dim14_rewritten": {
+    "count": 6788,
+    "max": 0.9583333134651184,
+    "mean": 0.7816612595647275,
+    "min": 0.125,
+    "sd": 0.24549200651554443
+   },
+   "dim17_original": 3.0,
+   "dim17_rewritten": 0.5,
+   "emissions": 160,
+   "n": 3,
+   "on_time": 94,
+   "on_time_denominator": 192,
+   "spent_bytes": 198669,
+   "subscribers_live": 3
+  }
+ },
+ "pins": {
+  "a1_metrics.py": {
+   "actual_sha256": "066459fb489507ceda3ca5fa306a7e80949bc4fba55761829194d26d3364f86d",
+   "manifest_sha256": "066459fb489507ceda3ca5fa306a7e80949bc4fba55761829194d26d3364f86d",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\attribution_and_gossip_probe_20261020\\a1_metrics.py",
+   "unchanged": true
+  },
+  "budget_masked.py": {
+   "actual_sha256": "73c251cdb98011f7762908f92a969f75e5584b3e7106a782f1ddc7b6bb05c7b8",
+   "manifest_sha256": "73c251cdb98011f7762908f92a969f75e5584b3e7106a782f1ddc7b6bb05c7b8",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_budget_action_mask_fix_20260922\\budget_masked.py",
+   "unchanged": true
+  },
+  "comm.py": {
+   "actual_sha256": "386fadcda10967641aac7bfee2808ced6498e84246a1125dd3a994c04645c226",
+   "manifest_sha256": "386fadcda10967641aac7bfee2808ced6498e84246a1125dd3a994c04645c226",
+   "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm.py",
+   "unchanged": true
+  },
+  "comm_learning.py": {
+   "actual_sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f",
+   "manifest_sha256": "a9add53099c2fe86f459797bd7c38d24361934b264e235ed9fb36118d55cf60f",
+   "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\comm_learning.py",
+   "unchanged": true
+  },
+  "joint_driver.py": {
+   "actual_sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "manifest_sha256": "2a682fecd5936cc4b2786477398eed55928c6f5781282bc29e4918cdc01c911b",
+   "path": "D:\\code\\整合\\zhenghe-round42\\integrated_sar\\joint_driver.py",
+   "unchanged": true
+  },
+  "sb_collector.py": {
+   "actual_sha256": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+   "manifest_sha256": "cd612c79b1be5ebe48c77d7660627cd88e83cfe6b5ae8ace66d2a8414d099279",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_cost_stage_b_20260927\\sb_collector.py",
+   "unchanged": true
+  },
+  "v2_reward_timing.py": {
+   "actual_sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+   "manifest_sha256": "57b43e03a8d3e0df3cba6d2203b7e16c1c7da6cd08c91d02d7a5c0e8dfb800b0",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_cost_v2_rerun_20260928\\v2_reward_timing.py",
+   "unchanged": true
+  },
+  "v2_run.py": {
+   "actual_sha256": "8356fb68661962263bb82513e4197e75f242f0c7cbc0af8a02487332899d9c61",
+   "manifest_sha256": "8356fb68661962263bb82513e4197e75f242f0c7cbc0af8a02487332899d9c61",
+   "path": "D:\\code\\整合\\zhenghe-round42\\runs\\comm_cost_v2_rerun_20260928\\v2_run.py",
+   "unchanged": true
+  }
+ },
+ "reference": {
+  "path": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_01\\execution\\smoke500\\eval_control\\RESULTS.json",
+  "sha256": "dde87e9faab0c59a476397f0a8b3f9d451c102ac069681b1e45dd22a297549f8"
+ },
+ "schema": "scale-probe-p3-report/1",
+ "stage": "P3",
+ "verdict": "pass"
+}
