@@ -55,12 +55,65 @@ def _bundle(stream, decision_steps, horizon):
     return bundled, prefix
 
 
+def _subscribers_of(episode):
+    """The live fan-out as the relay saw it, for a row that did not record one."""
+    value = episode.get("subscribers_live")
+    if value is None:
+        raise ValueError("episode %r carries neither subscribers_configured nor "
+                         "subscribers_live" % (episode.get("label"),))
+    return int(value)
+
+
 def _episode_horizon(episode):
     """The episode's own step count; the tap streams are indexed by that horizon."""
     horizon = int(episode["steps"])
     if horizon < 1:
         raise ValueError("episode steps must be >= 1, got %r" % (episode["steps"],))
     return horizon
+
+
+def _apply_transform(stacked, chunk):
+    """Apply each sample's own cell transform before the trunk.
+
+    The transform is **episode-scoped**: ``world`` restores it when the episode ends and the
+    PPO update runs afterwards. Without this, the update recomputes log-probabilities from raw
+    rows while the policy sampled from rewritten ones. Measured on this revision: max
+    |dlogp| = 0.109 at update 0, i.e. every sample was off-policy by construction.
+
+    A minibatch can mix cells and each cell divides #2/#14 by its own ``G``, so the transform
+    cannot be one matrix-wide constant. Every sample carries its own ``cell_transform``.
+    """
+    from . import scale_features as scale_features_mod
+    import torch as _torch
+
+    specs = [item.get("cell_transform") for item in chunk]
+    if all(spec is None for spec in specs):
+        raise RuntimeError("every sample is missing cell_transform; a revision_02 update must "
+                           "reproduce the row the policy sampled from")
+    if any(spec is None for spec in specs):
+        raise RuntimeError("a minibatch mixes transformed and untransformed samples")
+    # Row ranges are computed **within this minibatch**: ``stacked`` holds only the chunk's
+    # rows, so a global per-sample offset would index past the end. Each sample contributes
+    # ``len(targets)`` rows, in chunk order.
+    groups = {}
+    cursor = 0
+    for item, spec in zip(chunk, specs):
+        count = len(item["targets"])
+        key = (spec["mode"], int(spec["goals"]), int(spec["subscribers"]))
+        groups.setdefault(key, []).extend(range(cursor, cursor + count))
+        cursor += count
+    if cursor != int(stacked.shape[0]):
+        raise RuntimeError("minibatch row count %d != sum of sample rows %d"
+                           % (int(stacked.shape[0]), cursor))
+    if len(groups) == 1:
+        (mode, goals, subscribers), rows = next(iter(groups.items()))
+        return scale_features_mod.apply_rewrite(stacked[rows], mode=mode, goals=goals,
+                                                subscribers=subscribers)
+    out = _torch.empty_like(stacked)
+    for (mode, goals, subscribers), rows in groups.items():
+        out[rows] = scale_features_mod.apply_rewrite(stacked[rows], mode=mode, goals=goals,
+                                                     subscribers=subscribers)
+    return out
 
 
 def build_samples(episodes, arm=None, *, lam=None):
@@ -146,6 +199,12 @@ def build_samples(episodes, arm=None, *, lam=None):
                                                    bootstrap=bootstrap_cost)
         combined = objective.combine_many([float(v) for v in advantages_task],
                                           [float(v) for v in advantages_cost], lam)
+        cell_transform = {
+            "mode": str(C.SCALE_FEATURES),
+            "goals": int(episode.get("goals") or C.NUM_GOALS),
+            "subscribers": int(episode.get("subscribers_configured")
+                               or _subscribers_of(episode)),
+        }
         for index, tape in enumerate(tapes):
             samples.append({
                 "features": np.asarray(tape["features"], dtype=np.float32),
@@ -163,6 +222,9 @@ def build_samples(episodes, arm=None, *, lam=None):
                 "unassigned_prefix_cost_bytes": float(prefix_cost if index == 0 else 0.0),
                 #: What the scale actually was, so a report can audit the divisor.
                 "cost_scale": float(scale),
+                #: Which rewrite this row needs at update time. It travels with the sample
+                #: so the update can reproduce the exact input the policy sampled from.
+                "cell_transform": cell_transform,
             })
     return samples
 
@@ -212,6 +274,10 @@ def ppo_update(controller, optimizer, episodes, *, lam, update_index, q_ref=None
         for start in range(0, len(order), C.MINIBATCH_STEPS):
             chunk = [samples[index] for index in order[start:start + C.MINIBATCH_STEPS]]
             stacked = torch.as_tensor(np.concatenate([item["features"] for item in chunk], axis=0))
+            # The transform is episode-scoped, so it is NOT alive here. Reproduce the row the
+            # policy actually sampled from, or the importance ratio is computed against a
+            # different input. Measured without this: max |dlogp| = 0.109 at update 0.
+            stacked = _apply_transform(stacked, chunk)
             hidden = controller.inner.trunk(stacked)
             logits = controller.inner.action_head(hidden)
             values_task_c = controller.inner.value_head(hidden).squeeze(-1)

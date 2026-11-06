@@ -73,6 +73,40 @@ class _RunningDim:
                 "mean": mean, "sd": math.sqrt(variance)}
 
 
+def apply_rewrite(matrix, *, mode, goals, subscribers):
+    """The transform as a pure function: no state, no hook, same answer anywhere.
+
+    This exists because the trunk wrap is **episode-scoped**: ``world`` restores it when the
+    episode ends, and the PPO update runs afterwards. An update that read the raw
+    ``tape["features"]`` would therefore recompute log-probabilities from a different row than
+    the one the policy actually saw -- P4's 1.589 importance-ratio defect, relocated into the
+    trainer. Measured on this revision: max |logp_sampled - logp_update| = 0.030 when the
+    transform is installed only for the episode.
+
+    With this function the update reproduces the exact row without needing the wrap alive, so
+    the ratio at update 0 is again ~0.
+    """
+    import numpy as np
+
+    array = np.asarray(matrix, dtype="float32")
+    if array.ndim != 2 or array.shape[1] <= INDEX_SUBSCRIBERS:
+        raise RuntimeError("expected a [candidates, 19] matrix, got %r" % (array.shape,))
+    if mode not in MODES:
+        raise ValueError("unknown scale mode %r" % (mode,))
+    if mode == "off":
+        return torch.as_tensor(array)
+    goals = int(goals)
+    subscribers = int(subscribers)
+    if goals < 1 or subscribers < 1:
+        raise ValueError("goals and subscribers must be >= 1, got %d and %d"
+                         % (goals, subscribers))
+    out = array.copy()
+    out[:, INDEX_SENT_COUNT] = out[:, INDEX_SENT_COUNT] / float(goals)
+    out[:, INDEX_BACKLOG] = out[:, INDEX_BACKLOG] / float(goals)
+    out[:, INDEX_SUBSCRIBERS] = out[:, INDEX_SUBSCRIBERS] / float(SUBSCRIBERS_REF)
+    return torch.as_tensor(out)
+
+
 class ScaleFeatures:
     """Rewrite #2, #14 and #17 so one policy reads every cell the same way."""
 
@@ -113,10 +147,8 @@ class ScaleFeatures:
                 self.rewritten[index].add(array[:, index])
             return matrix
 
-        out = array.copy()
-        out[:, INDEX_SENT_COUNT] = out[:, INDEX_SENT_COUNT] / float(self.goals)
-        out[:, INDEX_BACKLOG] = out[:, INDEX_BACKLOG] / float(self.goals)
-        out[:, INDEX_SUBSCRIBERS] = out[:, INDEX_SUBSCRIBERS] / float(SUBSCRIBERS_REF)
+        out = apply_rewrite(array, mode=self.mode, goals=self.goals,
+                            subscribers=self.subscribers).numpy()
 
         for index in SCALED_INDICES:
             before, after = array[:, index], out[:, index]

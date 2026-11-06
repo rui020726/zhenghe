@@ -467,6 +467,78 @@ class FeaturePathTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             scale_features.ScaleFeatures(mode="scaled", subscribers=0)
 
+    def test_update_path_reproduces_the_sampled_row_after_restore(self):
+        """Regression on the seam that made the first revision_02 run off-policy.
+
+        ``world`` restores the trunk wrap when the episode ends, so the PPO update runs with
+        no transform installed. If the update then forwards the raw ``tape["features"]``, the
+        recorded log-probability came from one row and the recomputed one from another.
+        Measured on the broken path: max |dlogp| = 0.109 at update 0, which is why that run's
+        approx_kl read 11-17 against a clip of 0.2.
+
+        The fix is ``apply_rewrite`` called by the trainer with the sample's own cell. This
+        test runs the real sequence: sample, restore, update.
+        """
+        controller = _Controller(_StubInner())
+        transform = scale_features.ScaleFeatures(mode="scaled", goals=24, subscribers=6)
+        transform.install(controller)
+        raw = _rows()
+        sampled, _ = controller.forward(torch.as_tensor(raw))
+        scale_features.ScaleFeatures.restore({"scale_features": transform})
+        rebuilt = scale_features.apply_rewrite(raw, mode="scaled", goals=24, subscribers=6)
+        hidden = controller.inner.trunk(rebuilt)
+        updated = controller.inner.action_head(hidden)
+        delta = float((torch.log_softmax(updated, dim=-1)
+                       - torch.log_softmax(sampled.detach(), dim=-1)).abs().max())
+        self.assertLess(delta, 1e-6)
+        # And the same comparison without the rewrite must be visibly wrong, or the test
+        # would pass for the wrong reason.
+        raw_hidden = controller.inner.trunk(torch.as_tensor(raw))
+        raw_logits = controller.inner.action_head(raw_hidden)
+        broken = float((torch.log_softmax(raw_logits, dim=-1)
+                        - torch.log_softmax(sampled.detach(), dim=-1)).abs().max())
+        self.assertGreater(broken, 1e-3)
+
+    def test_transform_is_per_sample_for_a_mixed_cell_minibatch(self):
+        """A minibatch can mix cells, and each cell divides by its own G."""
+        from stage5b_comm import trainer
+        rows = []
+        for label, goals, subscribers in ((("A"), 12, 3), ("B", 48, 6), ("A", 12, 3)):
+            for index in range(2):
+                row = [0.0] * 19
+                row[2] = float(index)
+                row[14] = float(index)
+                row[17] = float(subscribers)
+                rows.append(row)
+        stacked = torch.as_tensor(np.asarray(rows, dtype=np.float32))
+        chunk = [
+            {"cell_transform": {"mode": "scaled", "goals": 12, "subscribers": 3},
+             "targets": ["a", "b"]},
+            {"cell_transform": {"mode": "scaled", "goals": 48, "subscribers": 6},
+             "targets": ["c", "d"]},
+            {"cell_transform": {"mode": "scaled", "goals": 12, "subscribers": 3},
+             "targets": ["e", "f"]},
+        ]
+        out = trainer._apply_transform(stacked, chunk)
+        # rows 0,1 and 4,5 use G=12; rows 2,3 use G=48
+        for row in (0, 1, 4, 5):
+            self.assertAlmostEqual(float(out[row, 2]), float(stacked[row, 2]) / 12.0)
+        for row in (2, 3):
+            self.assertAlmostEqual(float(out[row, 2]), float(stacked[row, 2]) / 48.0)
+        # #17 is always /6, independent of the cell
+        self.assertAlmostEqual(float(out[0, 17]), 3 / 6.0)
+
+    def test_missing_cell_transform_is_refused_not_silently_raw(self):
+        from stage5b_comm import trainer
+        stacked = torch.as_tensor(np.asarray(_rows(), dtype=np.float32))
+        with self.assertRaises(RuntimeError):
+            trainer._apply_transform(stacked, [{"targets": ["a"]}] * 4)
+        mixed = [{"cell_transform": {"mode": "scaled", "goals": 24, "subscribers": 6},
+                  "targets": ["a", "b"]},
+                 {"targets": ["c", "d"]}]
+        with self.assertRaises(RuntimeError):
+            trainer._apply_transform(stacked, mixed)
+
 
 # --------------------------------------------------------------------------- dedup
 class _Item:
