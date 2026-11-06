@@ -37,8 +37,9 @@ import traceback
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from pathlib import Path
 
-BASE = Path(__file__).resolve().parent
-ROOT = BASE
+BASE = Path(__file__).resolve().parent          # .../recovery_12/revision_02
+ROOT = BASE                                     # the revision package root
+STAGE = BASE.parents[1]                         # .../stage5b_pure_comm_convergence_20261027
 SCENES = tuple(range(2301901, 2301909))
 
 
@@ -195,7 +196,7 @@ def main():
     run_dir = ROOT / "execution" / args.tag / (
         "eval_%d%s" % (args.episode, ("_" + args.out_tag) if args.out_tag else ""))
     run_dir.mkdir(parents=True, exist_ok=True)
-    identity_sha = sha256(ROOT.parents[0] / "recovery_09b" / "revision_01" / "protocol"
+    identity_sha = sha256(STAGE / "recovery_09b" / "revision_01" / "protocol"
                           / "RECOVERY_EXPERIMENT_IDENTITY.json")
 
     baseline_payload = json.loads(Path(args.baselines).read_text(encoding="utf-8"))

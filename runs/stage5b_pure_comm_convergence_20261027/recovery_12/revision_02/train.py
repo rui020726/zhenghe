@@ -81,6 +81,95 @@ def load_references(path):
     return payload, q_ref
 
 
+def evaluate_all_cells(layout, controller, out, episode, identity_sha, scenes=(2301901,)):
+    """Greedy evaluation on every cell at one checkpoint, in-process.
+
+    Running the evaluation inside the training process is deliberate: a child process would
+    need its own controller and the checkpoint file, and a checkpoint that has not been
+    flushed yet is exactly the kind of race that makes an evaluation point lie. The cost is
+    that a slow evaluation blocks training, which is the right trade for a metric the breaker
+    reads.
+
+    One scene per cell per checkpoint keeps the cost at 15 worlds. Rotating through the eight
+    DEV scenes across eight checkpoints covers them all without paying for them at once.
+    """
+    from stage5b_comm import episode as episode_mod, scale_program
+
+    scene = int(scenes[(episode // 100) % len(scenes)])
+    rows = []
+    for cell in scale_program.CELLS:
+        label = scale_program.cell_label(cell)
+        try:
+            row = episode_mod.run_eval_world(layout, "T2", 91002, scene, controller, cell=cell)
+        except Exception as error:
+            rows.append({"cell": label, "status": "error",
+                         "error": "%s: %s" % (type(error).__name__, error)})
+            continue
+        sends = list(row.get("emission_sequence") or [])
+        distinct = {str(entry[1]) for entry in sends}
+        rows.append({
+            "cell": label, "status": "ok", "scene": scene,
+            "on_time": int(row["on_time"]),
+            "generated_goals": int(row.get("generated_goals") or 0),
+            "spent_bytes": int(row["spent_bytes"]),
+            "emissions": int(row["emissions"]),
+            "distinct_targets": len(distinct),
+            "duplicate_sends": int(row["emissions"]) - len(distinct),
+            "bytes_per_on_time": row.get("bytes_per_on_time"),
+            "masked_by_credit": row.get("masked_by_credit_total"),
+        })
+    ok = [r for r in rows if r["status"] == "ok"]
+    return {
+        "episode": int(episode),
+        "scene": scene,
+        "cells_expected": len(scale_program.CELLS),
+        "cells_ok": len(ok),
+        "mean_q": (sum(r["on_time"] for r in ok)
+                   / max(1, sum(r["generated_goals"] for r in ok)) if ok else None),
+        "mean_bytes": (sum(r["spent_bytes"] for r in ok) // len(ok) if ok else None),
+        "rows": rows,
+    }
+
+
+def check_two_point_breaker(points, breaker):
+    """Breaker 4: two consecutive points below half the reference, spending over twice it.
+
+    Compares against ``normal_immediate`` for the **same cells** and the same scene, so the
+    test cannot fire because the checkpoint happened to land on a hard cell. Both conditions
+    must hold at both points, and a point missing its reference does not count as failing.
+    """
+    if len(points) < 2:
+        return False
+    references = check_two_point_breaker.references
+    if not references:
+        return False
+    last_two = points[-2:]
+    judged = []
+    for point in last_two:
+        scene = int(point["scene"])
+        rows = [r for r in point["rows"] if r["status"] == "ok"
+                and (r["cell"], scene) in references]
+        if not rows:
+            return False
+        learned_on_time = sum(r["on_time"] for r in rows)
+        learned_bytes = sum(r["spent_bytes"] for r in rows)
+        ref_on_time = sum(references[(r["cell"], scene)]["on_time"] for r in rows)
+        ref_bytes = sum(references[(r["cell"], scene)]["bytes"] for r in rows)
+        if not ref_on_time or not ref_bytes:
+            return False
+        judged.append((learned_on_time / ref_on_time, learned_bytes / ref_bytes))
+    if all(q < 0.5 and cost > 2.0 for q, cost in judged):
+        breaker("two_points_below_half_reference_and_over_double_cost",
+                "success ratio %s, cost ratio %s"
+                % (["%.3f" % q for q, _ in judged], ["%.2f" % c for _, c in judged]))
+        return True
+    return False
+
+
+check_two_point_breaker.references = {}
+
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tag", required=True)
@@ -121,6 +210,15 @@ def main():
 
     baseline_payload, q_ref = load_references(args.baselines)
     baseline_sha = sha256(args.baselines)
+    # What the two-point breaker reads: `normal_immediate`'s per-scene on-time and byte totals,
+    # keyed by (cell label, scene) so the comparison is against the same world the evaluation
+    # point ran, not against an average over scenes.
+    check_two_point_breaker.references = {
+        (scale_program.cell_label(tuple(r["cell"])), int(r["scene"])): {
+            "on_time": int(r["on_time"]), "bytes": int(r["spent_bytes"])}
+        for r in (baseline_payload.get("results") or [])
+        if r.get("arm") == "normal_immediate" and r.get("status") == "ok"
+    }
     print("cells with a q_ref: %d of %d" % (len(q_ref), len(scale_program.CELLS)))
     missing = [scale_program.cell_label(cell) for cell in scale_program.CELLS
                if scale_program.cell_label(cell) not in q_ref]
@@ -260,6 +358,18 @@ def main():
                     trainer.save_checkpoint(milestone, controller, optimizer, state,
                                             identity_sha256=identity_sha)
                     print("  checkpoint", milestone.name, flush=True)
+                # The greedy evaluation the task requires at every checkpoint, on every cell.
+                # It is written into the summary so the two-evaluation-point breaker has real
+                # numbers to fire on instead of a remembered impression.
+                point = evaluate_all_cells(layout, controller, out, len(episodes_log),
+                                          identity_sha)
+                evaluation_points.append(point)
+                print("  eval @%d: %d/%d cells, mean q %.4f, mean bytes %d"
+                      % (point["episode"], point["cells_ok"], point["cells_expected"],
+                         point["mean_q"] or 0.0, point["mean_bytes"] or 0), flush=True)
+                fired = check_two_point_breaker(evaluation_points, breaker)
+                if fired or stopping_reason:
+                    break
     except Exception:
         breaker("uncaught_exception", traceback.format_exc()[-2000:])
     finally:
