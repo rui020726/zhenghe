@@ -365,7 +365,7 @@ def run_replay_world(layout, arm, seed, index, scene, controller):
     return row
 
 
-def run_eval_world(layout, arm, seed, scene, controller, cell=None):
+def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_index=None):
     ensure_import_paths(layout)
     import v2_run
     from budget_masked import BudgetMaskedCollector
@@ -380,14 +380,21 @@ def run_eval_world(layout, arm, seed, scene, controller, cell=None):
     if cell is not None:
         label += "_" + scale_program.cell_label(cell)
     tag = "eval_%s_s%d" % (arm, int(scene))
+    # The checkpoint index is part of the identity. Without it every checkpoint in one run
+    # writes to the same leaf, so the second evaluation point fails with FileExistsError on
+    # all 15 cells and reports 0/15 -- measured at episode 200 of train_v3.
+    stamp = "" if episode_index is None else "@%d" % int(episode_index)
+    namespace = "eval:%s%s:%d:%d" % (arm, stamp, int(seed), int(scene))
+    if cell is not None:
+        namespace = "eval:%s_%s%s:%d:%d" % (
+            arm, scale_program.cell_label(cell).replace("_", ""), stamp, int(seed), int(scene))
     row = world.run_episode(layout, label=label,
                             kind="eval", scene=int(scene), policy="learned",
                             attach=collector.policy(), controller=controller,
                             collector=collector,
                             action_rng_seed=action_seed,
                             tag=tag,
-                            artifact_namespace="eval:%s:%d:%d"
-                                               % (arm, int(seed), int(scene)),
+                            artifact_namespace=namespace,
                             cell=cell)
     row["arm"] = arm
     row["training_seed"] = int(seed) if seed is not None else None

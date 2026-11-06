@@ -100,7 +100,8 @@ def evaluate_all_cells(layout, controller, out, episode, identity_sha, scenes=(2
     for cell in scale_program.CELLS:
         label = scale_program.cell_label(cell)
         try:
-            row = episode_mod.run_eval_world(layout, "T2", 91002, scene, controller, cell=cell)
+            row = episode_mod.run_eval_world(layout, "T2", 91002, scene, controller, cell=cell,
+                                             episode_index=episode)
         except Exception as error:
             rows.append({"cell": label, "status": "error",
                          "error": "%s: %s" % (type(error).__name__, error)})
@@ -119,6 +120,12 @@ def evaluate_all_cells(layout, controller, out, episode, identity_sha, scenes=(2
             "masked_by_credit": row.get("masked_by_credit_total"),
         })
     ok = [r for r in rows if r["status"] == "ok"]
+    if not ok:
+        # An evaluation point that measured nothing is not a data point. Reporting 0/15 as if
+        # it were one is how the episode-200 collision almost passed as a result.
+        raise RuntimeError("evaluation at episode %d produced no successful world; first "
+                           "error: %s" % (int(episode),
+                                          (rows[0].get("error") if rows else "no rows")))
     return {
         "episode": int(episode),
         "scene": scene,
