@@ -30,7 +30,7 @@ scenario and a new world, so every cell gets its own baselines.
 | `stage5b_comm/dedup_policy.py` | the low-cost strong rule |
 | `stage5b_comm/trainer.py` | the dual step at the update boundary; scaled cost reward |
 | `stage5b_comm/world.py` | cell-driven `configuration_fields`, 1e9 authority binding |
-| `tests/test_revision_02_gates.py` | 51 offline gate checks |
+| `tests/test_revision_02_gates.py` | 56 offline gate checks |
 | `run_baselines.py` | three rules on every cell x scene |
 | `train.py` | the training loop with circuit breakers |
 | `evaluate.py` | greedy per-cell evaluation and the registered verdict |
@@ -61,6 +61,11 @@ substituted.
 | 5 | `test_cost_stream_and_ledger_agree_by_construction` failed | the test divided by `N*G` while the trainer multiplies by `1/(N*G)` | test corrected to the trainer's arithmetic |
 | 6 | `test_material_change_resends` failed | the test assumed the broad rule was the default | split into default (stage) and broad (`stage_only=False`) cases |
 | 7 | **`grid_v1`: 240 of 360 baseline worlds failed** with `resolved num_goals 12 != N24` | `verify_resolved_configuration` still compared `num_goals` against the frozen literal `C.NUM_GOALS = 24`, so every G=12 and G=48 cell was refused | the check now compares against **the cell's own** `expected["num_goals"]` and additionally asserts that value is in `C.SCALE_GOALS`. The G=24 cells that passed in `grid_v1` are unaffected; the failed cells were re-run as `grid_v2` |
+| 8 | **Cost magnitude: `train_v1` sent 0 bytes for 342 of 366 updates** | the registered `c = bytes/(N*G)` makes one send ≈ 33 scale units at `N=6, G=12` against a task advantage of ≈ 0.41, so "never send" was optimal for every λ in `[0.25, 8]` | re-scaled to the reference cell so `(N, G) = (6, 24)` reproduces `bytes/10000` exactly and other cells keep the `N*G` ratio; `probe40` then sent in 40/40 episodes. `train_v1` is kept as the record |
+| 9 | **Importance ratio 1.589 at update 0** (also the 11–17 `approx_kl` of `train_v2`) | the trunk wrap is **episode-scoped**: `world` restores it before the PPO update, so the update recomputed log-probs from raw `tape["features"]` while the policy had sampled rewritten rows | the transform became a pure function `scale_features.apply_rewrite`, and `trainer._apply_transform` reproduces each sample's row from its `cell_transform`. Measured `max|dlogp|` 1.091e-01 → **0.000e+00**; trainer `approx_kl` 0.186 → 0.00041. `train_v3` is the seam-fixed run |
+| 10 | **Every learned/baseline ratio ≈ 3/8 in the first `eval_100`** | the learned side summed 3 scenes while the baseline side summed all 8, so the comparison was between different denominators | baselines are summed over exactly the scenes the learned worlds ran; `evaluate.py --recompute-from` re-aggregates an archived `EVAL.json` and inherits its scene set. Both outputs are kept (`eval_100_seamfix`, `eval_100_seamfix_recomputed`) |
+| 11 | **In-loop evaluation at episode 200 returned 0/15 cells** | the eval artifact namespace had no checkpoint index, so every cell collided with the episode-100 leaf and raised `FileExistsError` | `episode_index` is now part of the namespace (`@<ep>`) and `evaluate_all_cells` **raises** instead of returning a null point, so an unmeasured point cannot pass as data |
+| 12 | `_apply_transform` raised `IndexError: 900 out of bounds for size 517` | it used global `_row_start/_row_stop` offsets while the update works per minibatch chunk | rows are computed chunk-relative from `len(item["targets"])`, with a row-count assertion; a stray `torch` reference and an invalid `import numpy as np as _np` were fixed in the same edit |
 
 The `grid_v1` file is kept: `execution/baselines/grid_v1/BASELINES.json` records 120 successful
 worlds and 240 failures. `grid_v2` is the complete grid; the analysis reads `grid_v2` and the
