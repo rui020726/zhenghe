@@ -178,6 +178,8 @@ def main():
     ap.add_argument("--cells", default="", help="limit to these cells (semicolon separated)")
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--out-tag", default="")
+    ap.add_argument("--recompute-from", default="",
+                    help="re-aggregate an already-archived EVAL.json instead of running worlds")
     args = ap.parse_args()
 
     sys.dont_write_bytecode = True
@@ -186,9 +188,15 @@ def main():
 
     checkpoint = ROOT / "execution" / args.tag / "checkpoints" / (
         "milestone_%d.pth" % args.episode)
-    if not checkpoint.exists():
+    if not args.recompute_from and not checkpoint.exists():
         raise SystemExit("checkpoint missing: %s" % checkpoint)
     scenes = (tuple(int(x) for x in args.scenes.split(",")) if args.scenes else SCENES)
+    if args.recompute_from and not args.scenes:
+        # The baseline must be summed over exactly the scenes the learned worlds ran.
+        # Defaulting to all eight here would compare a three-scene numerator to an
+        # eight-scene denominator, which is what produced the spurious 0.30-0.46 ratios.
+        archived_scenes = json.loads(Path(args.recompute_from).read_text(encoding="utf-8"))
+        scenes = tuple(int(x) for x in archived_scenes.get("scenes") or SCENES)
     if args.cells:
         cells = [tuple(int(p) for p in chunk.split(",")) for chunk in args.cells.split(";")]
     else:
@@ -210,9 +218,22 @@ def main():
     print("checkpoint:", checkpoint)
 
     results = []
-    with ProcessPoolExecutor(max_workers=args.workers,
-                             mp_context=__import__("multiprocessing").get_context("spawn")) as pool:
-        pending = {pool.submit(worker, task): task for task in tasks}
+    if args.recompute_from:
+        # Re-aggregate an archived set of learned worlds. The worlds are read back from the
+        # previous EVAL.json's own ``results`` block, so no world is re-run and no number is
+        # re-measured -- only the aggregation against baselines is recomputed.
+        archived = json.loads(Path(args.recompute_from).read_text(encoding="utf-8"))
+        results = [r for r in (archived.get("results") or []) if r.get("status") == "ok"]
+        print("recompute: %d archived learned worlds from %s"
+              % (len(results), args.recompute_from))
+
+    import contextlib
+    pool_context = (contextlib.nullcontext(None) if args.recompute_from
+                    else ProcessPoolExecutor(
+                        max_workers=args.workers,
+                        mp_context=__import__("multiprocessing").get_context("spawn")))
+    with pool_context as pool:
+        pending = {} if pool is None else {pool.submit(worker, task): task for task in tasks}
         done = 0
         while pending:
             finished, _ = wait(set(pending), return_when=FIRST_COMPLETED)
@@ -236,6 +257,7 @@ def main():
 
     ok = [r for r in results if r.get("status") == "ok"]
     per_cell = {}
+    scene_set = set(int(s) for s in scenes)
     for cell in cells:
         label = scale_program.cell_label(cell)
         learned_rows = [r for r in ok if tuple(r["cell"]) == tuple(cell)]
@@ -244,8 +266,24 @@ def main():
         learned_bytes = sum(r["spent_bytes"] for r in learned_rows)
         learned_emissions = sum(r["emissions"] for r in learned_rows)
         learned_distinct = sum(r["distinct_targets"] for r in learned_rows)
-        base_entry = (baseline_payload.get("per_cell") or {}).get(label) or {}
-        base_arms = base_entry.get("arms") or {}
+        # The baseline must cover the SAME scenes. Summing all eight scenes and comparing to a
+        # three-scene learned total makes every ratio ~3/8 and turns a parity result into an
+        # apparent collapse -- measured: 0.298-0.460 "of immediate" that was really 0.75-1.41.
+        scene_rows = {
+            arm: [r for r in (baseline_payload.get("results") or [])
+                  if r.get("arm") == arm and r.get("status") == "ok"
+                  and tuple(r.get("cell") or ()) == tuple(cell)
+                  and int(r["scene"]) in scene_set]
+            for arm in ("normal_immediate", "dedup_immediate", "always_hold")}
+        base_arms = {
+            arm: {
+                "on_time": (sum(int(r["on_time"]) for r in rows) if rows else None),
+                "q": ((sum(int(r["on_time"]) for r in rows)
+                       / sum(int(r["generated_goals"]) for r in rows))
+                      if rows and sum(int(r["generated_goals"]) for r in rows) else None),
+                "spent_bytes": (sum(int(r["spent_bytes"]) for r in rows) if rows else None),
+                "emissions": (sum(int(r["emissions"]) for r in rows) if rows else None),
+            } for arm, rows in scene_rows.items()}
 
         verdicts = {}
         pairings = {}
@@ -262,11 +300,7 @@ def main():
             verdicts[arm] = verdict or {
                 "cell": label, "arm": arm,
                 "base_on_time": base_on_time, "base_bytes": base_bytes}
-            # Per-scene pairing needs the baseline rows, not just the totals.
-            base_rows = {int(r["scene"]): r for r in
-                         (baseline_payload.get("results") or [])
-                         if r.get("arm") == arm and tuple(r.get("cell") or ()) == tuple(cell)
-                         and r.get("status") == "ok"}
+            base_rows = {int(r["scene"]): r for r in scene_rows[arm]}
             pairings[arm] = summarize_pair(learned_rows, base_rows)
 
         per_cell[label] = {
@@ -283,11 +317,7 @@ def main():
                 "bytes_per_on_time": (learned_bytes / learned_on_time
                                       if learned_on_time else None),
             },
-            "baselines": {arm: {"on_time": (base_arms.get(arm) or {}).get("on_time"),
-                               "q": (base_arms.get(arm) or {}).get("q"),
-                               "spent_bytes": (base_arms.get(arm) or {}).get("spent_bytes"),
-                               "emissions": (base_arms.get(arm) or {}).get("emissions")}
-                          for arm in ("normal_immediate", "dedup_immediate", "always_hold")},
+            "baselines": base_arms,
             "verdict_vs_immediate": verdicts["normal_immediate"],
             "paired_vs_immediate": pairings["normal_immediate"],
             "paired_vs_dedup": pairings["dedup_immediate"],
