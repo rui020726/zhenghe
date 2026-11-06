@@ -213,6 +213,7 @@ def main():
         evaluation = row.get("evaluation") or {}
         verdict = row.get("verdict_vs_immediate") or {}
         improved += int(bool(verdict.get("improved")))
+        bytes_per_on_time = evaluation.get("bytes_per_on_time")
         print("%-15s %6d %8s %8s %9d %9s %6s %6s %9s %s"
               % (row["cell_label"], row["training"]["episodes"],
                  "%.4f" % row["training"]["q"] if row["training"]["q"] is not None else "n/a",
@@ -221,9 +222,7 @@ def main():
                  ("%d" % evaluation["spent_bytes"]) if evaluation.get("spent_bytes") else "-",
                  evaluation.get("distinct_targets", "-"),
                  evaluation.get("duplicate_sends", "-"),
-                 ("%.0f" % evaluation["bytes_per_on_time"]
-                  if evaluation.get("bytes_per_on_time") else "-",
-                  ),
+                 ("%.0f" % bytes_per_on_time) if bytes_per_on_time else "-",
                  ("YES " if verdict.get("improved") else "no  ") + str(verdict.get("reason", ""))))
     print()
     print("cells improved: %d / %d" % (improved, len(rows)))
