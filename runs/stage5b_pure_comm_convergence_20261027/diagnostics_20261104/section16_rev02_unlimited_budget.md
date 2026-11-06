@@ -25,6 +25,28 @@ lambda <- clip(lambda + 2 * (q - 0.95 * q_ref), 0.25, 8)     初值 2.0
 `normal_immediate` 按时率。一个 batch 通常横跨多个 cell，因此 `q_ref` 是按
 `generated_goals` 加权的同批 cell 均值，缺参考的 cell 会被点名而不是被替换。
 
+### 16.1b 第五节：一个更严重的接缝缺陷（milestone_100 之后才发现）
+
+**milestone_100 的评估不是对目标的合法读数。**原因是接缝：特征变换挂在
+`controller.inner.trunk` 上，但 `world` 在**回合结束时**就把它还原了，而 PPO update 在那之后才跑。
+于是 update 前向的是**原始** `tape["features"]`，而策略采样时用的是**改写后**的行。
+
+实测（真实顺序：采样 → 还原 → update）：`max |logp_sample − logp_update| = 0.109`（update 0，
+参数尚未动，正确值必须为 0）。这解释了两件此前我当成"策略行为"来记录的事：
+
+- `approx_kl` 11–17（clip 只有 0.2）——不是策略跳得远，而是重要性比算在了不同的输入上；
+- 那次评估的成功率与字节数都建立在这个错误的基础上。
+
+修法：把改写抽成纯函数 `apply_rewrite()`，由 trainer 用**每个样本自己的 cell** 调用。
+cell 必须随样本走，因为一个 minibatch 混着多个 cell，而每个 cell 除以自己的 `G`。
+
+修后实测：`max |dlogp| = 0.000e+00`；trainer 里 `approx_kl` 从 0.186 降到 **0.00041**。
+闸门增至 **56 项**，新增三条：还原后 update 的回归、混合 cell 的 minibatch、以及
+`cell_transform` 缺失时必须报错而不是静默用原行。
+
+**因此 16.4 的 0/15 与 16.5 的机制描述都作废**，保留在此仅作为失败记录。
+`train_v2` 被 `train_v3` 取代，后者跑在修好的接缝上。
+
 ### 16.2 开跑前拦下的四个缺陷（每条都记在 README 的失败账本里）
 
 **① 成本量级错了，这一条最关键。**按任务原文 `c = bytes/(N·G)`，一次发送约
