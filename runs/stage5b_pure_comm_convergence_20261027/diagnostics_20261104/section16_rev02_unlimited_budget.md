@@ -417,7 +417,12 @@ cell 必须随样本走，因为一个 minibatch 混着多个 cell，而每个 c
 > 说明：上表 milestone_400/500/600 的 q 合计为 906 / 892（不是 892 / 892），因为 `deliver` 的重试
 > 顺序不同会让个别世界的按时命中差 1–15 个；这不是策略差异，见下文"两个测量注意点"。
 
-### 16.5 这批数字说明了什么
+### 16.5 早期读数（train_v2 / milestone_100，**接缝修复前**）——已被 16.5b 取代
+
+> 保留原文是为了让"读错过什么"可查。这里的 6–16 倍字节与 KL 11–17 都是**接缝缺陷的产物**：
+> 更新期与采样期的特征行不一致（16.1b），策略在 update 之间被推得很远。修复后 `train_v3` 的
+> `approx_kl` 是 1e-4 量级，字节与命中数则回到与 immediate 相等（16.4i）。**不要引用本节数字作结论。**
+
 
 **成功率确实上去了。**三个 `R=12` 且 `G ≤ 24` 的 cell 达到或超过 immediate
 （G24_R12_N3：1.000 vs 0.891；G24_R12_N12：1.000 vs 0.995；G12_R12_N3：0.972 vs 0.958）。
@@ -437,39 +442,78 @@ G48_R12_N12 多花 **16 倍**。所以"省钱"这一半完全没有实现，而�
 所以熔断没有触发；但这么大的 KL 意味着**这批方向的可靠性本身要打折扣**，
 不能把 milestone_100 的表现当成收敛行为。
 
+### 16.5b 最终判定（train_v3，接缝已修，6 个检查点）
+
+| 项 | 读数 |
+|---|---|
+| 训练 | `train_v3`，episode 5000 → 5607（153 个 update），6 枚 checkpoint，**0 次熔断** |
+| 评估 | 每个 checkpoint 15 cell × 3 场景 = 45 世界，6 点共 270 世界，**0 技术失败** |
+| 改善 cell | **0 / 15**，六个检查点全部如此 |
+| 判据未达的方式 | 100/200/400/500/600：字节**恰好等于** immediate（发送集合逐步相同）；300：字节减到 28 %，成功率掉到 0.30–0.46 倍 |
+| λ 轨迹 | 2.0 起，全程 min 0.250 / max 8.000，触上界 5 个 update、触下限 11 个，结束 0.526；零发送 update 为 0 |
+| 预算 | 1e9；45/45 世界 `masked_by_credit = 0`、`budget_restored = True` |
+| P5 恒等式的独立复核 | 90 个世界（学习臂 + 基线）里"已完成但从未发送"的目标 **0** 个（共 1798 个完成目标） |
+
+**结论：任务目标未达成。** 注册的判据（同 cell 成功率 ≥ 95 % immediate 且字节更少）在 15 个 cell 上
+一个也没成立，且不是"差一点"：五个检查点上学习臂与 immediate 是**同一个发送函数**，
+一个检查点上它是 immediate 的过小真子集。
+
+**为什么不是"再训久一点就行"**：λ 的可用档位在这个奖励尺度上是二值的——[0.25, 8) 内推不动
+argmax（142 个 update 每目标发送数中位数恒为 1.000），到 8.0 一次性过冲。要在判据上得分，
+需要的是**可用的中间档位**（更大上界并把 λ 稳定在能推得动的中段，或改奖励尺度让中间 λ
+就有推动力），以及**探测时刻就能分辨"会不会按时完成"的信息**（当前可见量的最优 AUC 0.63）。
+两者都不在本轮授权的改动范围内（不改注册常量、不做 full_features）。
+
 ### 16.6 能不能说
 
 **能说**：
 
-- 在 `recovery_12/revision_02` 的这组开关下，N=15 个 cell 的单检查点评估中
-  **没有一个**达到"成功率 ≥ 95 % immediate 且字节更少"。
-- 预算是 1e9，且**所有世界 credit mask 为 0**、预算权威退出后恢复（逐世界记录在行里）。
-- λ 按注册公式移动：2.0 → 5.0，方向与 `q − 0.95·q_ref` 的符号一致，未触上界。
-- 成本刻度已修到与归档轮次同量级；修前 `train_v1` 的 342/366 零发送是**量级缺陷**的
-  后果，不是策略性质。
-- 成本刻度修后 `probe40` 40/40 回合有发送、无熔断，说明"永不发送"的死锁已解除。
+- 在 `recovery_12/revision_02` 的这组开关下（预算 1e9、`c = bytes/(N·G)` 按参考 cell 重标定、
+  λ ∈ [0.25, 8] 起于 2.0），**15 个 cell 里没有一个**达到"同 cell 成功率 ≥ 95 % immediate
+  且字节更少"。6 个检查点、270 个评估世界、0 技术失败。
+- 预算 1e9 确实是非约束的：所有评估世界 `masked_by_credit = 0`、`budget_restored = True`。
+- λ 严格按注册公式移动，方向与 `q − 0.95·q_ref` 的符号一致（2.0 → 峰值 8.0 → 结束 0.526）。
+- 判据的后半条在 100/200/400/500/600 上之所以不成立，是因为**发送决策与 immediate 逐步相同**
+  （45/45 世界，1245/1245 次发送），而不是因为字节"多了几个百分点"。
+- 全程唯一真正的策略变化是 milestone_300 的过冲：发送减到 28 %，成功率掉到 0.30–0.46 倍
+  immediate，落在判据的错误一侧。
+- P5 的恒等式在本轮 90 个世界里独立复核成立：**已完成但从未被广播的目标 0 个**（1798 个完成目标）。
+- `dedup_immediate` 作为低成本强规则**不省字节**：15 个 cell 全部比 immediate 贵 2.06–2.35 倍
+  （它按阶段推进重发），所以"省字节"的参照只能是 immediate，不能拿 dedup 当省钱标杆。
+- 在 95 % 门槛下，字节的解析上界是**总发送数的 31.2 %**（按 billed targets 计；单 cell 0–66.9 %），
+  这个上界需要探测时刻不可得的信息：以"最终完成"为标签，探测可见量的最优 AUC 是探测步 0.6318，
+  `deadline_offset` 0.5175、`severity` 0.5540、`total_stages` 0.4404。
 
 **不能说**：
 
-- **不能声称跨 cell 最优或已到帕累托前沿**：本节没有任何一行与另一行相比。
-- **不能把 R 的差异说成 N 的效果**：`R=12` 的 cell 成功率普遍高于 `R=6`，这是执行
-  能力（劳动力）的差别，与订阅者数无关；表中 `G24_R6_*` 与 `G24_R12_*` 的差距全部
-  属于 R。
-- **不能说"dual 无效"**：只看到一个检查点、一轮 seed、每 cell 3 个场景；且 KL 11–17
-  说明这条轨迹本身没有收敛，任何关于 λ 机制的结论都需要更低 KL 的重跑。
-- **不能说这就是收敛值**：milestone_100 只是第一个存档点，训练仍在继续。
+- **不能声称跨 cell 最优或已到帕累托前沿**：每个 cell 只与自己同 cell 的 immediate 比。
+- **不能把 R 的差异说成 N 的效果**：`R=12` 的 cell 成功率普遍高于 `R=6`，这是执行能力（劳动力）
+  的差别；`G24_R6_*` 与 `G24_R12_*` 的差距全部属于 R。`N` 只改变每次发送的扇出字节。
+- **不能说"λ 无效"**：它在 8.0 处**有效且剧烈**（16.4g），只是可用档位二值化，
+  中间值推不动 argmax。这是"λ 区间与奖励尺度不匹配"，不是"对偶没接线"。
+- **不能说策略"学会了省字节"**：五个检查点的发送集合与 immediate 相同，一个检查点是其真子集。
+- **不能说这就是训练到收敛的结果**：训练没有预设回合上限，本轮在 153 个 update 后被本次会话终止；
+  λ 仍在 0.25–8 之间振荡，没有任何检查点显示稳定点。
+- **不能把逐场景配对差里的 ±1–15 读成 cell 优劣**：`send` 与 `deliver` 行在同一 tick 内会重排，
+  45/45 世界的发送多重集与投递总数都相同，差异来自 0.7 投递概率下的随机数消耗顺序。
 
 ### 16.7 证据
 
 | 文件 | 说明 |
 |---|---|
-| `recovery_12/revision_02/README.md` | 设计、四条失败记录、口径 |
+| `recovery_12/revision_02/README.md` | 设计、**12 条**失败记录、口径、闸门与熔断清单 |
+| `recovery_12/revision_02/REPORT_rev02.md` | 任务第 4 节要求的逐 cell 报告（6 个检查点 + 发送集合比对 + λ 轨迹） |
 | `recovery_12/revision_02/stage5b_comm/{scale_program,unlimited_budget,dedup_policy,scale_features,objective,trainer,world,episode,constants}.py` | 实现 |
-| `recovery_12/revision_02/tests/test_revision_02_gates.py` | 53 项闸门 |
-| `recovery_12/revision_02/execution/baselines/grid_v2/BASELINES.json` | 360/360 基线 |
+| `recovery_12/revision_02/tests/test_revision_02_gates.py` | **56 项**闸门（`python -m unittest tests.test_revision_02_gates`，全部通过） |
+| `recovery_12/revision_02/execution/baselines/grid_v2/BASELINES.json` | 360/360 基线，0 失败 |
+| `recovery_12/revision_02/execution/train_v3/checkpoints/milestone_{100..600}.pth` | 6 枚检查点（`state["episode"]` = 100 … 600；对应训练回合 5103 … 5607） |
+| `recovery_12/revision_02/execution/train_v3/eval_*_e*/EVAL.json` | 每个检查点 45 世界的逐 cell 结果与判定 |
+| `recovery_12/revision_02/execution/train_v3/lambda_trace.json` | 153 个 update 的 λ/q/sends/bytes/kl 全程记录 |
+| `recovery_12/revision_02/execution/train_v3.log` | 训练原样日志（0 次熔断、0 次零发送 update） |
 | `recovery_12/revision_02/execution/probe40/TRAIN_SUMMARY.json` | 量级修复后的 40 回合探针 |
-| `recovery_12/revision_02/execution/train_v2/checkpoints/milestone_100.pth` | 本节评估的检查点 |
-| `recovery_12/revision_02/execution/train_v2/eval_100/EVAL.json` | 45 世界的逐 cell 结果与判定 |
 | `recovery_12/revision_02/execution/train_v1.log` | 量级缺陷的原样证据（342/366 零发送） |
+| `recovery_09b/revision_01/protocol/RECOVERY_SOURCE_MANIFEST.json` | 98 个 pin 文件；本轮结束时复核 **98/98 哈希一致、0 漂移** |
 
-提交：`ef843ce`（源码 + 闸门 + grid_v2 + probe40）。
+提交：`ef843ce`（源码 + 闸门 + grid_v2 + probe40）、`cd79b62`（接缝修复）、`71065f9`（场景口径修复）、
+`8809cf2`/`b70f015`/`3f8f136`/`e29bcf6`/`44bfb7d`/`9d90391`（16.4b–16.4g）、`50dad48`（逐 cell 报告）、
+`3a63e50`（16.4h）、`5213261`（400/500/600 + 发送集合比对 + 16.4i）。
