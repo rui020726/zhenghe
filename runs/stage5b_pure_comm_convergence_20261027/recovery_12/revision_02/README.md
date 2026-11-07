@@ -34,6 +34,7 @@ scenario and a new world, so every cell gets its own baselines.
 | `run_baselines.py` | three rules on every cell x scene |
 | `train.py` | the training loop with circuit breakers |
 | `evaluate.py` | greedy per-cell evaluation and the registered verdict |
+| `analyse_checkpoints.py` | recomputes the per-cell tables, the send-set comparison against `normal_immediate`, and the same-target-set recheck straight from the archived transcripts; emits the markdown used in `REPORT_rev02.md` |
 
 ## The lambda rule
 
@@ -66,6 +67,9 @@ substituted.
 | 10 | **Every learned/baseline ratio ≈ 3/8 in the first `eval_100`** | the learned side summed 3 scenes while the baseline side summed all 8, so the comparison was between different denominators | baselines are summed over exactly the scenes the learned worlds ran; `evaluate.py --recompute-from` re-aggregates an archived `EVAL.json` and inherits its scene set. Both outputs are kept (`eval_100_seamfix`, `eval_100_seamfix_recomputed`) |
 | 11 | **In-loop evaluation at episode 200 returned 0/15 cells** | the eval artifact namespace had no checkpoint index, so every cell collided with the episode-100 leaf and raised `FileExistsError` | `episode_index` is now part of the namespace (`@<ep>`) and `evaluate_all_cells` **raises** instead of returning a null point, so an unmeasured point cannot pass as data |
 | 12 | `_apply_transform` raised `IndexError: 900 out of bounds for size 517` | it used global `_row_start/_row_stop` offsets while the update works per minibatch chunk | rows are computed chunk-relative from `len(item["targets"])`, with a row-count assertion; a stray `torch` reference and an invalid `import numpy as np as _np` were fixed in the same edit |
+| 13 | **18 of 1146 updates print `kl=nan`** | `train.py:347` formats with `update.get("approx_kl") or float("nan")`, and `trainer.py:348` returns `round(kl, 6)`, so a genuine `0.0` is falsy and prints as `nan` | **not a non-finite update**: the breaker at `train.py:348-354` reads the raw dict value (`0.0`, finite) and correctly did not fire. Source is left untouched while the run is live; `lambda_trace.json` records these as `approx_kl: null` with `approx_kl_printed_nan: true` instead of inventing a number |
+| 14 | **23 checkpoint evaluations exited immediately** with `ValueError: invalid literal for int(): '2301901 2301902 2301903'` | the batch script passed `--scenes` space-separated; `evaluate.py:193` splits on `,` | relaunched with `2301901,2301902,2301903`. The failed attempt wrote no `EVAL.json`; its per-point logs are kept as `execution/eval_v3_<ep>.log` and overwritten by the retry |
+| 15 | **Report header mis-stated milestone_1100** as "全部真子集（发送 890/1245）" and milestone_900's 6 differing worlds as all "同一步换一个目标" | the numbers were carried over from milestone_800 (893) instead of recomputed; the 900 breakdown was never split by category | `analyse_checkpoints.py` recomputes both from the transcripts: 1100 is **629/1245**, 31 strict subsets + 14 other (6 new send steps, 8 both); 900 is 4 target swaps + 2 new send steps. The analyser was validated by reproducing milestone_800's recorded 10/35/893 and 2 solid cells exactly before being used on the new points |
 
 The `grid_v1` file is kept: `execution/baselines/grid_v1/BASELINES.json` records 120 successful
 worlds and 240 failures. `grid_v2` is the complete grid; the analysis reads `grid_v2` and the
