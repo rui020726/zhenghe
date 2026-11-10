@@ -26,11 +26,19 @@ from __future__ import annotations
 
 import hashlib
 
-#: The registered grid. ``N`` never exceeds ``R``; the pairs are the cross product minus the
-#: four impossible combinations (R=6 with N=12).
+#: The registered training grid. ``N`` never exceeds ``R``; the pairs are the cross product
+#: minus the four impossible combinations (R=6 with N=12).
 GOALS = (12, 24, 48)
 ROBOTS = (6, 12)
 SUBSCRIBERS = (3, 6, 12)
+
+#: The G-scaling sweep: the same five (R, N) pairs at ten goal counts, step 6, so the load
+#: ratio G/R moves in equal increments. Only 12/24/48 are *training* cells; the other seven
+#: are evaluation-only, and nothing here may feed training (``CELLS`` below stays the 15).
+#: ``GOALS_EXTENDED`` is what the configuration parser admits, so a world at G=30 is a
+#: registered world rather than a relaxed check.
+GOALS_EXTENDED = (12, 18, 24, 30, 36, 42, 48, 54, 60, 72)
+GOALS_ACCEPTED = tuple(sorted(set(GOALS) | set(GOALS_EXTENDED)))
 
 #: rescue_robots = rescue_species * rescue_per_species, and rescue_species is 3 in every run.
 RESCUE_SPECIES = 3
@@ -67,10 +75,33 @@ def cell_label(cell):
     return "G%d_R%d_N%d" % (int(goals), int(robots), int(subscribers))
 
 
-def validate_cell(cell):
+#: The five (R, N) pairs, in the order every table reports them.
+PAIRS = tuple((robots, subscribers) for robots in ROBOTS for subscribers in SUBSCRIBERS
+              if subscribers <= robots)
+
+
+def g_scaling_cells(goals=GOALS_EXTENDED):
+    """``(G, R, N)`` for the G sweep: ten goal counts crossed with the same five pairs.
+
+    This is an **evaluation** grid. ``CELLS`` stays the 15 training cells, so nothing that
+    samples cells for training can reach a G that was never trained on; a caller that wants an
+    unseen goal count has to ask for it explicitly here.
+    """
+    return tuple((int(goal), robots, subscribers)
+                 for goal in goals for robots, subscribers in PAIRS)
+
+
+def validate_cell(cell, *, allow_extended_goals=False):
+    """Check one cell. ``allow_extended_goals`` admits the G sweep's seven new counts.
+
+    Training paths keep the default, so a G=30 cell is refused where it would change the
+    sampling grid; evaluation paths pass ``True`` and get the registered extended world
+    instead of a relaxed check.
+    """
     goals, robots, subscribers = (int(value) for value in cell)
-    if goals not in GOALS:
-        raise ValueError("goals %d not in %r" % (goals, GOALS))
+    admitted = GOALS_ACCEPTED if allow_extended_goals else GOALS
+    if goals not in admitted:
+        raise ValueError("goals %d not in %r" % (goals, admitted))
     if robots not in ROBOTS:
         raise ValueError("robots %d not in %r" % (robots, ROBOTS))
     if subscribers not in SUBSCRIBERS:
@@ -107,8 +138,13 @@ def episode_seed(scene, cell, episode_index, *, salt=""):
 
 
 def eval_seed(scene, cell, *, salt=""):
-    """The evaluation seed for a cell. Same inputs, same seed, every time."""
-    goals, robots, subscribers = validate_cell(cell)
+    """The evaluation seed for a cell. Same inputs, same seed, every time.
+
+    Extended goal counts are admitted: an evaluation at G=30 is a registered world, and its
+    seed must be a function of the cell like any other. The 15 training cells' seeds are
+    unchanged (the digest never saw the admitted set).
+    """
+    goals, robots, subscribers = validate_cell(cell, allow_extended_goals=True)
     return _digest("eval", int(scene), goals, robots, subscribers, salt)
 
 
@@ -119,7 +155,7 @@ def subscriber_spec_for(cell):
     ``first:N`` narrows the fan-out without touching the roster, which is what lets R and N
     move independently.
     """
-    goals, robots, subscribers = validate_cell(cell)
+    goals, robots, subscribers = validate_cell(cell, allow_extended_goals=True)
     return "all" if subscribers == robots else "first:%d" % subscribers
 
 

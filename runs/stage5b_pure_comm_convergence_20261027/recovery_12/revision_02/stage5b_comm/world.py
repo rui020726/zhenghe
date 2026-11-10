@@ -68,12 +68,19 @@ CURRENT_CELL = None
 #: with G != 24 moves ``num_goals``; one with R != 6 moves ``rescue_robots``. Both are derived
 #: from the cell rather than hand-written, so the divergence set can be checked against the
 #: cell itself instead of against a second copy of the same numbers.
-def cell_expectation_overrides(cell):
-    """``{a1 key: value}`` for the deviations a cell causes, with the frozen value removed."""
+def cell_expectation_overrides(cell, *, allow_extended_goals=True):
+    """``{a1 key: value}`` for the deviations a cell causes, with the frozen value removed.
+
+    ``allow_extended_goals`` defaults to True because this is the *parser*: a G-scaling world
+    at G=30 must resolve its own goal count instead of being refused. It cannot widen the
+    training grid, because ``scale_program.cell_for`` still samples only the 15 registered
+    cells -- a G that no training episode ever drew stays unreachable from the trainer.
+    """
     from . import scale_program
     if cell is None:
         return {}
-    goals, robots, subscribers = scale_program.validate_cell(cell)
+    goals, robots, subscribers = scale_program.validate_cell(
+        cell, allow_extended_goals=allow_extended_goals)
     overrides = {}
     if goals != 24:
         overrides["num_goals"] = goals
@@ -89,6 +96,11 @@ SCALE_EXPECTATION_OVERRIDE_REASONS = {
     "rescue_robots": "R is an experimental axis. joint_driver derives rescue_robots as "
                      "rescue_species * rescue_per_species, so registering it registers the "
                      "roster the cell actually runs, not a hidden edit.",
+    "num_goals_extended": "The G-scaling sweep evaluates the sealed weights at goal counts "
+                          "the trainer never sampled (18/30/36/42/54/60/72). The world is a "
+                          "registered configuration, not a relaxed check: scale_program."
+                          "GOALS_ACCEPTED names every admitted count, and CELLS still holds "
+                          "only the 15 training cells.",
 }
 
 #: The three in-memory budget references the frozen runtime actually reads. A 58600 B world
@@ -287,9 +299,11 @@ def verify_resolved_configuration(fields, expected):
     if int(fields["num_goals"]) != expected_goals:
         raise RuntimeError("resolved num_goals %s != the cell's %d (authority binding missing?)"
                            % (fields["num_goals"], expected_goals))
-    if int(expected_goals) not in C.SCALE_GOALS:
-        raise RuntimeError("num_goals %d is not a registered cell goal count %r"
-                           % (expected_goals, C.SCALE_GOALS))
+    from . import scale_program
+    if int(expected_goals) not in scale_program.GOALS_ACCEPTED:
+        raise RuntimeError("num_goals %d is neither a training cell nor a registered "
+                           "G-scaling goal count %r"
+                           % (expected_goals, scale_program.GOALS_ACCEPTED))
     if int(checks["steps"]) != C.STEPS:
         raise RuntimeError("resolved steps %d != protocol %d" % (checks["steps"], C.STEPS))
     return checks
@@ -331,7 +345,8 @@ def configuration_fields(layout, scene, cell=None):
     fields.update(A4_TRANSPORT_OVERRIDES)
     overrides = cell_expectation_overrides(cell)
     if cell is not None:
-        goals, robots, subscribers = scale_program.validate_cell(cell)
+        goals, robots, subscribers = scale_program.validate_cell(
+            cell, allow_extended_goals=True)
         fields["num_goals"] = int(goals)
         fields["rescue_per_species"] = int(scale_program.rescue_per_species(robots))
         fields["comm_subscribers"] = scale_program.subscriber_spec_for(cell)
@@ -582,10 +597,11 @@ def _run_episode_body(layout, *, label, kind, scene, policy, attach, rule, contr
             # narrow cell must normalise by its own G and N, or the same world would look
             # different depending on which switch resolved first.
             goals = int(cell[0]) if cell is not None else int(C.NUM_GOALS)
+            robots = int(cell[1]) if cell is not None else int(C.SCALE_ROBOTS_REF)
             subscribers = (int(cell[2]) if cell is not None
                            else len(getattr(run.task_adapter.comm_relay, "_subscribers", ())))
             scale_features = scale_features_mod.ScaleFeatures(
-                mode=C.SCALE_FEATURES, goals=goals, subscribers=subscribers)
+                mode=C.SCALE_FEATURES, goals=goals, subscribers=subscribers, robots=robots)
             taps["scale_restore_forward"] = scale_features.install(controller)
             taps["scale_features"] = scale_features
     started = time.time()
@@ -663,13 +679,12 @@ def _run_episode_body(layout, *, label, kind, scene, policy, attach, rule, contr
         #: report never has to re-derive it.
         "cost_scale": (float(cell_arg[2]) * float(generated_goals)
                        if cell_arg is not None else None),
-        #: The multiplier the trainer applies to charged bytes: 1/(N*G) scaled by the reference
-        #: cell so the frozen (6, 24) world keeps the ``bytes / B0`` magnitude. Recorded rather
-        #: than recomputed, so the reward can be audited from the row alone.
+        #: The multiplier the trainer applies to charged bytes. One definition, in
+        #: ``unlimited_budget.scaled_cost``: charged bytes per subscriber, rescaled so the frozen
+        #: (6, 24) cell keeps the ``bytes / B0`` magnitude. ``G`` is passed for validation and
+        #: recorded, but it no longer prices anything -- see that function's docstring.
         "cost_reward_factor": (
-            float(unlimited_budget.REFERENCE_CELL[0] * unlimited_budget.REFERENCE_CELL[1])
-            / (float(cell_arg[2]) * float(generated_goals)
-               * float(unlimited_budget.B0_BYTES))
+            unlimited_budget.scaled_cost(1.0, int(cell_arg[2]), generated_goals)
             if cell_arg is not None and generated_goals > 0 else None),
         "bytes_per_on_time": (float(spent) / float(metrics.on_time)
                               if int(metrics.on_time) > 0 else None),

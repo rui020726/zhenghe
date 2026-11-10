@@ -410,10 +410,38 @@ class CellTests(unittest.TestCase):
             scale_program.validate_cell((24, 6, 12))
 
     def test_unregistered_values_are_refused(self):
+        # 36 is a *G-scaling* goal count, not a training cell, so the training-side check must
+        # still refuse it; 30 is admitted only when the caller opts into the extended set.
         with self.assertRaises(ValueError):
             scale_program.validate_cell((36, 6, 3))
         with self.assertRaises(ValueError):
             scale_program.validate_cell((24, 9, 3))
+        self.assertEqual(scale_program.validate_cell((36, 6, 3), allow_extended_goals=True),
+                         (36, 6, 3))
+        with self.assertRaises(ValueError):
+            scale_program.validate_cell((33, 6, 3), allow_extended_goals=True)
+
+    def test_extended_goal_counts_never_enter_the_training_grid(self):
+        """The sweep's seven new counts are registered worlds, not sampling cells."""
+        self.assertEqual(scale_program.GOALS_EXTENDED,
+                         (12, 18, 24, 30, 36, 42, 48, 54, 60, 72))
+        self.assertEqual(len(scale_program.GOALS_ACCEPTED), 10)
+        self.assertEqual(len(scale_program.CELLS), 15)
+        self.assertTrue(all(cell[0] in scale_program.GOALS for cell in scale_program.CELLS))
+        sweep = scale_program.g_scaling_cells()
+        self.assertEqual(len(sweep), 50)
+        self.assertEqual({cell[0] for cell in sweep}, set(scale_program.GOALS_EXTENDED))
+        self.assertEqual({(cell[1], cell[2]) for cell in sweep}, set(scale_program.PAIRS))
+        self.assertFalse(set(sweep) - set(scale_program.CELLS)
+                         & {cell for cell in scale_program.CELLS})
+
+    def test_extended_goal_seed_is_cell_specific_and_stable(self):
+        cell = (30, 6, 6)
+        self.assertEqual(scale_program.eval_seed(2301901, cell),
+                         scale_program.eval_seed(2301901, cell))
+        self.assertNotEqual(scale_program.eval_seed(2301901, cell),
+                            scale_program.eval_seed(2301901, (36, 6, 6)))
+        self.assertEqual(scale_program.subscriber_spec_for((54, 12, 12)), "all")
 
     def test_cell_is_deterministic_in_its_inputs(self):
         first = scale_program.cell_for(2301901, 17)
@@ -455,6 +483,12 @@ class CellTests(unittest.TestCase):
         self.assertEqual(world.cell_expectation_overrides((24, 12, 6)), {"rescue_robots": 12})
         self.assertEqual(world.cell_expectation_overrides((48, 12, 12)),
                          {"num_goals": 48, "rescue_robots": 12})
+        # The G sweep's new counts resolve through the same path and carry the same reason.
+        self.assertEqual(world.cell_expectation_overrides((30, 6, 3)),
+                         {"num_goals": 30})
+        self.assertIn("num_goals_extended", world.SCALE_EXPECTATION_OVERRIDE_REASONS)
+        with self.assertRaises(ValueError):
+            world.cell_expectation_overrides((33, 6, 3))
 
     def test_cost_scale_is_n_times_g(self):
         self.assertAlmostEqual(scale_program.cost_scale(6, 24), 144.0)
