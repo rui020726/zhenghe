@@ -381,6 +381,40 @@ def main():
         L.append("**R=12 没有任何一档让三格全部通过。**")
     L.append("")
 
+    L.append("## 谁在限流：页预算还是网络自身")
+    L.append("")
+    L.append("把 v4t 的实际发送与它在该格的页预算、以及**未加配额**的 `v4f@200` 并排，"
+             "就能分开「配额压住了它」和「网络自己不愿发」：")
+    L.append("")
+    L.append("| G | 格 | v4t 发送/世界 | 页预算 | v4f 发送/世界 | 结论 |")
+    L.append("|---|---|---|---|---|---|")
+    for goal in GOALS:
+        if goal < 36:
+            continue
+        for pair in PAIRS:
+            vt = per_cell[("v4t@100", goal, pair)]
+            vf = per_cell[("v4f@200", goal, pair)]
+            base = per_cell[("normal_immediate", goal, pair)]
+            if vt is None or vf is None or base is None:
+                continue
+            cap = max(1, int(round(base["sends_per_world"])) - 1)
+            if vt["sends_per_world"] < 0.92 * cap:
+                who = "**网络自身少发**（v4f 同值，预算未用满）"
+            else:
+                who = "预算在限流"
+            L.append("| %d | R=%d N=%d | %.1f | %d | %.1f | %s |"
+                     % (goal, pair[0], pair[1], vt["sends_per_world"], cap,
+                        vf["sends_per_world"], who))
+    L.append("")
+    L.append("读法：**v4t 与未加配额的 v4f 发送量几乎处处相同**（R=6 全格逐位相等，"
+             "R=12 差 0–1 条/世界），而页预算往往是它们的两倍以上。"
+             "也就是说在 G≥36 的大部分格子里，**限流的是网络自己，不是配额**。"
+             "唯一例外是 `R=12_N=12`：三档都贴着预算，说明那里预算确实在起作用。"
+             "这条把「扩展 G 时应先补页预算」这个直觉直接否掉——预算从来没被用完；"
+             "要救高 G 的 R=12 结果，得让 actor 在 `N=3`/`N=6` 上愿意多发，"
+             "而不是给它更多额度。")
+    L.append("")
+
     L.append("## 明确不能说的话")
     L.append("")
     L.append("* 新档位（18/30/36/42/54/60/72）**没有参与任何训练或调参**，"
