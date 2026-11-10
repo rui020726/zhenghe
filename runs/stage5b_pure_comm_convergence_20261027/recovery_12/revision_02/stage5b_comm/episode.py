@@ -186,6 +186,59 @@ def native_import_preflight(layout=None, *, force=False):
     return state
 
 
+#: Paper baselines that wrap the immediate rule. They need no network and no checkpoint, so a
+#: reviewer can recompute them from ``grid_v2`` plus one evaluation world per cell.
+THROTTLE_ARMS = ("fifo_cap_k1", "random_matched_rate", "slack_heuristic_cap",
+                 "slack_matched_rate")
+
+#: The two traditional trigger designs, taken from the frozen policy catalogue unchanged:
+#: ``periodic_k5`` is time-triggered (the whole table every fifth step, the pre-registered
+#: ``periodic_5`` of the Stage C arm list) and ``event_maxwait`` is event-triggered with the
+#: transport's own 10/3/25 silence bound as its timeout. Neither has a tunable of its own here:
+#: the parameters are the catalogue defaults, so the arms are not fitted to this grid.
+TRADITIONAL_ARMS = ("periodic_k5", "event_maxwait")
+
+
+def build_throttle_policy(arm, immediate_pages, keep_probability, seed=0,
+                          keep_by_cell=None, cell_label=None, matched_pages=None):
+    """Build one of the no-network throttle arms around ``immediate``.
+
+    ``immediate_pages`` is ``normal_immediate``'s pages per episode in the same cell, read from
+    the frozen baseline; ``keep_probability`` is how much of each candidate list survives, which
+    is ``(P - 1) / P`` so the expected pages match the ``k = 1`` budget the learned arms use.
+    """
+    from integrated_sar.comm_policy import build_comm_policy
+    from . import paper_baselines
+    inner = build_comm_policy("immediate")
+    if arm == "fifo_cap_k1":
+        # The same integer budget v4t runs under, with no selector: the rule's own order, cut at
+        # the same page count. This is the "quota without a choice" control.
+        return paper_baselines.FifoCapPolicy(inner, max(1, int(immediate_pages) - 1),
+                                        per_step=1)
+    if arm == "slack_heuristic_cap":
+        return paper_baselines.SlackCapPolicy(inner, max(1, int(immediate_pages) - 1),
+                                         per_step=1)
+    if arm == "slack_matched_rate":
+        # Same deadline ordering, but capped at the depth the learned arm actually reaches in this
+        # cell. Without this the heuristic runs at the k=1 budget (about 3 % saved) and cannot be
+        # compared to a 20 %-cutting arm.
+        if matched_pages is None:
+            raise ValueError("slack_matched_rate needs v4t's pages per episode for its cell")
+        return paper_baselines.SlackMatchedPolicy(inner, max(1, int(matched_pages)), per_step=1)
+    if arm == "random_matched_rate":
+        # Matched to what v4t actually sent in this cell, not to the page budget: the point of the
+        # arm is "same bytes as the learned arm, chosen at random". The coin stream must differ per
+        # world, or the same keeps would repeat in every cell.
+        rate = None
+        if keep_by_cell is not None and cell_label is not None:
+            rate = keep_by_cell.get(cell_label)
+        if rate is None:
+            rate = keep_probability
+        return paper_baselines.RandomThinPolicy(
+            inner, max(0.0, min(1.0, float(rate))), seed=int(seed))
+    raise ValueError("unknown throttle arm %r" % (arm,))
+
+
 def build_rule_policy(layout, arm, scene):
     """Baseline rules by their frozen names, plus this revision's dedup arm."""
     # This must run before the pacing branch returns: pacing.py itself only needs the repo, but
@@ -204,6 +257,15 @@ def build_rule_policy(layout, arm, scene):
         return build_comm_policy("immediate")
     if arm == "always_hold":
         return build_comm_policy("always_hold")
+    if arm == "periodic_k5":
+        # Time-triggered: the catalogue's ``periodic`` at the pre-registered interval 5. Nothing
+        # in the arm reads the task state, which is exactly the point of including it.
+        return build_comm_policy("periodic", {"interval": 5})
+    if arm == "event_maxwait":
+        # Event-triggered with the declared silence bound as its timeout. The 10/3/25 numbers
+        # are the catalogue defaults and the same ones the frozen transport has always
+        # enforced, so the arm is a rule, not a search over timeouts.
+        return build_comm_policy("event_maxwait")
     if arm == "late147":
         # late_discovery_gate lives in the frozen Stage C rule catalogue, not in the
         # production policy module; build it through that catalogue so its own parameter
@@ -216,7 +278,8 @@ def build_rule_policy(layout, arm, scene):
 def adapter_rule(arm):
     """A4 adapter rule name; learned covers the trained network and the dedup baseline."""
     return {"normal_immediate": "normal_immediate", "always_hold": "always_hold",
-            "late147": "late147", "dedup_immediate": "dedup_immediate"}.get(arm, "learned")
+            "late147": "late147", "dedup_immediate": "dedup_immediate",
+            "periodic_k5": "periodic_k5", "event_maxwait": "event_maxwait"}.get(arm, "learned")
 
 
 def eval_arm_kind(arm):
@@ -250,11 +313,25 @@ def eval_action_seed(scene):
     return int(v2_run.eval_action_seed(int(C.EVAL_WORLD_SEED), int(scene), "greedy"))
 
 
-def run_rule_world(layout, arm, scene, phase="pacing", cell=None):
+def run_rule_world(layout, arm, scene, phase="pacing", cell=None,
+                   immediate_pages=None, keep_probability=None, keep_by_cell=None,
+                   matched_pages_by_cell=None):
     from . import scale_program, world
     # The real pre-world entrance must be independently bootstrap-safe in a fresh spawn.
     ensure_import_paths(layout)
-    policy = build_rule_policy(layout, arm, int(scene))
+    if arm in THROTTLE_ARMS:
+        if immediate_pages is None:
+            raise ValueError("%s needs normal_immediate's pages per episode for its cell" % arm)
+        policy = build_throttle_policy(
+            arm, immediate_pages, keep_probability,
+            seed=scale_program.eval_seed(int(scene), tuple(cell)) if cell is not None
+            else int(scene),
+            keep_by_cell=keep_by_cell,
+            cell_label=scale_program.cell_label(cell) if cell is not None else None,
+            matched_pages=(matched_pages_by_cell or {}).get(
+                scale_program.cell_label(cell)) if cell is not None else None)
+    else:
+        policy = build_rule_policy(layout, arm, int(scene))
     tag = "%s_s%d" % (arm, int(scene))
     if cell is not None:
         # A rule arm sees the same seed a learned arm would in this cell, so the two are
@@ -292,8 +369,22 @@ def run_rule_world(layout, arm, scene, phase="pacing", cell=None):
     return row
 
 
+def _capped(policy, cap, floor=None):
+    """Wrap a relay policy in a page window, or return it untouched when there is none.
+
+    ``floor=None`` (or 0) is the one-sided budget every v4t point ran under; a positive floor
+    switches to :class:`SendWindowPolicy`, which paces a minimum as well as a maximum.
+    """
+    if cap is None and not floor:
+        return policy
+    from .send_cap import SendCapPolicy, SendWindowPolicy
+    if floor:
+        return SendWindowPolicy(policy, int(cap), int(floor))
+    return SendCapPolicy(policy, int(cap))
+
+
 def run_training_world(layout, arm, seed, index, scene, controller, action_rng_seed=None,
-                       cell=None):
+                       cell=None, cap=None, floor=None):
     """One training world inside a ``(G, R, N)`` cell.
 
     ``cell`` decides the goal count, the rescue roster and the subscriber fan-out, and the
@@ -315,7 +406,8 @@ def run_training_world(layout, arm, seed, index, scene, controller, action_rng_s
     tag = "train_%s_s%d" % (arm, int(seed))
     row = world.run_episode(
         layout, label="s5b_train_%s_s%d_e%03d" % (arm, int(seed), int(index)),
-        kind="train", scene=int(scene), policy="learned", attach=collector.policy(),
+        kind="train", scene=int(scene), policy="learned",
+        attach=_capped(collector.policy(), cap, floor),
         controller=controller, collector=collector,
         action_rng_seed=resolved_action_seed,
         tag=tag + "_e%03d" % int(index),
@@ -365,7 +457,8 @@ def run_replay_world(layout, arm, seed, index, scene, controller):
     return row
 
 
-def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_index=None):
+def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_index=None,
+                   cap=None, floor=None):
     ensure_import_paths(layout)
     import v2_run
     from budget_masked import BudgetMaskedCollector
@@ -383,14 +476,18 @@ def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_inde
     # The checkpoint index is part of the identity. Without it every checkpoint in one run
     # writes to the same leaf, so the second evaluation point fails with FileExistsError on
     # all 15 cells and reports 0/15 -- measured at episode 200 of train_v3.
-    stamp = "" if episode_index is None else "@%d" % int(episode_index)
+    # The stamp must stay inside the arm slot's grammar ``[A-Za-z0-9_]+``; an "@" there is
+    # rejected by ``world.artifact_directory``, which made every in-process evaluation fail
+    # with "invalid logical-slot artifact namespace".
+    stamp = "" if episode_index is None else "_c%d" % int(episode_index)
     namespace = "eval:%s%s:%d:%d" % (arm, stamp, int(seed), int(scene))
     if cell is not None:
         namespace = "eval:%s_%s%s:%d:%d" % (
             arm, scale_program.cell_label(cell).replace("_", ""), stamp, int(seed), int(scene))
     row = world.run_episode(layout, label=label,
                             kind="eval", scene=int(scene), policy="learned",
-                            attach=collector.policy(), controller=controller,
+                            attach=_capped(collector.policy(), cap, floor),
+                            controller=controller,
                             collector=collector,
                             action_rng_seed=action_seed,
                             tag=tag,
