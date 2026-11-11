@@ -68,24 +68,38 @@ CURRENT_CELL = None
 #: with G != 24 moves ``num_goals``; one with R != 6 moves ``rescue_robots``. Both are derived
 #: from the cell rather than hand-written, so the divergence set can be checked against the
 #: cell itself instead of against a second copy of the same numbers.
-def cell_expectation_overrides(cell, *, allow_extended_goals=True):
-    """``{a1 key: value}`` for the deviations a cell causes, with the frozen value removed.
+def cell_expectation_overrides(cell, *, allow_extended_goals=True,
+                              allow_extended_rescue=True, search_agents=None):
+    """``{a1 key: value}`` for the deviations a cell (and S) causes, minus the frozen values.
 
-    ``allow_extended_goals`` defaults to True because this is the *parser*: a G-scaling world
-    at G=30 must resolve its own goal count instead of being refused. It cannot widen the
-    training grid, because ``scale_program.cell_for`` still samples only the 15 registered
-    cells -- a G that no training episode ever drew stays unreachable from the trainer.
+    The flags default to True because this is the *parser*: a G-scaling world at G=30 or an
+    R-scaling world at R=18 must resolve its own counts instead of being refused. None of them
+    can widen the training grid, because ``scale_program.cell_for`` still samples only the 15
+    registered cells -- a G, R or S that no training episode ever drew stays unreachable from
+    the trainer.
+
+    ``search_agents`` is carried beside the cell rather than inside it: the cell tuple stays
+    ``(G, R, N)`` so every archived artifact keeps its name, and S travels as its own
+    expectation.
     """
     from . import scale_program
-    if cell is None:
+    if cell is None and search_agents is None:
         return {}
-    goals, robots, subscribers = scale_program.validate_cell(
-        cell, allow_extended_goals=allow_extended_goals)
     overrides = {}
-    if goals != 24:
-        overrides["num_goals"] = goals
-    if robots != 6:
-        overrides["rescue_robots"] = robots
+    if cell is not None:
+        goals, robots, subscribers = scale_program.validate_cell(
+            cell, allow_extended_goals=allow_extended_goals,
+            allow_extended_rescue=allow_extended_rescue)
+        if goals != 24:
+            overrides["num_goals"] = goals
+        if robots != 6:
+            overrides["rescue_robots"] = robots
+    if search_agents is not None and int(search_agents) != int(
+            FROZEN_CONFIG_EXPECTATIONS["search_agents"]):
+        if int(search_agents) not in scale_program.SEARCH_AGENTS_ACCEPTED:
+            raise ValueError("search_agents %r is not a registered count %r"
+                             % (search_agents, scale_program.SEARCH_AGENTS_ACCEPTED))
+        overrides["search_agents"] = int(search_agents)
     return overrides
 
 
@@ -101,6 +115,19 @@ SCALE_EXPECTATION_OVERRIDE_REASONS = {
                           "registered configuration, not a relaxed check: scale_program."
                           "GOALS_ACCEPTED names every admitted count, and CELLS still holds "
                           "only the 15 training cells.",
+    "rescue_robots_extended": "The R-scaling sweep evaluates the sealed weights at rescue "
+                              "rosters the trainer never sampled (3/9/15/18; 6 and 12 are "
+                              "training values). joint_driver derives rescue_robots as "
+                              "rescue_species * rescue_per_species, so registering R "
+                              "registers the roster the world actually runs. "
+                              "scale_program.RESCUE_ACCEPTED names the admitted counts; "
+                              "CELLS is unchanged.",
+    "search_agents_extended": "The S-scaling sweep evaluates the sealed weights at "
+                              "search-agent counts the trainer never sampled (1/3/4/6; 2 is "
+                              "the training value). S is not part of the (G, R, N) cell -- it "
+                              "is carried beside it so the training grid and every archived "
+                              "cell name stay exactly what they were. "
+                              "scale_program.SEARCH_AGENTS_ACCEPTED names the admitted counts.",
 }
 
 #: The three in-memory budget references the frozen runtime actually reads. A 58600 B world
@@ -324,7 +351,7 @@ def frozen_expectation_divergence(frozen_module_expectations, ours=None):
             if ours.get(key) != theirs.get(key)}
 
 
-def configuration_fields(layout, scene, cell=None):
+def configuration_fields(layout, scene, cell=None, search_agents=None):
     """Frozen archive configuration for the seed, with this cell's G/R/N applied.
 
     The order matters. ``stage_b_inherited_config`` first resolves the frozen 29,300 B world
@@ -343,15 +370,17 @@ def configuration_fields(layout, scene, cell=None):
     import v2_common as common
     fields, substituted = common.stage_b_inherited_config(int(scene))
     fields.update(A4_TRANSPORT_OVERRIDES)
-    overrides = cell_expectation_overrides(cell)
+    overrides = cell_expectation_overrides(cell, search_agents=search_agents)
     if cell is not None:
         goals, robots, subscribers = scale_program.validate_cell(
-            cell, allow_extended_goals=True)
+            cell, allow_extended_goals=True, allow_extended_rescue=True)
         fields["num_goals"] = int(goals)
         fields["rescue_per_species"] = int(scale_program.rescue_per_species(robots))
         fields["comm_subscribers"] = scale_program.subscriber_spec_for(cell)
     else:
         fields["comm_subscribers"] = "all"
+    if search_agents is not None:
+        fields["search_agents"] = int(search_agents)
     fields["seed"] = int(scene)
     import a1_metrics
     expected = dict(FROZEN_CONFIG_EXPECTATIONS)
@@ -471,7 +500,7 @@ def reserve_artifact_directory(layout, label, tag="", artifact_namespace=None):
 
 def run_episode(layout, *, label, kind, scene, policy, attach, rule="learned", controller=None,
                 collector=None, action_rng_seed=None, tag="", artifact_namespace=None,
-                cell=None):
+                cell=None, search_agents=None):
     """One real world: budget authorities bound, then the frozen A4 Decoupled/K0 build.
 
     ``cell`` is the ``(G, R, N)`` this world runs under. Omitting it means "no programme", and
@@ -482,7 +511,8 @@ def run_episode(layout, *, label, kind, scene, policy, attach, rule="learned", c
     # configuration_fields runs outside the budget context on purpose: it binds the frozen
     # 29,300 first and checks that the deviation set is exactly the budget plus this cell's
     # axes, before anything is moved.
-    fields, substituted = configuration_fields(layout, scene, cell)
+    fields, substituted = configuration_fields(layout, scene, cell,
+                                              search_agents=search_agents)
     import v2_common as common
     record: dict = {}
     try:
@@ -493,7 +523,7 @@ def run_episode(layout, *, label, kind, scene, policy, attach, rule="learned", c
                 action_rng_seed=action_rng_seed, tag=tag,
                 artifact_namespace=artifact_namespace, fields=fields,
                 substituted=substituted, a3=a3, adapter=adapter, common=common,
-                budget_record=record, cell_arg=cell)
+                budget_record=record, cell_arg=cell, search_agents=search_agents)
     except BaseException:
         _remember_budget_authority(record)
         raise
@@ -505,7 +535,8 @@ def run_episode(layout, *, label, kind, scene, policy, attach, rule="learned", c
 
 def _run_episode_body(layout, *, label, kind, scene, policy, attach, rule, controller,
                       collector, action_rng_seed, tag, artifact_namespace,
-                      fields, substituted, a3, adapter, common, budget_record, cell_arg):
+                      fields, substituted, a3, adapter, common, budget_record, cell_arg,
+                      search_agents=None):
     """Construct, run and verify one A4 Decoupled/K0 world inside the budget context."""
     out_dir = reserve_artifact_directory(layout, label, tag, artifact_namespace)
     fields["output"] = str(out_dir / "lifecycle.jsonl")

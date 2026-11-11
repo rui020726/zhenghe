@@ -40,6 +40,16 @@ SUBSCRIBERS = (3, 6, 12)
 GOALS_EXTENDED = (12, 18, 24, 30, 36, 42, 48, 54, 60, 72)
 GOALS_ACCEPTED = tuple(sorted(set(GOALS) | set(GOALS_EXTENDED)))
 
+#: The two orthogonal axes the sealed weights are also evaluated on, evaluation-only like
+#: ``GOALS_EXTENDED``. ``R`` is still ``rescue_species x rescue_per_species`` with three
+#: species, so every admitted count is a multiple of three (1..6 robots per species).
+RESCUE_EXTENDED = (3, 6, 9, 12, 15, 18)
+RESCUE_ACCEPTED = tuple(sorted(set(ROBOTS) | set(RESCUE_EXTENDED)))
+#: Search agents (``RunConfiguration.search_agents``). This is NOT part of the ``(G, R, N)``
+#: cell: it is carried beside the cell so the training grid stays exactly what it was.
+SEARCH_AGENTS_EXTENDED = (1, 2, 3, 4, 6)
+SEARCH_AGENTS_ACCEPTED = tuple(sorted(set((2,)) | set(SEARCH_AGENTS_EXTENDED)))
+
 #: rescue_robots = rescue_species * rescue_per_species, and rescue_species is 3 in every run.
 RESCUE_SPECIES = 3
 
@@ -80,6 +90,30 @@ PAIRS = tuple((robots, subscribers) for robots in ROBOTS for subscribers in SUBS
               if subscribers <= robots)
 
 
+def r_scaling_cells():
+    """``(G, R, N)`` for the R sweep: six rescue counts x (G in {24,36,48}), at N=3 and N=6.
+
+    The registry only admits ``N <= R``, so ``R=3`` cannot carry six subscribers and the N=6
+    slice starts at R=6. The result is 3 goals x (6 + 5) pairs = 33 cells.
+    """
+    out = []
+    for goal in (24, 36, 48):
+        for robots in RESCUE_EXTENDED:
+            for subscribers in (3, 6):
+                if subscribers <= robots:
+                    out.append((goal, robots, subscribers))
+    return tuple(out)
+
+
+def s_scaling_cells():
+    """``(G, R, N)`` for the S sweep at N=6: G in {24, 48} x R in {6, 12}.
+
+    ``S`` itself is not in the tuple; the sweep runner pairs each cell with one search-agent
+    count. Four cells per (goal, search-agent) point.
+    """
+    return tuple((goal, robots, 6) for goal in (24, 48) for robots in (6, 12))
+
+
 def g_scaling_cells(goals=GOALS_EXTENDED):
     """``(G, R, N)`` for the G sweep: ten goal counts crossed with the same five pairs.
 
@@ -91,19 +125,20 @@ def g_scaling_cells(goals=GOALS_EXTENDED):
                  for goal in goals for robots, subscribers in PAIRS)
 
 
-def validate_cell(cell, *, allow_extended_goals=False):
-    """Check one cell. ``allow_extended_goals`` admits the G sweep's seven new counts.
+def validate_cell(cell, *, allow_extended_goals=False, allow_extended_rescue=False):
+    """Check one cell. The two flags admit the G and R sweeps' new counts.
 
-    Training paths keep the default, so a G=30 cell is refused where it would change the
-    sampling grid; evaluation paths pass ``True`` and get the registered extended world
+    Training paths keep the defaults, so a G=30 or R=18 cell is refused where it would change
+    the sampling grid; evaluation paths pass the flag and get the registered extended world
     instead of a relaxed check.
     """
     goals, robots, subscribers = (int(value) for value in cell)
     admitted = GOALS_ACCEPTED if allow_extended_goals else GOALS
+    robots_admitted = RESCUE_ACCEPTED if allow_extended_rescue else ROBOTS
     if goals not in admitted:
         raise ValueError("goals %d not in %r" % (goals, admitted))
-    if robots not in ROBOTS:
-        raise ValueError("robots %d not in %r" % (robots, ROBOTS))
+    if robots not in robots_admitted:
+        raise ValueError("robots %d not in %r" % (robots, robots_admitted))
     if subscribers not in SUBSCRIBERS:
         raise ValueError("subscribers %d not in %r" % (subscribers, SUBSCRIBERS))
     if subscribers > robots:
@@ -144,7 +179,8 @@ def eval_seed(scene, cell, *, salt=""):
     seed must be a function of the cell like any other. The 15 training cells' seeds are
     unchanged (the digest never saw the admitted set).
     """
-    goals, robots, subscribers = validate_cell(cell, allow_extended_goals=True)
+    goals, robots, subscribers = validate_cell(
+        cell, allow_extended_goals=True, allow_extended_rescue=True)
     return _digest("eval", int(scene), goals, robots, subscribers, salt)
 
 
@@ -155,7 +191,8 @@ def subscriber_spec_for(cell):
     ``first:N`` narrows the fan-out without touching the roster, which is what lets R and N
     move independently.
     """
-    goals, robots, subscribers = validate_cell(cell, allow_extended_goals=True)
+    goals, robots, subscribers = validate_cell(
+        cell, allow_extended_goals=True, allow_extended_rescue=True)
     return "all" if subscribers == robots else "first:%d" % subscribers
 
 

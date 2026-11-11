@@ -421,6 +421,56 @@ class CellTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             scale_program.validate_cell((33, 6, 3), allow_extended_goals=True)
 
+    def test_extended_rescue_rosters_are_registered_but_not_sampled(self):
+        """The R sweep's six rosters are admitted worlds, not sampling cells."""
+        self.assertEqual(scale_program.RESCUE_EXTENDED, (3, 6, 9, 12, 15, 18))
+        self.assertEqual(len(scale_program.RESCUE_ACCEPTED), 6)
+        self.assertEqual(len(scale_program.CELLS), 15)
+        self.assertTrue(all(cell[1] in scale_program.ROBOTS
+                            for cell in scale_program.CELLS))
+        sweep = scale_program.r_scaling_cells()
+        self.assertEqual(len(sweep), 33)
+        self.assertEqual({cell[1] for cell in sweep}, set(scale_program.RESCUE_EXTENDED))
+        self.assertTrue(all(cell[2] <= cell[1] for cell in sweep))
+        self.assertEqual(scale_program.validate_cell((24, 3, 3), allow_extended_rescue=True),
+                         (24, 3, 3))
+        with self.assertRaises(ValueError):
+            scale_program.validate_cell((24, 4, 3), allow_extended_rescue=True)
+
+    def test_extended_search_agents_are_carried_beside_the_cell(self):
+        """S is not in the cell tuple, so no archived cell name or seed changes."""
+        self.assertEqual(scale_program.SEARCH_AGENTS_EXTENDED, (1, 2, 3, 4, 6))
+        self.assertEqual(len(scale_program.SEARCH_AGENTS_ACCEPTED), 5)
+        before = scale_program.eval_seed(2301901, (24, 6, 6))
+        for agents in scale_program.SEARCH_AGENTS_EXTENDED:
+            self.assertEqual(scale_program.eval_seed(2301901, (24, 6, 6)), before)
+
+    def test_the_two_new_whitelists_do_not_enter_the_training_grid(self):
+        self.assertEqual(scale_program.s_scaling_cells(),
+                         ((24, 6, 6), (24, 12, 6), (48, 6, 6), (48, 12, 6)))
+        sweep = set(scale_program.r_scaling_cells()) | set(scale_program.s_scaling_cells())
+        training = set(scale_program.CELLS)
+        unseen = sweep - training
+        self.assertTrue(unseen)
+        for cell in unseen:
+            with self.assertRaises(ValueError):
+                scale_program.validate_cell(cell)
+
+    def test_search_agents_expectation_names_only_what_moved(self):
+        from stage5b_comm import world
+        self.assertEqual(world.cell_expectation_overrides((24, 6, 6)), {})
+        self.assertEqual(world.cell_expectation_overrides((24, 6, 6), search_agents=2), {})
+        self.assertEqual(world.cell_expectation_overrides((24, 6, 6), search_agents=1),
+                         {"search_agents": 1})
+        self.assertEqual(world.cell_expectation_overrides((24, 18, 6), search_agents=6),
+                         {"rescue_robots": 18, "search_agents": 6})
+        self.assertIn("rescue_robots_extended",
+                      world.SCALE_EXPECTATION_OVERRIDE_REASONS)
+        self.assertIn("search_agents_extended",
+                      world.SCALE_EXPECTATION_OVERRIDE_REASONS)
+        with self.assertRaises(ValueError):
+            world.cell_expectation_overrides((24, 6, 6), search_agents=5)
+
     def test_extended_goal_counts_never_enter_the_training_grid(self):
         """The sweep's seven new counts are registered worlds, not sampling cells."""
         self.assertEqual(scale_program.GOALS_EXTENDED,

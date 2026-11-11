@@ -315,7 +315,7 @@ def eval_action_seed(scene):
 
 def run_rule_world(layout, arm, scene, phase="pacing", cell=None,
                    immediate_pages=None, keep_probability=None, keep_by_cell=None,
-                   matched_pages_by_cell=None):
+                   matched_pages_by_cell=None, search_agents=None):
     from . import scale_program, world
     # The real pre-world entrance must be independently bootstrap-safe in a fresh spawn.
     ensure_import_paths(layout)
@@ -344,23 +344,28 @@ def run_rule_world(layout, arm, scene, phase="pacing", cell=None,
     # arm has no weight seed, so it stays "none"; the eval action seed is a physics argument
     # and never part of the directory identity. Under the scale programme the cell IS part of
     # the identity: two cells on one scene are different worlds and must not share a leaf.
+    # A search-agent count other than the frozen 2 is part of the world's identity: two
+    # worlds that differ only in S must not share an artifact leaf.
+    s_tag = "" if not search_agents or int(search_agents) == 2 else "_S%d" % int(search_agents)
     if cell is not None:
         # The namespace grammar is ``phase:arm:none:scene`` with no colons in the arm slot, so
         # the cell goes into that slot: two cells on one scene are different worlds and must
         # never share a leaf.
         cell_tag = scale_program.cell_label(cell).replace("_", "")
-        namespace = "%s:%s_%s:none:%d" % (phase, arm, cell_tag, int(scene))
-        label = "s5b_%s_s%d_%s" % (arm, int(scene), scale_program.cell_label(cell))
-        tag = "%s_s%d_%s" % (arm, int(scene), scale_program.cell_label(cell))
+        namespace = "%s:%s_%s%s:none:%d" % (phase, arm, cell_tag, s_tag.replace("_", ""),
+                                            int(scene))
+        label = "s5b_%s_s%d_%s%s" % (arm, int(scene), scale_program.cell_label(cell), s_tag)
+        tag = "%s_s%d_%s%s" % (arm, int(scene), scale_program.cell_label(cell), s_tag)
     else:
-        namespace = "%s:%s:none:%d" % (phase, arm, int(scene))
-        label = "s5b_%s_s%d" % (arm, int(scene))
+        namespace = "%s:%s%s:none:%d" % (phase, arm, s_tag.replace("_", ""), int(scene))
+        label = "s5b_%s_s%d%s" % (arm, int(scene), s_tag)
     row = world.run_episode(layout, label=label,
                             kind=("eval" if phase == "eval" else "rule"),
                             scene=int(scene), policy="learned", attach=policy,
                             rule=adapter_rule(arm), tag=tag,
                             action_rng_seed=action_seed,
-                            artifact_namespace=namespace, cell=cell)
+                            artifact_namespace=namespace, cell=cell,
+                            search_agents=search_agents)
     row["arm"] = arm
     row["attach_kind"] = "rule"
     if action_seed is not None:
@@ -458,7 +463,7 @@ def run_replay_world(layout, arm, seed, index, scene, controller):
 
 
 def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_index=None,
-                   cap=None, floor=None):
+                   cap=None, floor=None, search_agents=None):
     ensure_import_paths(layout)
     import v2_run
     from budget_masked import BudgetMaskedCollector
@@ -480,6 +485,10 @@ def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_inde
     # rejected by ``world.artifact_directory``, which made every in-process evaluation fail
     # with "invalid logical-slot artifact namespace".
     stamp = "" if episode_index is None else "_c%d" % int(episode_index)
+    # A search-agent count other than the frozen 2 is part of the world's identity: two worlds
+    # that differ only in S must not share an artifact leaf.
+    if search_agents is not None and int(search_agents) != 2:
+        stamp += "_s%d" % int(search_agents)
     namespace = "eval:%s%s:%d:%d" % (arm, stamp, int(seed), int(scene))
     if cell is not None:
         namespace = "eval:%s_%s%s:%d:%d" % (
@@ -492,7 +501,7 @@ def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_inde
                             action_rng_seed=action_seed,
                             tag=tag,
                             artifact_namespace=namespace,
-                            cell=cell)
+                            cell=cell, search_agents=search_agents)
     row["arm"] = arm
     row["training_seed"] = int(seed) if seed is not None else None
     row["eval_world_seed"] = int(C.EVAL_WORLD_SEED)
