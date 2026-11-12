@@ -270,7 +270,7 @@ D:/project_env/python.exe analysis/plot_g_rs_figures.py
 | `execution/g_scaling/v4f_200/RESULTS.json` | `1b12a1771572a74e` |
 | `execution/g_scaling/v4s_300/RESULTS.json` | `a131f2cc497458a6` |
 | `execution/g_scaling/v4t_100/RESULTS.json` | `2af92701d29616ed` |
-| `execution/g_rs_grid/normal_immediate/RESULTS.json` | `5822e791f771ada9` |
+| `execution/g_rs_grid/normal_immediate/RESULTS.json` | `ddf0db3795d31b99` |
 | `execution/g_rs_grid/slack_heuristic_cap/RESULTS.json` | `83ed07512a0db849` |
 | `execution/g_rs_grid/slack_matched_rate/RESULTS.json` | `768e41d867d563d6` |
 | `execution/g_rs_grid/v4f_200/RESULTS.json` | `f9b264e0a1bd32ed` |
@@ -279,10 +279,20 @@ D:/project_env/python.exe analysis/plot_g_rs_figures.py
 
 ## 图片
 
-| 图 | 文件 | 像素 | sha256（前 16 位） |
-|---|---|---|---|
-| fig7_g_rs_grid_r | `execution/figures/fig7_g_rs_grid_r.png` | 2193×1754 | `c3036af4e4f36a3a` |
-| fig7_g_rs_grid_r | `execution/figures/fig7_g_rs_grid_r.pdf` |  | `d76921a257039587` |
-| fig8_g_rs_grid_s | `execution/figures/fig8_g_rs_grid_s.png` | 2193×1753 | `e5655dd53eee93b9` |
-| fig8_g_rs_grid_s | `execution/figures/fig8_g_rs_grid_s.pdf` |  | `3b3e307f07422f3a` |
+`analysis/plot_g_rs_figures.py` 只读 `execution/g_rs_grid/G_RS_GRID.json`，零重跑。IEEE 风格同图 1–6：西文 Times New Roman、中文 SimSun、数学 STIX，字体嵌入（`pdf.fonttype = 42`），四边封闭坐标轴、刻度朝内、无图内标题。
 
+| 图 | 内容 | 文件 | 像素 | PNG sha256（前 16 位） |
+|---|---|---|---|---|
+| 图 7 | 运力轴：仅 `v4t` 的准时比/字节比/两侧浪费率 | `execution/figures/fig7_g_rs_grid_r.png` + `.pdf` | 2193×1754 | `c3036af4e4f36a3a` |
+| 图 8 | 发现轴：仅 `v4t` 的同样四项 | `execution/figures/fig8_g_rs_grid_s.png` + `.pdf` | 2193×1753 | `e5655dd53eee93b9` |
+| **图 9** | **六臂同框（S=2），按 R=6/12/18 三列：上排准时比、下排字节比** | `execution/figures/fig9_g_rs_compare_r.png` + `.pdf` | 2253×1728 | `55d89156737577ab` |
+| **图 10** | **六臂同框（R=12），按 S=1/2/4 三列：上排准时比、下排字节比** | `execution/figures/fig10_g_rs_compare_s.png` + `.pdf` | 2253×1728 | `490980404c373947` |
+
+图 9 / 图 10 的全部六个臂：`Immediate`（灰点划线，比值恒 1.0）、`Slack-Cap`（蓝虚）、`Slack-Matched`（绿点）、`Ours-Net v4f`（橙点划、空心）、`Ours-Cap v4s`（紫点线、空心）、`Ours-Frozen v4t`（红实、实心，本文封板方案）；红色细虚线是 0.95 判定线。
+
+**两条读图约定，必须与图同看：**
+
+1. **`v4f` 与 `v4t` 在 54 个点里 52 个逐位相同**（同一份权重，唯一差别是页预算，而这些格子里预算没被用满）。两条曲线几乎完全重合，所以它们按 ±0.09 横向错位画出，读者看到的是"一对点"而不是一条线——**不要把它读成两个独立策略的两次实验**。
+2. **上下两排的纵轴含义不同**：上排是"相对 Immediate 的准时数比"（1.0 = 打平，低于 0.95 红线即不达标）；下排是"相对 Immediate 的字节比"（越小越省）。同一格子里上排低于红线、下排明显小于 1，就是"省了字节但没达标"。
+
+PDF 是矢量副本，每次渲染的时间戳不同，因此表里只给 PNG 的 sha256。

@@ -535,6 +535,12 @@ def main():
                           for arm in ARMS for goal in GRID_GOALS for agents in GRID_AGENTS},
         "by_robot": {arm: {str(r): by_robot[arm][r] for r in GRID_ROBOTS} for arm in ARMS},
         "by_agent": {arm: {str(s): by_agent[arm][s] for s in GRID_AGENTS} for arm in ARMS},
+        # Joint (G, R, S) readings: the figures need a single point, not a marginal, so the
+        # six-arm comparison can be drawn per (R, S) facet without recomputing anything.
+        "by_point": {"%s|G%d_R%d_S%d" % (arm, goal, robots, agents):
+                     by_goal_robot_agent[(arm, goal, robots, agents)]
+                     for arm in ARMS for goal in GRID_GOALS
+                     for robots in GRID_ROBOTS for agents in GRID_AGENTS},
         "v4t_on_time_ratio_by_goal": {str(g): r for g, r in ratios},
         "v4t_on_time_ratio_by_robot": {str(k): v for k, v in r_ratio.items()},
         "v4t_on_time_ratio_by_agent": {str(k): v for k, v in s_ratio.items()},

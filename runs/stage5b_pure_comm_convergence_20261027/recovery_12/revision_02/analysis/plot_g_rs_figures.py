@@ -148,6 +148,97 @@ def draw(rows, levels, style, arm_field, x_label, slug) -> list:
     return save(fig, slug)
 
 
+# ---------------------------------------------------------------- six-arm comparison figures
+# Figures 9 and 10 answer the question "does the deep grid compare the methods, or only report
+# ours?". Every panel puts the five non-baseline arms in one frame at the same (R, S) facet, so
+# a reader can see, at one glance, whether the learned arms and the two heuristics separate.
+ARM_STYLE = {
+    "slack_heuristic_cap": dict(color="#1F618D", ls="--", marker="s",
+                                label="Slack-Cap（时限+配额）"),
+    "slack_matched_rate": dict(color="#27AE60", ls=":", marker="^",
+                               label="Slack-Matched（同字节时限）"),
+    "v4f@200": dict(color="#E67E22", ls="-.", marker="D", label="Ours-Net（v4f）"),
+    "v4s@300": dict(color="#8E44AD", ls=(0, (5, 1, 1, 1)), marker="v", label="Ours-Cap（v4s）"),
+    "v4t@100": dict(color="#C0392B", ls="-", marker="o", label="Ours-Frozen（v4t）"),
+}
+COMPARE_ARMS = tuple(ARM_STYLE)
+
+
+def point(rows, arm, goal, robots, agents):
+    return rows.get("%s|G%d_R%d_S%d" % (arm, goal, robots, agents))
+
+
+def series(rows, arm, facet_value, metric, facet, agents=None, robots=None):
+    out = []
+    for goal in GOALS:
+        if facet == "R":
+            entry = point(rows, arm, goal, facet_value, agents)
+        else:
+            entry = point(rows, arm, goal, robots, facet_value)
+        out.append(np.nan if entry is None else entry[metric])
+    return out
+
+
+def ratio(rows, arm, facet_value, facet, agents=None, robots=None):
+    own = series(rows, arm, facet_value, "on_time", facet, agents, robots)
+    base = series(rows, "normal_immediate", facet_value, "on_time", facet, agents, robots)
+    return [a / b if b else np.nan for a, b in zip(own, base)]
+
+
+def byte_ratio(rows, arm, facet_value, facet, agents=None, robots=None):
+    own = series(rows, arm, facet_value, "spent_bytes", facet, agents, robots)
+    base = series(rows, "normal_immediate", facet_value, "spent_bytes", facet, agents, robots)
+    return [a / b if b else np.nan for a, b in zip(own, base)]
+
+
+def draw_comparison(rows, facet, facet_values, fixed, slug, facet_cn):
+    fig, axes = plt.subplots(2, len(facet_values), figsize=(7.6, 5.2))
+    for col, value in enumerate(facet_values):
+        base_kw = ({"agents": fixed} if facet == "R" else {"robots": fixed})
+        for row, (metric, ylabel, hollow) in enumerate((
+                ("ratio", "相对 Immediate 的准时比", False),
+                ("byte", "相对 Immediate 的字节比", True))):
+            ax = axes[row][col]
+            x = goal_ticks(ax)
+            ax.axhline(1.0, color=IMMEDIATE_GREY, lw=1.1, ls="-.", zorder=1)
+            if metric == "ratio":
+                ax.axhline(0.95, color=VERDICT_RED, lw=0.9, ls=(0, (4, 3)), alpha=0.55,
+                           zorder=1)
+            for arm in COMPARE_ARMS:
+                st = ARM_STYLE[arm]
+                values = (ratio(rows, arm, value, facet, **base_kw) if metric == "ratio"
+                          else byte_ratio(rows, arm, value, facet, **base_kw))
+                filled = arm == "v4t@100"
+                # v4f and v4t share one set of weights and differ only by the page cap, which
+                # does not bind in these cells: the two curves coincide on 52 of 54 points.
+                # They are drawn at +-0.09 around the tick so the pair is visible as a pair.
+                shift = {"v4f@200": 0.09, "v4t@100": -0.09}.get(arm, 0.0)
+                ax.plot([x_i + shift for x_i in x], values, color=st["color"], ls=st["ls"],
+                        marker=st["marker"],
+                        mfc=(st["color"] if filled else "white"), mec=st["color"],
+                        lw=(1.8 if filled else 1.2), ms=4.2, mew=1.0,
+                        zorder=(6 if filled else 4))
+            letter = "ab"[row]
+            ax.set_xlabel("(%s%d) 任务数量 𝐺%s" % (letter, col + 1,
+                                                  "，%s = %d" % (facet_cn, value)))
+            if col == 0:
+                ax.set_ylabel(ylabel)
+            ax.set_ylim(0, None) if metric == "byte" else ax.set_ylim(None, None)
+    handles = [Line2D([], [], color=IMMEDIATE_GREY, lw=1.1, ls="-.",
+                      label="Immediate（=1.0 基准）"),
+               Line2D([], [], color=VERDICT_RED, lw=0.9, ls=(0, (4, 3)), alpha=0.55,
+                      label="0.95 判定线")]
+    for arm in COMPARE_ARMS:
+        st = ARM_STYLE[arm]
+        handles.append(Line2D([], [], color=st["color"], ls=st["ls"], marker=st["marker"],
+                              mfc=(st["color"] if arm == "v4t@100" else "white"),
+                              mec=st["color"], lw=(1.8 if arm == "v4t@100" else 1.2),
+                              ms=4.2, label=st["label"]))
+    place_legend(fig, handles, ncol=3)
+    tighten(fig)
+    return save(fig, slug)
+
+
 def main() -> None:
     sys.dont_write_bytecode = True
     require_fonts()
@@ -160,7 +251,13 @@ def main() -> None:
                        "搜救机器人数量", "fig7_g_rs_grid_r")
         written += draw(payload["by_goal_agent"], AGENTS, AGENT_STYLE, ("v4t@100", "S"),
                         "搜索智能体数量", "fig8_g_rs_grid_s")
-        for paths in (written[:2], written[2:]):
+        # Six arms in one frame, S fixed at the training value: the capacity axis.
+        written += draw_comparison(payload["by_point"], "R", ROBOTS, 2,
+                                   "fig9_g_rs_compare_r", "R")
+        # Same, R fixed at the training value: the discovery axis.
+        written += draw_comparison(payload["by_point"], "S", AGENTS, 12,
+                                   "fig10_g_rs_compare_s", "S")
+        for paths in (written[:2], written[2:4], written[4:6]):
             print("wrote", ", ".join(path.name for path in paths))
         missed = [str(item.message) for item in caught if "missing from font" in str(item.message)]
     if missed:
