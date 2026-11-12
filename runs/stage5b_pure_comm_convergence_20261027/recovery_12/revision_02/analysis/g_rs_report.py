@@ -158,6 +158,12 @@ def main():
         data[arm], waste, arm,
         lambda key, _row, g=goal, s=agents: key[0][0] == g and key[2] == s)
         for arm in ARMS for goal in GRID_GOALS for agents in GRID_AGENTS}
+    by_goal_robot_agent = {(arm, goal, robots, agents): aggregate(
+        data[arm], waste, arm,
+        lambda key, _row, g=goal, r=robots, s=agents:
+            key[0][0] == g and key[0][1] == r and key[2] == s)
+        for arm in ARMS for goal in GRID_GOALS for robots in GRID_ROBOTS
+        for agents in GRID_AGENTS}
     by_agent = {arm: {agents: aggregate(
         data[arm], waste, arm, lambda key, _row, s=agents: key[2] == s)
         for agents in GRID_AGENTS} for arm in ARMS}
@@ -210,7 +216,7 @@ def main():
     L.append("")
 
     # ---- table 1: the three slices side by side
-    L.append("## 表 1　三条切片：按 G、按 R、按 S 的合并读数（每行 54/54 世界）")
+    L.append("## 表 1　三条切片：按 G、按 R、按 S 的合并读数（G 行 27 世界，R/S 行 54 世界）")
     L.append("")
     L.append("| 切片 | 值 | " + " | ".join(
         "%s 准时 | %s 字节 | %s 消息/任务 | %s 浪费" % ((SHORT[a],) * 4) for a in ARMS)
@@ -229,6 +235,67 @@ def main():
                 stats["spent_bytes"] / base["spent_bytes"],
                 fmt(stats["messages_per_on_time"]), fmt(stats["waste"]))
         L.append(row)
+    L.append("")
+
+    # ---- table 1b: every (G, R, S) point with all six arms side by side
+    L.append("## 表 1b　逐点六臂对照（54 点 × 3 锚定场景）：相对 immediate 的准时比 / 字节比")
+    L.append("")
+    L.append("每一行是一个 `(G, R, S)` 点；`immediate` 是 1.000 基准，其余五个臂各自相对它。"
+             "54 个点上六个臂都在同一读数口径里，逐点可对照。")
+    L.append("")
+    others = [arm for arm in ARMS if arm != "normal_immediate"]
+    L.append("| G | R | S | " + " | ".join(
+        "%s 准时比 | %s 字节比" % (SHORT[a], SHORT[a]) for a in others) + " |")
+    L.append("|---|---|---|" + "---|" * (2 * len(others)))
+    for goal in GRID_GOALS:
+        for robots in GRID_ROBOTS:
+            for agents in GRID_AGENTS:
+                base = by_goal_robot_agent[("normal_immediate", goal, robots, agents)]
+                row = "| %d | %d | %d |" % (goal, robots, agents)
+                for arm in others:
+                    stats = by_goal_robot_agent[(arm, goal, robots, agents)]
+                    if stats is None or base is None or not base["on_time"]:
+                        row += " n/a | n/a |"
+                        continue
+                    row += " %.3f | %.3f |" % (
+                        stats["on_time"] / base["on_time"],
+                        stats["spent_bytes"] / base["spent_bytes"])
+                L.append(row)
+    L.append("")
+
+    # ---- table 1c: the registered verdict, arm by arm, point by point
+    L.append("## 表 1c　逐点判定：三个学习臂各自是否通过注册判据")
+    L.append("")
+    L.append("判据：`on_time ≥ ceil(0.95 × immediate)` 且 `bytes < immediate`，"
+             "只用同点同场景的 immediate。格内写作 `过/不过 · 准时数/门槛`。")
+    L.append("")
+    verdict_arms = ("v4f@200", "v4s@300", "v4t@100")
+    L.append("| G | R | S | " + " | ".join(SHORT[a] for a in verdict_arms) + " | 通过数 |")
+    L.append("|---|---|---|" + "---|" * len(verdict_arms) + "---|")
+    pass_totals = {arm: 0 for arm in verdict_arms}
+    for goal in GRID_GOALS:
+        for robots in GRID_ROBOTS:
+            for agents in GRID_AGENTS:
+                base = by_goal_robot_agent[("normal_immediate", goal, robots, agents)]
+                row = "| %d | %d | %d |" % (goal, robots, agents)
+                count = 0
+                for arm in verdict_arms:
+                    stats = by_goal_robot_agent[(arm, goal, robots, agents)]
+                    if stats is None or base is None:
+                        row += " n/a |"
+                        continue
+                    need = (95 * base["on_time"] + 99) // 100
+                    passed = (stats["on_time"] >= need
+                              and stats["spent_bytes"] < base["spent_bytes"])
+                    count += int(passed)
+                    pass_totals[arm] += int(passed)
+                    row += " %s %d/%d |" % ("**过**" if passed else "不过",
+                                            stats["on_time"], need)
+                row += " %d/3 |" % count
+                L.append(row)
+    L.append("")
+    L.append("全网格合计（54 点）：" + "，".join(
+        "%s %d/54" % (SHORT[arm], pass_totals[arm]) for arm in verdict_arms) + "。")
     L.append("")
 
     # ---- table 2: G x R at S=2 (the capacity axis)
@@ -274,7 +341,7 @@ def main():
     L.append("")
 
     # ---- table 4: the two axes summed across all goals
-    L.append("## 表 4　两条轴在全网格上的合计（每格 18 世界）")
+    L.append("## 表 4　两条轴在全网格上的合计（每格 54 世界）")
     L.append("")
     L.append("| 轴值 | " + " | ".join("%s 准时 | %s 字节比" % (SHORT[a], SHORT[a])
                                       for a in ARMS) + " |")
@@ -318,14 +385,15 @@ def main():
 
     L.append("## 读出来的结论")
     L.append("")
-    L.append("**① 深档 G 上 v4t 的按时比值不是单调的。** 全网格合并（18 世界/档）："
+    L.append("**① 深档 G 上 v4t 的按时比值不是单调的。** 全网格合并（27 世界/档）："
              + "、".join("G=%d %.3f" % (g, r) for g, r in ratios) + "。"
              "最低点在 %s，最高点在 %s；"
-             "**G=84 与 G=96 是 v4t 唯一低于 immediate 的两档**，从 G=120 起回到 1 以上。"
+             "低于 immediate 的是 %s；从 G=120 起回到 1 以上。"
              "这个「先降后升」的形状与上一轮 G 单轴扫描（R6/R12 合并、G≥36 单调走高）不同，"
              "原因是本网格的 R 比例更大（1/3 的世界是 R=18）——见 ②。"
              % (("G=%d（%.3f）" % worst) if worst else "n/a",
-                ("G=%d（%.3f）" % best) if best else "n/a"))
+                ("G=%d（%.3f）" % best) if best else "n/a",
+                "、".join("G=%d（%.3f）" % (g, r) for g, r in ratios if r < 1.0) or "无"))
     L.append("")
 
     def describe(value, kind):
@@ -341,7 +409,7 @@ def main():
             return "**发现快，v4t 的反超幅度最大**"
         return "训练值，v4t 略高于 immediate"
 
-    L.append("**② 运力轴与发现轴的合并比值（每条 18 世界 × 6 档 = 108 世界）：**")
+    L.append("**② 运力轴与发现轴的合并比值（每条 54 世界 = 6 档 × 3 个 S × 3 场景）：**")
     L.append("")
     L.append("| 轴 | 值 | v4t / immediate 准时 | v4t 字节比 | 读法 |")
     L.append("|---|---|---|---|---|")
