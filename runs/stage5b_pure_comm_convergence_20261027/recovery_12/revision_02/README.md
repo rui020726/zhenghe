@@ -34,6 +34,7 @@ scenario and a new world, so every cell gets its own baselines.
 | `run_baselines.py` | three rules on every cell x scene |
 | `train.py` | the training loop with circuit breakers |
 | `evaluate.py` | greedy per-cell evaluation and the registered verdict |
+| `analysis/master_table.py` | joins the three experiments into `MASTER_TABLE.md` + `execution/MASTER_TABLE.csv`, one schema, same-point denominators |
 | `analyse_checkpoints.py` | recomputes the per-cell tables, the send-set comparison against `normal_immediate`, and the same-target-set recheck straight from the archived transcripts; emits the markdown used in `REPORT_rev02.md` |
 
 ## The lambda rule
