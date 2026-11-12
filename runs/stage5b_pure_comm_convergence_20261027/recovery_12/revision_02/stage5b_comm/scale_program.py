@@ -37,7 +37,10 @@ SUBSCRIBERS = (3, 6, 12)
 #: are evaluation-only, and nothing here may feed training (``CELLS`` below stays the 15).
 #: ``GOALS_EXTENDED`` is what the configuration parser admits, so a world at G=30 is a
 #: registered world rather than a relaxed check.
-GOALS_EXTENDED = (12, 18, 24, 30, 36, 42, 48, 54, 60, 72)
+#: The G sweep's ten counts (step 6) plus the deep tail this round adds: 84/96/108/120/144.
+#: 144 is the headroom probe — the largest count the 60x60 scenario cluster can still place
+#: comfortably (see ``build_scenario``'s ``num_agents + num_goals`` requirement).
+GOALS_EXTENDED = (12, 18, 24, 30, 36, 42, 48, 54, 60, 72, 84, 96, 108, 120, 144)
 GOALS_ACCEPTED = tuple(sorted(set(GOALS) | set(GOALS_EXTENDED)))
 
 #: The two orthogonal axes the sealed weights are also evaluated on, evaluation-only like

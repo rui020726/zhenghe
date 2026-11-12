@@ -472,14 +472,17 @@ class CellTests(unittest.TestCase):
             world.cell_expectation_overrides((24, 6, 6), search_agents=5)
 
     def test_extended_goal_counts_never_enter_the_training_grid(self):
-        """The sweep's seven new counts are registered worlds, not sampling cells."""
+        """The sweep's new counts are registered worlds, not sampling cells."""
         self.assertEqual(scale_program.GOALS_EXTENDED,
-                         (12, 18, 24, 30, 36, 42, 48, 54, 60, 72))
-        self.assertEqual(len(scale_program.GOALS_ACCEPTED), 10)
+                         (12, 18, 24, 30, 36, 42, 48, 54, 60, 72,
+                          84, 96, 108, 120, 144))
+        self.assertEqual(len(scale_program.GOALS_ACCEPTED), 15)
         self.assertEqual(len(scale_program.CELLS), 15)
         self.assertTrue(all(cell[0] in scale_program.GOALS for cell in scale_program.CELLS))
         sweep = scale_program.g_scaling_cells()
-        self.assertEqual(len(sweep), 50)
+        # 15 goal counts x 5 (R, N) pairs; the count tracks GOALS_EXTENDED, not a literal.
+        self.assertEqual(len(sweep), len(scale_program.GOALS_EXTENDED)
+                         * len(scale_program.PAIRS))
         self.assertEqual({cell[0] for cell in sweep}, set(scale_program.GOALS_EXTENDED))
         self.assertEqual({(cell[1], cell[2]) for cell in sweep}, set(scale_program.PAIRS))
         self.assertFalse(set(sweep) - set(scale_program.CELLS)
