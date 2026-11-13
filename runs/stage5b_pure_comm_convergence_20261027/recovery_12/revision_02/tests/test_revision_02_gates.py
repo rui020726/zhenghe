@@ -1096,5 +1096,153 @@ class TraditionalArmTests(unittest.TestCase):
         self.assertFalse(set(episode.TRADITIONAL_ARMS) & set(episode.THROTTLE_ARMS))
 
 
+class ChannelOverrideTests(unittest.TestCase):
+    """The delivery-probability sweep registers its value instead of weakening a check."""
+
+    def test_the_frozen_value_adds_no_override(self):
+        from stage5b_comm import world
+        self.assertEqual(world.channel_expectation_overrides(None), {})
+        self.assertEqual(world.channel_expectation_overrides(0.7), {})
+
+    def test_a_sweep_value_is_registered(self):
+        from stage5b_comm import world
+        self.assertEqual(world.channel_expectation_overrides(0.3),
+                         {"comm_delivery_probability": 0.3})
+        self.assertEqual(world.channel_expectation_overrides(1.0),
+                         {"comm_delivery_probability": 1.0})
+
+    def test_an_unregistered_or_impossible_value_is_refused(self):
+        from stage5b_comm import world
+        for bad in (0.0, -0.1, 1.5, 0.55):
+            with self.assertRaises(ValueError):
+                world.channel_expectation_overrides(bad)
+
+    def test_only_the_frozen_value_uses_the_frozen_assertion(self):
+        from stage5b_comm import world
+        self.assertEqual(world.transport_check_route(None), "frozen")
+        self.assertEqual(world.transport_check_route(0.7), "frozen")
+        self.assertEqual(world.transport_check_route(0.4), "revision_local")
+
+    def test_the_local_check_compares_against_the_registered_value(self):
+        from stage5b_comm import world
+        declared = {"policy": "learned", "timing_mode": "policy_owned_timing",
+                    "bound_enforced_by_transport": False, "ack_enabled": False,
+                    "delivery_probability": 0.3, "delay_ticks": 0}
+        world.verify_transport_channel(declared, "w", "learned", 0.3)
+        with self.assertRaises(RuntimeError):
+            world.verify_transport_channel(declared, "w", "learned", 0.7)
+
+
+class FeatureMaskTests(unittest.TestCase):
+    """Experiment J: one column forced to a constant, or #11 back to the 50-step clip."""
+
+    def _matrix(self):
+        rows = np.zeros((2, 19), dtype="float32")
+        rows[:, scale_features.INDEX_SENT_COUNT] = 12.0
+        rows[:, scale_features.INDEX_BACKLOG] = 6.0
+        rows[:, scale_features.INDEX_SUBSCRIBERS] = 6.0
+        return rows
+
+    def test_a_mask_forces_only_the_named_column(self):
+        transform = scale_features.ScaleFeatures(mode="scaled", goals=24, subscribers=6,
+                                                mask={16: 1.0})
+        out = transform.rewrite(self._matrix()).numpy()
+        self.assertTrue(np.all(out[:, 16] == 1.0))
+        self.assertTrue(np.allclose(out[:, scale_features.INDEX_SENT_COUNT], 12.0 / 24.0))
+
+    def test_the_four_registered_masks_do_what_they_say(self):
+        raw = self._matrix()
+        cases = {2: 0.0, 14: 0.0, 16: 1.0, 17: 1.0}
+        for index, value in cases.items():
+            out = scale_features.ScaleFeatures(mode="scaled", goals=24, subscribers=6,
+                                               mask={index: value}).rewrite(raw).numpy()
+            self.assertTrue(np.all(out[:, index] == value), "dim %d" % index)
+
+    def test_an_unregistered_dimension_is_refused(self):
+        with self.assertRaises(ValueError):
+            scale_features.ScaleFeatures(mode="scaled", mask={5: 0.0})
+
+    def test_the_audit_reports_the_mask_and_the_horizon_denominator(self):
+        transform = scale_features.ScaleFeatures(mode="scaled", goals=48, subscribers=6,
+                                                 mask={16: 2.0}, horizon_denominator=50.0)
+        audit = transform.audit()
+        self.assertEqual(audit["feature_mask"], {"dim_16": 2.0})
+        self.assertIsNone(audit["horizon_scale"]["denominator"])   # not installed yet
+
+    def test_the_fifty_step_denominator_reproduces_the_shared_clip(self):
+        """With denominator 50 the shadow returns byte-for-byte the frozen builder's row."""
+        import integrated_sar.comm_learning as comm_learning
+        from integrated_sar.comm_policy import SendItem, SendObservation
+
+        item = SendItem(target_id="t", ready_step=1, age_steps=3, pending_event=True,
+                        changed_view=True, first_emission=True, revision=2, revision_delta=1,
+                        stage_index=0, stage_changed=True, progress=0.25,
+                        progress_delta=0.25, requirements_changed=False,
+                        members_changed=True, deadline=400.0, remaining_time=320.0,
+                        sent_count=0, last_sent_step=None, since_last_emission_time=None,
+                        has_future_requirements=True)
+        observation = SendObservation(step=4, current_time=4.0, items=(item,))
+        original = comm_learning.features
+        baseline = original(observation, item)
+        try:
+            _, denominator = scale_features.install_horizon_scale(50.0)
+            self.assertEqual(denominator, 50.0)
+            self.assertEqual(comm_learning.features(observation, item), baseline)
+        finally:
+            scale_features.restore_horizon_scale()
+            self.assertIs(comm_learning.features, original)
+
+
+class RandomCapTests(unittest.TestCase):
+    """Experiment K's random selector must differ from FIFO only in *which* pages it spends."""
+
+    class _Obs:
+        def __init__(self, step):
+            self.step = step
+
+    class _Inner:
+        name = "immediate"
+        orders_selection = False
+
+        def __init__(self, targets=("a", "b", "c", "d")):
+            self._targets = tuple(targets)
+
+        def parameters(self):
+            return {"name": "immediate"}
+
+        def decide(self, _observation):
+            return self._targets
+
+    def test_the_episode_ceiling_is_never_exceeded(self):
+        from stage5b_comm import paper_baselines
+        policy = paper_baselines.RandomCapPolicy(self._Inner(), 5, per_step=1, seed=7)
+        sent = 0
+        for step in range(1, 21):
+            sent += len(policy.decide(self._Obs(step)))
+        self.assertEqual(sent, 5)
+        self.assertEqual(policy.pages, 5)
+
+    def test_it_is_deterministic_for_a_seed_and_resets_per_episode(self):
+        from stage5b_comm import paper_baselines
+        first = paper_baselines.RandomCapPolicy(self._Inner(), 9, per_step=2, seed=3)
+        second = paper_baselines.RandomCapPolicy(self._Inner(), 9, per_step=2, seed=3)
+        runs = []
+        for policy in (first, second):
+            sequence = []
+            for step in range(1, 6):
+                sequence.append(policy.decide(self._Obs(step)))
+            sequence.append(policy.decide(self._Obs(1)))
+            runs.append(sequence)
+        self.assertEqual(runs[0], runs[1])
+        # The last call started a new episode: the ceiling is measured per episode, not per run.
+        self.assertEqual(len(runs[0][-1]), 2)
+
+    def test_it_really_reorders_rather_than_taking_the_rule_order(self):
+        from stage5b_comm import paper_baselines
+        policy = paper_baselines.RandomCapPolicy(self._Inner(), 40, per_step=4, seed=11)
+        seen = {tuple(policy.decide(self._Obs(step))) for step in range(1, 12)}
+        self.assertGreater(len(seen), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -321,10 +321,14 @@ def main():
     L.append("")
 
     r6 = {}
+    r6_worlds = None
     for goal in GOALS:
         base = aggregate(data["normal_immediate"], waste, "normal_immediate", goal, R6_PAIRS)
         vt = aggregate(data["v4t@100"], waste, "v4t@100", goal, R6_PAIRS)
         r6[goal] = (base["on_time"], vt["on_time"])
+        r6_worlds = base["worlds"]
+    r12_worlds = aggregate(data["normal_immediate"], waste, "normal_immediate",
+                           GOALS[0], R12_PAIRS)["worlds"]
     crossings = [goal for goal in GOALS if r6[goal][1] >= r6[goal][0]]
     gstar = None
     for index, goal in enumerate(GOALS):
@@ -334,7 +338,7 @@ def main():
 
     L.append("## 拐点与达标区间")
     L.append("")
-    L.append("### R=6（紧缺运力：R=6_N=3 与 R=6_N=6，13 世界/点）")
+    L.append("### R=6（紧缺运力：R=6_N=3 与 R=6_N=6，%d 世界/点）" % r6_worlds)
     L.append("")
     L.append("| G | immediate 准时 | v4t 准时 | 差 | 少发多救？ |")
     L.append("|---|---|---|---|---|")
@@ -351,7 +355,7 @@ def main():
                  "并且其后每一档都保持。单档反超出现在 %s，只有从 G\\* 起才持续。"
                  % (gstar, "、".join("G=%d" % g for g in crossings) if crossings else "无"))
     L.append("")
-    L.append("### R=12（运力充裕：R=12_N=3 / N=6 / N=12，12 世界/点）")
+    L.append("### R=12（运力充裕：R=12_N=3 / N=6 / N=12，%d 世界/点）" % r12_worlds)
     L.append("")
     L.append("| G | 通过格数（3 格） | v4t/immediate 准时比 | 备注 |")
     L.append("|---|---|---|---|")

@@ -198,6 +198,10 @@ THROTTLE_ARMS = ("fifo_cap_k1", "random_matched_rate", "slack_heuristic_cap",
 #: the parameters are the catalogue defaults, so the arms are not fitted to this grid.
 TRADITIONAL_ARMS = ("periodic_k5", "event_maxwait")
 
+#: Experiment K's three zero-training selectors. Each is handed the same integer page ceiling
+#: the learned arm runs under; only the rule that picks which targets get those pages differs.
+BUDGET_SELECTOR_ARMS = ("fifo_budget", "slack_budget", "random_budget")
+
 
 def build_throttle_policy(arm, immediate_pages, keep_probability, seed=0,
                           keep_by_cell=None, cell_label=None, matched_pages=None):
@@ -315,11 +319,29 @@ def eval_action_seed(scene):
 
 def run_rule_world(layout, arm, scene, phase="pacing", cell=None,
                    immediate_pages=None, keep_probability=None, keep_by_cell=None,
-                   matched_pages_by_cell=None, search_agents=None):
+                   matched_pages_by_cell=None, search_agents=None,
+                   delivery_probability=None, variant=None, cap=None):
     from . import scale_program, world
     # The real pre-world entrance must be independently bootstrap-safe in a fresh spawn.
     ensure_import_paths(layout)
-    if arm in THROTTLE_ARMS:
+    if arm in BUDGET_SELECTOR_ARMS:
+        # Experiment K: the same page ceiling, four different selectors. The cap is given in
+        # pages and applies to the whole episode, exactly like the learned arm's SendCapPolicy.
+        from integrated_sar.comm_policy import build_comm_policy
+        from . import paper_baselines
+        if cap is None:
+            raise ValueError("%s needs an explicit page cap" % arm)
+        inner = build_comm_policy("immediate")
+        if arm == "fifo_budget":
+            policy = paper_baselines.FifoCapPolicy(inner, int(cap), per_step=1)
+        elif arm == "slack_budget":
+            policy = paper_baselines.SlackCapPolicy(inner, int(cap), per_step=1)
+        else:
+            policy = paper_baselines.RandomCapPolicy(
+                inner, int(cap), per_step=1,
+                seed=(scale_program.eval_seed(int(scene), tuple(cell))
+                      if cell is not None else int(scene)))
+    elif arm in THROTTLE_ARMS:
         if immediate_pages is None:
             raise ValueError("%s needs normal_immediate's pages per episode for its cell" % arm)
         policy = build_throttle_policy(
@@ -347,25 +369,29 @@ def run_rule_world(layout, arm, scene, phase="pacing", cell=None,
     # A search-agent count other than the frozen 2 is part of the world's identity: two
     # worlds that differ only in S must not share an artifact leaf.
     s_tag = "" if not search_agents or int(search_agents) == 2 else "_S%d" % int(search_agents)
+    v_tag = "" if not variant else "_" + str(variant)
     if cell is not None:
         # The namespace grammar is ``phase:arm:none:scene`` with no colons in the arm slot, so
         # the cell goes into that slot: two cells on one scene are different worlds and must
         # never share a leaf.
         cell_tag = scale_program.cell_label(cell).replace("_", "")
-        namespace = "%s:%s_%s%s:none:%d" % (phase, arm, cell_tag, s_tag.replace("_", ""),
-                                            int(scene))
-        label = "s5b_%s_s%d_%s%s" % (arm, int(scene), scale_program.cell_label(cell), s_tag)
-        tag = "%s_s%d_%s%s" % (arm, int(scene), scale_program.cell_label(cell), s_tag)
+        namespace = "%s:%s_%s%s%s:none:%d" % (phase, arm, cell_tag, s_tag.replace("_", ""),
+                                              str(variant or ""), int(scene))
+        label = "s5b_%s_s%d_%s%s%s" % (arm, int(scene), scale_program.cell_label(cell),
+                                       s_tag, v_tag)
+        tag = "%s_s%d_%s%s%s" % (arm, int(scene), scale_program.cell_label(cell), s_tag, v_tag)
     else:
-        namespace = "%s:%s%s:none:%d" % (phase, arm, s_tag.replace("_", ""), int(scene))
-        label = "s5b_%s_s%d%s" % (arm, int(scene), s_tag)
+        namespace = "%s:%s%s%s:none:%d" % (phase, arm, s_tag.replace("_", ""),
+                                           str(variant or ""), int(scene))
+        label = "s5b_%s_s%d%s%s" % (arm, int(scene), s_tag, v_tag)
     row = world.run_episode(layout, label=label,
                             kind=("eval" if phase == "eval" else "rule"),
                             scene=int(scene), policy="learned", attach=policy,
                             rule=adapter_rule(arm), tag=tag,
                             action_rng_seed=action_seed,
                             artifact_namespace=namespace, cell=cell,
-                            search_agents=search_agents)
+                            search_agents=search_agents,
+                            delivery_probability=delivery_probability)
     row["arm"] = arm
     row["attach_kind"] = "rule"
     if action_seed is not None:
@@ -463,7 +489,8 @@ def run_replay_world(layout, arm, seed, index, scene, controller):
 
 
 def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_index=None,
-                   cap=None, floor=None, search_agents=None):
+                   cap=None, floor=None, search_agents=None, delivery_probability=None,
+                   feature_mask=None, horizon_denominator=None, variant=None):
     ensure_import_paths(layout)
     import v2_run
     from budget_masked import BudgetMaskedCollector
@@ -477,6 +504,8 @@ def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_inde
     label = "s5b_eval_%s_s%d" % (arm, int(scene))
     if cell is not None:
         label += "_" + scale_program.cell_label(cell)
+    if variant:
+        label += "_" + str(variant)
     tag = "eval_%s_s%d" % (arm, int(scene))
     # The checkpoint index is part of the identity. Without it every checkpoint in one run
     # writes to the same leaf, so the second evaluation point fails with FileExistsError on
@@ -489,6 +518,12 @@ def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_inde
     # that differ only in S must not share an artifact leaf.
     if search_agents is not None and int(search_agents) != 2:
         stamp += "_s%d" % int(search_agents)
+    # Sweep variants (channel probability, feature mask, budget fraction) are different worlds
+    # in the same cell and must not collide with the archived leaf.
+    if variant:
+        if not all(char.isalnum() or char == "_" for char in str(variant)):
+            raise ValueError("variant must match [A-Za-z0-9_]+ , got %r" % (variant,))
+        stamp += "_" + str(variant)
     namespace = "eval:%s%s:%d:%d" % (arm, stamp, int(seed), int(scene))
     if cell is not None:
         namespace = "eval:%s_%s%s:%d:%d" % (
@@ -501,7 +536,10 @@ def run_eval_world(layout, arm, seed, scene, controller, cell=None, episode_inde
                             action_rng_seed=action_seed,
                             tag=tag,
                             artifact_namespace=namespace,
-                            cell=cell, search_agents=search_agents)
+                            cell=cell, search_agents=search_agents,
+                            delivery_probability=delivery_probability,
+                            feature_mask=feature_mask,
+                            horizon_denominator=horizon_denominator)
     row["arm"] = arm
     row["training_seed"] = int(seed) if seed is not None else None
     row["eval_world_seed"] = int(C.EVAL_WORLD_SEED)

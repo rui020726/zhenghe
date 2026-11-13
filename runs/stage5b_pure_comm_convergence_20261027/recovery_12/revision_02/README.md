@@ -30,11 +30,15 @@ scenario and a new world, so every cell gets its own baselines.
 | `stage5b_comm/dedup_policy.py` | the low-cost strong rule |
 | `stage5b_comm/trainer.py` | the dual step at the update boundary; scaled cost reward |
 | `stage5b_comm/world.py` | cell-driven `configuration_fields`, 1e9 authority binding |
-| `tests/test_revision_02_gates.py` | 56 offline gate checks |
+| `tests/test_revision_02_gates.py` | 96 offline gate checks |
 | `run_baselines.py` | three rules on every cell x scene |
 | `train.py` | the training loop with circuit breakers |
 | `evaluate.py` | greedy per-cell evaluation and the registered verdict |
 | `analysis/master_table.py` | joins the three experiments into `MASTER_TABLE.md` + `execution/MASTER_TABLE.csv`, one schema, same-point denominators |
+| `analysis/extended_sweeps.py` | the five probes: channel sweep, feature masks, capacity counterfactual, budget spectrum, latency (write-once worlds, resumable) |
+| `analysis/micro_profile.py` | experiment L: send-time buckets and the sent/suppressed contrast, logs only |
+| `analysis/extended_report.py` | builds `EXTENDED_MECHANISM_EXPERIMENTS.md` + `execution/extended/EXTENDED.json` |
+| `analysis/plot_extended_figures.py` | fig15 (delivery sweep) and fig16 (budget Pareto) |
 | `analyse_checkpoints.py` | recomputes the per-cell tables, the send-set comparison against `normal_immediate`, and the same-target-set recheck straight from the archived transcripts; emits the markdown used in `REPORT_rev02.md` |
 
 ## The lambda rule
@@ -113,6 +117,20 @@ the 98-file manifest.
 | 43 | **the G×R×S grid reported 54/54 points but every arm held 52** | `cell_label()` drops the `_S` suffix when S=2 ("it is the training value"), so the first pass wrote `(G=72,R=6,S=2)` and `(G=72,R=12,S=2)` under `G72_R6_N6` — the same leaf the earlier G sweep used. The resume pass then died with `FileExistsError` and the surviving worlds were quarantined instead of merged, leaving 2 points × 3 scenes missing from all six arms | `analysis/g_rs_fill.py` re-runs exactly those 36 worlds under an explicit `_S2` label (no collision) and merges them; all six arms now hold 162 worlds = 54 points × 3 scenes, `missing_worlds: []` |
 | 44 | **the deep-grid report claimed only G=84 and G=96 fell below immediate** | the sentence was literal text, not derived; the data has three such levels (0.875 / 0.960 / 0.978 at G=84/96/108) | the below-baseline list is now computed from the ratios, and the stale world counts were corrected with it (G slice 27 worlds, R/S slices 54) |
 | 45 | **figures 7–8 showed only `v4t`, so the deep-grid extension looked uncompared** | both figures were written to plot one learned arm against immediate; the six-arm readings existed in `G_RS_GRID.json` but only two of them ever reached a canvas | `plot_g_rs_figures.py` now also draws fig9 (R facets at S=2) and fig10 (S facets at R=12), each a 2x3 panel of on-time ratio and byte ratio with all six arms; `G_RS_GRID.json` gained a joint `by_point` table so the figures read single points instead of marginals. v4f and v4t coincide on 52 of 54 points (same weights, unspent cap), so the pair is drawn at +-0.09 and the caption says so |
+
+### Round 44 (channel, feature, budget, micro and latency probes)
+
+| # | Failure | Cause | Fix |
+|---|---|---|---|
+| 46 | the micro profile crashed on every world with `KeyError: 'piloc-e1-target-11'` | `WINDOW` was written as 120 instead of the episode's 1000 steps, so detections after tick 120 never entered the map while their broadcasts did | `WINDOW = STEPS`; the broadcast set is also intersected with the detected set, so a send can never be compared against a discovery the window excluded |
+| 47 | the first grouped micro table raised `NameError: free variable 'world' referenced before assignment` | the bucket sum's generator bound `w` but indexed `world`, which the later `for world in worlds` loop also names in the same scope | the generator indexes `w`; both loops now use their own variable |
+| 48 | the sweep worker's waste reading was silently empty (`waste_*` keys absent) | it looked up `row["artefacts"]["lifecycle.jsonl.gz"]`, but the archive names its entries without the `.jsonl.gz` suffix | the directory is taken from the parent of any archived path, which is what `compact.archive_world_logs` guarantees |
+| 49 | the J2 driver died with `KeyError: 'G60_R12_N3'` | `archived_immediate_pages()` read only `grid_v2`, which holds the 15 training cells; G=60 and G=72 exist only in the G sweep's own immediate stage | the page table is now the union of `grid_v2` and `execution/g_scaling/normal_immediate/RESULTS.json`; both are the same arm measured the same way, so this is a union of cells, not of conventions |
+| 50 | the new #11 test failed twice with `AttributeError` on `budget_bytes_per_episode` / `capacity_remaining` | the shadow delegates to the frozen builder, which needs a real `SendObservation`, not the two-attribute stub the first draft passed | the test now builds a real `SendItem`/`SendObservation`, computes the **unshadowed** row first, and asserts the 50-step shadow returns exactly that tuple — an equivalence proof rather than a restatement of the formula |
+| 51 | the first draft of the report's J1 reference row was a tautology (`... and False`) | it was written as an inline expression while the per-cell reference numbers were only computed later | the reference pass count is computed in the same loop that builds the table, against the sealed immediate rows |
+| 52 | **the feature stage ran all 225 worlds correctly and then reported 900 failures** | `run_tasks` submitted the whole task list on every variant call (`feature_tasks` builds all five mutations at once), so variants 2–5 re-submitted worlds that already existed; each hit `FileExistsError`, and the first pass merged every mutation's rows into `features/mask16/RESULTS.json` | `run_tasks` now filters to its own arm. The four missing per-variant files were **split out of the rows already produced** (no world re-run); the stage then re-ran as "nothing to do" for all five. The 225 worlds themselves were never lost |
+| 53 | **`scale_invariant.horizon_scale` read null for every world** | `ScaleFeatures.restore()` runs in the world's `finally`, sets `_horizon = None`, and the row is assembled *after* that — so the field that was supposed to prove the #11 shadow existed always reported null | the installed denominator is now kept in a separate `_installed` field that `restore` does not clear, and the audit reports `installed_denominator`. Verified with a two-world probe (50 vs 200) that reads back 50.0 / 200.0 |
+| 54 | **the report's 0.7 reference read dedup as 2.02x on-time** | `archived_reference` accepted `normal_immediate` rows for *every* baseline arm of a shared file, so dedup's group was immediate + dedup | the filter now accepts a row only when it carries no `arm` (an EVAL file) or exactly the arm asked for; dedup reads 590/960 with 2.15x bytes, matching the paper |
 
 ## Gates before a world is opened
 

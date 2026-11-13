@@ -59,6 +59,69 @@ FROZEN_CONFIG_EXPECTATIONS = {
 #: The only key this experiment is allowed to differ on.
 REGISTERED_EXPECTATION_OVERRIDE = "comm_budget_bytes"
 
+#: The frozen channel constant. Every archived world ran at exactly this value, and
+#: ``v2_run._assert_transport`` hard-codes it in its own body.
+FROZEN_DELIVERY_PROBABILITY = 0.7
+#: The delivery-probability sweep's admitted values (experiment I).
+DELIVERY_PROBABILITIES = (0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)
+
+
+def channel_expectation_overrides(probability):
+    """``{}`` for the frozen channel, ``{"comm_delivery_probability": p}`` otherwise.
+
+    Same shape as the cell overrides: the value the world is built with is the value the
+    frozen-expectation gate is told to expect, so the divergence set stays exactly
+    ``{budget} | cell axes | channel`` and a drift in any *other* key is still refused.
+    """
+    if probability is None:
+        return {}
+    value = float(probability)
+    if value == FROZEN_DELIVERY_PROBABILITY:
+        return {}
+    if not 0.0 < value <= 1.0:
+        raise ValueError("delivery probability must be in (0, 1], got %r" % (probability,))
+    if value not in DELIVERY_PROBABILITIES:
+        raise ValueError("delivery probability %r is not a registered sweep value %r"
+                         % (probability, DELIVERY_PROBABILITIES))
+    return {"comm_delivery_probability": value}
+
+
+def transport_check_route(probability):
+    """Whether this world can use the frozen transport assertion unchanged.
+
+    The frozen body compares the relay's declared probability against the literal 0.7, so it
+    cannot express a sweep. At 0.7 the frozen function runs verbatim; at any other value the
+    revision-local check runs the same six assertions with the probability as an argument.
+    This is the same defect class as ledger #7 (a frozen literal where the cell's own value is
+    the truth), and it is routed rather than relaxed: nothing is skipped.
+    """
+    value = (FROZEN_DELIVERY_PROBABILITY if probability is None else float(probability))
+    return "frozen" if value == FROZEN_DELIVERY_PROBABILITY else "revision_local"
+
+
+def verify_transport_channel(declared, label, expected_policy, expected_delivery):
+    """``v2_run._assert_transport``'s six channel/label assertions, constant as an argument.
+
+    Kept deliberately literal and in the same order as the frozen body so a reviewer can diff
+    the two by eye. Only the four-byte-credit check that follows it in the frozen function is
+    absent here, because ``check_budget_credit`` already runs it unconditionally.
+    """
+    if declared["policy"] != expected_policy:
+        raise RuntimeError("%s: relay policy %r != %r"
+                           % (label, declared["policy"], expected_policy))
+    if declared["timing_mode"] != "policy_owned_timing":
+        raise RuntimeError("%s: timing mode %r" % (label, declared["timing_mode"]))
+    if declared["bound_enforced_by_transport"] is not False:
+        raise RuntimeError("%s: the transport is enforcing a silence bound" % (label,))
+    if declared["ack_enabled"]:
+        raise RuntimeError("%s: the reverse channel must be structurally off" % (label,))
+    if float(declared["delivery_probability"]) != float(expected_delivery):
+        raise RuntimeError("%s: relay delivery probability %r != registered %r"
+                           % (label, declared["delivery_probability"], expected_delivery))
+    if int(declared["delay_ticks"]) != 0:
+        raise RuntimeError("%s: the channel is not the frozen zero-delay one" % (label,))
+    return declared
+
 #: The cell this process is currently running, set by the driver before every world.
 #: ``None`` means "not under the scale programme"; a world built then uses the frozen values,
 #: which keeps the module importable and testable without a programme.
@@ -351,7 +414,8 @@ def frozen_expectation_divergence(frozen_module_expectations, ours=None):
             if ours.get(key) != theirs.get(key)}
 
 
-def configuration_fields(layout, scene, cell=None, search_agents=None):
+def configuration_fields(layout, scene, cell=None, search_agents=None,
+                         delivery_probability=None):
     """Frozen archive configuration for the seed, with this cell's G/R/N applied.
 
     The order matters. ``stage_b_inherited_config`` first resolves the frozen 29,300 B world
@@ -371,6 +435,9 @@ def configuration_fields(layout, scene, cell=None, search_agents=None):
     fields, substituted = common.stage_b_inherited_config(int(scene))
     fields.update(A4_TRANSPORT_OVERRIDES)
     overrides = cell_expectation_overrides(cell, search_agents=search_agents)
+    overrides.update(channel_expectation_overrides(delivery_probability))
+    if delivery_probability is not None:
+        fields["comm_delivery_probability"] = float(delivery_probability)
     if cell is not None:
         goals, robots, subscribers = scale_program.validate_cell(
             cell, allow_extended_goals=True, allow_extended_rescue=True)
@@ -500,7 +567,8 @@ def reserve_artifact_directory(layout, label, tag="", artifact_namespace=None):
 
 def run_episode(layout, *, label, kind, scene, policy, attach, rule="learned", controller=None,
                 collector=None, action_rng_seed=None, tag="", artifact_namespace=None,
-                cell=None, search_agents=None):
+                cell=None, search_agents=None, delivery_probability=None,
+                feature_mask=None, horizon_denominator=None):
     """One real world: budget authorities bound, then the frozen A4 Decoupled/K0 build.
 
     ``cell`` is the ``(G, R, N)`` this world runs under. Omitting it means "no programme", and
@@ -512,7 +580,8 @@ def run_episode(layout, *, label, kind, scene, policy, attach, rule="learned", c
     # 29,300 first and checks that the deviation set is exactly the budget plus this cell's
     # axes, before anything is moved.
     fields, substituted = configuration_fields(layout, scene, cell,
-                                              search_agents=search_agents)
+                                              search_agents=search_agents,
+                                              delivery_probability=delivery_probability)
     import v2_common as common
     record: dict = {}
     try:
@@ -523,7 +592,8 @@ def run_episode(layout, *, label, kind, scene, policy, attach, rule="learned", c
                 action_rng_seed=action_rng_seed, tag=tag,
                 artifact_namespace=artifact_namespace, fields=fields,
                 substituted=substituted, a3=a3, adapter=adapter, common=common,
-                budget_record=record, cell_arg=cell, search_agents=search_agents)
+                budget_record=record, cell_arg=cell, search_agents=search_agents,
+                feature_mask=feature_mask, horizon_denominator=horizon_denominator)
     except BaseException:
         _remember_budget_authority(record)
         raise
@@ -536,7 +606,7 @@ def run_episode(layout, *, label, kind, scene, policy, attach, rule="learned", c
 def _run_episode_body(layout, *, label, kind, scene, policy, attach, rule, controller,
                       collector, action_rng_seed, tag, artifact_namespace,
                       fields, substituted, a3, adapter, common, budget_record, cell_arg,
-                      search_agents=None):
+                      search_agents=None, feature_mask=None, horizon_denominator=None):
     """Construct, run and verify one A4 Decoupled/K0 world inside the budget context."""
     out_dir = reserve_artifact_directory(layout, label, tag, artifact_namespace)
     fields["output"] = str(out_dir / "lifecycle.jsonl")
@@ -579,7 +649,14 @@ def _run_episode_body(layout, *, label, kind, scene, policy, attach, rule, contr
     import v2_run
     import torch
     expected_policy = str(getattr(attach, "name", "learned"))
-    v2_run._assert_transport(run, label, expected_policy)
+    declared_channel = run.task_adapter.comm_relay.transport_parameters()
+    route = transport_check_route(fields["comm_delivery_probability"])
+    if route == "frozen":
+        # The archived channel: the frozen assertion body runs verbatim, not a copy of it.
+        v2_run._assert_transport(run, label, expected_policy)
+    else:
+        verify_transport_channel(declared_channel, label, expected_policy,
+                                 fields["comm_delivery_probability"])
     # The frozen assertion can only compare the executor against one inherited constant. These
     # four numbers additionally pin the run configuration and the protocol constant itself.
     budget_credit = check_budget_credit(run.task_adapter.comm_relay.budget.usage(),
@@ -632,7 +709,8 @@ def _run_episode_body(layout, *, label, kind, scene, policy, attach, rule, contr
             subscribers = (int(cell[2]) if cell is not None
                            else len(getattr(run.task_adapter.comm_relay, "_subscribers", ())))
             scale_features = scale_features_mod.ScaleFeatures(
-                mode=C.SCALE_FEATURES, goals=goals, subscribers=subscribers, robots=robots)
+                mode=C.SCALE_FEATURES, goals=goals, subscribers=subscribers, robots=robots,
+                mask=feature_mask, horizon_denominator=horizon_denominator)
             taps["scale_restore_forward"] = scale_features.install(controller)
             taps["scale_features"] = scale_features
     started = time.time()
@@ -725,6 +803,8 @@ def _run_episode_body(layout, *, label, kind, scene, policy, attach, rule, contr
         "num_goals_placed": int(placed),
         "num_goals_configured": int(configuration.num_goals),
         "budget_bytes": int(fields["comm_budget_bytes"]),
+        "comm_delivery_probability": float(fields["comm_delivery_probability"]),
+        "transport_assertion_route": route,
         "budget_credit": budget_credit,
         "scale_invariant": (taps["scale_features"].audit()
                             if taps.get("scale_features") is not None else None),

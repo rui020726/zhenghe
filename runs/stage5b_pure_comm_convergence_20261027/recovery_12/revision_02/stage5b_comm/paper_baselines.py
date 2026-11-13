@@ -219,3 +219,44 @@ class SlackCapPolicy(_PerEpisode):
         picked = tuple(ordered[:room])
         self.pages += len(picked)
         return picked
+
+
+class RandomCapPolicy(_PerEpisode):
+    """The learned arm's page ceiling, with a random target order instead of a ranking.
+
+    Experiment K needs the four selectors to differ **only** in which candidates get the pages,
+    so this arm cannot be ``RandomThinPolicy``: that one thins by a per-target coin at a matched
+    rate, which changes the page count itself. Here every step offers the rule's candidates in a
+    fresh random order and keeps as many as the per-step rate and the episode ceiling allow, so
+    the ceiling is identical across the four arms by construction.
+    """
+
+    name = "random_budget"
+    orders_selection = False
+
+    def __init__(self, inner, cap, *, per_step=1, seed=0):
+        super().__init__()
+        self._inner = inner
+        self.cap = int(cap)
+        self.per_step = max(1, int(per_step))
+        if self.cap < 0:
+            raise ValueError("a page budget cannot be negative, got %r" % (cap,))
+        self.seed = int(seed)
+        self._rng = None
+
+    def on_reset(self):
+        self._rng = Random(self.seed)
+        self.pages = 0
+
+    def parameters(self):
+        return {"cap": self.cap, "per_step": self.per_step, "order": "uniform_random",
+                "seed": self.seed, "inner": getattr(self._inner, "name", "immediate")}
+
+    def decide(self, observation):
+        self._tick(observation)
+        chosen = list(self._inner.decide(observation))
+        self._rng.shuffle(chosen)
+        room = min(self.per_step, max(0, self.cap - self.pages))
+        picked = tuple(chosen[:room])
+        self.pages += len(picked)
+        return picked
