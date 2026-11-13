@@ -588,7 +588,7 @@ def main():
     for cell in BUDGET_CELLS:
         key = label(cell)
         entry = budget[key]
-        add("### %s（immediate %d 页/世界）" % (key, int(round(cells_pages[key]))))
+        add("### %s（immediate %d 页/世界，8 场景均值）" % (key, int(round(cells_pages[key]))))
         add("")
         add("| 配额 | %s |" % " | ".join(BUDGET_LABEL[s] + " 字节比 / 相对按时"
                                         for s in BUDGET_SELECTORS))
