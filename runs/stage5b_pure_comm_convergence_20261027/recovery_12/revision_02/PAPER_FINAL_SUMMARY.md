@@ -84,7 +84,36 @@
 4. **不能说 v4v 证明了“无约束更好”**：它只证明了“去掉成本项会退化为广播全量”，这是负结果，不是替代方案。
 5. **不能把 12/15 与 9/15 当成同一条曲线上的两点**：一个来自新判据、一个在新判据下仍是 9/15，但两者的通过集合不同（v4f 的 3 个失败格与 v4t 的 6 个不同）。
 
-## 6. 交付物
+## 6. v4f-only 图集（唯一学习臂 = v4f@200）
+
+按“只保留 v4f、隐藏其他 v4 检查点”的要求重绘，输出在 `execution/figures/v4f_only/`；
+已发布的 fig1–17 与其哈希清单保持不动。每张图都只含 `Immediate / Slack-Cap / Slack-Matched / v4f`。
+
+| 图 | 覆盖的实验 | 四个子图 | 关键读数 |
+|---|---|---|---|
+| `v4f_g_scaling` | G 十档（12–72）× 5 组 (R,N) | 字节削减 / 相对按时 / 每任务字节 / 浪费 | G=72 省 45.9 %、按时 1.056；G=54 是低点（0.831） |
+| `v4f_dual_gate` | 15 格 × 3 锚定场景 | 逐格通过数 / 相对按时 / 字节比 / 浪费 | **12/15**、0.984、0.820、0.060（Slack-Cap 11/15、6/15 见 0.869） |
+| `v4f_budget_pareto` | 2 格 × 9 档配额 × 4 选择器 | R=6 与 R=12 的字节—按时轨迹 | R=6 上 40 % 配额即 1.021×（0.355 字节）；50 % 以上 v4f 不再多花 |
+| `v4f_g_rs_grid` | 深档 G 72–144 × R × S | R 轴准时/字节、S 轴准时/字节 | R=6 1.985×（0.346 字节）；R=18 0.816；S 1→4：0.940→1.224 |
+| `v4f_master_g` | A/B/C 三套网格同一条 G 轴 | 相对按时 / 字节比 | 12→144 全档单调省字节（1.00→0.40），按时在 0.87–1.23 之间 |
+| `v4f_r_s_scaling` | R 3–18、S 1–6 两条正交轴 | R 轴准时/字节、S 轴准时/字节 | R=3 1.70×、R≥9 ≤1.0；S=1 0.94 → S=6 1.19 |
+
+**未纳入本图集的一项**：投递率扫描（实验 I）当时只跑了 immediate / dedup / event_maxwait /
+slack_matched / v4s / v4t，**没有 v4f 的世界**，所以无法在不重跑的前提下加入；该实验的图仍是
+`fig15_delivery_prob_sweep`（含 v4s/v4t），仅在 `EXTENDED_MECHANISM_EXPERIMENTS.md` 中引用。
+
+| 文件 | PNG sha256 |
+|---|---|
+| `v4f_g_scaling.png` / `.pdf` | `303a1a9463f4e148` / `5b8af774077379fb` |
+| `v4f_dual_gate.png` / `.pdf` | `07b8a233c6185d51` / `f0d5c9661898c137` |
+| `v4f_budget_pareto.png` / `.pdf` | `9aaa8b854efb1a52` / `870693c2ca3897a4` |
+| `v4f_g_rs_grid.png` / `.pdf` | `a3184ef5a91357cc` / `2be852fc65d4d45d` |
+| `v4f_master_g.png` / `.pdf` | `fda92c6bf979c102` / `b37030a00deb519e` |
+| `v4f_r_s_scaling.png` / `.pdf` | `d1b24d5cfda0483e` / `fccc05b5547b35bc` |
+
+复现：`D:/project_env/python.exe analysis/plot_v4f_only_figures.py`
+
+## 7. 交付物
 
 | 类别 | 文件 |
 |---|---|
@@ -94,7 +123,7 @@
 | 报告 | `EXTENDED_MECHANISM_EXPERIMENTS.md`（I/J/K/L/M）、`PAPER_EXPERIMENTS.md`（14 臂主表）、`G_SCALING_EXPERIMENTS.md`、`R_S_SCALING_EXPERIMENTS.md`、`G_RS_GRID_EXPERIMENTS.md`、`MASTER_TABLE.md`、`OVERVIEW_EXPERIMENTS.md` |
 | 代码 | `analysis/{dual_gate_report.py,relaxed_gate.py,plot_dual_gate_figure.py,export_latex_tables.py,extended_*.py,micro_profile.py}` |
 
-## 7. 复现
+## 8. 复现
 
 ```bash
 D:/project_env/python.exe analysis/dual_gate_report.py      # 双口径全表 + JSON
@@ -104,7 +133,7 @@ D:/project_env/python.exe -B -m unittest discover -s tests  # 106 项门禁
 D:/project_env/python.exe analysis/verify_pins.py           # 98/98, 0 drift
 ```
 
-## 8. 证据哈希（前 16 位）
+## 9. 证据哈希（前 16 位）
 
 | 文件 | sha256 |
 |---|---|
