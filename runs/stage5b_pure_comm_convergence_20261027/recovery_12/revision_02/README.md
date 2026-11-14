@@ -141,6 +141,14 @@ the 98-file manifest.
 | 57 | the first v4v attempt (`train_v4v_smoke`, 2 episodes) consumed world indices 3900-3903 | a smoke needs the same stream position as the real run to exercise the same cells | the smoke directory was scratch and was removed; the real run re-uses index 3900, so those four worlds are run once in the reported arm. Recorded because the index stream is otherwise expected to be consumed once |
 | 58 | **the verdict-first dual removed trimming instead of aiming it** (v4v_pure) | with the price decaying to ~0 in cells short of on-time, nothing in the reward discourages a send; the actor went to "send every candidate" (1245 emissions = immediate, bytes ratio 1.000, waste 0.272) within the first 100 episodes and then stopped moving (eval at 100 and 200 identical: q 0.7190, bytes 208 352) | kept as the recorded negative result: the arm is evaluated and reported, not tuned away. The mechanism is the measured logit margin (12-14) against a price range of 0.06-2.44 |
 
+### Round 46 (dual-gate re-score, figure 17 and the LaTeX tables)
+
+| # | Failure | Cause | Fix |
+|---|---|---|---|
+| 59 | the LaTeX exporter raised `KeyError: bytes_ratio` on the floor arm | `RELAXED_GATE.json` names the field `global_bytes_ratio`; the exporter reused the dual-gate name | the exporter reads each file's own field names. The two files keep their names because renaming a published JSON would change its hash; the exporter is the one place that must know both |
+| 60 | figure 17's first render clipped the panel-(a) y label and printed a zero-based bar panel (b) from 0.85 | `tight_layout` cut a 34-character axis label, and the ratio panel had a truncated axis | the label is shortened and every ratio panel now starts at zero, so bar heights and numbers agree; the gate lines (0.85 / 0.10) are drawn as dashed references instead of moving the origin |
+
+
 ## Gates before a world is opened
 
 `tests/test_revision_02_gates.py` covers the six the task names, one class each:

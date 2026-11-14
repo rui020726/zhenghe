@@ -41,10 +41,13 @@ ARMS = (
      "execution/train_v4t_cap_frozen/eval_100_s8/EVAL.json", False),
     ("slack_heuristic_cap", "execution/baselines/paper_throttles_v1",
      "execution/baselines/paper_throttles_v1/BASELINES.json", True),
+    ("slack_matched_rate", "execution/baselines/paper_slack_matched",
+     "execution/baselines/paper_slack_matched/BASELINES.json", False),
 )
 LABEL = {"normal_immediate": "Immediate", "v4f@200": "v4f@200（旧纯网络）",
-         "v4v_pure": "v4v_pure（新纯网络）", "v4t@100": "v4t@100（旧网络+配额表）",
-         "slack_heuristic_cap": "Slack-Cap（零训练启发式）"}
+         "v4v_pure": "v4v_pure（价格衰减重训）", "v4t@100": "v4t@100（网络+配额表）",
+         "slack_heuristic_cap": "Slack-Cap（零训练启发式）",
+         "slack_matched_rate": "Slack-Matched（同字节启发式）"}
 
 
 def sha256(path):

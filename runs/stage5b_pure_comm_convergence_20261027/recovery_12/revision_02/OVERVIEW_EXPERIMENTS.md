@@ -109,6 +109,17 @@
   候选数（1.3→81.3/决策）而非模型规模增长。
 - 报告 `EXTENDED_MECHANISM_EXPERIMENTS.md`，图 `fig15_delivery_prob_sweep` / `fig16_budget_spectrum_pareto`。
 
+### K. 双判据复核与无配额重训（零新世界；1 个新训练臂 200 回合）
+- **旧判据（预先注册）**：v4f 3/15、v4t 9/15、Slack-Cap 11/15。
+- **新判据（本轮事后定义，探索性）**：逐格保准时 + 全局「字节比 < 0.85 且浪费 < 0.10」→
+  **v4f 12/15**、v4t 9/15、Slack-Cap 0/15（全局条款不过）。v4f 有 9 格此前仅因
+  `bytes == immediate` 被否，按时其实全部达标。
+- **v4v_pure**（无配额表、价格在准时不足时衰减到 0，暖启动 v4f@200 重训 200 回合）：
+  退化为全量广播（1 245 条 = immediate、字节比 1.000、浪费 0.272），新判据 0/15；
+  两处评估点逐格完全相同。
+- 报告 `execution/relaxed_gate/DUAL_GATE.md`，图 `fig17_dual_gate_ablation`，
+  LaTeX `execution/latex/table{1,2}_*.tex`，顶层总结 `PAPER_FINAL_SUMMARY.md`。
+
 ### 训练探索线（25 个 run，全部记账）
 train_v1（成本尺度错误致 342/366 更新零发送）→ v2/v3（重要性比接缝修复）→
 v4 价格系列（逐格 λ、锚定、温度、窗口；上限 3/15）→ 页预算系列（v4r 9/15 → v4s/v4t/v4u）。
