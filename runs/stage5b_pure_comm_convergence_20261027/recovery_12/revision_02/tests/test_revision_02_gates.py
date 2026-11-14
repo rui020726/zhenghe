@@ -1244,5 +1244,116 @@ class RandomCapTests(unittest.TestCase):
         self.assertGreater(len(seen), 1)
 
 
+class VerdictWasteDualTests(unittest.TestCase):
+    """Experiment v4v: protect on-time first, price only useless broadcasts."""
+
+    def test_a_cell_short_of_on_time_decays_the_price_towards_zero(self):
+        from stage5b_comm import unlimited_budget as U
+        new, detail = U.update_lambda_verdict(2.0, 0.50, 0.80, waste_ratio=0.40)
+        self.assertAlmostEqual(new, 0.5)          # 2.0 * 0.25
+        self.assertEqual(detail["region"], "protect_on_time")
+        self.assertEqual(detail["direction"], "decay_to_zero")
+        self.assertEqual(detail["penalty"], 0.0)  # no cost term while short
+
+    def test_the_decay_snaps_to_exactly_zero(self):
+        from stage5b_comm import unlimited_budget as U
+        new, _ = U.update_lambda_verdict(0.06, 0.10, 0.80, waste_ratio=0.90)
+        self.assertEqual(new, 0.0)
+
+    def test_no_penalty_is_added_for_waste_while_the_cell_is_short(self):
+        from stage5b_comm import unlimited_budget as U
+        _, detail = U.update_lambda_verdict(1.0, 0.60, 0.80, waste_ratio=0.80)
+        self.assertEqual(detail["penalty"], 0.0)
+        self.assertLess(detail["lambda_after"], detail["lambda_before"])
+
+    def test_waste_above_the_line_raises_the_price_between_target_and_reference(self):
+        from stage5b_comm import unlimited_budget as U
+        new, detail = U.update_lambda_verdict(2.0, 0.78, 0.80, waste_ratio=0.30)
+        self.assertEqual(detail["region"], "price_waste")
+        self.assertAlmostEqual(detail["penalty"], 0.30 - 0.10)
+        self.assertAlmostEqual(new, 2.0 + 0.25 * 0.20)
+
+    def test_beating_the_reference_raises_the_price_even_without_waste(self):
+        from stage5b_comm import unlimited_budget as U
+        new, detail = U.update_lambda_verdict(2.0, 0.90, 0.80, waste_ratio=0.0)
+        self.assertAlmostEqual(new, 2.0 + 0.25 * 0.10)
+        self.assertEqual(detail["region"], "price_margin")
+
+    def test_meeting_the_constraint_without_margin_or_waste_holds(self):
+        from stage5b_comm import unlimited_budget as U
+        new, detail = U.update_lambda_verdict(2.0, 0.80, 0.80, waste_ratio=0.05)
+        self.assertEqual(new, 2.0)
+        self.assertEqual(detail["direction"], "hold")
+
+    def test_the_price_is_clamped_at_the_registered_ceiling(self):
+        from stage5b_comm import unlimited_budget as U
+        new, detail = U.update_lambda_verdict(7.99, 0.99, 0.80, waste_ratio=0.9)
+        self.assertLessEqual(new, U.LAMBDA_MAX)
+        self.assertTrue(detail["clamped"])
+
+    def test_bad_inputs_are_refused(self):
+        from stage5b_comm import unlimited_budget as U
+        with self.assertRaises(ValueError):
+            U.update_lambda_verdict(1.0, 0.5, 0.8, waste_ratio=0.1, decay=1.0)
+        with self.assertRaises(ValueError):
+            U.update_lambda_verdict(1.0, 1.2, 0.8, waste_ratio=0.1)
+        with self.assertRaises(ValueError):
+            U.update_lambda_verdict(1.0, 0.5, None, waste_ratio=0.1)
+
+
+class WasteReaderTests(unittest.TestCase):
+    """The scan's waste reading must be the paper's definition, on a real pair of logs."""
+
+    def test_counts_broadcast_targets_that_missed_their_deadline(self):
+        import gzip, json, tempfile
+        from pathlib import Path
+        from stage5b_comm import waste
+
+        lifecycle = [
+            {"target_id": "a", "event_type": "detection", "timestamp": 1.0,
+             "detail": {"deadline_offset": 50.0}},
+            {"target_id": "b", "event_type": "detection", "timestamp": 2.0,
+             "detail": {"deadline_offset": 5.0}},
+            {"target_id": "c", "event_type": "detection", "timestamp": 3.0,
+             "detail": {"deadline_offset": 50.0}},
+            {"target_id": "a", "event_type": "progress", "status": "completed",
+             "timestamp": 10.0, "detail": {}},
+            {"target_id": "b", "event_type": "progress", "status": "completed",
+             "timestamp": 30.0, "detail": {}},
+        ]
+        transcript = [{"kind": "send", "target": "a", "step": 1},
+                      {"kind": "send", "target": "b", "step": 2},
+                      {"kind": "send", "target": "a", "step": 3}]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with gzip.open(root / "lifecycle.jsonl.gz", "wt", encoding="utf-8") as handle:
+                for record in lifecycle:
+                    handle.write(json.dumps(record) + "\n")
+            with gzip.open(root / "relay_transcript.jsonl.gz", "wt", encoding="utf-8") as handle:
+                for record in transcript:
+                    handle.write(json.dumps(record) + "\n")
+            reading = waste.world_waste(root)
+        self.assertEqual(reading["distinct_broadcast"], 2)   # a, b (a twice is one target)
+        self.assertEqual(reading["waste_n"], 1)              # b finished late
+        self.assertAlmostEqual(reading["waste_ratio"], 0.5)
+
+    def test_an_empty_broadcast_set_reads_as_none_not_zero(self):
+        import gzip, json, tempfile
+        from pathlib import Path
+        from stage5b_comm import waste
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with gzip.open(root / "lifecycle.jsonl.gz", "wt", encoding="utf-8") as handle:
+                handle.write(json.dumps({"target_id": "a", "event_type": "detection",
+                                         "timestamp": 1.0,
+                                         "detail": {"deadline_offset": 5.0}}) + "\n")
+            with gzip.open(root / "relay_transcript.jsonl.gz", "wt", encoding="utf-8") as handle:
+                handle.write("")
+            reading = waste.world_waste(root)
+        self.assertEqual(reading["distinct_broadcast"], 0)
+        self.assertIsNone(reading["waste_ratio"])
+
+
 if __name__ == "__main__":
     unittest.main()

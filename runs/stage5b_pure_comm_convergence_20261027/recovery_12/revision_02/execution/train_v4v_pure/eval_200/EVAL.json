@@ -1,0 +1,8375 @@
+{
+ "baselines": "execution/baselines/grid_v2/BASELINES.json",
+ "baselines_sha256": "95064c8753881114e00265ddcff81c591f9e4414e19426c9cbac509415d16b2f",
+ "caveat": "Cells are never compared to each other. R changes execution capability and N changes communication cost; a cell's verdict uses only that cell's own baselines.",
+ "cells": [
+  [
+   12,
+   6,
+   3
+  ],
+  [
+   12,
+   6,
+   6
+  ],
+  [
+   12,
+   12,
+   3
+  ],
+  [
+   12,
+   12,
+   6
+  ],
+  [
+   12,
+   12,
+   12
+  ],
+  [
+   24,
+   6,
+   3
+  ],
+  [
+   24,
+   6,
+   6
+  ],
+  [
+   24,
+   12,
+   3
+  ],
+  [
+   24,
+   12,
+   6
+  ],
+  [
+   24,
+   12,
+   12
+  ],
+  [
+   48,
+   6,
+   3
+  ],
+  [
+   48,
+   6,
+   6
+  ],
+  [
+   48,
+   12,
+   3
+  ],
+  [
+   48,
+   12,
+   6
+  ],
+  [
+   48,
+   12,
+   12
+  ]
+ ],
+ "checkpoint": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_02\\execution\\train_v4v_pure\\checkpoints\\milestone_200.pth",
+ "checkpoint_episode": 200,
+ "checkpoint_sha256": "c8f25ee0b81dea1cf9438fb2e0b277485fc36fcf187d4efc9056c29b35b98728",
+ "failures": [],
+ "per_cell": {
+  "G12_R12_N12": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 198,
+     "on_time": 95,
+     "q": 0.9895833333333334,
+     "spent_bytes": 1043076
+    },
+    "normal_immediate": {
+     "emissions": 95,
+     "on_time": 95,
+     "q": 0.9895833333333334,
+     "spent_bytes": 474432
+    }
+   },
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "learned": {
+    "bytes_per_on_time": 4994.021052631579,
+    "distinct_targets": 95,
+    "duplicate_sends": 0,
+    "emissions": 95,
+    "generated_goals": 96,
+    "on_time": 95,
+    "q": 0.9895833333333334,
+    "spent_bytes": 474432
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "mean_delta_on_time": 0.0,
+    "pairs": [
+     {
+      "baseline_bytes": 132540,
+      "baseline_on_time": 11,
+      "delta_bytes": -76680,
+      "delta_on_time": 0,
+      "learned_bytes": 55860,
+      "learned_on_time": 11,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 137652,
+      "baseline_on_time": 12,
+      "delta_bytes": -77520,
+      "delta_on_time": 0,
+      "learned_bytes": 60132,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 127488,
+      "baseline_on_time": 12,
+      "delta_bytes": -67776,
+      "delta_on_time": 0,
+      "learned_bytes": 59712,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 125508,
+      "baseline_on_time": 12,
+      "delta_bytes": -66360,
+      "delta_on_time": 0,
+      "learned_bytes": 59148,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 95868,
+      "baseline_on_time": 12,
+      "delta_bytes": -38136,
+      "delta_on_time": 0,
+      "learned_bytes": 57732,
+      "learned_on_time": 12,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 118560,
+      "baseline_on_time": 12,
+      "delta_bytes": -59592,
+      "delta_on_time": 0,
+      "learned_bytes": 58968,
+      "learned_on_time": 12,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 150276,
+      "baseline_on_time": 12,
+      "delta_bytes": -89124,
+      "delta_on_time": 0,
+      "learned_bytes": 61152,
+      "learned_on_time": 12,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 155184,
+      "baseline_on_time": 12,
+      "delta_bytes": -93456,
+      "delta_on_time": 0,
+      "learned_bytes": 61728,
+      "learned_on_time": 12,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 0,
+     "p_two_sided": null
+    },
+    "total_delta_bytes": -568644,
+    "total_delta_on_time": 0
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     11.5794,
+     12.1706
+    ],
+    "mean_delta_on_time": 11.875,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 55860,
+      "delta_on_time": 11,
+      "learned_bytes": 55860,
+      "learned_on_time": 11,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60132,
+      "delta_on_time": 12,
+      "learned_bytes": 60132,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59712,
+      "delta_on_time": 12,
+      "learned_bytes": 59712,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59148,
+      "delta_on_time": 12,
+      "learned_bytes": 59148,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 57732,
+      "delta_on_time": 12,
+      "learned_bytes": 57732,
+      "learned_on_time": 12,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 58968,
+      "delta_on_time": 12,
+      "learned_bytes": 58968,
+      "learned_on_time": 12,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 61152,
+      "delta_on_time": 12,
+      "learned_bytes": 61152,
+      "learned_on_time": 12,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 61728,
+      "delta_on_time": 12,
+      "learned_bytes": 61728,
+      "learned_on_time": 12,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 474432,
+    "total_delta_on_time": 95
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "mean_delta_on_time": 0.0,
+    "pairs": [
+     {
+      "baseline_bytes": 55860,
+      "baseline_on_time": 11,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 55860,
+      "learned_on_time": 11,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 60132,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 60132,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 59712,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 59712,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 59148,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 59148,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 57732,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 57732,
+      "learned_on_time": 12,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 58968,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 58968,
+      "learned_on_time": 12,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 61152,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 61152,
+      "learned_on_time": 12,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 61728,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 61728,
+      "learned_on_time": 12,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 0,
+     "p_two_sided": null
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 0
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G12_R12_N12",
+    "improved": false,
+    "reason": "bytes not lower (474432 vs 474432)",
+    "success_ratio_vs_immediate": 1.0
+   },
+   "worlds": 8
+  },
+  "G12_R12_N3": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 196,
+     "on_time": 91,
+     "q": 0.9479166666666666,
+     "spent_bytes": 257790
+    },
+    "normal_immediate": {
+     "emissions": 95,
+     "on_time": 92,
+     "q": 0.9583333333333334,
+     "spent_bytes": 118608
+    }
+   },
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "learned": {
+    "bytes_per_on_time": 1289.2173913043478,
+    "distinct_targets": 95,
+    "duplicate_sends": 0,
+    "emissions": 95,
+    "generated_goals": 96,
+    "on_time": 92,
+    "q": 0.9583333333333334,
+    "spent_bytes": 118608
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -0.4109,
+     0.6609
+    ],
+    "mean_delta_on_time": 0.125,
+    "pairs": [
+     {
+      "baseline_bytes": 31830,
+      "baseline_on_time": 11,
+      "delta_bytes": -16902,
+      "delta_on_time": 1,
+      "learned_bytes": 14928,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 34320,
+      "baseline_on_time": 12,
+      "delta_bytes": -19287,
+      "delta_on_time": 0,
+      "learned_bytes": 15033,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 30576,
+      "baseline_on_time": 9,
+      "delta_bytes": -16611,
+      "delta_on_time": 1,
+      "learned_bytes": 13965,
+      "learned_on_time": 10,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 31257,
+      "baseline_on_time": 12,
+      "delta_bytes": -16470,
+      "delta_on_time": 0,
+      "learned_bytes": 14787,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 29613,
+      "baseline_on_time": 12,
+      "delta_bytes": -14871,
+      "delta_on_time": 0,
+      "learned_bytes": 14742,
+      "learned_on_time": 12,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 23967,
+      "baseline_on_time": 11,
+      "delta_bytes": -9534,
+      "delta_on_time": 0,
+      "learned_bytes": 14433,
+      "learned_on_time": 11,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 37491,
+      "baseline_on_time": 12,
+      "delta_bytes": -22203,
+      "delta_on_time": 0,
+      "learned_bytes": 15288,
+      "learned_on_time": 12,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 38736,
+      "baseline_on_time": 12,
+      "delta_bytes": -23304,
+      "delta_on_time": -1,
+      "learned_bytes": 15432,
+      "learned_on_time": 11,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 3,
+     "negative": 1,
+     "p_two_sided": 1.0,
+     "positive": 2
+    },
+    "total_delta_bytes": -139182,
+    "total_delta_on_time": 1
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     10.8679,
+     12.1321
+    ],
+    "mean_delta_on_time": 11.5,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 14928,
+      "delta_on_time": 12,
+      "learned_bytes": 14928,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 15033,
+      "delta_on_time": 12,
+      "learned_bytes": 15033,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 13965,
+      "delta_on_time": 10,
+      "learned_bytes": 13965,
+      "learned_on_time": 10,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 14787,
+      "delta_on_time": 12,
+      "learned_bytes": 14787,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 14742,
+      "delta_on_time": 12,
+      "learned_bytes": 14742,
+      "learned_on_time": 12,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 14433,
+      "delta_on_time": 11,
+      "learned_bytes": 14433,
+      "learned_on_time": 11,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 15288,
+      "delta_on_time": 12,
+      "learned_bytes": 15288,
+      "learned_on_time": 12,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 15432,
+      "delta_on_time": 11,
+      "learned_bytes": 15432,
+      "learned_on_time": 11,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 118608,
+    "total_delta_on_time": 92
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "mean_delta_on_time": 0.0,
+    "pairs": [
+     {
+      "baseline_bytes": 14928,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 14928,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 15033,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 15033,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 13965,
+      "baseline_on_time": 10,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 13965,
+      "learned_on_time": 10,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 14787,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 14787,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 14742,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 14742,
+      "learned_on_time": 12,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 14433,
+      "baseline_on_time": 11,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 14433,
+      "learned_on_time": 11,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 15288,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 15288,
+      "learned_on_time": 12,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 15432,
+      "baseline_on_time": 11,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 15432,
+      "learned_on_time": 11,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 0,
+     "p_two_sided": null
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 0
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G12_R12_N3",
+    "improved": false,
+    "reason": "bytes not lower (118608 vs 118608)",
+    "success_ratio_vs_immediate": 1.0
+   },
+   "worlds": 8
+  },
+  "G12_R12_N6": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 198,
+     "on_time": 95,
+     "q": 0.9895833333333334,
+     "spent_bytes": 520860
+    },
+    "normal_immediate": {
+     "emissions": 95,
+     "on_time": 95,
+     "q": 0.9895833333333334,
+     "spent_bytes": 237216
+    }
+   },
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "learned": {
+    "bytes_per_on_time": 2497.0105263157893,
+    "distinct_targets": 95,
+    "duplicate_sends": 0,
+    "emissions": 95,
+    "generated_goals": 96,
+    "on_time": 95,
+    "q": 0.9895833333333334,
+    "spent_bytes": 237216
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "mean_delta_on_time": 0.0,
+    "pairs": [
+     {
+      "baseline_bytes": 68838,
+      "baseline_on_time": 12,
+      "delta_bytes": -38772,
+      "delta_on_time": 0,
+      "learned_bytes": 30066,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 63696,
+      "baseline_on_time": 12,
+      "delta_bytes": -33840,
+      "delta_on_time": 0,
+      "learned_bytes": 29856,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 62934,
+      "baseline_on_time": 12,
+      "delta_bytes": -33360,
+      "delta_on_time": 0,
+      "learned_bytes": 29574,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 66096,
+      "baseline_on_time": 11,
+      "delta_bytes": -38166,
+      "delta_on_time": 0,
+      "learned_bytes": 27930,
+      "learned_on_time": 11,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 47850,
+      "baseline_on_time": 12,
+      "delta_bytes": -18984,
+      "delta_on_time": 0,
+      "learned_bytes": 28866,
+      "learned_on_time": 12,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 59070,
+      "baseline_on_time": 12,
+      "delta_bytes": -29586,
+      "delta_on_time": 0,
+      "learned_bytes": 29484,
+      "learned_on_time": 12,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 77598,
+      "baseline_on_time": 12,
+      "delta_bytes": -46734,
+      "delta_on_time": 0,
+      "learned_bytes": 30864,
+      "learned_on_time": 12,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 74778,
+      "baseline_on_time": 12,
+      "delta_bytes": -44202,
+      "delta_on_time": 0,
+      "learned_bytes": 30576,
+      "learned_on_time": 12,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 0,
+     "p_two_sided": null
+    },
+    "total_delta_bytes": -283644,
+    "total_delta_on_time": 0
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     11.5794,
+     12.1706
+    ],
+    "mean_delta_on_time": 11.875,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30066,
+      "delta_on_time": 12,
+      "learned_bytes": 30066,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29856,
+      "delta_on_time": 12,
+      "learned_bytes": 29856,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29574,
+      "delta_on_time": 12,
+      "learned_bytes": 29574,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 27930,
+      "delta_on_time": 11,
+      "learned_bytes": 27930,
+      "learned_on_time": 11,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 28866,
+      "delta_on_time": 12,
+      "learned_bytes": 28866,
+      "learned_on_time": 12,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29484,
+      "delta_on_time": 12,
+      "learned_bytes": 29484,
+      "learned_on_time": 12,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30864,
+      "delta_on_time": 12,
+      "learned_bytes": 30864,
+      "learned_on_time": 12,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30576,
+      "delta_on_time": 12,
+      "learned_bytes": 30576,
+      "learned_on_time": 12,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 237216,
+    "total_delta_on_time": 95
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "mean_delta_on_time": 0.0,
+    "pairs": [
+     {
+      "baseline_bytes": 30066,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 30066,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 29856,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 29856,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 29574,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 29574,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 27930,
+      "baseline_on_time": 11,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 27930,
+      "learned_on_time": 11,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 28866,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 28866,
+      "learned_on_time": 12,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 29484,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 29484,
+      "learned_on_time": 12,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 30864,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 30864,
+      "learned_on_time": 12,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 30576,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 30576,
+      "learned_on_time": 12,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 0,
+     "p_two_sided": null
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 0
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G12_R12_N6",
+    "improved": false,
+    "reason": "bytes not lower (237216 vs 237216)",
+    "success_ratio_vs_immediate": 1.0
+   },
+   "worlds": 8
+  },
+  "G12_R6_N3": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 194,
+     "on_time": 79,
+     "q": 0.8229166666666666,
+     "spent_bytes": 253875
+    },
+    "normal_immediate": {
+     "emissions": 95,
+     "on_time": 81,
+     "q": 0.84375,
+     "spent_bytes": 118608
+    }
+   },
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "learned": {
+    "bytes_per_on_time": 1482.6,
+    "distinct_targets": 95,
+    "duplicate_sends": 0,
+    "emissions": 95,
+    "generated_goals": 96,
+    "on_time": 80,
+    "q": 0.8333333333333334,
+    "spent_bytes": 118608
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -0.4109,
+     0.6609
+    ],
+    "mean_delta_on_time": 0.125,
+    "pairs": [
+     {
+      "baseline_bytes": 31632,
+      "baseline_on_time": 11,
+      "delta_bytes": -16704,
+      "delta_on_time": 1,
+      "learned_bytes": 14928,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 29532,
+      "baseline_on_time": 7,
+      "delta_bytes": -14790,
+      "delta_on_time": 0,
+      "learned_bytes": 14742,
+      "learned_on_time": 7,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 31236,
+      "baseline_on_time": 12,
+      "delta_bytes": -16449,
+      "delta_on_time": 0,
+      "learned_bytes": 14787,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 37197,
+      "baseline_on_time": 12,
+      "delta_bytes": -21909,
+      "delta_on_time": 0,
+      "learned_bytes": 15288,
+      "learned_on_time": 12,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 30327,
+      "baseline_on_time": 9,
+      "delta_bytes": -16362,
+      "delta_on_time": 1,
+      "learned_bytes": 13965,
+      "learned_on_time": 10,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 34383,
+      "baseline_on_time": 6,
+      "delta_bytes": -19350,
+      "delta_on_time": -1,
+      "learned_bytes": 15033,
+      "learned_on_time": 5,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 23877,
+      "baseline_on_time": 11,
+      "delta_bytes": -9444,
+      "delta_on_time": 0,
+      "learned_bytes": 14433,
+      "learned_on_time": 11,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 35691,
+      "baseline_on_time": 11,
+      "delta_bytes": -20259,
+      "delta_on_time": 0,
+      "learned_bytes": 15432,
+      "learned_on_time": 11,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 3,
+     "negative": 1,
+     "p_two_sided": 1.0,
+     "positive": 2
+    },
+    "total_delta_bytes": -135267,
+    "total_delta_on_time": 1
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     7.8104,
+     12.1896
+    ],
+    "mean_delta_on_time": 10.0,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 14928,
+      "delta_on_time": 12,
+      "learned_bytes": 14928,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 14742,
+      "delta_on_time": 7,
+      "learned_bytes": 14742,
+      "learned_on_time": 7,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 14787,
+      "delta_on_time": 12,
+      "learned_bytes": 14787,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 15288,
+      "delta_on_time": 12,
+      "learned_bytes": 15288,
+      "learned_on_time": 12,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 13965,
+      "delta_on_time": 10,
+      "learned_bytes": 13965,
+      "learned_on_time": 10,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 15033,
+      "delta_on_time": 5,
+      "learned_bytes": 15033,
+      "learned_on_time": 5,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 14433,
+      "delta_on_time": 11,
+      "learned_bytes": 14433,
+      "learned_on_time": 11,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 15432,
+      "delta_on_time": 11,
+      "learned_bytes": 15432,
+      "learned_on_time": 11,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 118608,
+    "total_delta_on_time": 80
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -0.4206,
+     0.1706
+    ],
+    "mean_delta_on_time": -0.125,
+    "pairs": [
+     {
+      "baseline_bytes": 14928,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 14928,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 14742,
+      "baseline_on_time": 7,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 14742,
+      "learned_on_time": 7,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 14787,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 14787,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 15288,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 15288,
+      "learned_on_time": 12,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 13965,
+      "baseline_on_time": 10,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 13965,
+      "learned_on_time": 10,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 15033,
+      "baseline_on_time": 6,
+      "delta_bytes": 0,
+      "delta_on_time": -1,
+      "learned_bytes": 15033,
+      "learned_on_time": 5,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 14433,
+      "baseline_on_time": 11,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 14433,
+      "learned_on_time": 11,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 15432,
+      "baseline_on_time": 11,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 15432,
+      "learned_on_time": 11,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 1,
+     "negative": 1,
+     "p_two_sided": 1.0,
+     "positive": 0
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": -1
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G12_R6_N3",
+    "improved": false,
+    "reason": "bytes not lower (118608 vs 118608)",
+    "success_ratio_vs_immediate": 0.9876543209876543
+   },
+   "worlds": 8
+  },
+  "G12_R6_N6": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 198,
+     "on_time": 84,
+     "q": 0.875,
+     "spent_bytes": 518628
+    },
+    "normal_immediate": {
+     "emissions": 95,
+     "on_time": 83,
+     "q": 0.8645833333333334,
+     "spent_bytes": 237216
+    }
+   },
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "learned": {
+    "bytes_per_on_time": 2695.6363636363635,
+    "distinct_targets": 95,
+    "duplicate_sends": 0,
+    "emissions": 95,
+    "generated_goals": 96,
+    "on_time": 88,
+    "q": 0.9166666666666666,
+    "spent_bytes": 237216
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -1.0483,
+     2.0483
+    ],
+    "mean_delta_on_time": 0.5,
+    "pairs": [
+     {
+      "baseline_bytes": 63342,
+      "baseline_on_time": 12,
+      "delta_bytes": -33486,
+      "delta_on_time": 0,
+      "learned_bytes": 29856,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 68610,
+      "baseline_on_time": 7,
+      "delta_bytes": -38544,
+      "delta_on_time": -1,
+      "learned_bytes": 30066,
+      "learned_on_time": 6,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 59112,
+      "baseline_on_time": 6,
+      "delta_bytes": -29628,
+      "delta_on_time": 5,
+      "learned_bytes": 29484,
+      "learned_on_time": 11,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 65598,
+      "baseline_on_time": 11,
+      "delta_bytes": -37668,
+      "delta_on_time": 0,
+      "learned_bytes": 27930,
+      "learned_on_time": 11,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 62526,
+      "baseline_on_time": 12,
+      "delta_bytes": -32952,
+      "delta_on_time": 0,
+      "learned_bytes": 29574,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 47784,
+      "baseline_on_time": 12,
+      "delta_bytes": -18918,
+      "delta_on_time": 0,
+      "learned_bytes": 28866,
+      "learned_on_time": 12,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 77100,
+      "baseline_on_time": 12,
+      "delta_bytes": -46236,
+      "delta_on_time": 0,
+      "learned_bytes": 30864,
+      "learned_on_time": 12,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 74556,
+      "baseline_on_time": 12,
+      "delta_bytes": -43980,
+      "delta_on_time": 0,
+      "learned_bytes": 30576,
+      "learned_on_time": 12,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 2,
+     "negative": 1,
+     "p_two_sided": 1.0,
+     "positive": 1
+    },
+    "total_delta_bytes": -281412,
+    "total_delta_on_time": 4
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     9.269,
+     12.731
+    ],
+    "mean_delta_on_time": 11.0,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29856,
+      "delta_on_time": 12,
+      "learned_bytes": 29856,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30066,
+      "delta_on_time": 6,
+      "learned_bytes": 30066,
+      "learned_on_time": 6,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29484,
+      "delta_on_time": 11,
+      "learned_bytes": 29484,
+      "learned_on_time": 11,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 27930,
+      "delta_on_time": 11,
+      "learned_bytes": 27930,
+      "learned_on_time": 11,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29574,
+      "delta_on_time": 12,
+      "learned_bytes": 29574,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 28866,
+      "delta_on_time": 12,
+      "learned_bytes": 28866,
+      "learned_on_time": 12,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30864,
+      "delta_on_time": 12,
+      "learned_bytes": 30864,
+      "learned_on_time": 12,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30576,
+      "delta_on_time": 12,
+      "learned_bytes": 30576,
+      "learned_on_time": 12,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 237216,
+    "total_delta_on_time": 88
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -0.8531,
+     2.1031
+    ],
+    "mean_delta_on_time": 0.625,
+    "pairs": [
+     {
+      "baseline_bytes": 29856,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 29856,
+      "learned_on_time": 12,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 30066,
+      "baseline_on_time": 6,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 30066,
+      "learned_on_time": 6,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 29484,
+      "baseline_on_time": 6,
+      "delta_bytes": 0,
+      "delta_on_time": 5,
+      "learned_bytes": 29484,
+      "learned_on_time": 11,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 27930,
+      "baseline_on_time": 11,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 27930,
+      "learned_on_time": 11,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 29574,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 29574,
+      "learned_on_time": 12,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 28866,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 28866,
+      "learned_on_time": 12,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 30864,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 30864,
+      "learned_on_time": 12,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 30576,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 30576,
+      "learned_on_time": 12,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 1,
+     "negative": 0,
+     "p_two_sided": 1.0,
+     "positive": 1
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 5
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G12_R6_N6",
+    "improved": false,
+    "reason": "bytes not lower (237216 vs 237216)",
+    "success_ratio_vs_immediate": 1.0602409638554218
+   },
+   "worlds": 8
+  },
+  "G24_R12_N12": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 396,
+     "on_time": 190,
+     "q": 0.9895833333333334,
+     "spent_bytes": 2085636
+    },
+    "normal_immediate": {
+     "emissions": 192,
+     "on_time": 191,
+     "q": 0.9947916666666666,
+     "spent_bytes": 959988
+    }
+   },
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "learned": {
+    "bytes_per_on_time": 5026.115183246074,
+    "distinct_targets": 192,
+    "duplicate_sends": 0,
+    "emissions": 192,
+    "generated_goals": 192,
+    "on_time": 191,
+    "q": 0.9947916666666666,
+    "spent_bytes": 959988
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -0.5728,
+     0.8228
+    ],
+    "mean_delta_on_time": 0.125,
+    "pairs": [
+     {
+      "baseline_bytes": 282564,
+      "baseline_on_time": 24,
+      "delta_bytes": -161112,
+      "delta_on_time": 0,
+      "learned_bytes": 121452,
+      "learned_on_time": 24,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 293520,
+      "baseline_on_time": 24,
+      "delta_bytes": -171564,
+      "delta_on_time": 0,
+      "learned_bytes": 121956,
+      "learned_on_time": 24,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 281676,
+      "baseline_on_time": 22,
+      "delta_bytes": -160236,
+      "delta_on_time": 2,
+      "learned_bytes": 121440,
+      "learned_on_time": 24,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 239052,
+      "baseline_on_time": 24,
+      "delta_bytes": -120660,
+      "delta_on_time": 0,
+      "learned_bytes": 118392,
+      "learned_on_time": 24,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 257028,
+      "baseline_on_time": 24,
+      "delta_bytes": -137328,
+      "delta_on_time": 0,
+      "learned_bytes": 119700,
+      "learned_on_time": 24,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 228984,
+      "baseline_on_time": 24,
+      "delta_bytes": -110820,
+      "delta_on_time": 0,
+      "learned_bytes": 118164,
+      "learned_on_time": 24,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 270552,
+      "baseline_on_time": 24,
+      "delta_bytes": -149760,
+      "delta_on_time": -1,
+      "learned_bytes": 120792,
+      "learned_on_time": 23,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 232260,
+      "baseline_on_time": 24,
+      "delta_bytes": -114168,
+      "delta_on_time": 0,
+      "learned_bytes": 118092,
+      "learned_on_time": 24,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 2,
+     "negative": 1,
+     "p_two_sided": 1.0,
+     "positive": 1
+    },
+    "total_delta_bytes": -1125648,
+    "total_delta_on_time": 1
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     23.5794,
+     24.1706
+    ],
+    "mean_delta_on_time": 23.875,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 121452,
+      "delta_on_time": 24,
+      "learned_bytes": 121452,
+      "learned_on_time": 24,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 121956,
+      "delta_on_time": 24,
+      "learned_bytes": 121956,
+      "learned_on_time": 24,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 121440,
+      "delta_on_time": 24,
+      "learned_bytes": 121440,
+      "learned_on_time": 24,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 118392,
+      "delta_on_time": 24,
+      "learned_bytes": 118392,
+      "learned_on_time": 24,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 119700,
+      "delta_on_time": 24,
+      "learned_bytes": 119700,
+      "learned_on_time": 24,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 118164,
+      "delta_on_time": 24,
+      "learned_bytes": 118164,
+      "learned_on_time": 24,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 120792,
+      "delta_on_time": 23,
+      "learned_bytes": 120792,
+      "learned_on_time": 23,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 118092,
+      "delta_on_time": 24,
+      "learned_bytes": 118092,
+      "learned_on_time": 24,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 959988,
+    "total_delta_on_time": 191
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -0.4469,
+     0.4469
+    ],
+    "mean_delta_on_time": 0.0,
+    "pairs": [
+     {
+      "baseline_bytes": 121452,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 121452,
+      "learned_on_time": 24,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 121956,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 121956,
+      "learned_on_time": 24,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 121440,
+      "baseline_on_time": 23,
+      "delta_bytes": 0,
+      "delta_on_time": 1,
+      "learned_bytes": 121440,
+      "learned_on_time": 24,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 118392,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 118392,
+      "learned_on_time": 24,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 119700,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 119700,
+      "learned_on_time": 24,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 118164,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 118164,
+      "learned_on_time": 24,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 120792,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": -1,
+      "learned_bytes": 120792,
+      "learned_on_time": 23,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 118092,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 118092,
+      "learned_on_time": 24,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 2,
+     "negative": 1,
+     "p_two_sided": 1.0,
+     "positive": 1
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 0
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G24_R12_N12",
+    "improved": false,
+    "reason": "bytes not lower (959988 vs 959988)",
+    "success_ratio_vs_immediate": 1.0
+   },
+   "worlds": 8
+  },
+  "G24_R12_N3": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 392,
+     "on_time": 175,
+     "q": 0.9114583333333334,
+     "spent_bytes": 515907
+    },
+    "normal_immediate": {
+     "emissions": 192,
+     "on_time": 171,
+     "q": 0.890625,
+     "spent_bytes": 239997
+    }
+   },
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "learned": {
+    "bytes_per_on_time": 1304.3315217391305,
+    "distinct_targets": 192,
+    "duplicate_sends": 0,
+    "emissions": 192,
+    "generated_goals": 192,
+    "on_time": 184,
+    "q": 0.9583333333333334,
+    "spent_bytes": 239997
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -1.2999,
+     3.5499
+    ],
+    "mean_delta_on_time": 1.125,
+    "pairs": [
+     {
+      "baseline_bytes": 70803,
+      "baseline_on_time": 24,
+      "delta_bytes": -40440,
+      "delta_on_time": -1,
+      "learned_bytes": 30363,
+      "learned_on_time": 23,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 71880,
+      "baseline_on_time": 23,
+      "delta_bytes": -41391,
+      "delta_on_time": 0,
+      "learned_bytes": 30489,
+      "learned_on_time": 23,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 59688,
+      "baseline_on_time": 22,
+      "delta_bytes": -30090,
+      "delta_on_time": 1,
+      "learned_bytes": 29598,
+      "learned_on_time": 23,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 70545,
+      "baseline_on_time": 14,
+      "delta_bytes": -40185,
+      "delta_on_time": 8,
+      "learned_bytes": 30360,
+      "learned_on_time": 22,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 64272,
+      "baseline_on_time": 24,
+      "delta_bytes": -34347,
+      "delta_on_time": -1,
+      "learned_bytes": 29925,
+      "learned_on_time": 23,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 58185,
+      "baseline_on_time": 23,
+      "delta_bytes": -28662,
+      "delta_on_time": 1,
+      "learned_bytes": 29523,
+      "learned_on_time": 24,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 64605,
+      "baseline_on_time": 22,
+      "delta_bytes": -34407,
+      "delta_on_time": 1,
+      "learned_bytes": 30198,
+      "learned_on_time": 23,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 55929,
+      "baseline_on_time": 23,
+      "delta_bytes": -26388,
+      "delta_on_time": 0,
+      "learned_bytes": 29541,
+      "learned_on_time": 23,
+      "scene": 2301906
+     }
+    ],
+    "sign_test": {
+     "n": 6,
+     "negative": 2,
+     "p_two_sided": 0.6875,
+     "positive": 4
+    },
+    "total_delta_bytes": -275910,
+    "total_delta_on_time": 9
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     22.5531,
+     23.4469
+    ],
+    "mean_delta_on_time": 23.0,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30363,
+      "delta_on_time": 23,
+      "learned_bytes": 30363,
+      "learned_on_time": 23,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30489,
+      "delta_on_time": 23,
+      "learned_bytes": 30489,
+      "learned_on_time": 23,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29598,
+      "delta_on_time": 23,
+      "learned_bytes": 29598,
+      "learned_on_time": 23,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30360,
+      "delta_on_time": 22,
+      "learned_bytes": 30360,
+      "learned_on_time": 22,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29925,
+      "delta_on_time": 23,
+      "learned_bytes": 29925,
+      "learned_on_time": 23,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29523,
+      "delta_on_time": 24,
+      "learned_bytes": 29523,
+      "learned_on_time": 24,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30198,
+      "delta_on_time": 23,
+      "learned_bytes": 30198,
+      "learned_on_time": 23,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29541,
+      "delta_on_time": 23,
+      "learned_bytes": 29541,
+      "learned_on_time": 23,
+      "scene": 2301906
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 239997,
+    "total_delta_on_time": 184
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -1.9207,
+     5.1707
+    ],
+    "mean_delta_on_time": 1.625,
+    "pairs": [
+     {
+      "baseline_bytes": 30363,
+      "baseline_on_time": 23,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 30363,
+      "learned_on_time": 23,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 30489,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": -1,
+      "learned_bytes": 30489,
+      "learned_on_time": 23,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 29598,
+      "baseline_on_time": 22,
+      "delta_bytes": 0,
+      "delta_on_time": 1,
+      "learned_bytes": 29598,
+      "learned_on_time": 23,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 30360,
+      "baseline_on_time": 10,
+      "delta_bytes": 0,
+      "delta_on_time": 12,
+      "learned_bytes": 30360,
+      "learned_on_time": 22,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 29925,
+      "baseline_on_time": 23,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 29925,
+      "learned_on_time": 23,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 29523,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 29523,
+      "learned_on_time": 24,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 30198,
+      "baseline_on_time": 22,
+      "delta_bytes": 0,
+      "delta_on_time": 1,
+      "learned_bytes": 30198,
+      "learned_on_time": 23,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 29541,
+      "baseline_on_time": 23,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 29541,
+      "learned_on_time": 23,
+      "scene": 2301906
+     }
+    ],
+    "sign_test": {
+     "n": 4,
+     "negative": 1,
+     "p_two_sided": 0.625,
+     "positive": 3
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 13
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G24_R12_N3",
+    "improved": false,
+    "reason": "bytes not lower (239997 vs 239997)",
+    "success_ratio_vs_immediate": 1.0760233918128654
+   },
+   "worlds": 8
+  },
+  "G24_R12_N6": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 396,
+     "on_time": 184,
+     "q": 0.9583333333333334,
+     "spent_bytes": 1042056
+    },
+    "normal_immediate": {
+     "emissions": 192,
+     "on_time": 189,
+     "q": 0.984375,
+     "spent_bytes": 479994
+    }
+   },
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "learned": {
+    "bytes_per_on_time": 2526.2842105263157,
+    "distinct_targets": 192,
+    "duplicate_sends": 0,
+    "emissions": 192,
+    "generated_goals": 192,
+    "on_time": 190,
+    "q": 0.9895833333333334,
+    "spent_bytes": 479994
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -1.3818,
+     2.8818
+    ],
+    "mean_delta_on_time": 0.75,
+    "pairs": [
+     {
+      "baseline_bytes": 141504,
+      "baseline_on_time": 24,
+      "delta_bytes": -80778,
+      "delta_on_time": 0,
+      "learned_bytes": 60726,
+      "learned_on_time": 24,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 146538,
+      "baseline_on_time": 24,
+      "delta_bytes": -85560,
+      "delta_on_time": 0,
+      "learned_bytes": 60978,
+      "learned_on_time": 24,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 140982,
+      "baseline_on_time": 24,
+      "delta_bytes": -80262,
+      "delta_on_time": 0,
+      "learned_bytes": 60720,
+      "learned_on_time": 24,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 119256,
+      "baseline_on_time": 23,
+      "delta_bytes": -60060,
+      "delta_on_time": 0,
+      "learned_bytes": 59196,
+      "learned_on_time": 23,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 128676,
+      "baseline_on_time": 24,
+      "delta_bytes": -68826,
+      "delta_on_time": -1,
+      "learned_bytes": 59850,
+      "learned_on_time": 23,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 114498,
+      "baseline_on_time": 24,
+      "delta_bytes": -55416,
+      "delta_on_time": 0,
+      "learned_bytes": 59082,
+      "learned_on_time": 24,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 116058,
+      "baseline_on_time": 24,
+      "delta_bytes": -57012,
+      "delta_on_time": 0,
+      "learned_bytes": 59046,
+      "learned_on_time": 24,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 134544,
+      "baseline_on_time": 17,
+      "delta_bytes": -74148,
+      "delta_on_time": 7,
+      "learned_bytes": 60396,
+      "learned_on_time": 24,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 2,
+     "negative": 1,
+     "p_two_sided": 1.0,
+     "positive": 1
+    },
+    "total_delta_bytes": -562062,
+    "total_delta_on_time": 6
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     23.3629,
+     24.1371
+    ],
+    "mean_delta_on_time": 23.75,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60726,
+      "delta_on_time": 24,
+      "learned_bytes": 60726,
+      "learned_on_time": 24,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60978,
+      "delta_on_time": 24,
+      "learned_bytes": 60978,
+      "learned_on_time": 24,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60720,
+      "delta_on_time": 24,
+      "learned_bytes": 60720,
+      "learned_on_time": 24,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59196,
+      "delta_on_time": 23,
+      "learned_bytes": 59196,
+      "learned_on_time": 23,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59850,
+      "delta_on_time": 23,
+      "learned_bytes": 59850,
+      "learned_on_time": 23,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59082,
+      "delta_on_time": 24,
+      "learned_bytes": 59082,
+      "learned_on_time": 24,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59046,
+      "delta_on_time": 24,
+      "learned_bytes": 59046,
+      "learned_on_time": 24,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60396,
+      "delta_on_time": 24,
+      "learned_bytes": 60396,
+      "learned_on_time": 24,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 479994,
+    "total_delta_on_time": 190
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -0.1706,
+     0.4206
+    ],
+    "mean_delta_on_time": 0.125,
+    "pairs": [
+     {
+      "baseline_bytes": 60726,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 60726,
+      "learned_on_time": 24,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 60978,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 60978,
+      "learned_on_time": 24,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 60720,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 60720,
+      "learned_on_time": 24,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 59196,
+      "baseline_on_time": 22,
+      "delta_bytes": 0,
+      "delta_on_time": 1,
+      "learned_bytes": 59196,
+      "learned_on_time": 23,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 59850,
+      "baseline_on_time": 23,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 59850,
+      "learned_on_time": 23,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 59082,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 59082,
+      "learned_on_time": 24,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 59046,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 59046,
+      "learned_on_time": 24,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 60396,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 60396,
+      "learned_on_time": 24,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 1,
+     "negative": 0,
+     "p_two_sided": 1.0,
+     "positive": 1
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 1
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G24_R12_N6",
+    "improved": false,
+    "reason": "bytes not lower (479994 vs 479994)",
+    "success_ratio_vs_immediate": 1.0052910052910053
+   },
+   "worlds": 8
+  },
+  "G24_R6_N3": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 392,
+     "on_time": 126,
+     "q": 0.65625,
+     "spent_bytes": 513672
+    },
+    "normal_immediate": {
+     "emissions": 192,
+     "on_time": 123,
+     "q": 0.640625,
+     "spent_bytes": 239997
+    }
+   },
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "learned": {
+    "bytes_per_on_time": 1967.188524590164,
+    "distinct_targets": 192,
+    "duplicate_sends": 0,
+    "emissions": 192,
+    "generated_goals": 192,
+    "on_time": 122,
+    "q": 0.6354166666666666,
+    "spent_bytes": 239997
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -4.7869,
+     3.7869
+    ],
+    "mean_delta_on_time": -0.5,
+    "pairs": [
+     {
+      "baseline_bytes": 70278,
+      "baseline_on_time": 24,
+      "delta_bytes": -39915,
+      "delta_on_time": -8,
+      "learned_bytes": 30363,
+      "learned_on_time": 16,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 64398,
+      "baseline_on_time": 6,
+      "delta_bytes": -34473,
+      "delta_on_time": -3,
+      "learned_bytes": 29925,
+      "learned_on_time": 3,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 71754,
+      "baseline_on_time": 18,
+      "delta_bytes": -41265,
+      "delta_on_time": -6,
+      "learned_bytes": 30489,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 70203,
+      "baseline_on_time": 10,
+      "delta_bytes": -39843,
+      "delta_on_time": 6,
+      "learned_bytes": 30360,
+      "learned_on_time": 16,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 59289,
+      "baseline_on_time": 19,
+      "delta_bytes": -29691,
+      "delta_on_time": -1,
+      "learned_bytes": 29598,
+      "learned_on_time": 18,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 55608,
+      "baseline_on_time": 23,
+      "delta_bytes": -26067,
+      "delta_on_time": 0,
+      "learned_bytes": 29541,
+      "learned_on_time": 23,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 64308,
+      "baseline_on_time": 4,
+      "delta_bytes": -34110,
+      "delta_on_time": 6,
+      "learned_bytes": 30198,
+      "learned_on_time": 10,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 57834,
+      "baseline_on_time": 22,
+      "delta_bytes": -28311,
+      "delta_on_time": 2,
+      "learned_bytes": 29523,
+      "learned_on_time": 24,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 7,
+     "negative": 4,
+     "p_two_sided": 1.0,
+     "positive": 3
+    },
+    "total_delta_bytes": -273675,
+    "total_delta_on_time": -4
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     9.4785,
+     21.0215
+    ],
+    "mean_delta_on_time": 15.25,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30363,
+      "delta_on_time": 16,
+      "learned_bytes": 30363,
+      "learned_on_time": 16,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29925,
+      "delta_on_time": 3,
+      "learned_bytes": 29925,
+      "learned_on_time": 3,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30489,
+      "delta_on_time": 12,
+      "learned_bytes": 30489,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30360,
+      "delta_on_time": 16,
+      "learned_bytes": 30360,
+      "learned_on_time": 16,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29598,
+      "delta_on_time": 18,
+      "learned_bytes": 29598,
+      "learned_on_time": 18,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29541,
+      "delta_on_time": 23,
+      "learned_bytes": 29541,
+      "learned_on_time": 23,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 30198,
+      "delta_on_time": 10,
+      "learned_bytes": 30198,
+      "learned_on_time": 10,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 29523,
+      "delta_on_time": 24,
+      "learned_bytes": 29523,
+      "learned_on_time": 24,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 239997,
+    "total_delta_on_time": 122
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -5.5703,
+     5.3203
+    ],
+    "mean_delta_on_time": -0.125,
+    "pairs": [
+     {
+      "baseline_bytes": 30363,
+      "baseline_on_time": 23,
+      "delta_bytes": 0,
+      "delta_on_time": -7,
+      "learned_bytes": 30363,
+      "learned_on_time": 16,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 29925,
+      "baseline_on_time": 6,
+      "delta_bytes": 0,
+      "delta_on_time": -3,
+      "learned_bytes": 29925,
+      "learned_on_time": 3,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 30489,
+      "baseline_on_time": 19,
+      "delta_bytes": 0,
+      "delta_on_time": -7,
+      "learned_bytes": 30489,
+      "learned_on_time": 12,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 30360,
+      "baseline_on_time": 7,
+      "delta_bytes": 0,
+      "delta_on_time": 9,
+      "learned_bytes": 30360,
+      "learned_on_time": 16,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 29598,
+      "baseline_on_time": 21,
+      "delta_bytes": 0,
+      "delta_on_time": -3,
+      "learned_bytes": 29598,
+      "learned_on_time": 18,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 29541,
+      "baseline_on_time": 23,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 29541,
+      "learned_on_time": 23,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 30198,
+      "baseline_on_time": 10,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 30198,
+      "learned_on_time": 10,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 29523,
+      "baseline_on_time": 14,
+      "delta_bytes": 0,
+      "delta_on_time": 10,
+      "learned_bytes": 29523,
+      "learned_on_time": 24,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 6,
+     "negative": 4,
+     "p_two_sided": 0.6875,
+     "positive": 2
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": -1
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G24_R6_N3",
+    "improved": false,
+    "reason": "bytes not lower (239997 vs 239997)",
+    "success_ratio_vs_immediate": 0.991869918699187
+   },
+   "worlds": 8
+  },
+  "G24_R6_N6": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 396,
+     "on_time": 111,
+     "q": 0.578125,
+     "spent_bytes": 1037724
+    },
+    "normal_immediate": {
+     "emissions": 192,
+     "on_time": 113,
+     "q": 0.5885416666666666,
+     "spent_bytes": 479994
+    }
+   },
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "learned": {
+    "bytes_per_on_time": 3839.952,
+    "distinct_targets": 192,
+    "duplicate_sends": 0,
+    "emissions": 192,
+    "generated_goals": 192,
+    "on_time": 125,
+    "q": 0.6510416666666666,
+    "spent_bytes": 479994
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -0.7684,
+     4.2684
+    ],
+    "mean_delta_on_time": 1.75,
+    "pairs": [
+     {
+      "baseline_bytes": 140190,
+      "baseline_on_time": 22,
+      "delta_bytes": -79464,
+      "delta_on_time": 2,
+      "learned_bytes": 60726,
+      "learned_on_time": 24,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 146136,
+      "baseline_on_time": 9,
+      "delta_bytes": -85158,
+      "delta_on_time": 6,
+      "learned_bytes": 60978,
+      "learned_on_time": 15,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 140580,
+      "baseline_on_time": 8,
+      "delta_bytes": -79860,
+      "delta_on_time": 5,
+      "learned_bytes": 60720,
+      "learned_on_time": 13,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 118620,
+      "baseline_on_time": 14,
+      "delta_bytes": -59424,
+      "delta_on_time": -3,
+      "learned_bytes": 59196,
+      "learned_on_time": 11,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 128376,
+      "baseline_on_time": 11,
+      "delta_bytes": -68526,
+      "delta_on_time": 2,
+      "learned_bytes": 59850,
+      "learned_on_time": 13,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 134526,
+      "baseline_on_time": 9,
+      "delta_bytes": -74130,
+      "delta_on_time": -1,
+      "learned_bytes": 60396,
+      "learned_on_time": 8,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 113574,
+      "baseline_on_time": 24,
+      "delta_bytes": -54492,
+      "delta_on_time": 0,
+      "learned_bytes": 59082,
+      "learned_on_time": 24,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 115722,
+      "baseline_on_time": 14,
+      "delta_bytes": -56676,
+      "delta_on_time": 3,
+      "learned_bytes": 59046,
+      "learned_on_time": 17,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 7,
+     "negative": 2,
+     "p_two_sided": 0.453125,
+     "positive": 5
+    },
+    "total_delta_bytes": -557730,
+    "total_delta_on_time": 14
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     10.7712,
+     20.4788
+    ],
+    "mean_delta_on_time": 15.625,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60726,
+      "delta_on_time": 24,
+      "learned_bytes": 60726,
+      "learned_on_time": 24,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60978,
+      "delta_on_time": 15,
+      "learned_bytes": 60978,
+      "learned_on_time": 15,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60720,
+      "delta_on_time": 13,
+      "learned_bytes": 60720,
+      "learned_on_time": 13,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59196,
+      "delta_on_time": 11,
+      "learned_bytes": 59196,
+      "learned_on_time": 11,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59850,
+      "delta_on_time": 13,
+      "learned_bytes": 59850,
+      "learned_on_time": 13,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60396,
+      "delta_on_time": 8,
+      "learned_bytes": 60396,
+      "learned_on_time": 8,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59082,
+      "delta_on_time": 24,
+      "learned_bytes": 59082,
+      "learned_on_time": 24,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59046,
+      "delta_on_time": 17,
+      "learned_bytes": 59046,
+      "learned_on_time": 17,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 479994,
+    "total_delta_on_time": 125
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -2.6927,
+     5.6927
+    ],
+    "mean_delta_on_time": 1.5,
+    "pairs": [
+     {
+      "baseline_bytes": 60726,
+      "baseline_on_time": 18,
+      "delta_bytes": 0,
+      "delta_on_time": 6,
+      "learned_bytes": 60726,
+      "learned_on_time": 24,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 60978,
+      "baseline_on_time": 7,
+      "delta_bytes": 0,
+      "delta_on_time": 8,
+      "learned_bytes": 60978,
+      "learned_on_time": 15,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 60720,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 1,
+      "learned_bytes": 60720,
+      "learned_on_time": 13,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 59196,
+      "baseline_on_time": 19,
+      "delta_bytes": 0,
+      "delta_on_time": -8,
+      "learned_bytes": 59196,
+      "learned_on_time": 11,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 59850,
+      "baseline_on_time": 9,
+      "delta_bytes": 0,
+      "delta_on_time": 4,
+      "learned_bytes": 59850,
+      "learned_on_time": 13,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 60396,
+      "baseline_on_time": 10,
+      "delta_bytes": 0,
+      "delta_on_time": -2,
+      "learned_bytes": 60396,
+      "learned_on_time": 8,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 59082,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 59082,
+      "learned_on_time": 24,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 59046,
+      "baseline_on_time": 14,
+      "delta_bytes": 0,
+      "delta_on_time": 3,
+      "learned_bytes": 59046,
+      "learned_on_time": 17,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 7,
+     "negative": 2,
+     "p_two_sided": 0.453125,
+     "positive": 5
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 12
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G24_R6_N6",
+    "improved": false,
+    "reason": "bytes not lower (479994 vs 479994)",
+    "success_ratio_vs_immediate": 1.1061946902654867
+   },
+   "worlds": 8
+  },
+  "G48_R12_N12": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 780,
+     "on_time": 327,
+     "q": 0.8515625,
+     "spent_bytes": 4102068
+    },
+    "normal_immediate": {
+     "emissions": 382,
+     "on_time": 316,
+     "q": 0.8229166666666666,
+     "spent_bytes": 1907988
+    }
+   },
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "learned": {
+    "bytes_per_on_time": 5799.355623100304,
+    "distinct_targets": 382,
+    "duplicate_sends": 0,
+    "emissions": 382,
+    "generated_goals": 384,
+    "on_time": 329,
+    "q": 0.8567708333333334,
+    "spent_bytes": 1907988
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -4.3025,
+     4.8025
+    ],
+    "mean_delta_on_time": 0.25,
+    "pairs": [
+     {
+      "baseline_bytes": 502380,
+      "baseline_on_time": 37,
+      "delta_bytes": -268680,
+      "delta_on_time": -7,
+      "learned_bytes": 233700,
+      "learned_on_time": 30,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 510372,
+      "baseline_on_time": 46,
+      "delta_bytes": -270564,
+      "delta_on_time": 2,
+      "learned_bytes": 239808,
+      "learned_on_time": 48,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 519468,
+      "baseline_on_time": 38,
+      "delta_bytes": -283416,
+      "delta_on_time": 7,
+      "learned_bytes": 236052,
+      "learned_on_time": 45,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 531552,
+      "baseline_on_time": 27,
+      "delta_bytes": -291588,
+      "delta_on_time": 8,
+      "learned_bytes": 239964,
+      "learned_on_time": 35,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 520368,
+      "baseline_on_time": 45,
+      "delta_bytes": -279900,
+      "delta_on_time": 1,
+      "learned_bytes": 240468,
+      "learned_on_time": 46,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 573492,
+      "baseline_on_time": 44,
+      "delta_bytes": -330108,
+      "delta_on_time": -4,
+      "learned_bytes": 243384,
+      "learned_on_time": 40,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 462912,
+      "baseline_on_time": 47,
+      "delta_bytes": -225792,
+      "delta_on_time": 0,
+      "learned_bytes": 237120,
+      "learned_on_time": 47,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 481524,
+      "baseline_on_time": 43,
+      "delta_bytes": -244032,
+      "delta_on_time": -5,
+      "learned_bytes": 237492,
+      "learned_on_time": 38,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 7,
+     "negative": 3,
+     "p_two_sided": 1.0,
+     "positive": 4
+    },
+    "total_delta_bytes": -2194080,
+    "total_delta_on_time": 2
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     35.7165,
+     46.5335
+    ],
+    "mean_delta_on_time": 41.125,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 233700,
+      "delta_on_time": 30,
+      "learned_bytes": 233700,
+      "learned_on_time": 30,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 239808,
+      "delta_on_time": 48,
+      "learned_bytes": 239808,
+      "learned_on_time": 48,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 236052,
+      "delta_on_time": 45,
+      "learned_bytes": 236052,
+      "learned_on_time": 45,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 239964,
+      "delta_on_time": 35,
+      "learned_bytes": 239964,
+      "learned_on_time": 35,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 240468,
+      "delta_on_time": 46,
+      "learned_bytes": 240468,
+      "learned_on_time": 46,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 243384,
+      "delta_on_time": 40,
+      "learned_bytes": 243384,
+      "learned_on_time": 40,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 237120,
+      "delta_on_time": 47,
+      "learned_bytes": 237120,
+      "learned_on_time": 47,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 237492,
+      "delta_on_time": 38,
+      "learned_bytes": 237492,
+      "learned_on_time": 38,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 1907988,
+    "total_delta_on_time": 329
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -3.3907,
+     6.6407
+    ],
+    "mean_delta_on_time": 1.625,
+    "pairs": [
+     {
+      "baseline_bytes": 233700,
+      "baseline_on_time": 30,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 233700,
+      "learned_on_time": 30,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 239808,
+      "baseline_on_time": 45,
+      "delta_bytes": 0,
+      "delta_on_time": 3,
+      "learned_bytes": 239808,
+      "learned_on_time": 48,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 236052,
+      "baseline_on_time": 34,
+      "delta_bytes": 0,
+      "delta_on_time": 11,
+      "learned_bytes": 236052,
+      "learned_on_time": 45,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 239964,
+      "baseline_on_time": 32,
+      "delta_bytes": 0,
+      "delta_on_time": 3,
+      "learned_bytes": 239964,
+      "learned_on_time": 35,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 240468,
+      "baseline_on_time": 39,
+      "delta_bytes": 0,
+      "delta_on_time": 7,
+      "learned_bytes": 240468,
+      "learned_on_time": 46,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 243384,
+      "baseline_on_time": 42,
+      "delta_bytes": 0,
+      "delta_on_time": -2,
+      "learned_bytes": 243384,
+      "learned_on_time": 40,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 237120,
+      "baseline_on_time": 47,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 237120,
+      "learned_on_time": 47,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 237492,
+      "baseline_on_time": 47,
+      "delta_bytes": 0,
+      "delta_on_time": -9,
+      "learned_bytes": 237492,
+      "learned_on_time": 38,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 6,
+     "negative": 2,
+     "p_two_sided": 0.6875,
+     "positive": 4
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 13
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G48_R12_N12",
+    "improved": false,
+    "reason": "bytes not lower (1907988 vs 1907988)",
+    "success_ratio_vs_immediate": 1.0411392405063291
+   },
+   "worlds": 8
+  },
+  "G48_R12_N3": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 767,
+     "on_time": 305,
+     "q": 0.7942708333333334,
+     "spent_bytes": 1006212
+    },
+    "normal_immediate": {
+     "emissions": 382,
+     "on_time": 308,
+     "q": 0.8020833333333334,
+     "spent_bytes": 476997
+    }
+   },
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "learned": {
+    "bytes_per_on_time": 1485.9719626168223,
+    "distinct_targets": 382,
+    "duplicate_sends": 0,
+    "emissions": 382,
+    "generated_goals": 384,
+    "on_time": 321,
+    "q": 0.8359375,
+    "spent_bytes": 476997
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -2.6448,
+     6.6448
+    ],
+    "mean_delta_on_time": 2.0,
+    "pairs": [
+     {
+      "baseline_bytes": 125517,
+      "baseline_on_time": 28,
+      "delta_bytes": -67092,
+      "delta_on_time": -1,
+      "learned_bytes": 58425,
+      "learned_on_time": 27,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 123333,
+      "baseline_on_time": 45,
+      "delta_bytes": -63381,
+      "delta_on_time": 0,
+      "learned_bytes": 59952,
+      "learned_on_time": 45,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 127182,
+      "baseline_on_time": 42,
+      "delta_bytes": -68169,
+      "delta_on_time": -2,
+      "learned_bytes": 59013,
+      "learned_on_time": 40,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 132408,
+      "baseline_on_time": 31,
+      "delta_bytes": -72417,
+      "delta_on_time": 2,
+      "learned_bytes": 59991,
+      "learned_on_time": 33,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 129465,
+      "baseline_on_time": 34,
+      "delta_bytes": -69348,
+      "delta_on_time": 13,
+      "learned_bytes": 60117,
+      "learned_on_time": 47,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 134844,
+      "baseline_on_time": 38,
+      "delta_bytes": -73998,
+      "delta_on_time": 6,
+      "learned_bytes": 60846,
+      "learned_on_time": 44,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 120507,
+      "baseline_on_time": 42,
+      "delta_bytes": -61134,
+      "delta_on_time": 3,
+      "learned_bytes": 59373,
+      "learned_on_time": 45,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 112956,
+      "baseline_on_time": 45,
+      "delta_bytes": -53676,
+      "delta_on_time": -5,
+      "learned_bytes": 59280,
+      "learned_on_time": 40,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 7,
+     "negative": 3,
+     "p_two_sided": 1.0,
+     "positive": 4
+    },
+    "total_delta_bytes": -529215,
+    "total_delta_on_time": 16
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     34.359,
+     45.891
+    ],
+    "mean_delta_on_time": 40.125,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 58425,
+      "delta_on_time": 27,
+      "learned_bytes": 58425,
+      "learned_on_time": 27,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59952,
+      "delta_on_time": 45,
+      "learned_bytes": 59952,
+      "learned_on_time": 45,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59013,
+      "delta_on_time": 40,
+      "learned_bytes": 59013,
+      "learned_on_time": 40,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59991,
+      "delta_on_time": 33,
+      "learned_bytes": 59991,
+      "learned_on_time": 33,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60117,
+      "delta_on_time": 47,
+      "learned_bytes": 60117,
+      "learned_on_time": 47,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60846,
+      "delta_on_time": 44,
+      "learned_bytes": 60846,
+      "learned_on_time": 44,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59373,
+      "delta_on_time": 45,
+      "learned_bytes": 59373,
+      "learned_on_time": 45,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59280,
+      "delta_on_time": 40,
+      "learned_bytes": 59280,
+      "learned_on_time": 40,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 476997,
+    "total_delta_on_time": 321
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -1.1995,
+     4.4495
+    ],
+    "mean_delta_on_time": 1.625,
+    "pairs": [
+     {
+      "baseline_bytes": 58425,
+      "baseline_on_time": 23,
+      "delta_bytes": 0,
+      "delta_on_time": 4,
+      "learned_bytes": 58425,
+      "learned_on_time": 27,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 59952,
+      "baseline_on_time": 45,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 59952,
+      "learned_on_time": 45,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 59013,
+      "baseline_on_time": 43,
+      "delta_bytes": 0,
+      "delta_on_time": -3,
+      "learned_bytes": 59013,
+      "learned_on_time": 40,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 59991,
+      "baseline_on_time": 29,
+      "delta_bytes": 0,
+      "delta_on_time": 4,
+      "learned_bytes": 59991,
+      "learned_on_time": 33,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 60117,
+      "baseline_on_time": 46,
+      "delta_bytes": 0,
+      "delta_on_time": 1,
+      "learned_bytes": 60117,
+      "learned_on_time": 47,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 60846,
+      "baseline_on_time": 39,
+      "delta_bytes": 0,
+      "delta_on_time": 5,
+      "learned_bytes": 60846,
+      "learned_on_time": 44,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 59373,
+      "baseline_on_time": 40,
+      "delta_bytes": 0,
+      "delta_on_time": 5,
+      "learned_bytes": 59373,
+      "learned_on_time": 45,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 59280,
+      "baseline_on_time": 43,
+      "delta_bytes": 0,
+      "delta_on_time": -3,
+      "learned_bytes": 59280,
+      "learned_on_time": 40,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 7,
+     "negative": 2,
+     "p_two_sided": 0.453125,
+     "positive": 5
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 13
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G48_R12_N3",
+    "improved": false,
+    "reason": "bytes not lower (476997 vs 476997)",
+    "success_ratio_vs_immediate": 1.0422077922077921
+   },
+   "worlds": 8
+  },
+  "G48_R12_N6": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 780,
+     "on_time": 340,
+     "q": 0.8854166666666666,
+     "spent_bytes": 2049060
+    },
+    "normal_immediate": {
+     "emissions": 382,
+     "on_time": 324,
+     "q": 0.84375,
+     "spent_bytes": 953994
+    }
+   },
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "learned": {
+    "bytes_per_on_time": 2908.518292682927,
+    "distinct_targets": 382,
+    "duplicate_sends": 0,
+    "emissions": 382,
+    "generated_goals": 384,
+    "on_time": 328,
+    "q": 0.8541666666666666,
+    "spent_bytes": 953994
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -4.7843,
+     1.7843
+    ],
+    "mean_delta_on_time": -1.5,
+    "pairs": [
+     {
+      "baseline_bytes": 251142,
+      "baseline_on_time": 33,
+      "delta_bytes": -134292,
+      "delta_on_time": -6,
+      "learned_bytes": 116850,
+      "learned_on_time": 27,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 254652,
+      "baseline_on_time": 47,
+      "delta_bytes": -134748,
+      "delta_on_time": -6,
+      "learned_bytes": 119904,
+      "learned_on_time": 41,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 260262,
+      "baseline_on_time": 43,
+      "delta_bytes": -142236,
+      "delta_on_time": 1,
+      "learned_bytes": 118026,
+      "learned_on_time": 44,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 264924,
+      "baseline_on_time": 35,
+      "delta_bytes": -144942,
+      "delta_on_time": 5,
+      "learned_bytes": 119982,
+      "learned_on_time": 40,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 260088,
+      "baseline_on_time": 45,
+      "delta_bytes": -139854,
+      "delta_on_time": -5,
+      "learned_bytes": 120234,
+      "learned_on_time": 40,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 286158,
+      "baseline_on_time": 46,
+      "delta_bytes": -164466,
+      "delta_on_time": -1,
+      "learned_bytes": 121692,
+      "learned_on_time": 45,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 230964,
+      "baseline_on_time": 46,
+      "delta_bytes": -112404,
+      "delta_on_time": 1,
+      "learned_bytes": 118560,
+      "learned_on_time": 47,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 240870,
+      "baseline_on_time": 45,
+      "delta_bytes": -122124,
+      "delta_on_time": -1,
+      "learned_bytes": 118746,
+      "learned_on_time": 44,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 5,
+     "p_two_sided": 0.726562,
+     "positive": 3
+    },
+    "total_delta_bytes": -1095066,
+    "total_delta_on_time": -12
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     35.8263,
+     46.1737
+    ],
+    "mean_delta_on_time": 41.0,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 116850,
+      "delta_on_time": 27,
+      "learned_bytes": 116850,
+      "learned_on_time": 27,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 119904,
+      "delta_on_time": 41,
+      "learned_bytes": 119904,
+      "learned_on_time": 41,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 118026,
+      "delta_on_time": 44,
+      "learned_bytes": 118026,
+      "learned_on_time": 44,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 119982,
+      "delta_on_time": 40,
+      "learned_bytes": 119982,
+      "learned_on_time": 40,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 120234,
+      "delta_on_time": 40,
+      "learned_bytes": 120234,
+      "learned_on_time": 40,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 121692,
+      "delta_on_time": 45,
+      "learned_bytes": 121692,
+      "learned_on_time": 45,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 118560,
+      "delta_on_time": 47,
+      "learned_bytes": 118560,
+      "learned_on_time": 47,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 118746,
+      "delta_on_time": 44,
+      "learned_bytes": 118746,
+      "learned_on_time": 44,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 953994,
+    "total_delta_on_time": 328
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -3.2394,
+     4.2394
+    ],
+    "mean_delta_on_time": 0.5,
+    "pairs": [
+     {
+      "baseline_bytes": 116850,
+      "baseline_on_time": 30,
+      "delta_bytes": 0,
+      "delta_on_time": -3,
+      "learned_bytes": 116850,
+      "learned_on_time": 27,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 119904,
+      "baseline_on_time": 46,
+      "delta_bytes": 0,
+      "delta_on_time": -5,
+      "learned_bytes": 119904,
+      "learned_on_time": 41,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 118026,
+      "baseline_on_time": 44,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 118026,
+      "learned_on_time": 44,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 119982,
+      "baseline_on_time": 31,
+      "delta_bytes": 0,
+      "delta_on_time": 9,
+      "learned_bytes": 119982,
+      "learned_on_time": 40,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 120234,
+      "baseline_on_time": 40,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 120234,
+      "learned_on_time": 40,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 121692,
+      "baseline_on_time": 40,
+      "delta_bytes": 0,
+      "delta_on_time": 5,
+      "learned_bytes": 121692,
+      "learned_on_time": 45,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 118560,
+      "baseline_on_time": 48,
+      "delta_bytes": 0,
+      "delta_on_time": -1,
+      "learned_bytes": 118560,
+      "learned_on_time": 47,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 118746,
+      "baseline_on_time": 45,
+      "delta_bytes": 0,
+      "delta_on_time": -1,
+      "learned_bytes": 118746,
+      "learned_on_time": 44,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 6,
+     "negative": 4,
+     "p_two_sided": 0.6875,
+     "positive": 2
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": 4
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G48_R12_N6",
+    "improved": false,
+    "reason": "bytes not lower (953994 vs 953994)",
+    "success_ratio_vs_immediate": 1.0123456790123457
+   },
+   "worlds": 8
+  },
+  "G48_R6_N3": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 763,
+     "on_time": 141,
+     "q": 0.3671875,
+     "spent_bytes": 998904
+    },
+    "normal_immediate": {
+     "emissions": 382,
+     "on_time": 133,
+     "q": 0.3463541666666667,
+     "spent_bytes": 476997
+    }
+   },
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "learned": {
+    "bytes_per_on_time": 3613.6136363636365,
+    "distinct_targets": 382,
+    "duplicate_sends": 0,
+    "emissions": 382,
+    "generated_goals": 384,
+    "on_time": 132,
+    "q": 0.34375,
+    "spent_bytes": 476997
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -5.1085,
+     2.8585
+    ],
+    "mean_delta_on_time": -1.125,
+    "pairs": [
+     {
+      "baseline_bytes": 122628,
+      "baseline_on_time": 26,
+      "delta_bytes": -62676,
+      "delta_on_time": -8,
+      "learned_bytes": 59952,
+      "learned_on_time": 18,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 126570,
+      "baseline_on_time": 19,
+      "delta_bytes": -67557,
+      "delta_on_time": 2,
+      "learned_bytes": 59013,
+      "learned_on_time": 21,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 116202,
+      "baseline_on_time": 10,
+      "delta_bytes": -57777,
+      "delta_on_time": 0,
+      "learned_bytes": 58425,
+      "learned_on_time": 10,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 126612,
+      "baseline_on_time": 22,
+      "delta_bytes": -66495,
+      "delta_on_time": -4,
+      "learned_bytes": 60117,
+      "learned_on_time": 18,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 132660,
+      "baseline_on_time": 9,
+      "delta_bytes": -72669,
+      "delta_on_time": -4,
+      "learned_bytes": 59991,
+      "learned_on_time": 5,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 139800,
+      "baseline_on_time": 20,
+      "delta_bytes": -78954,
+      "delta_on_time": 2,
+      "learned_bytes": 60846,
+      "learned_on_time": 22,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 120126,
+      "baseline_on_time": 20,
+      "delta_bytes": -60753,
+      "delta_on_time": -4,
+      "learned_bytes": 59373,
+      "learned_on_time": 16,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 114306,
+      "baseline_on_time": 15,
+      "delta_bytes": -55026,
+      "delta_on_time": 7,
+      "learned_bytes": 59280,
+      "learned_on_time": 22,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 7,
+     "negative": 4,
+     "p_two_sided": 1.0,
+     "positive": 3
+    },
+    "total_delta_bytes": -521907,
+    "total_delta_on_time": -9
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     11.4041,
+     21.5959
+    ],
+    "mean_delta_on_time": 16.5,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59952,
+      "delta_on_time": 18,
+      "learned_bytes": 59952,
+      "learned_on_time": 18,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59013,
+      "delta_on_time": 21,
+      "learned_bytes": 59013,
+      "learned_on_time": 21,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 58425,
+      "delta_on_time": 10,
+      "learned_bytes": 58425,
+      "learned_on_time": 10,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60117,
+      "delta_on_time": 18,
+      "learned_bytes": 60117,
+      "learned_on_time": 18,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59991,
+      "delta_on_time": 5,
+      "learned_bytes": 59991,
+      "learned_on_time": 5,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 60846,
+      "delta_on_time": 22,
+      "learned_bytes": 60846,
+      "learned_on_time": 22,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59373,
+      "delta_on_time": 16,
+      "learned_bytes": 59373,
+      "learned_on_time": 16,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 59280,
+      "delta_on_time": 22,
+      "learned_bytes": 59280,
+      "learned_on_time": 22,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 476997,
+    "total_delta_on_time": 132
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -4.5594,
+     4.3094
+    ],
+    "mean_delta_on_time": -0.125,
+    "pairs": [
+     {
+      "baseline_bytes": 59952,
+      "baseline_on_time": 20,
+      "delta_bytes": 0,
+      "delta_on_time": -2,
+      "learned_bytes": 59952,
+      "learned_on_time": 18,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 59013,
+      "baseline_on_time": 23,
+      "delta_bytes": 0,
+      "delta_on_time": -2,
+      "learned_bytes": 59013,
+      "learned_on_time": 21,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 58425,
+      "baseline_on_time": 6,
+      "delta_bytes": 0,
+      "delta_on_time": 4,
+      "learned_bytes": 58425,
+      "learned_on_time": 10,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 60117,
+      "baseline_on_time": 18,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 60117,
+      "learned_on_time": 18,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 59991,
+      "baseline_on_time": 13,
+      "delta_bytes": 0,
+      "delta_on_time": -8,
+      "learned_bytes": 59991,
+      "learned_on_time": 5,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 60846,
+      "baseline_on_time": 22,
+      "delta_bytes": 0,
+      "delta_on_time": 0,
+      "learned_bytes": 60846,
+      "learned_on_time": 22,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 59373,
+      "baseline_on_time": 19,
+      "delta_bytes": 0,
+      "delta_on_time": -3,
+      "learned_bytes": 59373,
+      "learned_on_time": 16,
+      "scene": 2301908
+     },
+     {
+      "baseline_bytes": 59280,
+      "baseline_on_time": 12,
+      "delta_bytes": 0,
+      "delta_on_time": 10,
+      "learned_bytes": 59280,
+      "learned_on_time": 22,
+      "scene": 2301907
+     }
+    ],
+    "sign_test": {
+     "n": 6,
+     "negative": 4,
+     "p_two_sided": 0.6875,
+     "positive": 2
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": -1
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G48_R6_N3",
+    "improved": false,
+    "reason": "bytes not lower (476997 vs 476997)",
+    "success_ratio_vs_immediate": 0.9924812030075187
+   },
+   "worlds": 8
+  },
+  "G48_R6_N6": {
+   "baselines": {
+    "always_hold": {
+     "emissions": 0,
+     "on_time": 0,
+     "q": 0.0,
+     "spent_bytes": 0
+    },
+    "dedup_immediate": {
+     "emissions": 771,
+     "on_time": 139,
+     "q": 0.3619791666666667,
+     "spent_bytes": 2020908
+    },
+    "normal_immediate": {
+     "emissions": 382,
+     "on_time": 141,
+     "q": 0.3671875,
+     "spent_bytes": 953994
+    }
+   },
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "learned": {
+    "bytes_per_on_time": 7172.887218045113,
+    "distinct_targets": 382,
+    "duplicate_sends": 0,
+    "emissions": 382,
+    "generated_goals": 384,
+    "on_time": 133,
+    "q": 0.3463541666666667,
+    "spent_bytes": 953994
+   },
+   "paired_vs_dedup": {
+    "ci95": [
+     -5.4958,
+     3.9958
+    ],
+    "mean_delta_on_time": -0.75,
+    "pairs": [
+     {
+      "baseline_bytes": 253236,
+      "baseline_on_time": 25,
+      "delta_bytes": -133332,
+      "delta_on_time": -8,
+      "learned_bytes": 119904,
+      "learned_on_time": 17,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 251124,
+      "baseline_on_time": 14,
+      "delta_bytes": -134274,
+      "delta_on_time": -5,
+      "learned_bytes": 116850,
+      "learned_on_time": 9,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 253674,
+      "baseline_on_time": 20,
+      "delta_bytes": -135648,
+      "delta_on_time": -4,
+      "learned_bytes": 118026,
+      "learned_on_time": 16,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 259236,
+      "baseline_on_time": 18,
+      "delta_bytes": -139002,
+      "delta_on_time": -2,
+      "learned_bytes": 120234,
+      "learned_on_time": 16,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 248724,
+      "baseline_on_time": 7,
+      "delta_bytes": -128742,
+      "delta_on_time": 4,
+      "learned_bytes": 119982,
+      "learned_on_time": 11,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 229278,
+      "baseline_on_time": 10,
+      "delta_bytes": -110718,
+      "delta_on_time": 10,
+      "learned_bytes": 118560,
+      "learned_on_time": 20,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 285174,
+      "baseline_on_time": 20,
+      "delta_bytes": -163482,
+      "delta_on_time": 1,
+      "learned_bytes": 121692,
+      "learned_on_time": 21,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 240462,
+      "baseline_on_time": 25,
+      "delta_bytes": -121716,
+      "delta_on_time": -2,
+      "learned_bytes": 118746,
+      "learned_on_time": 23,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 5,
+     "p_two_sided": 0.726562,
+     "positive": 3
+    },
+    "total_delta_bytes": -1066914,
+    "total_delta_on_time": -6
+   },
+   "paired_vs_hold": {
+    "ci95": [
+     12.6041,
+     20.6459
+    ],
+    "mean_delta_on_time": 16.625,
+    "pairs": [
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 119904,
+      "delta_on_time": 17,
+      "learned_bytes": 119904,
+      "learned_on_time": 17,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 116850,
+      "delta_on_time": 9,
+      "learned_bytes": 116850,
+      "learned_on_time": 9,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 118026,
+      "delta_on_time": 16,
+      "learned_bytes": 118026,
+      "learned_on_time": 16,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 120234,
+      "delta_on_time": 16,
+      "learned_bytes": 120234,
+      "learned_on_time": 16,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 119982,
+      "delta_on_time": 11,
+      "learned_bytes": 119982,
+      "learned_on_time": 11,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 118560,
+      "delta_on_time": 20,
+      "learned_bytes": 118560,
+      "learned_on_time": 20,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 121692,
+      "delta_on_time": 21,
+      "learned_bytes": 121692,
+      "learned_on_time": 21,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 0,
+      "baseline_on_time": 0,
+      "delta_bytes": 118746,
+      "delta_on_time": 23,
+      "learned_bytes": 118746,
+      "learned_on_time": 23,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 0,
+     "p_two_sided": 0.007812,
+     "positive": 8
+    },
+    "total_delta_bytes": 953994,
+    "total_delta_on_time": 133
+   },
+   "paired_vs_immediate": {
+    "ci95": [
+     -4.9725,
+     2.9725
+    ],
+    "mean_delta_on_time": -1.0,
+    "pairs": [
+     {
+      "baseline_bytes": 119904,
+      "baseline_on_time": 25,
+      "delta_bytes": 0,
+      "delta_on_time": -8,
+      "learned_bytes": 119904,
+      "learned_on_time": 17,
+      "scene": 2301901
+     },
+     {
+      "baseline_bytes": 116850,
+      "baseline_on_time": 14,
+      "delta_bytes": 0,
+      "delta_on_time": -5,
+      "learned_bytes": 116850,
+      "learned_on_time": 9,
+      "scene": 2301902
+     },
+     {
+      "baseline_bytes": 118026,
+      "baseline_on_time": 17,
+      "delta_bytes": 0,
+      "delta_on_time": -1,
+      "learned_bytes": 118026,
+      "learned_on_time": 16,
+      "scene": 2301903
+     },
+     {
+      "baseline_bytes": 120234,
+      "baseline_on_time": 13,
+      "delta_bytes": 0,
+      "delta_on_time": 3,
+      "learned_bytes": 120234,
+      "learned_on_time": 16,
+      "scene": 2301905
+     },
+     {
+      "baseline_bytes": 119982,
+      "baseline_on_time": 7,
+      "delta_bytes": 0,
+      "delta_on_time": 4,
+      "learned_bytes": 119982,
+      "learned_on_time": 11,
+      "scene": 2301904
+     },
+     {
+      "baseline_bytes": 118560,
+      "baseline_on_time": 15,
+      "delta_bytes": 0,
+      "delta_on_time": 5,
+      "learned_bytes": 118560,
+      "learned_on_time": 20,
+      "scene": 2301907
+     },
+     {
+      "baseline_bytes": 121692,
+      "baseline_on_time": 26,
+      "delta_bytes": 0,
+      "delta_on_time": -5,
+      "learned_bytes": 121692,
+      "learned_on_time": 21,
+      "scene": 2301906
+     },
+     {
+      "baseline_bytes": 118746,
+      "baseline_on_time": 24,
+      "delta_bytes": 0,
+      "delta_on_time": -1,
+      "learned_bytes": 118746,
+      "learned_on_time": 23,
+      "scene": 2301908
+     }
+    ],
+    "sign_test": {
+     "n": 8,
+     "negative": 5,
+     "p_two_sided": 0.726562,
+     "positive": 3
+    },
+    "total_delta_bytes": 0,
+    "total_delta_on_time": -8
+   },
+   "verdict_vs_immediate": {
+    "bytes_saved": 0.0,
+    "cell": "G48_R6_N6",
+    "improved": false,
+    "reason": "bytes not lower (953994 vs 953994)",
+    "success_ratio_vs_immediate": 0.9432624113475178
+   },
+   "worlds": 8
+  }
+ },
+ "results": [
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1244.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.29,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 14928,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 3006.6,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 5,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.7,
+   "emissions": 12,
+   "expired": 7,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 5,
+   "on_time_rate": 0.4166666666666667,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 15033,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1396.5,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 10,
+   "cost_scale": 36.0,
+   "distinct_targets": 11,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.59,
+   "emissions": 11,
+   "expired": 1,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 10,
+   "on_time_rate": 0.8333333333333334,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 13965,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1232.25,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.39,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 14787,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2106.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 7,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.28,
+   "emissions": 12,
+   "expired": 5,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 7,
+   "on_time_rate": 0.5833333333333334,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 14742,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1312.090909090909,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 27.0,
+   "emissions": 12,
+   "expired": 1,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 14433,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1402.909090909091,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 27.18,
+   "emissions": 12,
+   "expired": 1,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 15432,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1274.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    3
+   ],
+   "cell_label": "G12_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.55,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 15288,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2488.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.45,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 29856,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5011.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 6,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.79,
+   "emissions": 12,
+   "expired": 6,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 6,
+   "on_time_rate": 0.5,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 30066,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2539.090909090909,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 72.0,
+   "distinct_targets": 11,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 19.47,
+   "emissions": 11,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 27930,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2464.5,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 19.52,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 29574,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2680.3636363636365,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 18.92,
+   "emissions": 12,
+   "expired": 1,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 29484,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2405.5,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 19.69,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 28866,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2572.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 19.67,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 30864,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2548.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    6,
+    6
+   ],
+   "cell_label": "G12_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 19.66,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 30576,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1244.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "cell_label": "G12_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.64,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 14928,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1252.75,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "cell_label": "G12_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.55,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 15033,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1396.5,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "cell_label": "G12_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 10,
+   "cost_scale": 36.0,
+   "distinct_targets": 11,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.83,
+   "emissions": 11,
+   "expired": 1,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 10,
+   "on_time_rate": 0.8333333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 13965,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1232.25,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "cell_label": "G12_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.98,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 14787,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1228.5,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "cell_label": "G12_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.13,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 14742,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1312.090909090909,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "cell_label": "G12_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.07,
+   "emissions": 12,
+   "expired": 1,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 14433,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1402.909090909091,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "cell_label": "G12_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.9,
+   "emissions": 12,
+   "expired": 1,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 15432,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1274.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    3
+   ],
+   "cell_label": "G12_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 36.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.14,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 15288,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2488.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.47,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 29856,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2505.5,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.58,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 30066,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2539.090909090909,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 72.0,
+   "distinct_targets": 11,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.9,
+   "emissions": 11,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 27930,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2464.5,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.83,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 29574,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2457.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.95,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 29484,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2405.5,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.35,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 28866,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2572.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 25.89,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 30864,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2548.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    6
+   ],
+   "cell_label": "G12_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 25.63,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 30576,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4976.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 144.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.42,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 59712,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5011.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 144.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 25.79,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 60132,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5078.181818181818,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 144.0,
+   "distinct_targets": 11,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 25.06,
+   "emissions": 11,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 55860,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4929.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 144.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.38,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 59148,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4914.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 144.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 25.56,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 58968,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4811.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 144.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 25.38,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 57732,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5144.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 144.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.63,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 61728,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5096.0,
+   "capacity_refused": 0,
+   "cell": [
+    12,
+    12,
+    12
+   ],
+   "cell_label": "G12_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 144.0,
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.04,
+   "emissions": 12,
+   "expired": 0,
+   "generated_goals": 12,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 61152,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1897.6875,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 16,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.28,
+   "emissions": 24,
+   "expired": 8,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 16,
+   "on_time_rate": 0.6666666666666666,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 30363,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2540.75,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 12,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.14,
+   "emissions": 24,
+   "expired": 12,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 12,
+   "on_time_rate": 0.5,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 30489,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1897.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 16,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.36,
+   "emissions": 24,
+   "expired": 8,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 16,
+   "on_time_rate": 0.6666666666666666,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 30360,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1644.3333333333333,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 18,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.29,
+   "emissions": 24,
+   "expired": 6,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 18,
+   "on_time_rate": 0.75,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 29598,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 9975.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 3,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.24,
+   "emissions": 24,
+   "expired": 21,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 3,
+   "on_time_rate": 0.125,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 29925,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1284.391304347826,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.54,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 29541,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 3019.8,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 10,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.23,
+   "emissions": 24,
+   "expired": 14,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 10,
+   "on_time_rate": 0.4166666666666667,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 30198,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1230.125,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.89,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 29523,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2530.25,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.73,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 60726,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4065.2,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 15,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.99,
+   "emissions": 24,
+   "expired": 9,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 15,
+   "on_time_rate": 0.625,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 60978,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4670.7692307692305,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 13,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.62,
+   "emissions": 24,
+   "expired": 11,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 13,
+   "on_time_rate": 0.5416666666666666,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 60720,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5381.454545454545,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.96,
+   "emissions": 24,
+   "expired": 13,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.4583333333333333,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 59196,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4603.846153846154,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 13,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.19,
+   "emissions": 24,
+   "expired": 11,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 13,
+   "on_time_rate": 0.5416666666666666,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 59850,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2461.75,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 25.06,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 59082,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 7549.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 8,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.47,
+   "emissions": 24,
+   "expired": 16,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 8,
+   "on_time_rate": 0.3333333333333333,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 60396,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 3473.294117647059,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 17,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 24.43,
+   "emissions": 24,
+   "expired": 7,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 17,
+   "on_time_rate": 0.7083333333333334,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 59046,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1320.1304347826087,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.87,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 30363,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1325.608695652174,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.0,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 30489,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1380.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 22,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.56,
+   "emissions": 24,
+   "expired": 2,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 22,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 30360,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1286.8695652173913,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.94,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 29598,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1301.0869565217392,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.91,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 29925,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1284.391304347826,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.94,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 29541,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1312.9565217391305,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.43,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 30198,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1230.125,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 72.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.08,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 29523,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2530.25,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.8,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 60726,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2540.75,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.21,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 60978,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2530.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.97,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 60720,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2573.7391304347825,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.2,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 59196,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2602.1739130434785,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.74,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 59850,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2461.75,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.01,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 59082,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2516.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.79,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 60396,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2460.25,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 144.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.83,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 59046,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5060.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 288.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.61,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 121452,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5081.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 288.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.61,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 121956,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5060.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 288.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.71,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 121440,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4933.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 288.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.96,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 118392,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4987.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 288.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.42,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 119700,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4923.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 288.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.42,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 118164,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5251.826086956522,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 288.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.62,
+   "emissions": 24,
+   "expired": 1,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 120792,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4920.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 24,
+   "cost_scale": 288.0,
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.78,
+   "emissions": 24,
+   "expired": 0,
+   "generated_goals": 24,
+   "masked_by_credit": 0,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 118092,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 3330.6666666666665,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 18,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.2,
+   "emissions": 48,
+   "expired": 30,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 18,
+   "on_time_rate": 0.375,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 59952,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5842.5,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 10,
+   "cost_scale": 144.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.28,
+   "emissions": 47,
+   "expired": 37,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 10,
+   "on_time_rate": 0.20833333333333334,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 58425,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2810.1428571428573,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 21,
+   "cost_scale": 144.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 27.89,
+   "emissions": 47,
+   "expired": 26,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 21,
+   "on_time_rate": 0.4375,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 59013,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 11998.2,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 5,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.79,
+   "emissions": 48,
+   "expired": 43,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 5,
+   "on_time_rate": 0.10416666666666667,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 59991,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 3339.8333333333335,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 18,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.4,
+   "emissions": 48,
+   "expired": 30,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 18,
+   "on_time_rate": 0.375,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 60117,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2765.7272727272725,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 22,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.58,
+   "emissions": 48,
+   "expired": 26,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 22,
+   "on_time_rate": 0.4583333333333333,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 60846,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2694.5454545454545,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 22,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.53,
+   "emissions": 48,
+   "expired": 26,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 22,
+   "on_time_rate": 0.4583333333333333,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 59280,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 3710.8125,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    3
+   ],
+   "cell_label": "G48_R6_N3",
+   "checkpoint_episode": 200,
+   "completed": 16,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.12,
+   "emissions": 48,
+   "expired": 32,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 16,
+   "on_time_rate": 0.3333333333333333,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 59373,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 7053.176470588235,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 17,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.4,
+   "emissions": 48,
+   "expired": 31,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 17,
+   "on_time_rate": 0.3541666666666667,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 119904,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 12983.333333333334,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 9,
+   "cost_scale": 288.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.93,
+   "emissions": 47,
+   "expired": 38,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 9,
+   "on_time_rate": 0.1875,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 116850,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 7376.625,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 16,
+   "cost_scale": 288.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.02,
+   "emissions": 47,
+   "expired": 31,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 16,
+   "on_time_rate": 0.3333333333333333,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 118026,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 10907.454545454546,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 11,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.06,
+   "emissions": 48,
+   "expired": 37,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 11,
+   "on_time_rate": 0.22916666666666666,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 119982,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 7514.625,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 16,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.07,
+   "emissions": 48,
+   "expired": 32,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 16,
+   "on_time_rate": 0.3333333333333333,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 120234,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5794.857142857143,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 21,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.16,
+   "emissions": 48,
+   "expired": 27,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 21,
+   "on_time_rate": 0.4375,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 121692,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5928.0,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 20,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.04,
+   "emissions": 48,
+   "expired": 28,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 20,
+   "on_time_rate": 0.4166666666666667,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 118560,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5162.869565217391,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    6,
+    6
+   ],
+   "cell_label": "G48_R6_N6",
+   "checkpoint_episode": 200,
+   "completed": 23,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.18,
+   "emissions": 48,
+   "expired": 25,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 23,
+   "on_time_rate": 0.4791666666666667,
+   "rescue_robots": 6,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 118746,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1332.2666666666667,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 45,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 41.76,
+   "emissions": 48,
+   "expired": 3,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 45,
+   "on_time_rate": 0.9375,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 59952,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2163.8888888888887,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 27,
+   "cost_scale": 144.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 40.9,
+   "emissions": 47,
+   "expired": 20,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 27,
+   "on_time_rate": 0.5625,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 58425,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1475.325,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 40,
+   "cost_scale": 144.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 41.48,
+   "emissions": 47,
+   "expired": 7,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 40,
+   "on_time_rate": 0.8333333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 59013,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1817.909090909091,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 33,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 43.15,
+   "emissions": 48,
+   "expired": 15,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 33,
+   "on_time_rate": 0.6875,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 59991,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1279.0851063829787,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 47,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 41.61,
+   "emissions": 48,
+   "expired": 1,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 47,
+   "on_time_rate": 0.9791666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 60117,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1382.8636363636363,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 44,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 43.17,
+   "emissions": 48,
+   "expired": 4,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 44,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 60846,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1482.0,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 40,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 43.83,
+   "emissions": 48,
+   "expired": 8,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 40,
+   "on_time_rate": 0.8333333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 59280,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 1319.4,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    3
+   ],
+   "cell_label": "G48_R12_N3",
+   "checkpoint_episode": 200,
+   "completed": 45,
+   "cost_scale": 144.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 42.03,
+   "emissions": 48,
+   "expired": 3,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 45,
+   "on_time_rate": 0.9375,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 59373,
+   "status": "ok",
+   "subscribers_live": 3
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2924.487804878049,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 41,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 46.35,
+   "emissions": 48,
+   "expired": 7,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 41,
+   "on_time_rate": 0.8541666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 119904,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4327.777777777777,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 27,
+   "cost_scale": 288.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 43.1,
+   "emissions": 47,
+   "expired": 20,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 27,
+   "on_time_rate": 0.5625,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 116850,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2682.409090909091,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 44,
+   "cost_scale": 288.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 43.82,
+   "emissions": 47,
+   "expired": 3,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 44,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 118026,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2999.55,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 40,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 44.2,
+   "emissions": 48,
+   "expired": 8,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 40,
+   "on_time_rate": 0.8333333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 119982,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 3005.85,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 40,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 45.36,
+   "emissions": 48,
+   "expired": 8,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 40,
+   "on_time_rate": 0.8333333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 120234,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2704.266666666667,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 45,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 44.67,
+   "emissions": 48,
+   "expired": 3,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 45,
+   "on_time_rate": 0.9375,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 121692,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2522.553191489362,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 47,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 44.51,
+   "emissions": 48,
+   "expired": 1,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 47,
+   "on_time_rate": 0.9791666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 118560,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 2698.7727272727275,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    6
+   ],
+   "cell_label": "G48_R12_N6",
+   "checkpoint_episode": 200,
+   "completed": 44,
+   "cost_scale": 288.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 42.3,
+   "emissions": 48,
+   "expired": 4,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 44,
+   "on_time_rate": 0.9166666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 118746,
+   "status": "ok",
+   "subscribers_live": 6
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 4996.0,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "cell_label": "G48_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 48,
+   "cost_scale": 576.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 47.95,
+   "emissions": 48,
+   "expired": 0,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 48,
+   "on_time_rate": 1.0,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301901,
+   "spent_bytes": 239808,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 7790.0,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "cell_label": "G48_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 30,
+   "cost_scale": 576.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 46.4,
+   "emissions": 47,
+   "expired": 17,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 30,
+   "on_time_rate": 0.625,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301902,
+   "spent_bytes": 233700,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5245.6,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "cell_label": "G48_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 45,
+   "cost_scale": 576.0,
+   "distinct_targets": 47,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 45.92,
+   "emissions": 47,
+   "expired": 2,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 45,
+   "on_time_rate": 0.9375,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301903,
+   "spent_bytes": 236052,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 6856.114285714286,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "cell_label": "G48_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 35,
+   "cost_scale": 576.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 45.96,
+   "emissions": 48,
+   "expired": 13,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 35,
+   "on_time_rate": 0.7291666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301904,
+   "spent_bytes": 239964,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5227.565217391304,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "cell_label": "G48_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 46,
+   "cost_scale": 576.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 40.55,
+   "emissions": 48,
+   "expired": 2,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 46,
+   "on_time_rate": 0.9583333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301905,
+   "spent_bytes": 240468,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 6084.6,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "cell_label": "G48_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 40,
+   "cost_scale": 576.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 40.26,
+   "emissions": 48,
+   "expired": 8,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 40,
+   "on_time_rate": 0.8333333333333334,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301906,
+   "spent_bytes": 243384,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 5045.106382978724,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "cell_label": "G48_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 47,
+   "cost_scale": 576.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 38.11,
+   "emissions": 48,
+   "expired": 1,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 47,
+   "on_time_rate": 0.9791666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301907,
+   "spent_bytes": 237120,
+   "status": "ok",
+   "subscribers_live": 12
+  },
+  {
+   "budget_bytes": 1000000000,
+   "budget_restored": true,
+   "bytes_per_on_time": 6249.789473684211,
+   "capacity_refused": 0,
+   "cell": [
+    48,
+    12,
+    12
+   ],
+   "cell_label": "G48_R12_N12",
+   "checkpoint_episode": 200,
+   "completed": 38,
+   "cost_scale": 576.0,
+   "distinct_targets": 48,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 36.61,
+   "emissions": 48,
+   "expired": 10,
+   "generated_goals": 48,
+   "masked_by_credit": 0,
+   "on_time": 38,
+   "on_time_rate": 0.7916666666666666,
+   "rescue_robots": 12,
+   "scale_mode": "scaled",
+   "scene": 2301908,
+   "spent_bytes": 237492,
+   "status": "ok",
+   "subscribers_live": 12
+  }
+ ],
+ "scenes": [
+  2301901,
+  2301902,
+  2301903,
+  2301904,
+  2301905,
+  2301906,
+  2301907,
+  2301908
+ ],
+ "schema": "stage5b-revision02-eval/1",
+ "tag": "train_v4v_pure",
+ "ts": "2026-11-14T03:41:16Z",
+ "worlds": 120,
+ "worlds_ok": 120
+}

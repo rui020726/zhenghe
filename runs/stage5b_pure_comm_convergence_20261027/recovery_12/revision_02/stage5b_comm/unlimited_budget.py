@@ -45,8 +45,24 @@ LAMBDA_INITIAL = 2.0
 LAMBDA_STEP = 2.0
 LAMBDA_MIN = 0.25
 LAMBDA_MAX = 8.0
-#: The success target relative to the strong rule for the same cell.
+#: The success target relative to the strong rule for the same cell. This is the *registered
+#: verdict* threshold and never changes: a cell improves only if the learned arm keeps at least
+#: 95% of ``normal_immediate``'s on-time count and spends fewer bytes.
 Q_TARGET_FRACTION = 0.95
+#: The dual's own water line, 1.5 points above the verdict. A cell that steers exactly on 0.95
+#: is one discrete dropped goal away from failing a verdict that is applied literally, and at
+#: G=12 one goal is 8.3% of the cell's total. train_v4g therefore aims at 0.965 * q_ref so the
+#: policy stops trimming while it still has margin, not at the edge itself.
+Q_TARGET_FRACTION_DUAL = 0.965
+
+#: revision_02 has one lambda for the whole grid. train_v4_cell_lambda keeps one per cell
+#: instead, because a single value is driven by whichever cells the batch happened to contain
+#: and therefore oscillates between the clamps (measured on train_v3: 191 boundary hits, 122 of
+#: them at the ceiling). The per-cell step is 1/8 of the shared step so the dual moves slowly
+#: enough for the exponential average to be the signal rather than one batch's luck.
+LAMBDA_BY_CELL_INITIAL = 3.0
+LAMBDA_STEP_PER_CELL = 0.25
+Q_EMA_ALPHA = 0.25
 
 
 def clamp_lambda(value):
@@ -92,35 +108,174 @@ def update_lambda(current, q_batch, q_ref):
     }
 
 
-def scaled_cost(cost_bytes, subscribers, goals, *, reference=REFERENCE_CELL):
-    """``bytes / (N * G)``, rescaled so the frozen reference cell keeps the old magnitude.
+LAMBDA_VERDICT_DECAY = 0.25
+#: Below this the decayed price is set to exactly zero, so a cell that is short of on-time
+#: reads as "cost is free" instead of "cost is cheap".
+LAMBDA_VERDICT_FLOOR = 0.05
+#: The waste water line: at or above it, useless broadcasts are priced again even when the
+#: cell's success rate sits between the on-time target and the immediate reference.
+WASTE_WATER_LINE = 0.10
 
-    The task registers ``c = cost_bytes / (N * G)`` for cross-cell comparability, and that
-    divisor alone is right for comparability: a byte costs the same in every cell once divided
-    by the fan-out and the goal count.
 
-    But it is not right for *magnitude*. With ~2.4 kB per send, ``2400 / (6 * 12) = 33`` scaled
-    units per send, while one converted task is worth ``A_task = 1 - V(s) ~= 0.41``. At that
-    ratio the registered ``lambda`` floor of 0.25 already prices a send at ~21x a task, so
-    "never send" is optimal for every lambda in [0.25, 8] -- which is exactly what the first
-    training run did (342 of 366 updates with zero sends, lambda pinned at the floor).
+def clamp_lambda_zero(value):
+    """``[0, LAMBDA_MAX]``: the v4v actuator, where zero is a legal price."""
+    return max(0.0, min(LAMBDA_MAX, float(value)))
 
-    The fix is a pure rescale, not a re-registration: multiply by the reference cell's own
-    ``N*G / B0`` so that at ``(N, G) = (6, 24)`` the reward is exactly ``bytes / B0`` -- the
-    magnitude every archived run used -- while any other cell is priced relative to that
-    reference by the registered ``N*G`` ratio. One lambda therefore still means the same thing
-    across cells, and it also means the same thing as it did before.
+
+def update_lambda_verdict(current, q_ema, q_ref, *, waste_ratio,
+                          step=LAMBDA_STEP_PER_CELL, q_target_fraction=None,
+                          decay=LAMBDA_VERDICT_DECAY, waste_threshold=WASTE_WATER_LINE):
+    """Experiment v4v's per-cell dual: protect on-time first, price only useless broadcasts.
+
+    Three regions, in this order of precedence:
+
+    1. ``q_ema < target`` -- the cell is short of on-time. The price **decays geometrically to
+       zero** (``decay`` per scan, snapped to 0 below ``LAMBDA_VERDICT_FLOOR``) and no cost term
+       is added at all. The old rule only walked down by ``step * error`` and could never reach
+       0.25, so a congested cell kept paying a price while already losing tasks.
+    2. ``q_ema >= target`` -- the cell is meeting its constraint, so trimming is allowed:
+       ``penalty = max(0, q_ema - q_ref)``, plus ``waste_ratio - waste_threshold`` when the
+       cell's broadcast waste is at or above the water line. The price rises by
+       ``step * penalty`` and is clamped to ``[0, LAMBDA_MAX]``.
+    3. otherwise the price holds.
+
+    ``waste_ratio`` is the paper's definition (broadcast-but-not-on-time over distinct
+    broadcasts); ``None`` means it could not be measured, which is treated as "no evidence of
+    waste" rather than as zero waste.
     """
-    goals = int(goals)
+    if q_target_fraction is None:
+        q_target_fraction = Q_TARGET_FRACTION_DUAL
+    q_target_fraction = float(q_target_fraction)
+    if not 0.0 < q_target_fraction <= 1.0:
+        raise ValueError("q_target_fraction must be in (0, 1], got %r" % (q_target_fraction,))
+    if q_ref is None:
+        raise ValueError("q_ref is required; a cell without a normal_immediate rate cannot "
+                         "set its own constraint")
+    q_ema, q_ref = float(q_ema), float(q_ref)
+    for name, value in (("q_ema", q_ema), ("q_ref", q_ref)):
+        if not 0.0 <= value <= 1.0:
+            raise ValueError("%s must be in [0, 1], got %r" % (name, value))
+    if decay <= 0.0 or decay >= 1.0:
+        raise ValueError("decay must be in (0, 1), got %r" % (decay,))
+    current = float(current)
+    target = q_target_fraction * q_ref
+    waste = None if waste_ratio is None else float(waste_ratio)
+    error = q_ema - q_ref
+
+    if q_ema < target:
+        proposed = current * float(decay)
+        new = 0.0 if proposed < LAMBDA_VERDICT_FLOOR else proposed
+        return new, {
+            "lambda_before": current, "lambda_after": new,
+            "q_ema": q_ema, "q_ref": q_ref, "q_target": target, "error": error,
+            "waste_ratio": waste, "waste_threshold": float(waste_threshold),
+            "region": "protect_on_time", "direction": "decay_to_zero",
+            "penalty": 0.0, "step": float(step), "decay": float(decay),
+            "clamped": False,
+        }
+
+    penalty = max(0.0, error)
+    priced_waste = waste is not None and waste >= float(waste_threshold)
+    if priced_waste:
+        penalty += waste - float(waste_threshold)
+    proposed = current + float(step) * penalty
+    new = clamp_lambda_zero(proposed)
+    return new, {
+        "lambda_before": current, "lambda_after": new,
+        "q_ema": q_ema, "q_ref": q_ref, "q_target": target, "error": error,
+        "waste_ratio": waste, "waste_threshold": float(waste_threshold),
+        "region": "price_waste" if priced_waste else "price_margin",
+        "direction": "raise_price" if new > current else "hold",
+        "penalty": penalty, "step": float(step), "decay": float(decay),
+        "clamped": new != proposed,
+    }
+
+
+def scaled_cost(cost_bytes, subscribers, goals, *, reference=REFERENCE_CELL):
+    """``bytes / N``, rescaled so the frozen reference cell keeps the old magnitude.
+
+    History, because the divisor changed and the reason matters. train_v3 divided by ``N * G``
+    and then multiplied by ``ref_N * ref_G / B0``, which made one broadcast cost
+
+        (page_bytes * N) * (6 * 24) / (N * G * 10000) = page_bytes * 144 / (G * 10000),
+
+    i.e. ``~6.0 / G`` scaled units for a ~418 B page against a task credit of 1.0. So the
+    break-even price was ``lambda* = G / 6``: 2.0 at G=12, 4.0 at G=24, 8.0 at G=48. At G=48
+    the break-even sits exactly on the registered ceiling, which is why train_v3's G=48 cells
+    only ever stopped sending once lambda was pinned at 8.0 and then collapsed past it.
+
+    Dividing by ``G`` was wrong in the first place: a broadcast costs the same whatever the
+    number of goals a world generates, and the charged bytes already carry the fan-out (the
+    relay bills each subscriber). So the aligned price is "charged bytes per subscriber":
+
+        bytes / N   ->   one page costs page_bytes / B0 at every cell, ~0.25 with a 418 B page.
+
+    That makes ``lambda* = B0 / page_bytes = 3.99`` independent of G, inside the middle of
+    [0.25, 8] rather than at its ceiling. ``G`` is still accepted (callers pass the cell) and
+    recorded by the caller, but it no longer prices anything; that is the whole fix.
+    """
     subscribers = int(subscribers)
-    if goals < 1 or subscribers < 1:
-        raise ValueError("subscribers and goals must be >= 1, got %d and %d"
-                         % (subscribers, goals))
-    ref_subscribers, ref_goals = (int(value) for value in reference)
-    if ref_subscribers < 1 or ref_goals < 1:
+    if subscribers < 1:
+        raise ValueError("subscribers must be >= 1, got %d" % (subscribers,))
+    if int(goals) < 1:
+        raise ValueError("goals must be >= 1, got %d" % (int(goals),))
+    ref_subscribers = int(reference[0])
+    if ref_subscribers < 1:
         raise ValueError("the reference cell must be positive, got %r" % (reference,))
-    return (float(cost_bytes) / float(subscribers * goals)
-            * (float(ref_subscribers * ref_goals) / B0_BYTES))
+    return float(cost_bytes) / float(subscribers) * (float(ref_subscribers) / B0_BYTES)
+
+
+def update_lambda_cell(current, q_ema, q_ref, *, step=LAMBDA_STEP_PER_CELL,
+                       q_target_fraction=None):
+    """One per-cell dual step, on the cell's own smoothed success rate.
+
+    Same direction and clamp as :func:`update_lambda`; only the signal changes. ``q_ema`` is
+    this cell's exponential average of ``on_time / generated``, so one unlucky world cannot
+    move the price, and no other cell's batch can either. Returns ``(new_lambda, detail)``.
+
+    The water line defaults to ``Q_TARGET_FRACTION_DUAL`` (0.965) so the dual stops trimming
+    with a margin above the 0.95 the verdict is judged on. Passing ``q_target_fraction``
+    explicitly is what the tests use to pin both numbers separately.
+    """
+    if q_target_fraction is None:
+        q_target_fraction = Q_TARGET_FRACTION_DUAL
+    q_target_fraction = float(q_target_fraction)
+    if not 0.0 < q_target_fraction <= 1.0:
+        raise ValueError("q_target_fraction must be in (0, 1], got %r" % (q_target_fraction,))
+    if q_ref is None:
+        raise ValueError("q_ref is required; a cell without a normal_immediate rate cannot "
+                         "set its own constraint")
+    q_ema = float(q_ema)
+    q_ref = float(q_ref)
+    for name, value in (("q_ema", q_ema), ("q_ref", q_ref)):
+        if not 0.0 <= value <= 1.0:
+            raise ValueError("%s must be in [0, 1], got %r" % (name, value))
+    target = q_target_fraction * q_ref
+    error = q_ema - target
+    proposed = float(current) + float(step) * error
+    new = clamp_lambda(proposed)
+    return new, {
+        "lambda_before": float(current),
+        "lambda_after": new,
+        "clamped": new != proposed,
+        "q_ema": q_ema,
+        "q_ref": q_ref,
+        "q_target": target,
+        "q_target_fraction": q_target_fraction,
+        "error": error,
+        "step": float(step),
+        "direction": "raise_price" if error > 0 else ("lower_price" if error < 0 else "hold"),
+    }
+
+
+def ema(previous, value, *, alpha=Q_EMA_ALPHA):
+    """Exponential average with the first observation taken as-is (no zero-start bias)."""
+    if previous is None:
+        return float(value)
+    alpha = float(alpha)
+    if not 0.0 < alpha <= 1.0:
+        raise ValueError("alpha must be in (0, 1], got %r" % (alpha,))
+    return (1.0 - alpha) * float(previous) + alpha * float(value)
 
 
 def bytes_per_on_time(cost_bytes, on_time):

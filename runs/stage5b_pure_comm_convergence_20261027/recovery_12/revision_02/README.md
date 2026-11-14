@@ -132,6 +132,15 @@ the 98-file manifest.
 | 53 | **`scale_invariant.horizon_scale` read null for every world** | `ScaleFeatures.restore()` runs in the world's `finally`, sets `_horizon = None`, and the row is assembled *after* that — so the field that was supposed to prove the #11 shadow existed always reported null | the installed denominator is now kept in a separate `_installed` field that `restore` does not clear, and the audit reports `installed_denominator`. Verified with a two-world probe (50 vs 200) that reads back 50.0 / 200.0 |
 | 54 | **the report's 0.7 reference read dedup as 2.02x on-time** | `archived_reference` accepted `normal_immediate` rows for *every* baseline arm of a shared file, so dedup's group was immediate + dedup | the filter now accepts a row only when it carries no `arm` (an EVAL file) or exactly the arm asked for; dedup reads 590/960 with 2.15x bytes, matching the paper |
 
+### Round 45 (relaxed gate and the uncapped v4v arm)
+
+| # | Failure | Cause | Fix |
+|---|---|---|---|
+| 55 | the dual-gate report read **zero waste for every arm** | it keyed cells as `G12_R6_N3` while the world leaves spell `G12R6N3`, so every lookup missed and the ratio came out as `None` | the label is rebuilt from the digits; the four archived arms then reproduced the earlier `RELAXED_GATE.json` numbers exactly (v4f 0.060, v4t 0.049, immediate 0.284) |
+| 56 | adding the new dual briefly broke `unlimited_budget.py` | the edit that inserted `update_lambda_verdict` above `scaled_cost` also deleted that function's docstring opening line, leaving a syntax error | caught by an import smoke before any run; the line was restored and the module imports |
+| 57 | the first v4v attempt (`train_v4v_smoke`, 2 episodes) consumed world indices 3900-3903 | a smoke needs the same stream position as the real run to exercise the same cells | the smoke directory was scratch and was removed; the real run re-uses index 3900, so those four worlds are run once in the reported arm. Recorded because the index stream is otherwise expected to be consumed once |
+| 58 | **the verdict-first dual removed trimming instead of aiming it** (v4v_pure) | with the price decaying to ~0 in cells short of on-time, nothing in the reward discourages a send; the actor went to "send every candidate" (1245 emissions = immediate, bytes ratio 1.000, waste 0.272) within the first 100 episodes and then stopped moving (eval at 100 and 200 identical: q 0.7190, bytes 208 352) | kept as the recorded negative result: the arm is evaluated and reported, not tuned away. The mechanism is the measured logit margin (12-14) against a price range of 0.06-2.44 |
+
 ## Gates before a world is opened
 
 `tests/test_revision_02_gates.py` covers the six the task names, one class each:
