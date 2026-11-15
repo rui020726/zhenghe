@@ -796,7 +796,60 @@ def main():
                  "both": "两者都差"}[record["reason"]],
                 record["capped_on_time"], record["capped_bytes"]))
         add("")
-        add("读法：**配额买到的是“深度”，不是“选择”**。去掉表之后，模型仍然比 immediate 省 "
+        # The no-cap arm was also trained further in an earlier round (v4v_pure, 200 episodes
+        # from these same weights, cap off). Its archived evaluation is on this exact grid.
+        trained_path = BASE / "execution/train_v4v_pure/eval_200/EVAL.json"
+        trained = None
+        if trained_path.exists():
+            payload = json.loads(trained_path.read_text(encoding="utf-8"))
+            trained_rows = [row for row in payload.get("results") or []
+                            if row.get("status") == "ok"]
+            if trained_rows:
+                stats = group(trained_rows)
+                equal_cells = 0
+                trained_passes = 0
+                for cell in TRAIN_CELLS:
+                    key = label(cell)
+                    own = group([r for r in trained_rows if label(r["cell"]) == key])
+                    ref = group([r for r in base_rows if label(r["cell"]) == key])
+                    required = need_for(ref["on_time"])
+                    equal_cells += int(own["spent_bytes"] == ref["spent_bytes"])
+                    trained_passes += int(own["on_time"] >= required
+                                          and own["spent_bytes"] < ref["spent_bytes"])
+                trained = {"stats": stats, "equal_cells": equal_cells,
+                           "passes": trained_passes, "worlds": len(trained_rows),
+                           "byte_ratio": stats["spent_bytes"] / reference_bytes,
+                           "episodes": payload.get("checkpoint_episode")}
+                nocap["trained"] = trained
+                add("### 再训练 200 回合（无表，warm start 自 v4f@200）")
+                add("")
+                add("这条不是新跑的：`train_v4v_pure` 在上一轮已经从同一份权重继续训了 200 回合"
+                    "（`send_cap_mode = off`、0 次熔断、50 次更新），并在**同一 15 格 × 8 场景**上"
+                    "评估过。它回答的正是“再训练能不能自己学会少发”。")
+                add("")
+                add("| 检查点 | 按时数 | 绝对率 | 字节 | 字节比 | 消息/按时任务 | 通过 | 字节与 immediate 相等的格 |")
+                add("|---|---|---|---|---|---|---|---|")
+                add("| v4v@%s | %d/%d | %.3f | %d | %.3f | %.3f | **%d/15** | %d/15 |" % (
+                    trained["episodes"], stats["on_time"], stats["goals"], stats["q"],
+                    stats["spent_bytes"], trained["byte_ratio"],
+                    stats["messages_per_on_time"], trained["passes"],
+                    trained["equal_cells"]))
+                add("")
+                add("**结论是否定的**：再训 200 回合后，按时数反而升到 %d（比 v4f 多 %d、比 "
+                    "immediate 多 %d），但发送数 %d 与 immediate 的 %d 完全相同、字节在 **%d/15** "
+                    "个格子里与 immediate 逐字节相等，因此按注册判据 **%d/15**。"
+                    "README 失败账 #58 记录了机制：判定优先的对偶在“按时不足”的格子里把 λ 衰减到 ≈0，"
+                    "于是没有任何项在惩罚发送，actor 在 100 回合内就饱和到“发每个候选”，"
+                    "`eval@100` 与 `eval@200` 完全相同（已停止移动）。"
+                    % (stats["on_time"], stats["on_time"] - without["on_time"],
+                       stats["on_time"] - immediate["on_time"], stats["emissions"],
+                       immediate["emissions"], trained["equal_cells"], trained["passes"]))
+                add("")
+                add("这条负结果比“3/15”更说明问题：**没有外挂配额时，这套奖励的不动点就是 immediate**。"
+                    "所以“训练让它自己学会少发”在本数据上不成立，配额不是偷懒的补丁，"
+                    "而是把目标从“按时最多”改成“按时够用且更少”的唯一有效执行器。")
+                add("")
+        add("对 3/15 这一行的读法：**配额买到的是“深度”，不是“选择”**。去掉表之后，模型仍然比 immediate 省 "
             "%.1f %% 字节、每按时任务 1.07 条消息、浪费率 0.064——它不是靠乱发取胜的；"
             "它只是**在运力充裕的格子里把该发的全发了**，字节自然就等于 immediate，"
             "于是“严格更少”这一条判据不成立。而在它自己愿意节流的 R=6 格（G24_R6_N6、"
@@ -874,6 +927,8 @@ def main():
     add("9. **不能把\"去掉配额表 3/15\"读成\"模型不能用\"**：它仍然比 immediate 省 18.5 % 字节、"
         "1.07 条/任务，失败的 12 格里有 9 格只是\"字节与 immediate 相等\"而非更多；"
         "判据的严格不等号才是那 9 格失败的原因，不是策略崩了。")
+    add("10. **不能说\"再训练就能自己学会少发\"**：无表、再训 200 回合的 v4v@200 是本轮的直接反例——"
+        "按时数升到 2505，但发送数与 immediate 完全相同、15/15 格字节相等，判据 0/15。")
     add("")
     add("## 复现")
     add("")
