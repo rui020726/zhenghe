@@ -30,7 +30,7 @@ scenario and a new world, so every cell gets its own baselines.
 | `stage5b_comm/dedup_policy.py` | the low-cost strong rule |
 | `stage5b_comm/trainer.py` | the dual step at the update boundary; scaled cost reward |
 | `stage5b_comm/world.py` | cell-driven `configuration_fields`, 1e9 authority binding |
-| `tests/test_revision_02_gates.py` | 96 offline gate checks |
+| `tests/test_revision_02_gates.py` | 106 offline gate checks |
 | `run_baselines.py` | three rules on every cell x scene |
 | `train.py` | the training loop with circuit breakers |
 | `evaluate.py` | greedy per-cell evaluation and the registered verdict |
@@ -131,6 +131,8 @@ the 98-file manifest.
 | 52 | **the feature stage ran all 225 worlds correctly and then reported 900 failures** | `run_tasks` submitted the whole task list on every variant call (`feature_tasks` builds all five mutations at once), so variants 2–5 re-submitted worlds that already existed; each hit `FileExistsError`, and the first pass merged every mutation's rows into `features/mask16/RESULTS.json` | `run_tasks` now filters to its own arm. The four missing per-variant files were **split out of the rows already produced** (no world re-run); the stage then re-ran as "nothing to do" for all five. The 225 worlds themselves were never lost |
 | 53 | **`scale_invariant.horizon_scale` read null for every world** | `ScaleFeatures.restore()` runs in the world's `finally`, sets `_horizon = None`, and the row is assembled *after* that — so the field that was supposed to prove the #11 shadow existed always reported null | the installed denominator is now kept in a separate `_installed` field that `restore` does not clear, and the audit reports `installed_denominator`. Verified with a two-world probe (50 vs 200) that reads back 50.0 / 200.0 |
 | 54 | **the report's 0.7 reference read dedup as 2.02x on-time** | `archived_reference` accepted `normal_immediate` rows for *every* baseline arm of a shared file, so dedup's group was immediate + dedup | the filter now accepts a row only when it carries no `arm` (an EVAL file) or exactly the arm asked for; dedup reads 590/960 with 2.15x bytes, matching the paper |
+| 55 | the no-table comparison died with `KeyError: 'v4f@200'` | `archived_reference`'s source table listed only the arms the earlier sections used, and v4f was not among them | v4f's `eval_200_s8/EVAL.json` is now in both the reference table and the waste-source table; the no-cap run then compared 120/120 worlds as identical |
+| 56 | **the J1 table stopped building with `UnboundLocalError: need`** | the new no-table section assigned a local named `need` inside `main()`, which made `need(...)` resolve as a local for the whole function, including the J1 loop above it | the local is renamed `required`; the helper `need()` keeps its name |
 
 ### Round 45 (relaxed gate and the uncapped v4v arm)
 

@@ -339,7 +339,7 @@ def worker(task):
             },
             "budget_restored": row.get("budget_authority_restored"),
         })
-        if task["stage"] in ("delivery", "budget", "features", "capacity"):
+        if task["stage"] in ("delivery", "budget", "features", "capacity", "nocap"):
             try:
                 result.update({("waste_%s" % key): value
                                for key, value in _world_readings(row).items()})
@@ -493,6 +493,28 @@ def budget_tasks(pages):
     return tasks
 
 
+def nocap_tasks(caps):
+    """The same weights as v4t, with **no page table**: 15 cells x 8 scenes.
+
+    This is the deployment question "what happens beyond the table" asked at the cells where
+    the table exists, so the two rows differ only by the cap. Passing ``cap=None`` leaves the
+    relay's ranked list untruncated, which is exactly what v4f@200 does; the run is therefore
+    also a determinism check against the archived v4f evaluation.
+    """
+    tasks = []
+    for cell in TRAIN_CELLS:
+        for scene in ALL_SCENES:
+            tasks.append({
+                "root": str(BASE), "run_dir": str(OUT / "nocap" / "v4t_100"),
+                "stage": "nocap", "arm": "v4t@100", "cell": list(cell),
+                "scene": int(scene), "variant": "capoff", "kind": "learned",
+                "checkpoint": str(BASE / "execution/train_v4t_cap_frozen/checkpoints"
+                                  / "milestone_100.pth"),
+                "checkpoint_episode": 100, "identity_sha": identity_sha(),
+                "cap": None})
+    return tasks
+
+
 def latency_tasks(caps):
     tasks = []
     for cell in LATENCY_CELLS:
@@ -511,7 +533,7 @@ def latency_tasks(caps):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage", required=True,
-                        choices=["delivery", "features", "capacity", "budget", "latency"])
+                        choices=["delivery", "features", "capacity", "budget", "latency", "nocap"])
     parser.add_argument("--workers", type=int, default=12)
     args = parser.parse_args()
     sys.dont_write_bytecode = True
@@ -537,6 +559,8 @@ def main():
     elif args.stage == "budget":
         for selector in BUDGET_SELECTORS:
             run_tasks("budget", selector, budget_tasks(pages), args.workers, extra)
+    elif args.stage == "nocap":
+        run_tasks("nocap", "v4t@100", nocap_tasks(caps), args.workers, extra)
     else:
         run_tasks("latency", "v4t@100", latency_tasks(caps), args.workers, extra)
 

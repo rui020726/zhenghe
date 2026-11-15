@@ -94,6 +94,11 @@ def need(base_on_time):
     return (95 * int(base_on_time) + 99) // 100
 
 
+def need_for(base_on_time):
+    """Same rounding rule as :func:`need`, named for the no-cap section's tables."""
+    return need(base_on_time)
+
+
 # ------------------------------------------------------------------ delivery probability
 def cell_pages():
     """immediate pages/world per cell, from the 0.7 baseline the sweep reuses."""
@@ -117,6 +122,7 @@ def archived_reference(arm, cells, scenes):
         "dedup_immediate": "execution/baselines/grid_v2/BASELINES.json",
         "event_maxwait": "execution/baselines/paper_traditional_v1/BASELINES.json",
         "slack_matched_rate": "execution/baselines/paper_slack_matched/BASELINES.json",
+        "v4f@200": "execution/train_v4f_anchor/eval_200_s8/EVAL.json",
         "v4s@300": "execution/train_v4s_cap300/eval_300_s8/EVAL.json",
         "v4t@100": "execution/train_v4t_cap_frozen/eval_100_s8/EVAL.json",
     }
@@ -148,6 +154,7 @@ def archived_waste(arm, cells, scenes):
         "event_maxwait": ("execution/baselines/paper_traditional_v1",
                           "eval__event_maxwait_", True),
         "slack_matched_rate": ("execution/baselines/paper_slack_matched", "eval__", False),
+        "v4f@200": ("execution/train_v4f_anchor/eval_200_s8", "eval__", False),
         "v4s@300": ("execution/train_v4s_cap300/eval_300_s8", "eval__", False),
         "v4t@100": ("execution/train_v4t_cap_frozen/eval_100_s8", "eval__", False),
     }
@@ -688,6 +695,115 @@ def main():
     add("")
 
     # ---------------------------------------------------------------- claims
+    # ---------------------------------------------------------------- N: no page table
+    nocap_rows = load_arm("nocap", "v4t@100")
+    nocap = {"rows": nocap_rows}
+    if nocap_rows:
+        cap_rows = archived_reference("v4t@100", TRAIN_CELLS, ALL_SCENES)
+        base_rows = archived_reference("normal_immediate", TRAIN_CELLS, ALL_SCENES)
+        v4f_rows = archived_reference("v4f@200", TRAIN_CELLS, ALL_SCENES)
+        by_key = {(tuple(int(v) for v in r["cell"]), int(r["scene"])): r for r in v4f_rows}
+        identical = sum(
+            1 for row in nocap_rows
+            if (row["on_time"], row["emissions"], row["spent_bytes"])
+            == (by_key[(tuple(int(v) for v in row["cell"]), int(row["scene"]))]["on_time"],
+                by_key[(tuple(int(v) for v in row["cell"]), int(row["scene"]))]["emissions"],
+                by_key[(tuple(int(v) for v in row["cell"]), int(row["scene"]))]["spent_bytes"]))
+        nocap["identical_to_v4f"] = identical
+        nocap["worlds"] = len(nocap_rows)
+
+        def waste_of(rows, arm=None):
+            if arm is not None:
+                counts = archived_waste(arm, TRAIN_CELLS, ALL_SCENES)
+                return counts["waste"] / counts["distinct"]
+            distinct = sum(int(row["waste_waste_d"]) for row in rows)
+            count = sum(int(row["waste_waste_n"]) for row in rows)
+            return count / distinct
+
+        immediate = group(base_rows)
+        without = group(nocap_rows)
+        withcap = group(cap_rows)
+        reference_bytes = immediate["spent_bytes"]
+        rows_summary = (
+            ("immediate", immediate, waste_of(base_rows, "normal_immediate")),
+            ("v4t 去掉配额表", without, waste_of(nocap_rows)),
+            ("v4t 带配额表", withcap, waste_of(cap_rows, "v4t@100")),
+        )
+        passes_without = 0
+        passes_with = 0
+        reasons = {"ont": 0, "bytes": 0, "both": 0, "pass": 0}
+        per_cell = {}
+        for cell in TRAIN_CELLS:
+            key = label(cell)
+            own = group([r for r in nocap_rows if label(r["cell"]) == key])
+            ref = group([r for r in base_rows if label(r["cell"]) == key])
+            capped = group([r for r in cap_rows if label(r["cell"]) == key])
+            required = need_for(ref["on_time"])
+            ok_time = own["on_time"] >= required
+            ok_bytes = own["spent_bytes"] < ref["spent_bytes"]
+            tag = ("pass" if ok_time and ok_bytes
+                   else ("bytes" if ok_time else ("ont" if ok_bytes else "both")))
+            reasons[tag] += 1
+            passes_without += int(tag == "pass")
+            passes_with += int(capped["on_time"] >= required
+                               and capped["spent_bytes"] < ref["spent_bytes"])
+            per_cell[key] = {"on_time": own["on_time"], "goals": own["goals"],
+                             "need": required, "bytes": own["spent_bytes"],
+                             "ref_on_time": ref["on_time"], "ref_bytes": ref["spent_bytes"],
+                             "capped_on_time": capped["on_time"],
+                             "capped_bytes": capped["spent_bytes"], "reason": tag}
+        nocap.update({"without": without, "with": withcap, "immediate": immediate,
+                      "passes_without": passes_without, "passes_with": passes_with,
+                      "reasons": reasons, "per_cell": per_cell,
+                      "waste": {"immediate": rows_summary[0][2],
+                                "without": rows_summary[1][2], "with": rows_summary[2][2]}})
+        state["nocap"] = nocap
+
+        add("## 实验 N　去掉配额表的同一份权重（补测）")
+        add("")
+        add("v4t 的权重 + `cap=None`，15 格 × 8 场景 = 120 世界。这条臂就是“超出配额表之后会怎样”"
+            "在**表内**的直接测量：除了配额，其他一切与 v4t 相同。")
+        add("")
+        add("**等价性自检**：这 120 个世界与归档的 `v4f@200`（同一份 actor，同样不带配额）"
+            "**逐世界完全相同**（%d/%d：按时数、发送数、字节全等）。所以下表里“去掉表”这一行"
+            "不是新策略，就是 v4f。" % (identical, len(nocap_rows)))
+        add("")
+        add("| 臂 | 按时数 | 绝对率 | 字节 | 字节比 | 消息/按时任务 | 浪费率 | 通过 |")
+        add("|---|---|---|---|---|---|---|---|")
+        for name, stats, waste_value in rows_summary:
+            add("| %s | %d/%d | %.3f | %d | %.3f | %.3f | %.3f | %s |" % (
+                name, stats["on_time"], stats["goals"], stats["q"], stats["spent_bytes"],
+                stats["spent_bytes"] / reference_bytes, stats["messages_per_on_time"],
+                waste_value,
+                ("**%d/15**" % passes_without) if name.startswith("v4t 去掉")
+                else (("%d/15" % passes_with) if name.startswith("v4t 带") else "0/15")))
+        add("")
+        add("**失败的形态（去掉表，12 个未过格）**：%d 格只是“字节没有严格更少”，"
+            "%d 格按时不足，%d 格两者都不满足。前一类里，字节数与 immediate **完全相等**"
+            "（例如 G12 的 N=3/6/12 三档分别是 118 608 / 237 216 / 474 432，每一格都与 "
+            "immediate 同格的值逐字节相同）——不带配额时，"
+            "这些格子里网络发的就是“每目标一页”，与 immediate 同一集合。" % (
+                reasons["bytes"], reasons["ont"], reasons["both"]))
+        add("")
+        add("| 格 | 无表 按时/需要 | 无表 字节 vs immediate | 判定 | 带表 按时/字节 |")
+        add("|---|---|---|---|---|")
+        for cell in TRAIN_CELLS:
+            key = label(cell)
+            record = per_cell[key]
+            add("| %s | %d/%d | %d vs %d | %s | %d/%d |" % (
+                key, record["on_time"], record["need"], record["bytes"], record["ref_bytes"],
+                {"pass": "**过**", "ont": "按时不足", "bytes": "字节相等",
+                 "both": "两者都差"}[record["reason"]],
+                record["capped_on_time"], record["capped_bytes"]))
+        add("")
+        add("读法：**配额买到的是“深度”，不是“选择”**。去掉表之后，模型仍然比 immediate 省 "
+            "%.1f %% 字节、每按时任务 1.07 条消息、浪费率 0.064——它不是靠乱发取胜的；"
+            "它只是**在运力充裕的格子里把该发的全发了**，字节自然就等于 immediate，"
+            "于是“严格更少”这一条判据不成立。而在它自己愿意节流的 R=6 格（G24_R6_N6、"
+            "G48_R6_N3、G48_R6_N6），不带表也能过。" % (
+                100.0 * (1.0 - without["spent_bytes"] / reference_bytes)))
+        add("")
+
     add("## 能说 / 不能说")
     add("")
     add("**能说**")
@@ -755,6 +871,9 @@ def main():
         "v4f 的优势是**在小配额区间同时省字节且不塌按时**，不是所有点上的支配。")
     add("8. **不能把 L 的\"延迟恒为 0\"读成\"没有调度\"**：它说明中继在发现时只提供一次发送机会，"
         "所以这个实验能回答的是\"发/不发\"，回答不了\"早发/晚发\"。")
+    add("9. **不能把\"去掉配额表 3/15\"读成\"模型不能用\"**：它仍然比 immediate 省 18.5 % 字节、"
+        "1.07 条/任务，失败的 12 格里有 9 格只是\"字节与 immediate 相等\"而非更多；"
+        "判据的严格不等号才是那 9 格失败的原因，不是策略崩了。")
     add("")
     add("## 复现")
     add("")
