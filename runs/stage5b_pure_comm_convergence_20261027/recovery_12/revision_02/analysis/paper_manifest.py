@@ -42,6 +42,8 @@ FIGURES = (
     ("execution/figures/fig18_queueing_delay_and_goodput", "图 18：下游响应时延与有效吞吐"),
     ("execution/figures/fig19_scale_classical_comparison",
      "图 19：G ≥ 48 两套规模网格上经典四臂 vs 本文方法（按时与字节四联）"),
+    ("execution/figures/fig20_success_and_channel_uses",
+     "图 20：G = 24…108 成功率与信道使用次数/世界（两口径分列，六臂）"),
 )
 AUDIT_ONLY = (
     ("execution/figures/fig11_master_all_experiments", "三套实验分列总图（内部审计）"),

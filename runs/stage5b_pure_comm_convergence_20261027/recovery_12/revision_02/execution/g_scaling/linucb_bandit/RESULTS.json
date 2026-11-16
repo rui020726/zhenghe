@@ -7,14 +7,19 @@
  "arm": "linucb_bandit",
  "failures": [],
  "goals": [
+  24,
+  30,
+  36,
+  42,
   54,
   60,
   72
  ],
  "new_goals": [
-  54,
-  60,
-  72
+  24,
+  30,
+  36,
+  42
  ],
  "operating_point": {
   "threshold": 0.7164625302175645
@@ -42,6 +47,5506 @@
   ]
  ],
  "results": [
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1241.25,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 12,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 19.46,
+   "emissions": 12,
+   "generated_goals": 24,
+   "on_time": 12,
+   "on_time_rate": 0.5,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 14895,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1242.642857142857,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 14,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 20.81,
+   "emissions": 14,
+   "generated_goals": 24,
+   "on_time": 14,
+   "on_time_rate": 0.5833333333333334,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 17397,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1335.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    3
+   ],
+   "cell_label": "G24_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 13,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 19.75,
+   "emissions": 13,
+   "generated_goals": 24,
+   "on_time": 12,
+   "on_time_rate": 0.5,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 16020,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2515.764705882353,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 17,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 20.54,
+   "emissions": 17,
+   "generated_goals": 24,
+   "on_time": 17,
+   "on_time_rate": 0.7083333333333334,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 42768,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2537.7,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 20,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.04,
+   "emissions": 20,
+   "generated_goals": 24,
+   "on_time": 20,
+   "on_time_rate": 0.8333333333333334,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 50754,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5050.363636363636,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 22,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 20.82,
+   "emissions": 22,
+   "generated_goals": 24,
+   "on_time": 11,
+   "on_time_rate": 0.4583333333333333,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 55554,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 3054.75,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 20,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.0,
+   "emissions": 20,
+   "generated_goals": 24,
+   "on_time": 16,
+   "on_time_rate": 0.6666666666666666,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301904,
+   "search_agents": null,
+   "spent_bytes": 48876,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 4500.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 20,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 20.2,
+   "emissions": 20,
+   "generated_goals": 24,
+   "on_time": 11,
+   "on_time_rate": 0.4583333333333333,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301905,
+   "search_agents": null,
+   "spent_bytes": 49500,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2451.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 22,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.56,
+   "emissions": 22,
+   "generated_goals": 24,
+   "on_time": 22,
+   "on_time_rate": 0.9166666666666666,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301906,
+   "search_agents": null,
+   "spent_bytes": 53922,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2471.6470588235293,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 17,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 20.82,
+   "emissions": 17,
+   "generated_goals": 24,
+   "on_time": 17,
+   "on_time_rate": 0.7083333333333334,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301907,
+   "search_agents": null,
+   "spent_bytes": 42018,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 3953.5384615384614,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    6,
+    6
+   ],
+   "cell_label": "G24_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 21,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 20.55,
+   "emissions": 21,
+   "generated_goals": 24,
+   "on_time": 13,
+   "on_time_rate": 0.5416666666666666,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301908,
+   "search_agents": null,
+   "spent_bytes": 51396,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1320.1304347826087,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 27.5,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 30363,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1270.375,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.01,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 30489,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 3036.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    3
+   ],
+   "cell_label": "G24_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.05,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 10,
+   "on_time_rate": 0.4166666666666667,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 30360,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2530.25,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.48,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 60726,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2540.75,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.57,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 60978,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2530.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.43,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 60720,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2690.7272727272725,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 27.75,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 22,
+   "on_time_rate": 0.9166666666666666,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301904,
+   "search_agents": null,
+   "spent_bytes": 59196,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2602.1739130434785,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.49,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301905,
+   "search_agents": null,
+   "spent_bytes": 59850,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2461.75,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.43,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301906,
+   "search_agents": null,
+   "spent_bytes": 59082,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2516.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.77,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301907,
+   "search_agents": null,
+   "spent_bytes": 60396,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2460.25,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    6
+   ],
+   "cell_label": "G24_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.33,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301908,
+   "search_agents": null,
+   "spent_bytes": 59046,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5060.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.79,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 121452,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5081.5,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.29,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 24,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 121956,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5280.0,
+   "capacity_refused": 0,
+   "cell": [
+    24,
+    12,
+    12
+   ],
+   "cell_label": "G24_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.33,
+   "emissions": 24,
+   "generated_goals": 24,
+   "on_time": 23,
+   "on_time_rate": 0.9583333333333334,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 121440,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1325.1666666666667,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    3
+   ],
+   "cell_label": "G30_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 19,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.37,
+   "emissions": 19,
+   "generated_goals": 30,
+   "on_time": 18,
+   "on_time_rate": 0.6,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 23853,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1208.25,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    3
+   ],
+   "cell_label": "G30_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 16,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.38,
+   "emissions": 16,
+   "generated_goals": 30,
+   "on_time": 16,
+   "on_time_rate": 0.5333333333333333,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 19332,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1267.8,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    3
+   ],
+   "cell_label": "G30_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 16,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.03,
+   "emissions": 16,
+   "generated_goals": 30,
+   "on_time": 15,
+   "on_time_rate": 0.5,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 19017,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2510.842105263158,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    6
+   ],
+   "cell_label": "G30_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 19,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.38,
+   "emissions": 19,
+   "generated_goals": 30,
+   "on_time": 19,
+   "on_time_rate": 0.6333333333333333,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 47706,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 4067.5714285714284,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    6
+   ],
+   "cell_label": "G30_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 23,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.36,
+   "emissions": 23,
+   "generated_goals": 30,
+   "on_time": 14,
+   "on_time_rate": 0.4666666666666667,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 56946,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2868.75,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    6
+   ],
+   "cell_label": "G30_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 19,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.71,
+   "emissions": 19,
+   "generated_goals": 30,
+   "on_time": 16,
+   "on_time_rate": 0.5333333333333333,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 45900,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2396.7,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    6
+   ],
+   "cell_label": "G30_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 20,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.07,
+   "emissions": 20,
+   "generated_goals": 30,
+   "on_time": 20,
+   "on_time_rate": 0.6666666666666666,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301904,
+   "search_agents": null,
+   "spent_bytes": 47934,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 4834.363636363636,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    6
+   ],
+   "cell_label": "G30_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 21,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.37,
+   "emissions": 21,
+   "generated_goals": 30,
+   "on_time": 11,
+   "on_time_rate": 0.36666666666666664,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301905,
+   "search_agents": null,
+   "spent_bytes": 53178,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2654.842105263158,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    6
+   ],
+   "cell_label": "G30_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 20,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.54,
+   "emissions": 20,
+   "generated_goals": 30,
+   "on_time": 19,
+   "on_time_rate": 0.6333333333333333,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301906,
+   "search_agents": null,
+   "spent_bytes": 50442,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2549.1,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    6
+   ],
+   "cell_label": "G30_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 21,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.94,
+   "emissions": 21,
+   "generated_goals": 30,
+   "on_time": 20,
+   "on_time_rate": 0.6666666666666666,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301907,
+   "search_agents": null,
+   "spent_bytes": 50982,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 4505.076923076923,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    6,
+    6
+   ],
+   "cell_label": "G30_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.59,
+   "emissions": 24,
+   "generated_goals": 30,
+   "on_time": 13,
+   "on_time_rate": 0.43333333333333335,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301908,
+   "search_agents": null,
+   "spent_bytes": 58566,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1316.375,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    3
+   ],
+   "cell_label": "G30_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 25,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.84,
+   "emissions": 25,
+   "generated_goals": 30,
+   "on_time": 24,
+   "on_time_rate": 0.8,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 31593,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1249.392857142857,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    3
+   ],
+   "cell_label": "G30_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 28,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.42,
+   "emissions": 28,
+   "generated_goals": 30,
+   "on_time": 28,
+   "on_time_rate": 0.9333333333333333,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 34983,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1334.125,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    3
+   ],
+   "cell_label": "G30_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 26,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.91,
+   "emissions": 26,
+   "generated_goals": 30,
+   "on_time": 24,
+   "on_time_rate": 0.8,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 32019,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2539.4,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    6
+   ],
+   "cell_label": "G30_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.88,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 30,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 76182,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2510.6,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    6
+   ],
+   "cell_label": "G30_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.03,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 30,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 75318,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2479.0,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    6
+   ],
+   "cell_label": "G30_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.89,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 30,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 74370,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2539.448275862069,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    6
+   ],
+   "cell_label": "G30_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.18,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 29,
+   "on_time_rate": 0.9666666666666667,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301904,
+   "search_agents": null,
+   "spent_bytes": 73644,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 9564.75,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    6
+   ],
+   "cell_label": "G30_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.26,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 8,
+   "on_time_rate": 0.26666666666666666,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301905,
+   "search_agents": null,
+   "spent_bytes": 76518,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2540.4,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    6
+   ],
+   "cell_label": "G30_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.95,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 30,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301906,
+   "search_agents": null,
+   "spent_bytes": 76212,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2491.8,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    6
+   ],
+   "cell_label": "G30_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.66,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 30,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301907,
+   "search_agents": null,
+   "spent_bytes": 74754,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2559.103448275862,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    6
+   ],
+   "cell_label": "G30_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.43,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 29,
+   "on_time_rate": 0.9666666666666667,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301908,
+   "search_agents": null,
+   "spent_bytes": 74214,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5078.8,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    12
+   ],
+   "cell_label": "G30_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 34.36,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 30,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 152364,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5021.2,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    12
+   ],
+   "cell_label": "G30_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.82,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 30,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 150636,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 4958.0,
+   "capacity_refused": 0,
+   "cell": [
+    30,
+    12,
+    12
+   ],
+   "cell_label": "G30_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 30,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.75,
+   "emissions": 30,
+   "generated_goals": 30,
+   "on_time": 30,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 148740,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1306.5,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    3
+   ],
+   "cell_label": "G36_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 17,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 20.45,
+   "emissions": 17,
+   "generated_goals": 36,
+   "on_time": 16,
+   "on_time_rate": 0.4444444444444444,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 20904,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1258.1666666666667,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    3
+   ],
+   "cell_label": "G36_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 19,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.45,
+   "emissions": 19,
+   "generated_goals": 36,
+   "on_time": 18,
+   "on_time_rate": 0.5,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 22647,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1322.4375,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    3
+   ],
+   "cell_label": "G36_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 17,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.15,
+   "emissions": 17,
+   "generated_goals": 36,
+   "on_time": 16,
+   "on_time_rate": 0.4444444444444444,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 21159,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2485.2631578947367,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    6
+   ],
+   "cell_label": "G36_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 19,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.19,
+   "emissions": 19,
+   "generated_goals": 36,
+   "on_time": 19,
+   "on_time_rate": 0.5277777777777778,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 47220,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2407.090909090909,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    6
+   ],
+   "cell_label": "G36_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 22,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.88,
+   "emissions": 22,
+   "generated_goals": 36,
+   "on_time": 22,
+   "on_time_rate": 0.6111111111111112,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 52956,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2499.6,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    6
+   ],
+   "cell_label": "G36_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 20,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.04,
+   "emissions": 20,
+   "generated_goals": 36,
+   "on_time": 20,
+   "on_time_rate": 0.5555555555555556,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 49992,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2490.315789473684,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    6
+   ],
+   "cell_label": "G36_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 19,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.56,
+   "emissions": 19,
+   "generated_goals": 36,
+   "on_time": 19,
+   "on_time_rate": 0.5277777777777778,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301904,
+   "search_agents": null,
+   "spent_bytes": 47316,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2431.090909090909,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    6
+   ],
+   "cell_label": "G36_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 22,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.04,
+   "emissions": 22,
+   "generated_goals": 36,
+   "on_time": 22,
+   "on_time_rate": 0.6111111111111112,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301905,
+   "search_agents": null,
+   "spent_bytes": 53484,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2472.9473684210525,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    6
+   ],
+   "cell_label": "G36_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 19,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.75,
+   "emissions": 19,
+   "generated_goals": 36,
+   "on_time": 19,
+   "on_time_rate": 0.5277777777777778,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301906,
+   "search_agents": null,
+   "spent_bytes": 46986,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2445.5,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    6
+   ],
+   "cell_label": "G36_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.62,
+   "emissions": 24,
+   "generated_goals": 36,
+   "on_time": 24,
+   "on_time_rate": 0.6666666666666666,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301907,
+   "search_agents": null,
+   "spent_bytes": 58692,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 3783.2,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    6,
+    6
+   ],
+   "cell_label": "G36_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 23,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.53,
+   "emissions": 23,
+   "generated_goals": 36,
+   "on_time": 15,
+   "on_time_rate": 0.4166666666666667,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301908,
+   "search_agents": null,
+   "spent_bytes": 56748,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1311.5454545454545,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    3
+   ],
+   "cell_label": "G36_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 23,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 27.38,
+   "emissions": 23,
+   "generated_goals": 36,
+   "on_time": 22,
+   "on_time_rate": 0.6111111111111112,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 28854,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1265.3333333333333,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    3
+   ],
+   "cell_label": "G36_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 28,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.67,
+   "emissions": 28,
+   "generated_goals": 36,
+   "on_time": 27,
+   "on_time_rate": 0.75,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 34164,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1372.2857142857142,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    3
+   ],
+   "cell_label": "G36_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 23,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.09,
+   "emissions": 23,
+   "generated_goals": 36,
+   "on_time": 21,
+   "on_time_rate": 0.5833333333333334,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 28818,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2607.705882352941,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    6
+   ],
+   "cell_label": "G36_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 35,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.4,
+   "emissions": 35,
+   "generated_goals": 36,
+   "on_time": 34,
+   "on_time_rate": 0.9444444444444444,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 88662,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2466.8333333333335,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    6
+   ],
+   "cell_label": "G36_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 36,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.2,
+   "emissions": 36,
+   "generated_goals": 36,
+   "on_time": 36,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 88806,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2622.529411764706,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    6
+   ],
+   "cell_label": "G36_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 35,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.91,
+   "emissions": 35,
+   "generated_goals": 36,
+   "on_time": 34,
+   "on_time_rate": 0.9444444444444444,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 89166,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 3973.0434782608695,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    6
+   ],
+   "cell_label": "G36_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 36,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.44,
+   "emissions": 36,
+   "generated_goals": 36,
+   "on_time": 23,
+   "on_time_rate": 0.6388888888888888,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301904,
+   "search_agents": null,
+   "spent_bytes": 91380,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2642.294117647059,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    6
+   ],
+   "cell_label": "G36_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 36,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.04,
+   "emissions": 36,
+   "generated_goals": 36,
+   "on_time": 34,
+   "on_time_rate": 0.9444444444444444,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301905,
+   "search_agents": null,
+   "spent_bytes": 89838,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2692.875,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    6
+   ],
+   "cell_label": "G36_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 34,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.2,
+   "emissions": 34,
+   "generated_goals": 36,
+   "on_time": 32,
+   "on_time_rate": 0.8888888888888888,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301906,
+   "search_agents": null,
+   "spent_bytes": 86172,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2513.1666666666665,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    6
+   ],
+   "cell_label": "G36_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 36,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.37,
+   "emissions": 36,
+   "generated_goals": 36,
+   "on_time": 36,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301907,
+   "search_agents": null,
+   "spent_bytes": 90474,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2581.4545454545455,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    6
+   ],
+   "cell_label": "G36_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 34,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.22,
+   "emissions": 34,
+   "generated_goals": 36,
+   "on_time": 33,
+   "on_time_rate": 0.9166666666666666,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301908,
+   "search_agents": null,
+   "spent_bytes": 85188,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5063.333333333333,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    12
+   ],
+   "cell_label": "G36_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 36,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 34.12,
+   "emissions": 36,
+   "generated_goals": 36,
+   "on_time": 36,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 182280,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 4933.666666666667,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    12
+   ],
+   "cell_label": "G36_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 36,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 34.91,
+   "emissions": 36,
+   "generated_goals": 36,
+   "on_time": 36,
+   "on_time_rate": 1.0,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 177612,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 6369.0,
+   "capacity_refused": 0,
+   "cell": [
+    36,
+    12,
+    12
+   ],
+   "cell_label": "G36_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 35,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 35.71,
+   "emissions": 35,
+   "generated_goals": 36,
+   "on_time": 28,
+   "on_time_rate": 0.7777777777777778,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 178332,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1243.4117647058824,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    3
+   ],
+   "cell_label": "G42_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 17,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.12,
+   "emissions": 17,
+   "generated_goals": 42,
+   "on_time": 17,
+   "on_time_rate": 0.40476190476190477,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 21138,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1251.157894736842,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    3
+   ],
+   "cell_label": "G42_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 20,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.95,
+   "emissions": 20,
+   "generated_goals": 42,
+   "on_time": 19,
+   "on_time_rate": 0.4523809523809524,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 23772,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1285.2857142857142,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    3
+   ],
+   "cell_label": "G42_R6_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 15,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 21.43,
+   "emissions": 15,
+   "generated_goals": 42,
+   "on_time": 14,
+   "on_time_rate": 0.3333333333333333,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 17994,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2590.56,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    6
+   ],
+   "cell_label": "G42_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 26,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.71,
+   "emissions": 26,
+   "generated_goals": 42,
+   "on_time": 25,
+   "on_time_rate": 0.5952380952380952,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 64764,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2377.2,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    6
+   ],
+   "cell_label": "G42_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 20,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.27,
+   "emissions": 20,
+   "generated_goals": 42,
+   "on_time": 20,
+   "on_time_rate": 0.47619047619047616,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 47544,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2407.1428571428573,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    6
+   ],
+   "cell_label": "G42_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 21,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.56,
+   "emissions": 21,
+   "generated_goals": 42,
+   "on_time": 21,
+   "on_time_rate": 0.5,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 50550,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2453.7391304347825,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    6
+   ],
+   "cell_label": "G42_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 23,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.74,
+   "emissions": 23,
+   "generated_goals": 42,
+   "on_time": 23,
+   "on_time_rate": 0.5476190476190477,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301904,
+   "search_agents": null,
+   "spent_bytes": 56436,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2389.909090909091,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    6
+   ],
+   "cell_label": "G42_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 22,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.78,
+   "emissions": 22,
+   "generated_goals": 42,
+   "on_time": 22,
+   "on_time_rate": 0.5238095238095238,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301905,
+   "search_agents": null,
+   "spent_bytes": 52578,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2460.285714285714,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    6
+   ],
+   "cell_label": "G42_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 21,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.75,
+   "emissions": 21,
+   "generated_goals": 42,
+   "on_time": 21,
+   "on_time_rate": 0.5,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301906,
+   "search_agents": null,
+   "spent_bytes": 51666,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2429.217391304348,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    6
+   ],
+   "cell_label": "G42_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 23,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 22.82,
+   "emissions": 23,
+   "generated_goals": 42,
+   "on_time": 23,
+   "on_time_rate": 0.5476190476190477,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301907,
+   "search_agents": null,
+   "spent_bytes": 55872,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2592.5454545454545,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    6,
+    6
+   ],
+   "cell_label": "G42_R6_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 24,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 23.89,
+   "emissions": 24,
+   "generated_goals": 42,
+   "on_time": 22,
+   "on_time_rate": 0.5238095238095238,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 6,
+   "scene": 2301908,
+   "search_agents": null,
+   "spent_bytes": 57036,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1349.25,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    3
+   ],
+   "cell_label": "G42_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 26,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.3,
+   "emissions": 26,
+   "generated_goals": 42,
+   "on_time": 24,
+   "on_time_rate": 0.5714285714285714,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 32382,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1255.8,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    3
+   ],
+   "cell_label": "G42_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 21,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 29.36,
+   "emissions": 21,
+   "generated_goals": 42,
+   "on_time": 20,
+   "on_time_rate": 0.47619047619047616,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 25116,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 1325.55,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    3
+   ],
+   "cell_label": "G42_R12_N3",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 22,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 26.18,
+   "emissions": 22,
+   "generated_goals": 42,
+   "on_time": 20,
+   "on_time_rate": 0.47619047619047616,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 26511,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 3,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2500.3636363636365,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    6
+   ],
+   "cell_label": "G42_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 33,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 31.59,
+   "emissions": 33,
+   "generated_goals": 42,
+   "on_time": 33,
+   "on_time_rate": 0.7857142857142857,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 82512,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2468.108108108108,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    6
+   ],
+   "cell_label": "G42_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 37,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 36.49,
+   "emissions": 37,
+   "generated_goals": 42,
+   "on_time": 37,
+   "on_time_rate": 0.8809523809523809,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 91320,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2477.470588235294,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    6
+   ],
+   "cell_label": "G42_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 34,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 34.18,
+   "emissions": 34,
+   "generated_goals": 42,
+   "on_time": 34,
+   "on_time_rate": 0.8095238095238095,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 84234,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 3153.3333333333335,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    6
+   ],
+   "cell_label": "G42_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 34,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 34.74,
+   "emissions": 34,
+   "generated_goals": 42,
+   "on_time": 27,
+   "on_time_rate": 0.6428571428571429,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301904,
+   "search_agents": null,
+   "spent_bytes": 85140,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2483.837837837838,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    6
+   ],
+   "cell_label": "G42_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 37,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 34.63,
+   "emissions": 37,
+   "generated_goals": 42,
+   "on_time": 37,
+   "on_time_rate": 0.8809523809523809,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301905,
+   "search_agents": null,
+   "spent_bytes": 91902,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2601.7297297297296,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    6
+   ],
+   "cell_label": "G42_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 38,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 34.1,
+   "emissions": 38,
+   "generated_goals": 42,
+   "on_time": 37,
+   "on_time_rate": 0.8809523809523809,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301906,
+   "search_agents": null,
+   "spent_bytes": 96264,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2564.181818181818,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    6
+   ],
+   "cell_label": "G42_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 34,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.68,
+   "emissions": 34,
+   "generated_goals": 42,
+   "on_time": 33,
+   "on_time_rate": 0.7857142857142857,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301907,
+   "search_agents": null,
+   "spent_bytes": 84618,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 2829.5625,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    6
+   ],
+   "cell_label": "G42_R12_N6",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 37,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 33.49,
+   "emissions": 37,
+   "generated_goals": 42,
+   "on_time": 32,
+   "on_time_rate": 0.7619047619047619,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301908,
+   "search_agents": null,
+   "spent_bytes": 90546,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 6,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5051.121951219512,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    12
+   ],
+   "cell_label": "G42_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 41,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 32.83,
+   "emissions": 41,
+   "generated_goals": 42,
+   "on_time": 41,
+   "on_time_rate": 0.9761904761904762,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301901,
+   "search_agents": null,
+   "spent_bytes": 207096,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5097.538461538462,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    12
+   ],
+   "cell_label": "G42_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 40,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 30.76,
+   "emissions": 40,
+   "generated_goals": 42,
+   "on_time": 39,
+   "on_time_rate": 0.9285714285714286,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301902,
+   "search_agents": null,
+   "spent_bytes": 198804,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
+  {
+   "arm": "linucb_bandit",
+   "budget_bytes": 1000000000,
+   "budget_refused": 0,
+   "budget_restored": true,
+   "bytes_per_on_time": 5709.942857142857,
+   "capacity_refused": 0,
+   "cell": [
+    42,
+    12,
+    12
+   ],
+   "cell_label": "G42_R12_N12",
+   "classic_parameters": {
+    "alpha": 0.5,
+    "decision": "sticky_first_offer",
+    "features": "19-dim comm-send-state/1 with the revision's scaling",
+    "inner": "immediate",
+    "threshold": 0.7164625302175645,
+    "training": {
+     "auc_in_sample": 0.8214806880278192,
+     "base_rate": 0.7870967741935484,
+     "positives": 976,
+     "reward": "1 if the target completed inside its deadline under immediate, else 0",
+     "ridge": 1.0,
+     "samples": 1240,
+     "scenes": [
+      2201901,
+      2201902,
+      2201903
+     ],
+     "state": "19-dim comm-send-state/1, revision scaling, #11 denominator 200",
+     "ucb_alpha": 0.5,
+     "worlds": 45
+    }
+   },
+   "distinct_targets": 40,
+   "duplicate_sends": 0,
+   "elapsed_seconds": 28.75,
+   "emissions": 40,
+   "generated_goals": 42,
+   "on_time": 35,
+   "on_time_rate": 0.8333333333333334,
+   "params": {
+    "threshold": 0.7164625302175645
+   },
+   "rescue_robots": 12,
+   "scene": 2301903,
+   "search_agents": null,
+   "spent_bytes": 199848,
+   "stage": "scale",
+   "status": "ok",
+   "subscribers_live": 12,
+   "tag": null
+  },
   {
    "arm": "linucb_bandit",
    "budget_bytes": 1000000000,
@@ -4170,6 +9675,6 @@
  ],
  "root": "D:\\code\\整合\\zhenghe-round42\\runs\\stage5b_pure_comm_convergence_20261027\\recovery_12\\revision_02",
  "schema": "stage5b-g-scaling-arm/1",
- "ts": "2026-11-16T13:03:23Z",
- "worlds": 75
+ "ts": "2026-11-16T14:44:09Z",
+ "worlds": 175
 }

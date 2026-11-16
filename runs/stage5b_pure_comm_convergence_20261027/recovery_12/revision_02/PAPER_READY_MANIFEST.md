@@ -9,7 +9,7 @@
 | `execution/latex/table1_main_comparison.tex` | 表 1：13 基线（含 4 个具名经典算法）+ 本文方法，七项指标 | `88f27c5d7be20be2` |
 | `execution/latex/table3_orthogonal_comparison.tex` | 表 3：特征集 × 决策机制的正交对照 | `8f0a4ac856dcc26d` |
 | `execution/latex/table2_ablation_mechanism.tex` | 表 2：本文方法自身的特征消融（上）与 #16 容量反事实（下） | `cc5c58fa2eebe2da` |
-| `execution/latex/table4_scale_classical.tex` | 表 4：G ≥ 48 两套规模网格上经典四臂 vs 本文方法（工作点冻结迁移） | `93e33d9bd09cbd77` |
+| `execution/latex/table4_scale_classical.tex` | 表 4：G ≥ 48 两套规模网格上经典四臂 vs 本文方法（工作点冻结迁移） | `9a56d1ea398a896d` |
 
 表 1 的判据说明（与文件内脚注一致）：头条“按时达标格数”按**放宽判据**（逐格 `on_time ≥ ⌈0.95×Immediate⌉` 且全网字节比 `< 0.85`、浪费率 `< 0.10`）统计，本文方法 12/15；脚注同时给出**严格双条件**（另需每格字节更少）的通过数 3/15 与十三个基线的读数。
 
@@ -26,6 +26,7 @@
 | 图 16：外加配额约束下的排序器对比 | `execution/figures/fig16_budget_spectrum_pareto.png`<br>`execution/figures/fig16_budget_spectrum_pareto.pdf` | `7468affc0e629660` |
 | 图 18：下游响应时延与有效吞吐 | `execution/figures/fig18_queueing_delay_and_goodput.png`<br>`execution/figures/fig18_queueing_delay_and_goodput.pdf` | `afdca8333c161974` |
 | 图 19：G ≥ 48 两套规模网格上经典四臂 vs 本文方法（按时与字节四联） | `execution/figures/fig19_scale_classical_comparison.png`<br>`execution/figures/fig19_scale_classical_comparison.pdf` | `21f118c6577abe19` |
+| 图 20：G = 24…108 成功率与信道使用次数/世界（两口径分列，六臂） | `execution/figures/fig20_success_and_channel_uses.png`<br>`execution/figures/fig20_success_and_channel_uses.pdf` | `3b948e65c16834a9` |
 
 **不进入论文的图（内部审计）**：
 

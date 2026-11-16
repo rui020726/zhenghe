@@ -576,10 +576,26 @@ def scale_pages(grid):
         entry = acc.setdefault(key, [0, 0])
         entry[0] += int(row["emissions"])
         entry[1] += 1
-    return {key: total / worlds for key, (total, worlds) in acc.items()}
+    pages = {key: total / worlds for key, (total, worlds) in acc.items()}
+    if grid == "g":
+        # G=12/24/48 are archived in the 15-cell baseline, not in the sweep's own file.
+        for row in rows_of_baseline():
+            key = (tuple(row["cell"]), None)
+            entry = acc.setdefault(key, [0, 0])
+            entry[0] += int(row["emissions"])
+            entry[1] += 1
+        pages = {key: total / worlds for key, (total, worlds) in acc.items()}
+    return pages
 
 
-def stage_scale(workers, grid):
+def rows_of_baseline():
+    payload = json.loads((BASE / "execution/baselines/grid_v2/BASELINES.json")
+                         .read_text(encoding="utf-8"))
+    return [row for row in payload.get("results") or []
+            if row.get("status") == "ok" and row.get("arm") == "normal_immediate"]
+
+
+def stage_scale(workers, grid, goals=None):
     """Run the four classical arms, at their frozen operating points, on a scale grid.
 
     No parameter is re-tuned here: the point chosen on the 15-cell benchmark is carried over
@@ -592,12 +608,13 @@ def stage_scale(workers, grid):
     chosen = json.loads(CHOSEN.read_text(encoding="utf-8"))["chosen"]
     pages = scale_pages(grid)
     if grid == "g":
+        run_goals = tuple(goals) if goals else GEXT_GOALS
         points = [((goal, robots, subscribers), None)
-                  for goal in GEXT_GOALS for robots, subscribers in GEXT_PAIRS]
+                  for goal in run_goals for robots, subscribers in GEXT_PAIRS]
         out_root = BASE / "execution/g_scaling"
         schema = "stage5b-g-scaling-arm/1"
-        meta = {"goals": list(GEXT_GOALS), "pairs": [list(p) for p in GEXT_PAIRS],
-                "archived_goals": [12, 24, 48], "new_goals": list(GEXT_GOALS)}
+        meta = {"goals": list(run_goals), "pairs": [list(p) for p in GEXT_PAIRS],
+                "archived_goals": [12, 24, 48], "new_goals": list(run_goals)}
     else:
         points = [((goal, robots, 6), agents)
                   for goal in DEEP_GOALS for robots in DEEP_ROBOTS for agents in DEEP_AGENTS]
@@ -629,6 +646,13 @@ def stage_scale(workers, grid):
     results = run_tasks(tasks, workers)
     for arm in ARMS:
         own = [row for row in results if row["arm"] == arm]
+        target = out_root / arm / "RESULTS.json"
+        if target.exists():
+            keep_goals = {int(row["cell"][0]) for row in own}
+            previous = [row for row in json.loads(target.read_text(encoding="utf-8"))["results"]
+                        if int(row["cell"][0]) not in keep_goals]
+            print("scale(%s): %s keeps %d earlier worlds" % (grid, arm, len(previous)))
+            own = previous + own
         ok = [row for row in own if row.get("status") == "ok"]
         payload = {"schema": schema, "root": str(BASE), "arm": arm,
                    "worlds": len(own), "results": sorted(
@@ -637,6 +661,7 @@ def stage_scale(workers, grid):
                    "failures": [row for row in own if row.get("status") != "ok"],
                    "operating_point": chosen[arm]["point"], "ts": utc()}
         payload.update(meta)
+        payload["goals"] = sorted({int(row["cell"][0]) for row in own})
         dump(out_root / arm / "RESULTS.json", payload)
         print("scale(%s): %s %d/%d worlds ok" % (grid, arm, len(ok), len(own)))
 
@@ -646,6 +671,7 @@ def main():
     parser.add_argument("--stage", required=True,
                         choices=("train", "fit", "calibrate", "choose", "final", "scale"))
     parser.add_argument("--grid", default="g", choices=("g", "deep"))
+    parser.add_argument("--goals", default="", help="comma-separated goal counts for --grid g")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--arms", default="", help="comma-separated arms to calibrate")
     parser.add_argument("--override", default="", help="JSON point for a single-arm re-run")
@@ -662,7 +688,8 @@ def main():
     elif args.stage == "choose":
         stage_choose()
     elif args.stage == "scale":
-        stage_scale(args.workers, args.grid)
+        goals = tuple(int(v) for v in args.goals.split(",") if v) or None
+        stage_scale(args.workers, args.grid, goals)
     else:
         only = tuple(a for a in args.arms.split(",") if a) or None
         override = json.loads(args.override) if args.override else None

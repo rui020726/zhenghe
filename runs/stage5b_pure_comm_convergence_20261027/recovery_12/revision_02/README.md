@@ -161,6 +161,7 @@ the 98-file manifest.
 | 65 | **table 1's Ours row read `	extbf{12/15}` and its ablation caption `0.95 	imes`** | an earlier line-based patch wrote `\t` escapes as literal TAB bytes, so two LaTeX commands lost their backslash | repaired at the byte level (TAB+`extbf` → `\textbf`, TAB+`imes` → `\times`); the exporter is regenerated and the `.tex` re-checked for TAB bytes |
 | 66 | the scale report died with `FileNotFoundError` while the deep grid was still running | `rows_of` assumed every arm's `RESULTS.json` exists, but a staged run writes it only at stage end | `rows_of` returns `[]` for a missing file, so the report previews on the finished G sweep and is re-run after the deep stage; no world is re-run |
 | 67 | fig19's first render put the panel labels on top of the `y = 1.0` reference line | fixed axes limits left no headroom above the Immediate line | limits are now derived from the plotted values with 20 % headroom, so labels sit above every curve |
+| 68 | **fig20's first render was four empty panels** | `SCALE_RESULTS.json` serialises its goal keys as strings, and the new plot looked them up with integer keys, so every series was NaN | the lookup accepts both spellings (as fig19's already did); re-rendered and visually checked |
 
 
 ## Gates before a world is opened

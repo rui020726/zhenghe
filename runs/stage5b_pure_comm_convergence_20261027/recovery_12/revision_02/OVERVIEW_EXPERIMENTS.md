@@ -126,6 +126,10 @@
   Ours 字节比 G48 0.691 → G144 0.399，LinUCB 0.701 → 0.473。RED 字节比漂移最小（0.77–0.81）。
 - 图 `fig19_scale_classical_comparison`、表 `table4_scale_classical.tex`、
   `CLASSIC_ALGORITHM_COMPARISON.md` §9。
+- 再补 G=24/30/36/42 四档 400 世界后，`fig20_success_and_channel_uses` 给出 G=24…108 的
+  **绝对成功率**与**信道使用次数/世界**（六臂、两口径分列）：G≤42 Ours 与 Immediate 成功率差
+  ≤0.010；G≥48 Ours 信道最低（G72 省 44 %、G108 省 57 %）但成功率低于 Immediate 与 LinUCB。
+  全表 `CLASSIC_ALGORITHM_COMPARISON.md` §10。
 
 ### K. 双判据复核与无配额重训（零新世界；1 个新训练臂 200 回合）
 - **旧判据（预先注册）**：v4f 3/15、v4t 9/15、Slack-Cap 11/15。

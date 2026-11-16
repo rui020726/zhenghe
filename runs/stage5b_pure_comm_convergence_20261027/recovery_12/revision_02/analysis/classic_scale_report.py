@@ -41,7 +41,7 @@ LABEL = {"normal_immediate": "Immediate", "slack_heuristic_cap": "EDF-Slack",
          "ahp_utility": "AHP-Utility", "linucb_bandit": "LinUCB-Bandit"}
 ORDER = ("normal_immediate",) + CLASSIC + ("v4f@200",)
 
-G_GOALS = (48, 54, 60, 72)
+G_GOALS = (24, 30, 36, 42, 48, 54, 60, 72)
 G_PAIRS = ((6, 3), (6, 6), (12, 3), (12, 6), (12, 12))
 G_FULL = ((6, 6), (12, 6))
 ANCHOR3 = (2301901, 2301902, 2301903)
@@ -78,11 +78,13 @@ def rows_of(path, arm=None):
 
 
 def totals(rows):
+    uses = sum(int(row["emissions"]) * int(row["cell"][2]) for row in rows)
     return {"worlds": len(rows),
             "on_time": sum(int(row["on_time"]) for row in rows),
             "goals": sum(int(row["generated_goals"]) for row in rows),
             "spent_bytes": sum(int(row["spent_bytes"]) for row in rows),
-            "emissions": sum(int(row["emissions"]) for row in rows)}
+            "emissions": sum(int(row["emissions"]) for row in rows),
+            "cu": uses / len(rows) if rows else None}
 
 
 def waste_from_logs(roots, want, arm):
@@ -134,9 +136,12 @@ def g_sweep():
         out[goal] = {}
         for arm in ORDER:
             if arm in OLD:
-                cells = [scaling["cells"].get("%s|G%d_R%d_N%d" % (arm, goal, r, n))
-                         for r, n in G_PAIRS]
-                cells = [cell for cell in cells if cell]
+                cells, uses = [], 0
+                for r, n in G_PAIRS:
+                    cell = scaling["cells"].get("%s|G%d_R%d_N%d" % (arm, goal, r, n))
+                    if cell:
+                        cells.append(cell)
+                        uses += cell["emissions"] * n
                 if not cells:
                     continue
                 entry = {"worlds": sum(cell["worlds"] for cell in cells),
@@ -144,6 +149,7 @@ def g_sweep():
                          "goals": sum(cell["goals"] for cell in cells),
                          "spent_bytes": sum(cell["spent_bytes"] for cell in cells),
                          "emissions": sum(cell["emissions"] for cell in cells)}
+                entry["cu"] = uses / entry["worlds"] if entry["worlds"] else None
                 want = lambda cell, scene, agents, g=goal: (
                     cell[0] == g and (cell[1], cell[2]) in G_PAIRS and scene in scenes_for(cell))
                 distinct, waste = waste_from_json("execution/g_scaling/WASTE.json", arm, want)
@@ -180,6 +186,8 @@ def deep_grid():
                 entry = dict(grid["by_goal"][arm][str(goal)])
                 entry = {key: entry[key] for key in
                          ("worlds", "on_time", "goals", "spent_bytes", "emissions")}
+                entry["cu"] = (entry["emissions"] * 6 / entry["worlds"]
+                               if entry["worlds"] else None)
                 want = lambda cell, scene, agents, g=goal: cell[0] == g
                 distinct, waste = waste_from_json("execution/g_rs_grid/WASTE.json", arm, want)
             else:
@@ -204,7 +212,8 @@ def readings(entry, reference):
             "byte_ratio": (entry["spent_bytes"] / reference["spent_bytes"]
                            if reference["spent_bytes"] else None),
             "messages": (entry["emissions"] / entry["on_time"] if entry["on_time"] else None),
-            "waste": (entry["waste_n"] / entry["waste_d"] if entry["waste_d"] else None)}
+            "waste": (entry["waste_n"] / entry["waste_d"] if entry["waste_d"] else None),
+            "cu": entry.get("cu")}
 
 
 def main():
@@ -318,6 +327,42 @@ def main():
         text = text.rstrip() + "\n\n" + block
     doc.write_text(text, encoding="utf-8", newline="\n")
     print("updated %s §9" % doc.name)
+
+    success = ["<!-- success-section:start -->",
+               "## 10. 成功率与信道使用次数/世界（G = 24…108）", ""]
+    success.append("成功率 = on_time / generated_goals（绝对口径，分母为该档全部生成目标）；"
+                   "信道使用次数/世界 = Σ(发射数 × 订阅者数) / 世界数。左半为 G 扫描口径"
+                   "（25 世界/档，N 随 (R,N) 对变化），右半为深档口径（27 世界/档，N=6）；"
+                   "G=72 是两口径的重叠档，数值不同属正常，不可跨口径直接连线。")
+    success.append("")
+    for key, title, pattern in (("q", "成功率（绝对）", "%.3f"),
+                                ("cu", "信道使用次数/世界", "%.1f")):
+        success.append("### %s" % title)
+        success.append("")
+        success.append("| 方法 | " + " | ".join("G=%d" % g for g in G_GOALS)
+                       + " | " + " | ".join("深G=%d" % g for g in (72, 84, 96, 108)) + " |")
+        success.append("|---" * (len(G_GOALS) + 4 + 1) + "|")
+        for arm in ORDER:
+            cells = []
+            for name, goals in (("g_sweep", G_GOALS), ("deep", (72, 84, 96, 108))):
+                for goal in goals:
+                    record = (table[name].get(goal) or {}).get(arm)
+                    cells.append("—" if record is None or record.get(key) is None
+                                 else pattern % record[key])
+            success.append("| %s | %s |" % (LABEL[arm], " | ".join(cells)))
+        success.append("")
+    success.append("图 `fig20_success_and_channel_uses`（四联：成功率 / 信道使用 × 两口径）。")
+    success.append("<!-- success-section:end -->")
+    text = doc.read_text(encoding="utf-8")
+    block = "\n".join(success) + "\n"
+    if "<!-- success-section:start -->" in text:
+        head, rest = text.split("<!-- success-section:start -->", 1)
+        _, tail = rest.split("<!-- success-section:end -->", 1)
+        text = head + block + tail
+    else:
+        text = text.rstrip() + "\n\n" + block
+    doc.write_text(text, encoding="utf-8", newline="\n")
+    print("updated %s §10" % doc.name)
 
     tex = [r"% Generated by analysis/classic_scale_report.py -- do not edit by hand.",
            r"\begin{table*}[t]", r"\centering",
