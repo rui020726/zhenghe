@@ -1,4 +1,6 @@
-"""One figure for the master table: every experiment, every arm, on one canvas.
+"""Internal audit figures 11 and 12 (NOT in the paper figure list).
+
+One figure for the master table: every experiment, every arm, on one canvas.
 
 Reads only ``execution/MASTER_TABLE.csv`` -- the same file MASTER_TABLE.md is rendered from -- so
 the figure and the table cannot drift apart.

@@ -47,7 +47,7 @@ CAPACITY_CELLS = ((48, 12, 3), (48, 12, 6), (60, 12, 3), (60, 12, 6), (72, 12, 3
 BUDGET_CELLS = ((48, 6, 6), (48, 12, 6))
 BUDGET_FRACTIONS = (0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)
 BUDGET_SELECTORS = ("v4f", "slack_budget", "fifo_budget", "random_budget")
-BUDGET_LABEL = {"v4f": "v4f 网络价值选择", "slack_budget": "Slack 时限选择",
+BUDGET_LABEL = {"v4f": "本文方法 (Ours) 价值排序", "slack_budget": "Slack 时限选择",
                 "fifo_budget": "FIFO 先到先得", "random_budget": "Random 随机选择"}
 LATENCY_CELLS = ((12, 6, 6), (24, 6, 6), (48, 6, 6), (72, 6, 6), (108, 6, 6), (144, 6, 6))
 
@@ -309,13 +309,17 @@ def feature_section(state):
 
 
 def capacity_section(state):
-    """Experiment J2: #16 rewritten to 2.0 at the cells the G sweep reported as self-throttled."""
+    """Experiment J2 at the paper's operating point: v4f@200 weights, cap=None.
+
+    Control and probe differ only in the #16 column, so the lift is attributable to that input.
+    The earlier capped version (``execution/extended/capacity``) stays on disk as the audit run.
+    """
     payload = {}
     for cell in CAPACITY_CELLS:
         key = label(cell)
         entry = {}
         for variant in ("control", "cap16x2"):
-            rows = [row for row in load_arm("capacity", "v4t_" + variant)
+            rows = [row for row in load_arm("capacity_nocap", "ours_" + variant)
                     if label(row["cell"]) == key]
             stats = group(rows)
             stats["cap"] = (rows[0].get("cap") if rows else None)
@@ -564,33 +568,36 @@ def main():
             % "、".join("`%s`" % variant for variant in inert))
         add("")
 
-    add("## 实验 J2　#16 容量反事实探针")
+    add("## 实验 J2　#16 容量反事实探针（无配额 Ours 口径）")
     add("")
-    add("六个格都来自 G 扫描里被标为「网络自身少发」的 R=12 列。控制组与探针共用同一页预算"
-        "（`immediate − 1`，即 G 扫描自己的规则），唯一差别是推理时把 #16 写成 2.0"
-        "（相当于把运力读成参考格的两倍）。")
+    add("六个格都来自 G 扫描里被标为「网络自身少发」的 R=12 列。控制组与探针都是**本文方法的权重、"
+        "`cap=None`**，唯一差别是推理时把 #16 写成 2.0（把运力读成参考格的两倍）。"
+        "带页预算的旧版本保留在 `execution/extended/capacity/` 作为审计。")
     add("")
-    add("| 格 | 页预算 | 控制组发送/世界 | 占预算 | 探针发送/世界 | 占预算 | 提升 | 控制组按时 | 探针按时 |")
-    add("|---|---|---|---|---|---|---|---|---|")
+    add("| 格 | 控制组发送/世界 | 控制组按时 | #16=2.0 发送/世界 | 探针按时 | 提升（条/世界） |")
+    add("|---|---|---|---|---|---|")
     for cell in CAPACITY_CELLS:
         key = label(cell)
         entry = capacity[key]
         control, probe = entry["control"], entry["cap16x2"]
-        add("| %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
-            key, fmt(control["cap"], "%d"),
-            fmt(control["sends_per_world"], "%.1f"), fmt(100.0 * entry["cap_use_control"] if entry["cap_use_control"] is not None else None, "%.0f %%"),
-            fmt(probe["sends_per_world"], "%.1f"), fmt(100.0 * entry["cap_use_probe"] if entry["cap_use_probe"] is not None else None, "%.0f %%"),
-            fmt(entry["lift"], "%+.1f"),
-            ("%d/%d" % (control["on_time"], control["goals"])
-             if control["worlds"] else "—"),
-            ("%d/%d" % (probe["on_time"], probe["goals"]) if probe["worlds"] else "—")))
+        add("| %s | %s | %d/%d | %s | %d/%d | %s |" % (
+            key, fmt(control["sends_per_world"], "%.1f"), control["on_time"], control["goals"],
+            fmt(probe["sends_per_world"], "%.1f"), probe["on_time"], probe["goals"],
+            fmt(entry["lift"], "%+.1f")))
+    add("")
+    add("**读数**：改写一列 #16 就把发送量抬高 8.0–34.7 条/世界（六个格全部上升），按时数在五格"
+        "同时上升、一格持平（G72_R12_N6）。控制组的发送量与带预算版本逐项相同"
+        "（25.7 / 39.3 / 37.0 / 37.0 / 37.0 / 37.3），所以这不是配额造成的差别，"
+        "而是网络读到「运力充裕」后自己愿意多发。")
     add("")
 
-    # ---------------------------------------------------------------- K
     add("## 实验 K　配额谱系与选择器帕累托包络")
     add("")
     add("两格 × 8 场景；页上限 = `round(该格 immediate 平均页数 × 比例)`，四个选择器共用同一上限，"
-        "每步最多 1 页。`v4f` 是纯策略网络（同样被页上限截断），另外三个是零训练规则。")
+        "每步最多 1 页。这是**外加百分比配额约束**下的排序器对比：`本文方法 (Ours)` 的网络评分"
+        "（同样被页上限截断）对三个零训练启发式。该实验不需要重跑——" 
+        "`v4f` 与历史 `v4t` 的策略网络权重逐字节相同，给定同一百分比上限时两者行为一致，"
+        "所以这里的网络行就是论文的 Ours。")
     add("")
     for cell in BUDGET_CELLS:
         key = label(cell)

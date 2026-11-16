@@ -341,7 +341,7 @@ def worker(task):
             },
             "budget_restored": row.get("budget_authority_restored"),
         })
-        if task["stage"] in ("delivery", "budget", "features", "features_nocap", "capacity", "nocap"):
+        if task["stage"] in ("delivery", "budget", "features", "features_nocap", "capacity", "capacity_nocap", "nocap"):
             try:
                 result.update({("waste_%s" % key): value
                                for key, value in _world_readings(row).items()})
@@ -491,6 +491,28 @@ def capacity_tasks(caps, pages):
     return tasks
 
 
+def capacity_nocap_tasks():
+    """Experiment J2 at the paper's operating point: v4f@200 weights, cap=None.
+
+    Control and probe differ only in the #16 column (capacity ratio), so the probe measures
+    what that column alone does to the send volume when no page budget truncates the list.
+    """
+    tasks = []
+    for variant, mask in CAPACITY_VARIANTS.items():
+        for cell in CAPACITY_CELLS:
+            for scene in ANCHOR:
+                task = {"root": str(BASE), "run_dir": str(OUT / "capacity_nocap" / variant),
+                        "stage": "capacity_nocap", "arm": "ours_" + variant,
+                        "cell": list(cell), "scene": int(scene), "variant": variant,
+                        "kind": "learned",
+                        "checkpoint": str(BASE / "execution/train_v4f_anchor/checkpoints"
+                                          / "milestone_200.pth"),
+                        "checkpoint_episode": 200, "identity_sha": identity_sha(),
+                        "cap": None, "mask": dict(mask) if mask else None}
+                tasks.append(task)
+    return tasks
+
+
 def budget_tasks(pages):
     tasks = []
     for selector in BUDGET_SELECTORS:
@@ -557,7 +579,7 @@ def latency_tasks(caps):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage", required=True,
-                        choices=["delivery", "features", "features_nocap", "capacity", "budget", "latency", "nocap"])
+                        choices=["delivery", "features", "features_nocap", "capacity", "capacity_nocap", "budget", "latency", "nocap"])
     parser.add_argument("--workers", type=int, default=12)
     args = parser.parse_args()
     sys.dont_write_bytecode = True
@@ -587,6 +609,10 @@ def main():
         for variant in FEATURE_VARIANTS:
             run_tasks("features_nocap", variant, feature_nocap_tasks(), args.workers,
                       dict(extra, variant=variant))
+    elif args.stage == "capacity_nocap":
+        for variant in CAPACITY_VARIANTS:
+            run_tasks("capacity_nocap", "ours_" + variant, capacity_nocap_tasks(),
+                      args.workers, dict(extra, variant=variant))
     elif args.stage == "nocap":
         run_tasks("nocap", "v4t@100", nocap_tasks(caps), args.workers, extra)
     else:

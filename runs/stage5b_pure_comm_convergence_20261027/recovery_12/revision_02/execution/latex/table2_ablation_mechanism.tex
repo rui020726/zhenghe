@@ -18,3 +18,22 @@
 \end{tabular}
 \end{table}
 
+% Second panel: experiment J2, same weights, cap=None.
+\begin{table}[t]
+\centering
+\caption{\#16 容量列的反事实探针（同一权重、无配额；6 格 $\times$ 3 锚定场景）。控制与探针只差推理时把 \#16 写成 2.0；发送量的差就是该列对节流的直接控制。}
+\label{tab:capacity_probe}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+格 & 控制组发送/世界 & 控制组按时 & \#16=2.0 发送/世界 & 探针按时 \\
+\midrule
+G48_R12_N3 & 25.7 & 72/144 & 47.3 & 112/144 \\
+G48_R12_N6 & 39.3 & 108/144 & 47.3 & 112/144 \\
+G60_R12_N3 & 37.0 & 106/180 & 59.0 & 122/180 \\
+G60_R12_N6 & 37.0 & 109/180 & 59.0 & 139/180 \\
+G72_R12_N3 & 37.0 & 102/216 & 71.7 & 119/216 \\
+G72_R12_N6 & 37.3 & 110/216 & 71.7 & 110/216 \\
+\bottomrule
+\end{tabular}
+\end{table}
+

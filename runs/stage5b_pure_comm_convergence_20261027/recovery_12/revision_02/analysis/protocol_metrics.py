@@ -93,14 +93,16 @@ G_SWEEP_ARMS = ("normal_immediate", "slack_heuristic_cap", "slack_matched_rate",
 DELIVERY_ARMS = ("normal_immediate", "dedup_immediate", "event_maxwait",
                  "slack_matched_rate", "v4s@300", "v4t@100")
 
-DELAY_ARMS = ("normal_immediate", "slack_matched_rate", "v4f@200", "v4t@100")
+#: The paper's delay comparison. v4t stays in the audit JSON but is not drawn or tabulated in
+#: the paper-facing report/figure (its weights equal v4f's; only the page table differs).
+DELAY_ARMS = ("normal_immediate", "slack_matched_rate", "v4f@200")
 
 ARM_LABEL = {
     "normal_immediate": "Immediate", "dedup_immediate": "Dedup",
     "always_hold": "Always-Hold", "fifo_cap_k1": "FIFO-Cap",
     "slack_heuristic_cap": "Slack-Cap", "random_matched_rate": "Random-Matched",
     "slack_matched_rate": "Slack-Matched", "periodic_k5": "Periodic-k5",
-    "event_maxwait": "Event-MaxWait", "v4f@200": "Pure-Policy (v4f)",
+    "event_maxwait": "Event-MaxWait", "v4f@200": "本文方法 (Ours)",
     "v4g@300": "Price-Dual (v4g)", "v4s@300": "Ours-Joint (v4s)",
     "v4t@100": "Ours-Frozen (v4t)", "v4u@100": "Ours-Floor (v4u)",
 }
@@ -860,7 +862,7 @@ def draw_figure(payload):
                                  lw=1.1, ms=4.5, mew=1.0, zorder=4),
         "slack_matched_rate": dict(color="#8E44AD", ls=":", marker="v", mfc="white",
                                    lw=1.3, ms=4.5, mew=1.0, zorder=4),
-        "v4f@200": dict(color="#2980B9", ls="--", marker="o", mfc="none",
+        "v4f@200": dict(color="#C0392B", ls="-", marker="o", mfc="#C0392B",
                         lw=1.1, ms=6.4, mew=1.15, zorder=7),
         "v4t@100": dict(color="#C0392B", ls="-", marker="o", mfc="#C0392B",
                         lw=1.7, ms=4.6, mew=1.0, zorder=6),

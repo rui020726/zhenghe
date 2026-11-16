@@ -279,6 +279,41 @@ def write_table2(table1_rows):
                     own["emissions"], own["spent_bytes"] / ref_ref["spent_bytes"], waste,
                     clause))
     lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}", ""]
+    # Second panel: experiment J2 at the same operating point (same weights, no page table).
+    probe_root = BASE / "execution/extended/capacity_nocap"
+    cells = ((48, 12, 3), (48, 12, 6), (60, 12, 3), (60, 12, 6), (72, 12, 3), (72, 12, 6))
+    lines += [
+        r"% Second panel: experiment J2, same weights, cap=None.",
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{\#16 容量列的反事实探针（同一权重、无配额；6 格 $\times$ 3 锚定场景）。"
+        r"控制与探针只差推理时把 \#16 写成 2.0；发送量的差就是该列对节流的直接控制。}",
+        r"\label{tab:capacity_probe}",
+        r"\begin{tabular}{@{}lcccc@{}}",
+        r"\toprule",
+        r"格 & 控制组发送/世界 & 控制组按时 & \#16=2.0 发送/世界 & 探针按时 \\",
+        r"\midrule",
+    ]
+    if probe_root.is_dir():
+        def load_variant(name):
+            path = probe_root / name / "RESULTS.json"
+            if not path.exists():
+                return []
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            return [row for row in payload.get("results") or [] if row.get("status") == "ok"]
+        control_rows = load_variant("ours_control")
+        probe_rows = load_variant("ours_cap16x2")
+        for cell in cells:
+            key = R.label(cell)
+            control = R.group([r for r in control_rows if R.label(r["cell"]) == key])
+            probe = R.group([r for r in probe_rows if R.label(r["cell"]) == key])
+            if not control["worlds"] or not probe["worlds"]:
+                continue
+            lines.append(r"%s & %.1f & %d/%d & %.1f & %d/%d \\" % (
+                key, control["emissions"] / control["worlds"], control["on_time"],
+                control["goals"], probe["emissions"] / probe["worlds"], probe["on_time"],
+                probe["goals"]))
+    lines += [r"\bottomrule", r"\end{tabular}", r"\end{table}", ""]
     path = OUT / "table2_ablation_mechanism.tex"
     path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
     print("wrote %s (sha256 %s)" % (path.name, sha256(path)[:16]))

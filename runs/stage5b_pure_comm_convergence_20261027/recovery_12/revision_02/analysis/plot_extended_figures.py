@@ -67,7 +67,7 @@ BUDGET_STYLE = {
                           mew=1.0, zorder=4),
 }
 BUDGET_ORDER = ("v4f", "slack_budget", "fifo_budget", "random_budget")
-BUDGET_LABEL = {"v4f": "Pure-Policy (v4f 价值排序)", "slack_budget": "Slack (时限排序)",
+BUDGET_LABEL = {"v4f": "本文方法 (Ours，价值排序)", "slack_budget": "Slack (时限排序)",
                 "fifo_budget": "FIFO (先到先得)", "random_budget": "Random (随机)"}
 VERDICT_RED = "#C0392B"
 
