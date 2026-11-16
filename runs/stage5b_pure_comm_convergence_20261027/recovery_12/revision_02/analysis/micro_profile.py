@@ -46,7 +46,7 @@ WINDOW = STEPS
 
 SOURCES = {
     "normal_immediate": ("execution/baselines/grid_v2", "eval__normal_immediate_", True),
-    "v4t@100": ("execution/train_v4t_cap_frozen/eval_100_s8", "eval__", False),
+    "v4f@200": ("execution/train_v4f_anchor/eval_200_s8", "eval__", False),
 }
 
 

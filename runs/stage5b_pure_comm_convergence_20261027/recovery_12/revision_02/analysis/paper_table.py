@@ -48,21 +48,19 @@ THROTTLES = ("fifo_cap_k1", "random_matched_rate", "slack_heuristic_cap",
              "slack_matched_rate")
 TRADITIONAL = ("periodic_k5", "event_maxwait")
 #: Order in the printed table, and the efficiency key each label reads.
+#: The paper's table: nine non-learning baselines plus the one learned model. The other
+#: learned checkpoints (v4g/v4s/v4t/v4u) stay in the audit record but are not in this table.
 ARM_ORDER = (
-    ("normal_immediate", "normal_immediate", "immediate (strong rule)"),
-    ("dedup_immediate", "dedup_immediate", "dedup_immediate (dedupe only)"),
-    ("always_hold", "always_hold", "always_hold (never send)"),
-    ("periodic_k5", "periodic_k5", "periodic_k5 (time-triggered)"),
-    ("event_maxwait", "event_maxwait", "event_maxwait (event + timeout)"),
-    ("fifo_cap_k1", "fifo_cap_k1", "fifo_cap_k1 (no net, quota only)"),
-    ("random_matched_rate", "random_matched_rate", "random_matched_rate (same bytes, random)"),
-    ("slack_heuristic_cap", "slack_heuristic_cap", "slack_heuristic_cap (same quota, deadline)"),
-    ("slack_matched_rate", "slack_matched_rate", "slack_matched_rate (same bytes, deadline)"),
-    ("v4f@200", "v4f@200", "v4f@200 (pure network)"),
-    ("v4g@300", "v4g@300", "v4g@300 (pure price dual)"),
-    ("v4s@300", "v4s@300", "v4s@300 (quota + net, unfrozen)"),
-    ("v4t@100", "v4t@100", "v4t@100 (quota + net + frozen)"),
-    ("v4u@100", "v4u@100", "v4u@100 (quota + floor + frozen)"),
+    ("normal_immediate", "normal_immediate", "Immediate (全量广播基线)"),
+    ("dedup_immediate", "dedup_immediate", "Dedup (仅去重)"),
+    ("always_hold", "always_hold", "Always-Hold (从不发送)"),
+    ("periodic_k5", "periodic_k5", "Periodic-k5 (时间触发)"),
+    ("event_maxwait", "event_maxwait", "Event-MaxWait (事件 + 超时)"),
+    ("fifo_cap_k1", "fifo_cap_k1", "FIFO-Cap (仅配额)"),
+    ("slack_heuristic_cap", "slack_heuristic_cap", "Slack-Cap (时限启发式)"),
+    ("random_matched_rate", "random_matched_rate", "Random-Matched (同字节随机)"),
+    ("slack_matched_rate", "slack_matched_rate", "Slack-Matched (同字节时限)"),
+    ("v4f@200", "v4f@200", "**本文方法 (Ours)**"),
 )
 #: Short names used as per-cell column headers in table B.
 LABELS = {key: key for key, _eff, _label in ARM_ORDER}
@@ -242,7 +240,7 @@ def main():
         print("MISSING: %s" % ", ".join(missing))
 
     detail_arms = ("normal_immediate", "event_maxwait", "slack_heuristic_cap",
-                   "slack_matched_rate", "v4t@100")
+                   "slack_matched_rate", "v4f@200")
     print()
     print()
     print("## table B  per-cell detail, three anchor scenes: sends per world, its ratio to")
@@ -251,7 +249,7 @@ def main():
     print("| cell | immediate sends | immediate on-time | event_maxwait sends (x imm) "
           "| event_maxwait on-time | slack_heuristic_cap sends (x imm) | slack_heuristic_cap on-time "
           "| slack_matched_rate sends (x imm) | slack_matched_rate on-time "
-          "| v4t sends (x imm) | v4t on-time | v4t msg/task | v4t waste |")
+          "| Ours sends (x imm) | Ours on-time | Ours msg/task | Ours waste |")
     print("|---|---|---|---|---|---|---|---|---|---|---|---|")
     for cell in cells:
         line = "| %s |" % cell_label(cell)
@@ -262,7 +260,7 @@ def main():
             per_cell = ((efficiency.get(key) or {}).get("cells_anchor") or {}).get(
                 cell_label(cell))
             if stats is None or not per_cell:
-                line += " n/a |" + (" n/a | n/a |" if key == "v4t@100" else " n/a |")
+                line += " n/a |" + (" n/a | n/a |" if key == "v4f@200" else " n/a |")
                 continue
             sends = per_cell["emissions"] / per_cell["worlds"]
             if key == "normal_immediate":
@@ -271,7 +269,7 @@ def main():
                 continue
             ratio = "%.2fx" % (sends / base_sends) if base_sends else "n/a"
             line += " %.1f (%s) | %d/%d |" % (sends, ratio, stats["on_time"], stats["goals"])
-            if key == "v4t@100":
+            if key == "v4f@200":
                 line += " %.3f | %.3f |" % (per_cell["messages_per_on_time"],
                                             per_cell["broadcast_waste_ratio"])
         print(line)

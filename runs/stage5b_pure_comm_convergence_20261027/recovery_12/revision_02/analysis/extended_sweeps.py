@@ -50,8 +50,10 @@ ALL_SCENES = tuple(range(2301901, 2301909))
 
 DELIVERY_CELLS = ((24, 6, 6), (48, 6, 6), (48, 12, 6))
 DELIVERY_VALUES = (0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)
+#: v4f@200 is the paper's single learned model (cap=None); the other learned arms are kept
+#: only as internal history and are no longer swept.
 DELIVERY_ARMS = ("normal_immediate", "dedup_immediate", "event_maxwait",
-                 "slack_matched_rate", "v4s@300", "v4t@100")
+                 "slack_matched_rate", "v4f@200", "v4s@300", "v4t@100")
 #: Rule arms (no checkpoint) in the delivery sweep.
 DELIVERY_RULE_ARMS = ("normal_immediate", "dedup_immediate", "event_maxwait",
                       "slack_matched_rate")
@@ -339,7 +341,7 @@ def worker(task):
             },
             "budget_restored": row.get("budget_authority_restored"),
         })
-        if task["stage"] in ("delivery", "budget", "features", "capacity", "nocap"):
+        if task["stage"] in ("delivery", "budget", "features", "features_nocap", "capacity", "nocap"):
             try:
                 result.update({("waste_%s" % key): value
                                for key, value in _world_readings(row).items()})
@@ -447,6 +449,28 @@ def feature_tasks(caps):
     return tasks
 
 
+def feature_nocap_tasks():
+    """Experiment J1 repeated with the page table OFF, so the ablation matches the paper's
+    single learned model (v4f@200 = the same weights, cap=None)."""
+    tasks = []
+    for variant, mutation in FEATURE_VARIANTS.items():
+        for cell in TRAIN_CELLS:
+            for scene in ANCHOR:
+                task = {"root": str(BASE), "run_dir": str(OUT / "features_nocap" / variant),
+                        "stage": "features_nocap", "arm": variant, "cell": list(cell),
+                        "scene": int(scene), "variant": variant, "kind": "learned",
+                        "checkpoint": str(BASE / "execution/train_v4f_anchor/checkpoints"
+                                          / "milestone_200.pth"),
+                        "checkpoint_episode": 200, "identity_sha": identity_sha(),
+                        "cap": None}
+                if "mask" in mutation:
+                    task["mask"] = dict(mutation["mask"])
+                if "horizon" in mutation:
+                    task["horizon"] = float(mutation["horizon"])
+                tasks.append(task)
+    return tasks
+
+
 def capacity_tasks(caps, pages):
     tasks = []
     for variant, mask in CAPACITY_VARIANTS.items():
@@ -533,7 +557,7 @@ def latency_tasks(caps):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage", required=True,
-                        choices=["delivery", "features", "capacity", "budget", "latency", "nocap"])
+                        choices=["delivery", "features", "features_nocap", "capacity", "budget", "latency", "nocap"])
     parser.add_argument("--workers", type=int, default=12)
     args = parser.parse_args()
     sys.dont_write_bytecode = True
@@ -559,6 +583,10 @@ def main():
     elif args.stage == "budget":
         for selector in BUDGET_SELECTORS:
             run_tasks("budget", selector, budget_tasks(pages), args.workers, extra)
+    elif args.stage == "features_nocap":
+        for variant in FEATURE_VARIANTS:
+            run_tasks("features_nocap", variant, feature_nocap_tasks(), args.workers,
+                      dict(extra, variant=variant))
     elif args.stage == "nocap":
         run_tasks("nocap", "v4t@100", nocap_tasks(caps), args.workers, extra)
     else:

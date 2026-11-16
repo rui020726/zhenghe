@@ -53,8 +53,7 @@ ARM_STYLE = {
     "slack_matched_rate": dict(color="#27AE60", ls=":", marker="^",
                                label="Slack-Matched（同字节时限）"),
     "v4f@200": dict(color="#E67E22", ls="-.", marker="D", label="Ours-Net（v4f）"),
-    "v4s@300": dict(color="#8E44AD", ls=(0, (5, 1, 1, 1)), marker="v", label="Ours-Cap（v4s）"),
-    "v4t@100": dict(color=VERDICT_RED, ls="-", marker="o", label="Ours-Frozen（v4t）"),
+    "v4f@200": dict(color=VERDICT_RED, ls="-", marker="o", label="本文方法 (Ours)"),
 }
 ARMS = tuple(ARM_STYLE)
 
@@ -90,7 +89,7 @@ def draw(data):
     x = np.arange(len(GOALS))
     for col, (experiment, _label) in enumerate(COLUMNS):
         present = [i for i, goal in enumerate(GOALS)
-                   if (experiment, "v4t@100", goal) in data]
+                   if (experiment, "v4f@200", goal) in data]
         for row, metric in enumerate((0, 1)):
             ax = axes[row][col]
             ax.axhline(1.0, color=IMMEDIATE_GREY, lw=1.1, ls="-.", zorder=1)
@@ -103,7 +102,7 @@ def draw(data):
                 values = [data.get((experiment, arm, GOALS[i]), (np.nan, np.nan))[metric]
                           for i in present]
                 st = ARM_STYLE[arm]
-                filled = arm == "v4t@100"
+                filled = arm == "v4f@200"
                 ax.plot([x[i] for i in present], values, color=st["color"], ls=st["ls"],
                         marker=st["marker"], mfc=(st["color"] if filled else "white"),
                         mec=st["color"], lw=(1.8 if filled else 1.2), ms=4.2, mew=1.0,
@@ -126,9 +125,9 @@ def draw(data):
         st = ARM_STYLE[arm]
         handles.append(plt.Line2D([], [], color=st["color"], ls=st["ls"],
                                   marker=(st["marker"] or ""),
-                                  mfc=(st["color"] if arm == "v4t@100" else "white"),
+                                  mfc=(st["color"] if arm == "v4f@200" else "white"),
                                   mec=st["color"],
-                                  lw=(1.8 if arm == "v4t@100" else 1.2), ms=4.2,
+                                  lw=(1.8 if arm == "v4f@200" else 1.2), ms=4.2,
                                   label=st["label"]))
     handles.append(plt.Line2D([], [], color=VERDICT_RED, lw=0.9, ls=(0, (4, 3)),
                               alpha=0.5, label="0.95 判定线"))
@@ -161,7 +160,7 @@ def draw_unified(data):
             if arm == "normal_immediate":
                 continue
             st = ARM_STYLE[arm]
-            filled = arm == "v4t@100"
+            filled = arm == "v4f@200"
             for experiment, est in EXPERIMENT_STYLE.items():
                 present = [i for i, goal in enumerate(GOALS)
                            if (experiment, arm, goal) in data]
@@ -183,9 +182,9 @@ def draw_unified(data):
         st = ARM_STYLE[arm]
         handles.append(plt.Line2D([], [], color=st["color"], ls="-",
                                   marker=(st["marker"] or ""),
-                                  mfc=(st["color"] if arm == "v4t@100" else "white"),
+                                  mfc=(st["color"] if arm == "v4f@200" else "white"),
                                   mec=st["color"],
-                                  lw=(1.8 if arm == "v4t@100" else 1.2), ms=4.2,
+                                  lw=(1.8 if arm == "v4f@200" else 1.2), ms=4.2,
                                   label=st["label"]))
     for experiment, est in EXPERIMENT_STYLE.items():
         handles.append(plt.Line2D([], [], color="#404040", ls=est["ls"],

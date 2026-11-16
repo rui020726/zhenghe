@@ -25,15 +25,15 @@ ANCHOR = (2301901, 2301902, 2301903)
 ALL_SCENES = tuple(range(2301901, 2301909))
 DELIVERY_CELLS = ((24, 6, 6), (48, 6, 6), (48, 12, 6))
 DELIVERY_VALUES = (0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)
+#: The paper shows one learned model (v4f@200, cap=None); v4s/v4t stay in the audit record only.
 DELIVERY_ARMS = ("normal_immediate", "dedup_immediate", "event_maxwait",
-                 "slack_matched_rate", "v4s@300", "v4t@100")
+                 "slack_matched_rate", "v4f@200")
 DELIVERY_LABEL = {
     "normal_immediate": "immediate",
     "dedup_immediate": "dedup",
     "event_maxwait": "event_maxwait",
     "slack_matched_rate": "slack_matched",
-    "v4s@300": "v4s@300",
-    "v4t@100": "v4t@100",
+    "v4f@200": "本文方法 (Ours)",
 }
 FEATURE_VARIANTS = ("mask16", "mask14", "mask2", "mask17", "horizon50")
 FEATURE_TITLE = {
@@ -248,7 +248,7 @@ def delivery_section(state):
 
     # Robustness summaries: at which probability does each learned arm stop holding 0.95?
     robustness = {}
-    for arm in ("v4s@300", "v4t@100", "slack_matched_rate"):
+    for arm in ("v4f@200", "slack_matched_rate"):
         series = [(p, payload[arm][str(p)]["on_time_ratio"]) for p in DELIVERY_VALUES]
         floor = min(p for p, ratio in series if ratio is not None and ratio < 0.95) \
             if any(ratio is not None and ratio < 0.95 for _p, ratio in series) else None
@@ -472,8 +472,8 @@ def main():
     add("## 实验 I　投递率 8 档鲁棒性")
     add("")
     add("三格（G24_R6_N6、G48_R6_N6、G48_R12_N6）× 8 场景 = 24 世界/点；0.7 复用封板归档，"
-        "其余七档为新跑。六个臂都使用**各自封板的页预算**（v4t/v4s 用 checkpoint 自带的 "
-        "`cap_by_cell`，slack_matched 对齐 v4t 同格的页数），所以变化的是信道，不是配额。")
+        "其余七档为新跑。本文方法不带配额表（`cap=None`）；slack_matched 按论文定义的深度"
+        "（15/23/39 页）匹配，所以各档之间变化的是信道，不是配额。")
     add("")
     add("**耦合性质**：中继的丢包判据是 `rng.random() > p`，随机流种子等于场景号、与 p 无关，"
         "所以各档位看到的第 i 个均匀数相同。**在轨迹分叉之前**，丢包集合随 p 单调嵌套；"
@@ -628,7 +628,7 @@ def main():
     add("|---|---|---|---|---|")
     for index in range(10):
         base = micro["normal_immediate"]["all"]["buckets"][index]
-        own = micro["v4t@100"]["all"]["buckets"][index]
+        own = micro["v4f@200"]["all"]["buckets"][index]
         add("| %d–%d | %s | %s | %s | %s |" % (
             base["low"], base["high"], fmt(base["first_sends_per_world"], "%.2f"),
             fmt(base["on_time_rate"], "%.3f"), fmt(own["first_sends_per_world"], "%.2f"),
@@ -636,7 +636,7 @@ def main():
     add("")
     add("| 臂 | 广播目标 | 其中按时 | 未广播目标 | 其中按时 |")
     add("|---|---|---|---|---|")
-    for arm in ("normal_immediate", "v4t@100"):
+    for arm in ("normal_immediate", "v4f@200"):
         record = micro[arm]["all"]
         add("| %s | %d | %d (%s) | %d | %d (%s) |" % (
             DELIVERY_LABEL[arm], record["broadcast"]["n"], record["broadcast"]["on_time"],
@@ -649,7 +649,7 @@ def main():
     for key, title in (("discovery_tick", "发现 tick 均值 / 中位"),
                        ("slack_at_discovery", "发现时剩余时限 均值 / 中位"),
                        ("total_stages", "任务阶段数 均值 / 中位")):
-        pair = micro["v4t@100"]["all"]["contrast"][key]
+        pair = micro["v4f@200"]["all"]["contrast"][key]
         add("| %s | %s / %s | %s / %s |" % (
             title, fmt(pair["broadcast"]["mean"], "%.2f"),
             fmt(pair["broadcast"]["median"], "%.1f"),
@@ -658,9 +658,9 @@ def main():
     add("")
     add("v4t 广播目标的发送时刻剩余时限均值 %s、发送延迟（相对发现）均值 %s（中位 %s）；"
         "这两列只对广播集合有定义，因为未广播目标没有发送时刻。" % (
-            fmt(micro["v4t@100"]["all"]["send_slack"]["mean"], "%.1f"),
-            fmt(micro["v4t@100"]["all"]["send_delay"]["mean"], "%.1f"),
-            fmt(micro["v4t@100"]["all"]["send_delay"]["median"], "%.1f")))
+            fmt(micro["v4f@200"]["all"]["send_slack"]["mean"], "%.1f"),
+            fmt(micro["v4f@200"]["all"]["send_delay"]["mean"], "%.1f"),
+            fmt(micro["v4f@200"]["all"]["send_delay"]["median"], "%.1f")))
     add("")
     add("**延迟恒为 0 这一读数本身是机制证据**：v4t 的每一次广播都发生在该目标的发现 tick 上"
         "（2 408 个广播目标，延迟全部为 0；抽查一个 G48_R6_N6 世界，22 次发送的步号与各目标的"
@@ -861,7 +861,7 @@ def main():
     add("")
     add("**能说**")
     add("")
-    micro_all = micro["v4t@100"]["all"]
+    micro_all = micro["v4f@200"]["all"]
     add("1. **信道鲁棒性是可测的**：六臂在 8 档投递率上的绝对按时率、字节/按时任务与浪费率"
         "全部给出，且 0.7 档与封板数字逐项相同（同源复用，不是重算）。")
     add("2. **配额不是瓶颈、容量感知才是**：J2 在六个 R=12 格上把 #16 写成 2.0 后，发送量"

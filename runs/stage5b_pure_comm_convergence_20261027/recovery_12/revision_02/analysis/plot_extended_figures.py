@@ -47,16 +47,14 @@ STYLE = {
                           lw=1.1, ms=4.2, mew=1.0, zorder=3),
     "slack_matched_rate": dict(color="#8E44AD", ls=":", marker="v", mfc="white",
                                lw=1.3, ms=4.5, mew=1.0, zorder=4),
-    "v4s@300": dict(color="#1F618D", ls="-", marker="s", mfc="#1F618D",
-                    lw=1.35, ms=4.5, mew=1.0, zorder=5),
-    "v4t@100": dict(color="#C0392B", ls="-", marker="o", mfc="#C0392B",
+    "v4f@200": dict(color="#C0392B", ls="-", marker="o", mfc="#C0392B",
                     lw=1.7, ms=4.6, mew=1.0, zorder=6),
 }
 ORDER = ("normal_immediate", "dedup_immediate", "event_maxwait",
-         "slack_matched_rate", "v4s@300", "v4t@100")
+         "slack_matched_rate", "v4f@200")
 LABEL = {"normal_immediate": "Immediate", "dedup_immediate": "Dedup",
          "event_maxwait": "Event-MaxWait", "slack_matched_rate": "Slack-Matched",
-         "v4s@300": "Ours-Joint (v4s)", "v4t@100": "Ours-Frozen (v4t)"}
+         "v4f@200": "本文方法 (Ours)"}
 
 BUDGET_STYLE = {
     "v4f": dict(color="#2980B9", ls="--", marker="o", mfc="none", lw=1.2, ms=6.0,

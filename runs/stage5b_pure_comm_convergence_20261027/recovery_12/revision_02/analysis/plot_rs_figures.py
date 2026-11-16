@@ -117,7 +117,7 @@ def figure_r(payload: dict) -> list:
     ax = axes[0][0]
     x = x_spec(ax)
     ax.axhline(0.0, color=IMMEDIATE_GREY, lw=1.1, ls="-.", zorder=1)
-    for arm in ("slack_heuristic_cap", "v4f@200", "v4s@300", "v4t@100"):
+    for arm in ("slack_heuristic_cap", "v4f@200"):
         plot_arm(ax, x, byte_cut(points, arm, R_VALUES), arm)
     ax.set_ylim(-6, 92)
     ax.set_xlabel("(a) 搜救机器人数量 𝑅（𝐺∈{24,36,48}）")
@@ -126,8 +126,7 @@ def figure_r(payload: dict) -> list:
     ax = axes[0][1]
     x = x_spec(ax)
     ratio_axis(ax)
-    for arm in ("slack_heuristic_cap", "slack_matched_rate", "v4f@200", "v4s@300",
-                "v4t@100"):
+    for arm in ("slack_heuristic_cap", "slack_matched_rate", "v4f@200"):
         plot_arm(ax, x, on_time_ratio(points, arm, R_VALUES), arm)
     # Wide enough for Slack-Matched's R=3 collapse (0.370) — a clipped line would hide the
     # single most informative point of the axis.
@@ -163,7 +162,7 @@ def figure_s(payload: dict) -> list:
     ax = axes[0][0]
     x = categorical_ticks(ax, S_VALUES)
     ax.axhline(0.0, color=IMMEDIATE_GREY, lw=1.1, ls="-.", zorder=1)
-    for arm in ("slack_heuristic_cap", "v4f@200", "v4s@300", "v4t@100"):
+    for arm in ("slack_heuristic_cap", "v4f@200"):
         plot_arm(ax, x, byte_cut(points, arm, S_VALUES), arm)
     ax.set_ylim(-6, 52)
     ax.set_xlabel("(a) 搜索智能体数量 𝑆（𝑁=6）")
@@ -172,8 +171,7 @@ def figure_s(payload: dict) -> list:
     ax = axes[0][1]
     x = categorical_ticks(ax, S_VALUES)
     ratio_axis(ax)
-    for arm in ("slack_heuristic_cap", "slack_matched_rate", "v4f@200", "v4s@300",
-                "v4t@100"):
+    for arm in ("slack_heuristic_cap", "slack_matched_rate", "v4f@200"):
         plot_arm(ax, x, on_time_ratio(points, arm, S_VALUES), arm)
     ax.set_ylim(0.70, 1.40)
     ax.set_xlabel("(b) 搜索智能体数量 𝑆（𝑁=6）")

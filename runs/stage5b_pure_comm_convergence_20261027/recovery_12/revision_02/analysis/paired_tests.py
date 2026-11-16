@@ -21,8 +21,8 @@ Three tests per (arm, comparator, reading), in the order the review asked for:
 2. paired t test: mean difference, its 95 % CI (t quantile, n-1 df) and two-sided p;
 3. Wilcoxon signed-rank, two-sided, exact for n <= 50 and normal-approximated above.
 
-Multiplicity: 2 arms x 3 comparators x 4 readings = 24 tests. A Holm-adjusted p is printed next
-to the raw one; with 24 tests the smallest raw p must be < 0.0021 to survive at 0.05. The
+Multiplicity: 1 arm x 4 comparators x 4 readings = 16 tests per scene group. A Holm-adjusted p is printed next
+to the raw one; with 16 tests the smallest raw p must be < 0.0031 to survive at 0.05. The
 adjustment is reported so no single row is read as if it were pre-registered.
 
 Independence caveat, stated in the output as well: the 120 worlds are 15 cells x 8 scenes, and
@@ -48,8 +48,11 @@ BASE = Path(__file__).resolve().parents[1]
 IN = BASE / "execution/COMM_EFFICIENCY.json"
 OUT = BASE / "execution/PAIRED_TESTS.json"
 
-ARMS = ("v4t@100", "v4s@300")
-COMPARATORS = ("normal_immediate", "slack_matched_rate", "random_matched_rate")
+#: The paper shows one learned model; the tests compare it against every comparator the task
+#: names. 1 arm x 4 comparators x 4 readings x 3 scene groups = 48 tests, Holm within each group.
+ARMS = ("v4f@200",)
+COMPARATORS = ("normal_immediate", "slack_heuristic_cap", "slack_matched_rate",
+               "random_matched_rate")
 READINGS = (
     ("on_time_rate", "按时完成率", "on_time / generated_goals"),
     ("byte_ratio", "字节比", "spent_bytes / immediate bytes, same world"),

@@ -99,35 +99,35 @@ def draw(rows, levels, style, arm_field, x_label, slug) -> list:
     ax.axhline(0.95, color=VERDICT_RED, lw=1.0, ls="--", zorder=1)
     for level in levels:
         st = style[level]
-        ax.plot(x, ratio_series(rows, ("v4t@100", arm_field[1]), level),
+        ax.plot(x, ratio_series(rows, ("v4f@200", arm_field[1]), level),
                 color=st["color"], ls=st["ls"], marker=st["marker"],
                 mfc=st["mfc"], mec=st["color"], lw=1.6, ms=4.6, mew=1.0, zorder=5,
                 label=st["label"])
     ax.set_xlabel("(a) 任务数量 𝐺")
-    ax.set_ylabel("Ours-Frozen / Immediate 准时比")
+    ax.set_ylabel("本文方法 / Immediate 准时比")
 
     ax = axes[0][1]
     x = goal_ticks(ax)
     ax.axhline(1.0, color=IMMEDIATE_GREY, lw=1.1, ls="-.", zorder=1)
     for level in levels:
         st = style[level]
-        ax.plot(x, byte_series(rows, ("v4t@100", arm_field[1]), level),
+        ax.plot(x, byte_series(rows, ("v4f@200", arm_field[1]), level),
                 color=st["color"], ls=st["ls"], marker=st["marker"],
                 mfc="white", mec=st["color"], lw=1.2, ms=4.6, mew=1.0, zorder=4,
                 label=st["label"])
     ax.set_xlabel("(b) 任务数量 𝐺")
-    ax.set_ylabel("Ours-Frozen / Immediate 字节比")
+    ax.set_ylabel("本文方法 / Immediate 字节比")
 
     ax = axes[1][0]
     x = goal_ticks(ax)
     for level in levels:
         st = style[level]
-        ax.plot(x, level_series(rows, ("v4t@100", arm_field[1]), level, "waste"),
+        ax.plot(x, level_series(rows, ("v4f@200", arm_field[1]), level, "waste"),
                 color=st["color"], ls=st["ls"], marker=st["marker"],
                 mfc=st["mfc"], mec=st["color"], lw=1.6, ms=4.6, mew=1.0, zorder=5,
                 label=st["label"])
     ax.set_xlabel("(c) 任务数量 𝐺")
-    ax.set_ylabel("Ours-Frozen 广播超时浪费率")
+    ax.set_ylabel("本文方法 广播超时浪费率")
 
     ax = axes[1][1]
     x = goal_ticks(ax)
@@ -158,8 +158,7 @@ ARM_STYLE = {
     "slack_matched_rate": dict(color="#27AE60", ls=":", marker="^",
                                label="Slack-Matched（同字节时限）"),
     "v4f@200": dict(color="#E67E22", ls="-.", marker="D", label="Ours-Net（v4f）"),
-    "v4s@300": dict(color="#8E44AD", ls=(0, (5, 1, 1, 1)), marker="v", label="Ours-Cap（v4s）"),
-    "v4t@100": dict(color="#C0392B", ls="-", marker="o", label="Ours-Frozen（v4t）"),
+    "v4f@200": dict(color="#C0392B", ls="-", marker="o", label="本文方法 (Ours)"),
 }
 COMPARE_ARMS = tuple(ARM_STYLE)
 
@@ -208,11 +207,11 @@ def draw_comparison(rows, facet, facet_values, fixed, slug, facet_cn):
                 st = ARM_STYLE[arm]
                 values = (ratio(rows, arm, value, facet, **base_kw) if metric == "ratio"
                           else byte_ratio(rows, arm, value, facet, **base_kw))
-                filled = arm == "v4t@100"
+                filled = arm == "v4f@200"
                 # v4f and v4t share one set of weights and differ only by the page cap, which
                 # does not bind in these cells: the two curves coincide on 52 of 54 points.
                 # They are drawn at +-0.09 around the tick so the pair is visible as a pair.
-                shift = {"v4f@200": 0.09, "v4t@100": -0.09}.get(arm, 0.0)
+                shift = {"v4f@200": 0.0}.get(arm, 0.0)
                 ax.plot([x_i + shift for x_i in x], values, color=st["color"], ls=st["ls"],
                         marker=st["marker"],
                         mfc=(st["color"] if filled else "white"), mec=st["color"],
@@ -231,8 +230,8 @@ def draw_comparison(rows, facet, facet_values, fixed, slug, facet_cn):
     for arm in COMPARE_ARMS:
         st = ARM_STYLE[arm]
         handles.append(Line2D([], [], color=st["color"], ls=st["ls"], marker=st["marker"],
-                              mfc=(st["color"] if arm == "v4t@100" else "white"),
-                              mec=st["color"], lw=(1.8 if arm == "v4t@100" else 1.2),
+                              mfc=(st["color"] if arm == "v4f@200" else "white"),
+                              mec=st["color"], lw=(1.8 if arm == "v4f@200" else 1.2),
                               ms=4.2, label=st["label"]))
     place_legend(fig, handles, ncol=3)
     tighten(fig)
@@ -247,9 +246,9 @@ def main() -> None:
     payload = load_json(SOURCE)
     with warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter("always")
-        written = draw(payload["by_goal_robot"], ROBOTS, LEVEL_STYLE, ("v4t@100", "R"),
+        written = draw(payload["by_goal_robot"], ROBOTS, LEVEL_STYLE, ("v4f@200", "R"),
                        "搜救机器人数量", "fig7_g_rs_grid_r")
-        written += draw(payload["by_goal_agent"], AGENTS, AGENT_STYLE, ("v4t@100", "S"),
+        written += draw(payload["by_goal_agent"], AGENTS, AGENT_STYLE, ("v4f@200", "S"),
                         "搜索智能体数量", "fig8_g_rs_grid_s")
         # Six arms in one frame, S fixed at the training value: the capacity axis.
         written += draw_comparison(payload["by_point"], "R", ROBOTS, 2,
