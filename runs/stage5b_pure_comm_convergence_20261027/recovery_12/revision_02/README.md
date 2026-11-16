@@ -159,6 +159,8 @@ the 98-file manifest.
 | 63 | `KeyError: '12_6_3'` when the token-bucket calibration asked for its page count | the archived `per_cell` keys are `G12_R6_N3`; the driver built `"%d_%d_%d"` | the label comes from `scale_program.cell_label(cell)` in both the calibration and the final stage |
 | 64 | `FileExistsError` when two thresholds were smoke-tested in one run directory | the artifact leaf is keyed by `(arm, cell, scene)`, so a second threshold on the same world is the same leaf | every operating point gets its own run directory (`calibration/<arm>/<point>/`), not a suffix inside one directory |
 | 65 | **table 1's Ours row read `	extbf{12/15}` and its ablation caption `0.95 	imes`** | an earlier line-based patch wrote `\t` escapes as literal TAB bytes, so two LaTeX commands lost their backslash | repaired at the byte level (TAB+`extbf` → `\textbf`, TAB+`imes` → `\times`); the exporter is regenerated and the `.tex` re-checked for TAB bytes |
+| 66 | the scale report died with `FileNotFoundError` while the deep grid was still running | `rows_of` assumed every arm's `RESULTS.json` exists, but a staged run writes it only at stage end | `rows_of` returns `[]` for a missing file, so the report previews on the finished G sweep and is re-run after the deep stage; no world is re-run |
+| 67 | fig19's first render put the panel labels on top of the `y = 1.0` reference line | fixed axes limits left no headroom above the Immediate line | limits are now derived from the plotted values with 20 % headroom, so labels sit above every curve |
 
 
 ## Gates before a world is opened

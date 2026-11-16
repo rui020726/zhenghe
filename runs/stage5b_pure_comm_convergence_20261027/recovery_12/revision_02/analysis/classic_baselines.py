@@ -175,7 +175,8 @@ def worker(task):
             params.setdefault("seed", seed)
         row = episode.run_rule_world(
             layout, task["arm"], scene, phase="eval", cell=cell,
-            classic_params=params, model_path=task.get("model_path"))
+            classic_params=params, model_path=task.get("model_path"),
+            search_agents=task.get("search_agents"))
         emissions = list(row.get("emission_sequence") or [])
         distinct = {str(entry[1]) for entry in emissions}
         result.update({
@@ -193,6 +194,7 @@ def worker(task):
             "subscribers_live": row.get("subscribers_live"),
             "rescue_robots": row.get("rescue_robots"),
             "cell_label": row.get("cell_label") or scale_program.cell_label(cell),
+            "search_agents": task.get("search_agents"),
             "budget_bytes": int(row.get("budget_bytes") or 0),
             "budget_restored": row.get("budget_authority_restored"),
             "classic_parameters": row.get("rule_parameters"),
@@ -553,10 +555,97 @@ def stage_final(workers, only=None, override=None):
     print("sha256", sha256(OUT / "BASELINES.json"))
 
 
+GEXT_GOALS = (54, 60, 72)
+GEXT_PAIRS = ((6, 3), (6, 6), (12, 3), (12, 6), (12, 12))
+GEXT_FULL_SCENE_PAIRS = ((6, 6), (12, 6))
+ANCHOR3 = (2301901, 2301902, 2301903)
+DEEP_GOALS = (72, 84, 96, 108, 120, 144)
+DEEP_ROBOTS = (6, 12, 18)
+DEEP_AGENTS = (1, 2, 4)
+
+
+def scale_pages(grid):
+    """immediate pages per world for every (cell[, S]) of the scale grid being extended."""
+    path = BASE / ("execution/g_scaling/normal_immediate/RESULTS.json" if grid == "g"
+                   else "execution/g_rs_grid/normal_immediate/RESULTS.json")
+    acc = {}
+    for row in json.loads(path.read_text(encoding="utf-8"))["results"]:
+        if row.get("status") != "ok":
+            continue
+        key = (tuple(row["cell"]), row.get("search_agents"))
+        entry = acc.setdefault(key, [0, 0])
+        entry[0] += int(row["emissions"])
+        entry[1] += 1
+    return {key: total / worlds for key, (total, worlds) in acc.items()}
+
+
+def stage_scale(workers, grid):
+    """Run the four classical arms, at their frozen operating points, on a scale grid.
+
+    No parameter is re-tuned here: the point chosen on the 15-cell benchmark is carried over
+    unchanged, so the run measures whether the operating point *transfers* to larger worlds.
+    The token bucket's rate is the one per-cell quantity that must be recomputed, because it
+    is defined as a fraction of that cell's own immediate pages.
+    """
+    from stage5b_comm import scale_program
+
+    chosen = json.loads(CHOSEN.read_text(encoding="utf-8"))["chosen"]
+    pages = scale_pages(grid)
+    if grid == "g":
+        points = [((goal, robots, subscribers), None)
+                  for goal in GEXT_GOALS for robots, subscribers in GEXT_PAIRS]
+        out_root = BASE / "execution/g_scaling"
+        schema = "stage5b-g-scaling-arm/1"
+        meta = {"goals": list(GEXT_GOALS), "pairs": [list(p) for p in GEXT_PAIRS],
+                "archived_goals": [12, 24, 48], "new_goals": list(GEXT_GOALS)}
+    else:
+        points = [((goal, robots, 6), agents)
+                  for goal in DEEP_GOALS for robots in DEEP_ROBOTS for agents in DEEP_AGENTS]
+        out_root = BASE / "execution/g_rs_grid"
+        schema = "stage5b-g-rs-grid-arm/1"
+        meta = {"goals": list(DEEP_GOALS), "robots": list(DEEP_ROBOTS),
+                "search_agents": list(DEEP_AGENTS), "subscribers": 6,
+                "scenes": list(ANCHOR3)}
+    tasks = []
+    for arm in ARMS:
+        point = dict(chosen[arm]["point"])
+        run_dir = out_root / arm
+        for cell, agents in points:
+            params = dict(point)
+            if arm == "token_bucket":
+                key = (cell, agents)
+                if key not in pages:
+                    raise SystemExit("no immediate pages for %s S=%s" % (cell, agents))
+                params.update(token_parameters(scale_program.cell_label(cell), pages[key],
+                                               point["fraction"], point.get("depth")))
+            scenes = (DEV_SCENES if (grid == "g" and (cell[1], cell[2]) in GEXT_FULL_SCENE_PAIRS)
+                      else ANCHOR3)
+            for scene in scenes:
+                tasks.append({"root": str(BASE), "run_dir": str(run_dir), "cell": list(cell),
+                              "scene": scene, "arm": arm, "stage": "scale",
+                              "params": params, "search_agents": agents,
+                              "model_path": str(MODEL_PATH)})
+    print("scale(%s): %d worlds (%d arms)" % (grid, len(tasks), len(ARMS)))
+    results = run_tasks(tasks, workers)
+    for arm in ARMS:
+        own = [row for row in results if row["arm"] == arm]
+        ok = [row for row in own if row.get("status") == "ok"]
+        payload = {"schema": schema, "root": str(BASE), "arm": arm,
+                   "worlds": len(own), "results": sorted(
+                       own, key=lambda row: (tuple(row["cell"]), row.get("search_agents") or 0,
+                                             row["scene"])),
+                   "failures": [row for row in own if row.get("status") != "ok"],
+                   "operating_point": chosen[arm]["point"], "ts": utc()}
+        payload.update(meta)
+        dump(out_root / arm / "RESULTS.json", payload)
+        print("scale(%s): %s %d/%d worlds ok" % (grid, arm, len(ok), len(own)))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--stage", required=True,
-                        choices=("train", "fit", "calibrate", "choose", "final"))
+                        choices=("train", "fit", "calibrate", "choose", "final", "scale"))
+    parser.add_argument("--grid", default="g", choices=("g", "deep"))
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--arms", default="", help="comma-separated arms to calibrate")
     parser.add_argument("--override", default="", help="JSON point for a single-arm re-run")
@@ -572,6 +661,8 @@ def main():
         stage_calibrate(args.workers, only)
     elif args.stage == "choose":
         stage_choose()
+    elif args.stage == "scale":
+        stage_scale(args.workers, args.grid)
     else:
         only = tuple(a for a in args.arms.split(",") if a) or None
         override = json.loads(args.override) if args.override else None

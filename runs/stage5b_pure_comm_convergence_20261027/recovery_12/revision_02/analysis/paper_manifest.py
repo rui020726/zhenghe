@@ -28,6 +28,8 @@ TABLES = (
      "表 3：特征集 × 决策机制的正交对照"),
     ("execution/latex/table2_ablation_mechanism.tex",
      "表 2：本文方法自身的特征消融（上）与 #16 容量反事实（下）"),
+    ("execution/latex/table4_scale_classical.tex",
+     "表 4：G ≥ 48 两套规模网格上经典四臂 vs 本文方法（工作点冻结迁移）"),
 )
 FIGURES = (
     ("execution/figures/fig1_g_scaling_efficiency", "图 1：G 扩展四联（字节/按时/消息/浪费）"),
@@ -38,6 +40,8 @@ FIGURES = (
     ("execution/figures/fig15_delivery_prob_sweep", "图 15：投递率 8 档鲁棒性"),
     ("execution/figures/fig16_budget_spectrum_pareto", "图 16：外加配额约束下的排序器对比"),
     ("execution/figures/fig18_queueing_delay_and_goodput", "图 18：下游响应时延与有效吞吐"),
+    ("execution/figures/fig19_scale_classical_comparison",
+     "图 19：G ≥ 48 两套规模网格上经典四臂 vs 本文方法（按时与字节四联）"),
 )
 AUDIT_ONLY = (
     ("execution/figures/fig11_master_all_experiments", "三套实验分列总图（内部审计）"),

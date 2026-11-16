@@ -119,6 +119,14 @@
 - 报告 `CLASSIC_ALGORITHM_COMPARISON.md`；表 `table1_main_comparison.tex`（14 行）与
   `table3_orthogonal_comparison.tex`（特征集 × 决策机制）。
 
+### N2. 经典四臂的大规模迁移（G ≥ 48，新增 948 世界）
+- G 扫描 G∈{54,60,72}（300 世界）+ 深档 G×R×S G∈{72…144}（648 世界）；G=48 复用基准子集。
+  工作点冻结，只重算 Token-Bucket 的每格速率。
+- **全部 10 个档位上 LinUCB 相对按时率高于 Ours（+0.016…+0.165）**，字节比高 0.002…0.102；
+  Ours 字节比 G48 0.691 → G144 0.399，LinUCB 0.701 → 0.473。RED 字节比漂移最小（0.77–0.81）。
+- 图 `fig19_scale_classical_comparison`、表 `table4_scale_classical.tex`、
+  `CLASSIC_ALGORITHM_COMPARISON.md` §9。
+
 ### K. 双判据复核与无配额重训（零新世界；1 个新训练臂 200 回合）
 - **旧判据（预先注册）**：v4f 3/15、v4t 9/15、Slack-Cap 11/15。
 - **新判据（本轮事后定义，探索性）**：逐格保准时 + 全局「字节比 < 0.85 且浪费 < 0.10」→
