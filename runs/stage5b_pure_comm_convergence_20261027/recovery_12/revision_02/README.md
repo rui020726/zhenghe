@@ -30,7 +30,7 @@ scenario and a new world, so every cell gets its own baselines.
 | `stage5b_comm/dedup_policy.py` | the low-cost strong rule |
 | `stage5b_comm/trainer.py` | the dual step at the update boundary; scaled cost reward |
 | `stage5b_comm/world.py` | cell-driven `configuration_fields`, 1e9 authority binding |
-| `tests/test_revision_02_gates.py` | 106 offline gate checks |
+| `tests/test_revision_02_gates.py` | 112 offline gate checks |
 | `run_baselines.py` | three rules on every cell x scene |
 | `train.py` | the training loop with circuit breakers |
 | `evaluate.py` | greedy per-cell evaluation and the registered verdict |
@@ -149,6 +149,16 @@ the 98-file manifest.
 |---|---|---|---|
 | 59 | the LaTeX exporter raised `KeyError: bytes_ratio` on the floor arm | `RELAXED_GATE.json` names the field `global_bytes_ratio`; the exporter reused the dual-gate name | the exporter reads each file's own field names. The two files keep their names because renaming a published JSON would change its hash; the exporter is the one place that must know both |
 | 60 | figure 17's first render clipped the panel-(a) y label and printed a zero-based bar panel (b) from 0.85 | `tight_layout` cut a 34-character axis label, and the ratio panel had a truncated axis | the label is shortened and every ratio panel now starts at zero, so bar heights and numbers agree; the gate lines (0.85 / 0.10) are drawn as dashed references instead of moving the origin |
+
+### Round 78 (four named classical algorithms)
+
+| # | Failure | Cause | Fix |
+|---|---|---|---|
+| 61 | **the first AHP operating point admitted nothing at all** (threshold 0.54, 0 emissions at G12_R6_N6) | the composite score of a fresh detection is ≈ 0.38–0.50: urgency is 0 while `remaining_time` is clipped at 200, and the stage term is 0 at t=1. The 0.48–0.66 grid was above the whole distribution | the grid is moved to 0.30–0.42 and the final threshold is chosen from the calibration worlds, not from intuition |
+| 62 | **the LinUCB training quantiles (0.63–0.72) admitted every candidate at evaluation** | the score of an average context is the intercept (≈ 0.79), and the simultaneous first batch has near-average rows, so a threshold below the intercept never drops anything | the calibration grid is expressed as intercept + 0.05/0.09/0.13/0.17; one pilot world per point located the selective band before the 30-world calibration |
+| 63 | `KeyError: '12_6_3'` when the token-bucket calibration asked for its page count | the archived `per_cell` keys are `G12_R6_N3`; the driver built `"%d_%d_%d"` | the label comes from `scale_program.cell_label(cell)` in both the calibration and the final stage |
+| 64 | `FileExistsError` when two thresholds were smoke-tested in one run directory | the artifact leaf is keyed by `(arm, cell, scene)`, so a second threshold on the same world is the same leaf | every operating point gets its own run directory (`calibration/<arm>/<point>/`), not a suffix inside one directory |
+| 65 | **table 1's Ours row read `	extbf{12/15}` and its ablation caption `0.95 	imes`** | an earlier line-based patch wrote `\t` escapes as literal TAB bytes, so two LaTeX commands lost their backslash | repaired at the byte level (TAB+`extbf` → `\textbf`, TAB+`imes` → `\times`); the exporter is regenerated and the `.tex` re-checked for TAB bytes |
 
 
 ## Gates before a world is opened

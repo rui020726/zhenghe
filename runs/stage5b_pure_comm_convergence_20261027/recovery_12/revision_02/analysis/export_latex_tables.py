@@ -38,17 +38,21 @@ ANCHOR = R.ANCHOR
 ALL_SCENES = R.ALL_SCENES
 CELLS = R.TRAIN_CELLS
 
-#: The paper's row order: nine baselines, then Ours.
+#: The paper's row order: thirteen baselines (five of them named classical algorithms), then Ours.
 ORDER = (
-    ("normal_immediate", "Immediate (全量广播基线)"),
-    ("dedup_immediate", "Dedup (仅去重)"),
+    ("normal_immediate", "Flooding (全量广播)"),
+    ("dedup_immediate", "Dedup-Flooding (仅去重)"),
     ("always_hold", "Always-Hold (从不发送)"),
-    ("periodic_k5", "Periodic-$k_5$ (时间触发)"),
-    ("event_maxwait", "Event-MaxWait (事件+超时)"),
-    ("fifo_cap_k1", "FIFO-Cap (仅配额)"),
-    ("slack_heuristic_cap", "Slack-Cap (时限启发式)"),
-    ("random_matched_rate", "Random-Matched (同字节随机)"),
-    ("slack_matched_rate", "Slack-Matched (同字节时限)"),
+    ("periodic_k5", "TT-Periodic (定时触发)"),
+    ("event_maxwait", "ET-MaxWait (事件+超时)"),
+    ("fifo_cap_k1", r"FCFS-DropTail (fifo\_cap)"),
+    ("slack_heuristic_cap", r"EDF-Slack (slack\_cap)"),
+    ("random_matched_rate", "Random-Drop (同字节随机)"),
+    ("slack_matched_rate", r"EDF-Matched (slack\_matched)"),
+    ("red_aqm", "RED-AQM"),
+    ("token_bucket", "Token-Bucket"),
+    ("ahp_utility", "AHP-Utility"),
+    ("linucb_bandit", "LinUCB-Bandit"),
     ("v4f@200", r"\textbf{本文方法 (Ours)}"),
 )
 
@@ -60,6 +64,10 @@ _MULTI = {
     "fifo_cap_k1": "execution/baselines/paper_throttles_v1/BASELINES.json",
     "slack_heuristic_cap": "execution/baselines/paper_throttles_v1/BASELINES.json",
     "random_matched_rate": "execution/baselines/paper_random_matched/BASELINES.json",
+    "red_aqm": "execution/baselines/classic_v1/BASELINES.json",
+    "token_bucket": "execution/baselines/classic_v1/BASELINES.json",
+    "ahp_utility": "execution/baselines/classic_v1/BASELINES.json",
+    "linucb_bandit": "execution/baselines/classic_v1/BASELINES.json",
 }
 #: Dedicated roots (one arm per file) for the rest.
 _DEDICATED = {
@@ -79,6 +87,10 @@ _WASTE_ROOTS = {
     "event_maxwait": ("execution/baselines/paper_traditional_v1", "eval__event_maxwait_", True),
     "random_matched_rate": ("execution/baselines/paper_random_matched", "eval__", False),
     "slack_matched_rate": ("execution/baselines/paper_slack_matched", "eval__", False),
+    "red_aqm": ("execution/baselines/classic_v1", "eval__red_aqm_", True),
+    "token_bucket": ("execution/baselines/classic_v1", "eval__token_bucket_", True),
+    "ahp_utility": ("execution/baselines/classic_v1", "eval__ahp_utility_", True),
+    "linucb_bandit": ("execution/baselines/classic_v1", "eval__linucb_bandit_", True),
     "v4f@200": ("execution/train_v4f_anchor/eval_200_s8", "eval__", False),
 }
 STRICT_ONLY = ("normal_immediate", "dedup_immediate", "always_hold", "periodic_k5",
@@ -179,12 +191,14 @@ def main():
         r"% Source: archived evaluation rows (15 cells x 8 scenes), PROTOCOL_METRICS.json.",
         r"\begin{table*}[t]",
         r"\centering",
-        r"\caption{主对比：九个非学习基线与本文方法（同一份权重、无配额表）。"
+        r"\caption{主对比：十三条基线（其中四个为本轮新增的具名经典算法）与本文方法（同一份权重、无配额表）。"
         r"“按时达标格数”按放宽判据统计：每格 on-time $\geq \lceil 0.95 \times$ Immediate，"
         r"且全网字节比 $< 0.85$、浪费率 $< 0.10$；$^{\ast}$ 严格双条件（另需每格字节更少）"
         r"下本文方法为 3/15，见脚注。相对按时率为 8 场景合计（括号内为 3 个锚定场景）；"
         r"字节比、消息/任务与浪费率均为 8 场景合计；$E_{\rm task}$ 与 $D_{\rm resp}$ 取自协议指标表"
-        r"（$\alpha_{tx}=1.0,\ \alpha_{rx}=0.5$）。}",
+        r"（$\alpha_{tx}=1.0,\ \alpha_{rx}=0.5$）。RED-AQM 与 AHP-Utility 的阈值、Token-Bucket 的"
+        r"速率均在训练场景（与 8 个 DEV 场景不相交）上标定到同一 0.82 字节工作点；"
+        r"LinUCB-Bandit 的参数在同样的训练世界流上冻结拟合。}",
         r"\label{tab:main_comparison}",
         r"\begin{tabular}{@{}lccccccc@{}}",
         r"\toprule",
@@ -194,7 +208,7 @@ def main():
     for arm, name in ORDER:
         record = table[arm]
         if arm == "v4f@200":
-            cells = r"	extbf{12/15}"
+            cells = r"\textbf{12/15}"
         elif record["relaxed"]:
             cells = "%d/15" % record["relaxed"]
         elif record["on_time_cells"]:
@@ -211,15 +225,25 @@ def main():
                 name, cells, f3(record["on_time_ratio"]), f3(record["anchor_ratio"]),
                 f3(record["bytes_ratio"]), f3(record["messages"]), f3(record["waste"]),
                 fmt(record["e_task"], "%.0f"), fmt(record["d_resp"], "%.1f")))
+    short = {"normal_immediate": "Flooding", "dedup_immediate": "Dedup",
+             "always_hold": "Always-Hold", "periodic_k5": "TT-Periodic",
+             "event_maxwait": "ET-MaxWait", "fifo_cap_k1": "FCFS-DropTail",
+             "slack_heuristic_cap": "EDF-Slack", "random_matched_rate": "Random-Drop",
+             "slack_matched_rate": "EDF-Matched", "red_aqm": "RED-AQM",
+             "token_bucket": "Token-Bucket", "ahp_utility": "AHP-Utility",
+             "linucb_bandit": "LinUCB-Bandit", "v4f@200": "本文方法"}
+    strict_line = "、".join("%s %d" % (short[arm], table[arm]["strict"]) for arm, _ in ORDER)
     lines += [
         r"\bottomrule",
         r"\end{tabular}",
         r"\par\smallskip",
         r"\footnotesize",
         r"$^{\ddagger}$~满足逐格按时条款但未过全网成本条款（字节比 $\geq 0.85$ 或浪费率 $\geq 0.10$）。",
-        r"$^{\ast}$~严格双条件（逐格按时 \emph{且} 每格字节更少）的通过数：Immediate 0、Dedup 0、"
-        r"Always-Hold 0、Periodic 0、Event-MaxWait 0、FIFO-Cap 8、Slack-Cap 11、Random-Matched 7、"
-        r"Slack-Matched 6、本文方法 3。本文方法的 12 个按时达标格中，9 格在运力充裕时按策略全发"
+        r"$^{\ast}$~严格双条件（逐格按时 \emph{且} 每格字节更少）的通过数：" + strict_line + "。",
+        r"算法出处：RED-AQM（Floyd \& Jacobson, 1993）；Token-Bucket（Turner, 1986）；"
+        r"AHP（Saaty, 1980，判断矩阵 $CR=0.013<0.1$）；LinUCB（Li et al., 2010，"
+        r"离线岭回归参数 + 冻结 UCB）。",
+        r"本文方法的 12 个按时达标格中，9 格在运力充裕时按策略全发"
         r"（字节与 Immediate 相等），3 格在拥塞运力下自主削减字节。",
         r"\end{table*}",
         "",
@@ -230,6 +254,60 @@ def main():
     print("wrote %s (sha256 %s)" % (path.name, sha256(path)[:16]))
 
     write_table2(table)
+    write_table3(table)
+
+
+def write_table3(table):
+    """Orthogonal feature-set x decision-mechanism view (Gao Yanzhong, ch. 4 design)."""
+    rows = (
+        ("单维时限启发式", "1 维（#11）", "EDF-Slack", "slack_heuristic_cap"),
+        ("单维时限（同字节匹配）", "1 维（#11）", "EDF-Matched", "slack_matched_rate"),
+        ("多维启发式（AQM 准入）", "2 维（#14, #16）", "RED-AQM", "red_aqm"),
+        ("流量整形（无状态特征）", "速率 / 桶深", "Token-Bucket", "token_bucket"),
+        ("多属性赋权", "5 维（#10,#11,#14,#16,#17）", "AHP-Utility", "ahp_utility"),
+        ("上下文赌博机", "19 维（无量纲重写）", "LinUCB-Bandit", "linucb_bandit"),
+        (r"原对偶 RL（\textbf{本文}）", "19 维（无量纲重写）", "Ours", "v4f@200"),
+    )
+    lines = [
+        r"% Generated by analysis/export_latex_tables.py -- do not edit by hand.",
+        r"% Orthogonal contrast: state feature set x decision mechanism, same 120 worlds.",
+        r"\begin{table}[t]",
+        r"\centering",
+        r"\caption{特征集 $\times$ 决策机制的正交对照（同一 15 格 $\times$ 8 场景基准，"
+        r"非学习算法与学习基线均标定到 $\approx 0.82$ 字节工作点）。两种“单维时限”行与 19 维行回答"
+        r"“同样的机制换特征集是否更好”；同一特征集下的多行回答“同样的输入换机制是否更好”。"
+        r"AHP 与上下文赌博机按定义需要多维输入，其单维变体不是独立算法，故不列出；"
+        r"Token-Bucket 是速率整形器，不读取逐目标状态。}",
+        r"\label{tab:orthogonal}",
+        r"\begin{tabular}{@{}lllcccc@{}}",
+        r"\toprule",
+        r"决策机制 & 状态特征集 & 代表方法 & 按时达标格数 & 相对按时率 & 字节比 & 消息/任务 \\",
+        r"\midrule",
+    ]
+    for mechanism, features, method, arm in rows:
+        record = table.get(arm)
+        if record is None:
+            continue
+        if arm == "v4f@200":
+            cells = r"\textbf{12/15}"
+        elif record["relaxed"]:
+            cells = "%d/15" % record["relaxed"]
+        elif record["on_time_cells"]:
+            cells = r"0/15$^{\ddagger}$"
+        else:
+            cells = "0/15"
+        lines.append(r"%s & %s & %s & %s & %.3f & %.3f & %.3f \\" % (
+            mechanism, features, method, cells, record["on_time_ratio"],
+            record["bytes_ratio"], record["messages"]))
+    lines += [
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\end{table}",
+        "",
+    ]
+    path = OUT / "table3_orthogonal_comparison.tex"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    print("wrote %s (sha256 %s)" % (path.name, sha256(path)[:16]))
 
 
 def write_table2(table1_rows):
@@ -248,7 +326,7 @@ def write_table2(table1_rows):
         r"\centering",
         r"\caption{本文方法的状态特征消融（同一份权重、无配额表；15 格 $\times$ 3 锚定场景 = 45 世界）。"
         r"每次只把一个输入列强制为常数，其余不变。最后一列是“按时达标格”（逐格 on-time "
-        r"$\geq \lceil 0.95 	imes$ Immediate），\emph{不含}成本条款——“按时达标格”更高的两行"
+        r"$\geq \lceil 0.95 \times$ Immediate），\emph{不含}成本条款——“按时达标格”更高的两行"
         r"（\#14、\#17）同时把字节比推到 0.92 / 0.81、浪费率到 0.139 / 0.054，"
         r"并不优于完整模型的 0.820 / 0.064。}",
         r"\label{tab:ablation}",

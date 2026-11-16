@@ -1355,5 +1355,120 @@ class WasteReaderTests(unittest.TestCase):
         self.assertIsNone(reading["waste_ratio"])
 
 
+class ClassicArmTests(unittest.TestCase):
+    """The four named classical arms: fixed parameters, one-shot admission, counted pages."""
+
+    class _Inner:
+        name = "immediate"
+        orders_selection = False
+
+        def __init__(self, targets=("t0", "t1", "t2")):
+            self._targets = tuple(targets)
+
+        def parameters(self):
+            return {"name": "immediate"}
+
+        def decide(self, _observation):
+            return self._targets
+
+    @staticmethod
+    def _observation(step, backlog, items):
+        from integrated_sar.comm_policy import SendObservation
+
+        return SendObservation(step=step, current_time=float(step), items=tuple(items),
+                               remaining_budget_bytes=1e9, budget_bytes_per_episode=10 ** 9,
+                               capacity_remaining=None, backlog_targets=backlog,
+                               subscribers=6)
+
+    @staticmethod
+    def _items(count=3, remaining=300.0, stage=0):
+        from integrated_sar.comm_policy import SendItem
+
+        out = []
+        for index in range(count):
+            out.append(SendItem(
+                target_id="t%d" % index, ready_step=1, age_steps=index,
+                pending_event=True, changed_view=True, first_emission=True, revision=1,
+                revision_delta=1, stage_index=stage, stage_changed=False, progress=0.0,
+                progress_delta=0.0, requirements_changed=False, members_changed=False,
+                deadline=float(remaining) + 1.0, remaining_time=float(remaining),
+                sent_count=0, last_sent_step=None, since_last_emission_time=None,
+                has_future_requirements=True))
+        return out
+
+    def test_ahp_weights_are_a_distribution_and_consistent(self):
+        from stage5b_comm import classic_baselines
+
+        weights, lambda_max, consistency = classic_baselines.ahp_weights()
+        self.assertAlmostEqual(sum(weights), 1.0, places=9)
+        self.assertGreater(lambda_max, 5.0)
+        self.assertLess(consistency, 0.1)
+
+    def test_ahp_threshold_admits_nothing_at_one_and_everything_at_zero(self):
+        from stage5b_comm import classic_baselines
+
+        items = self._items()
+        observation = self._observation(1, 3, items)
+        closed = classic_baselines.AhpUtilityPolicy(self._Inner(), goals=24, robots=6,
+                                                    subscribers=6, threshold=1.0)
+        self.assertEqual(closed.decide(observation), ())
+        opened = classic_baselines.AhpUtilityPolicy(self._Inner(), goals=24, robots=6,
+                                                    subscribers=6, threshold=0.0)
+        self.assertEqual(opened.decide(observation), ("t0", "t1", "t2"))
+
+    def test_red_drops_by_load_and_remembers_the_first_decision(self):
+        from stage5b_comm import classic_baselines
+
+        items = self._items()
+        heavy = classic_baselines.RedAqmPolicy(self._Inner(), goals=12, robots=6,
+                                               subscribers=6, min_th=0.0, max_th=0.5,
+                                               max_p=1.0, seed=3)
+        # backlog/G = 1.0, capacity_ratio = 2.0 -> x = 0.5 = max_th -> drop probability 1.
+        self.assertEqual(heavy.decide(self._observation(1, 12, items)), ())
+        # Even when the queue drains, the dropped targets stay dropped for this episode.
+        self.assertEqual(heavy.decide(self._observation(2, 0, items)), ())
+
+        light = classic_baselines.RedAqmPolicy(self._Inner(), goals=48, robots=6,
+                                               subscribers=6, min_th=0.5, max_th=1.0,
+                                               max_p=1.0, seed=3)
+        self.assertEqual(light.decide(self._observation(1, 1, items)), ("t0", "t1", "t2"))
+
+    def test_token_bucket_spends_only_what_the_bucket_holds(self):
+        from stage5b_comm import classic_baselines
+
+        items = self._items()
+        policy = classic_baselines.TokenBucketPolicy(self._Inner(), rate=0.0, depth=2.0)
+        self.assertEqual(len(policy.decide(self._observation(1, 3, items))), 2)
+        self.assertEqual(len(policy.decide(self._observation(2, 3, items))), 0)
+        # A backwards step starts a new episode and refills the bucket.
+        self.assertEqual(len(policy.decide(self._observation(1, 3, items))), 2)
+
+    def test_linucb_uses_the_frozen_model_and_a_high_threshold_can_drop_all(self):
+        from stage5b_comm import classic_baselines
+        import json
+
+        model = {
+            "theta": [0.0] * 20, "alpha": 0.0, "threshold": 0.5,
+            "mean": [0.0] * 19, "sd": [1.0] * 19,
+            "a_inv": [[1.0 if i == j else 0.0 for j in range(20)] for i in range(20)],
+        }
+        items = self._items()
+        observation = self._observation(1, 3, items)
+        closed = classic_baselines.LinUcbBanditPolicy(self._Inner(), goals=24, robots=6,
+                                                      subscribers=6, model=dict(model))
+        self.assertEqual(closed.decide(observation), ())
+        model["threshold"] = -1.0
+        opened = classic_baselines.LinUcbBanditPolicy(self._Inner(), goals=24, robots=6,
+                                                      subscribers=6, model=dict(model))
+        self.assertEqual(opened.decide(observation), ("t0", "t1", "t2"))
+
+    def test_the_arms_are_registered_as_rules(self):
+        from stage5b_comm import episode
+
+        for arm in episode.CLASSIC_ARMS:
+            self.assertEqual(episode.eval_arm_kind(arm), "rule")
+        self.assertFalse(set(episode.CLASSIC_ARMS) & set(C.EVAL_LEARNING_ARMS))
+
+
 if __name__ == "__main__":
     unittest.main()

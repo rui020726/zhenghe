@@ -2,27 +2,33 @@
 % Source: archived evaluation rows (15 cells x 8 scenes), PROTOCOL_METRICS.json.
 \begin{table*}[t]
 \centering
-\caption{主对比：九个非学习基线与本文方法（同一份权重、无配额表）。“按时达标格数”按放宽判据统计：每格 on-time $\geq \lceil 0.95 \times$ Immediate，且全网字节比 $< 0.85$、浪费率 $< 0.10$；$^{\ast}$ 严格双条件（另需每格字节更少）下本文方法为 3/15，见脚注。相对按时率为 8 场景合计（括号内为 3 个锚定场景）；字节比、消息/任务与浪费率均为 8 场景合计；$E_{\rm task}$ 与 $D_{\rm resp}$ 取自协议指标表（$\alpha_{tx}=1.0,\ \alpha_{rx}=0.5$）。}
+\caption{主对比：十三条基线（其中四个为本轮新增的具名经典算法）与本文方法（同一份权重、无配额表）。“按时达标格数”按放宽判据统计：每格 on-time $\geq \lceil 0.95 \times$ Immediate，且全网字节比 $< 0.85$、浪费率 $< 0.10$；$^{\ast}$ 严格双条件（另需每格字节更少）下本文方法为 3/15，见脚注。相对按时率为 8 场景合计（括号内为 3 个锚定场景）；字节比、消息/任务与浪费率均为 8 场景合计；$E_{\rm task}$ 与 $D_{\rm resp}$ 取自协议指标表（$\alpha_{tx}=1.0,\ \alpha_{rx}=0.5$）。RED-AQM 与 AHP-Utility 的阈值、Token-Bucket 的速率均在训练场景（与 8 个 DEV 场景不相交）上标定到同一 0.82 字节工作点；LinUCB-Bandit 的参数在同样的训练世界流上冻结拟合。}
 \label{tab:main_comparison}
 \begin{tabular}{@{}lccccccc@{}}
 \toprule
 方法 & 按时达标格数 & 相对按时率 & 字节比 & 消息/任务 & 浪费率 & $E_{\rm task}$ & $D_{\rm resp}$ \\
 \midrule
-Immediate (全量广播基线) & 0/15$^{\ddagger}$ & 1.000 (1.000) & 1.000 & 1.363 & 0.266 & 1758 & 53.5 \\
-Dedup (仅去重) & 0/15$^{\ddagger}$ & 1.011 (1.037) & 2.150 & 2.747 & 0.258 & 3717 & 52.9 \\
+Flooding (全量广播) & 0/15$^{\ddagger}$ & 1.000 (1.000) & 1.000 & 1.363 & 0.266 & 1758 & 53.5 \\
+Dedup-Flooding (仅去重) & 0/15$^{\ddagger}$ & 1.011 (1.037) & 2.150 & 2.747 & 0.258 & 3717 & 52.9 \\
 Always-Hold (从不发送) & 0/15 & 0.000 (0.000) & 0.000 & — & — & — & — \\
-Periodic-$k_5$ (时间触发) & 0/15$^{\ddagger}$ & 1.057 (1.090) & 24.744 & 36.416 & 0.224 & 43317 & 51.1 \\
-Event-MaxWait (事件+超时) & 0/15$^{\ddagger}$ & 1.060 (1.067) & 8.919 & 10.915 & 0.222 & 14801 & 51.5 \\
-FIFO-Cap (仅配额) & 0/15$^{\ddagger}$ & 0.950 (1.003) & 0.969 & 1.389 & 0.280 & 1795 & 47.7 \\
-Slack-Cap (时限启发式) & 0/15$^{\ddagger}$ & 1.026 (1.063) & 0.969 & 1.287 & 0.223 & 1663 & 47.0 \\
-Random-Matched (同字节随机) & 0/15$^{\ddagger}$ & 0.900 (0.845) & 0.812 & 1.125 & 0.111 & 1547 & 47.8 \\
-Slack-Matched (同字节时限) & 0/15$^{\ddagger}$ & 0.859 (0.869) & 0.800 & 1.153 & 0.133 & 1594 & 44.7 \\
-\textbf{本文方法 (Ours)} & 	extbf{12/15} & 0.946 (0.984) & 0.815 & 1.068 & 0.064 & 1468 & 40.0 \\
+TT-Periodic (定时触发) & 0/15$^{\ddagger}$ & 1.057 (1.090) & 24.744 & 36.416 & 0.224 & 43317 & 51.1 \\
+ET-MaxWait (事件+超时) & 0/15$^{\ddagger}$ & 1.060 (1.067) & 8.919 & 10.915 & 0.222 & 14801 & 51.5 \\
+FCFS-DropTail (fifo\_cap) & 0/15$^{\ddagger}$ & 0.950 (1.003) & 0.969 & 1.389 & 0.280 & 1795 & 47.7 \\
+EDF-Slack (slack\_cap) & 0/15$^{\ddagger}$ & 1.026 (1.063) & 0.969 & 1.287 & 0.223 & 1663 & 47.0 \\
+Random-Drop (同字节随机) & 0/15$^{\ddagger}$ & 0.900 (0.845) & 0.812 & 1.125 & 0.111 & 1547 & 47.8 \\
+EDF-Matched (slack\_matched) & 0/15$^{\ddagger}$ & 0.859 (0.869) & 0.800 & 1.153 & 0.133 & 1594 & 44.7 \\
+RED-AQM & 0/15$^{\ddagger}$ & 0.887 (0.851) & 0.841 & 1.288 & 0.224 & 1668 & 50.8 \\
+Token-Bucket & 0/15 & 0.443 (0.417) & 0.803 & 2.466 & 0.594 & 3191 & 38.2 \\
+AHP-Utility & 0/15$^{\ddagger}$ & 0.898 (0.863) & 0.822 & 1.136 & 0.120 & 1570 & 42.4 \\
+LinUCB-Bandit & 12/15 & 0.965 (0.972) & 0.831 & 1.076 & 0.070 & 1472 & 39.9 \\
+\textbf{本文方法 (Ours)} & \textbf{12/15} & 0.946 (0.984) & 0.815 & 1.068 & 0.064 & 1468 & 40.0 \\
 \bottomrule
 \end{tabular}
 \par\smallskip
 \footnotesize
 $^{\ddagger}$~满足逐格按时条款但未过全网成本条款（字节比 $\geq 0.85$ 或浪费率 $\geq 0.10$）。
-$^{\ast}$~严格双条件（逐格按时 \emph{且} 每格字节更少）的通过数：Immediate 0、Dedup 0、Always-Hold 0、Periodic 0、Event-MaxWait 0、FIFO-Cap 8、Slack-Cap 11、Random-Matched 7、Slack-Matched 6、本文方法 3。本文方法的 12 个按时达标格中，9 格在运力充裕时按策略全发（字节与 Immediate 相等），3 格在拥塞运力下自主削减字节。
+$^{\ast}$~严格双条件（逐格按时 \emph{且} 每格字节更少）的通过数：Flooding 0、Dedup 0、Always-Hold 0、TT-Periodic 0、ET-MaxWait 0、FCFS-DropTail 8、EDF-Slack 11、Random-Drop 7、EDF-Matched 6、RED-AQM 2、Token-Bucket 0、AHP-Utility 5、LinUCB-Bandit 3、本文方法 3。
+算法出处：RED-AQM（Floyd \& Jacobson, 1993）；Token-Bucket（Turner, 1986）；AHP（Saaty, 1980，判断矩阵 $CR=0.013<0.1$）；LinUCB（Li et al., 2010，离线岭回归参数 + 冻结 UCB）。
+本文方法的 12 个按时达标格中，9 格在运力充裕时按策略全发（字节与 Immediate 相等），3 格在拥塞运力下自主削减字节。
 \end{table*}
 

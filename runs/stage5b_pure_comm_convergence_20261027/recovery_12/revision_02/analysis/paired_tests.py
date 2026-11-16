@@ -21,9 +21,11 @@ Three tests per (arm, comparator, reading), in the order the review asked for:
 2. paired t test: mean difference, its 95 % CI (t quantile, n-1 df) and two-sided p;
 3. Wilcoxon signed-rank, two-sided, exact for n <= 50 and normal-approximated above.
 
-Multiplicity: 1 arm x 4 comparators x 4 readings = 16 tests per scene group. A Holm-adjusted p is printed next
-to the raw one; with 16 tests the smallest raw p must be < 0.0031 to survive at 0.05. The
-adjustment is reported so no single row is read as if it were pre-registered.
+Multiplicity: 1 arm x 4 comparators x 4 readings = 16 tests per scene group **per family**; the
+families are the four registered baselines and the four named classical algorithms, so Holm is
+applied within each family and never pools the two. With 16 tests the smallest raw p must be
+< 0.0031 to survive at 0.05. The adjustment is reported so no single row is read as if it were
+pre-registered.
 
 Independence caveat, stated in the output as well: the 120 worlds are 15 cells x 8 scenes, and
 the eight scenes of one cell share the cell's goal count and robot roster. The paired tests treat
@@ -49,10 +51,15 @@ IN = BASE / "execution/COMM_EFFICIENCY.json"
 OUT = BASE / "execution/PAIRED_TESTS.json"
 
 #: The paper shows one learned model; the tests compare it against every comparator the task
-#: names. 1 arm x 4 comparators x 4 readings x 3 scene groups = 48 tests, Holm within each group.
+#: names.  Two Holm families, each 1 arm x 4 comparators x 4 readings = 16 tests per scene
+#: group: the registered baselines, and the four named classical algorithms.
 ARMS = ("v4f@200",)
-COMPARATORS = ("normal_immediate", "slack_heuristic_cap", "slack_matched_rate",
-               "random_matched_rate")
+FAMILIES = {
+    "registered": ("normal_immediate", "slack_heuristic_cap", "slack_matched_rate",
+                   "random_matched_rate"),
+    "classic": ("red_aqm", "token_bucket", "ahp_utility", "linucb_bandit"),
+}
+COMPARATORS = FAMILIES["registered"] + FAMILIES["classic"]
 READINGS = (
     ("on_time_rate", "按时完成率", "on_time / generated_goals"),
     ("byte_ratio", "字节比", "spent_bytes / immediate bytes, same world"),
@@ -172,25 +179,29 @@ def main():
 
     adjusted = {}
     for scope_name in scopes:
-        family = [entry for entry in flat
-                  if entry["scope"] == scope_name and "t_p" in entry]
-        values = holm([entry["t_p"] for entry in family])
-        for entry, value in zip(family, values):
-            adjusted[id(entry)] = value
+        for family_name, family_comparators in FAMILIES.items():
+            family = [entry for entry in flat
+                      if entry["scope"] == scope_name and "t_p" in entry
+                      and entry["comparator"] in family_comparators]
+            values = holm([entry["t_p"] for entry in family])
+            for entry, value in zip(family, values):
+                adjusted[id(entry)] = value
     for entry in flat:
         if "t_p" in entry:
             entry["t_p_holm"] = adjusted[id(entry)]
 
     #: Wilcoxon is the primary test here: Shapiro-Wilk rejects normality in every one of the 72
     #: scopes, so the t interval is descriptive and the rank test carries the inference. Its Holm
-    #: family is the same 24 per scope.
+    #: family is the same 16 per scope and per comparator family.
     adjusted_w = {}
     for scope_name in scopes:
-        family = [entry for entry in flat
-                  if entry["scope"] == scope_name and "wilcoxon_p" in entry]
-        values = holm([entry["wilcoxon_p"] for entry in family])
-        for entry, value in zip(family, values):
-            adjusted_w[id(entry)] = value
+        for family_name, family_comparators in FAMILIES.items():
+            family = [entry for entry in flat
+                      if entry["scope"] == scope_name and "wilcoxon_p" in entry
+                      and entry["comparator"] in family_comparators]
+            values = holm([entry["wilcoxon_p"] for entry in family])
+            for entry, value in zip(family, values):
+                adjusted_w[id(entry)] = value
     for entry in flat:
         if "wilcoxon_p" in entry:
             entry["wilcoxon_p_holm"] = adjusted_w[id(entry)]
@@ -223,16 +234,17 @@ def main():
         "source_sha256": sha256(IN),
         "arms": list(ARMS),
         "comparators": list(COMPARATORS),
+        "families": {name: list(values) for name, values in FAMILIES.items()},
         "readings": {name: formula for name, _cn, formula in READINGS},
         "scopes": {name: len(value) for name, value in scopes.items()},
         "scopes_count": len(scopes),
         "tests": len(flat),
-        #: Holm was applied once per scope: 2 arms x 3 comparators x 4 readings = 24 per family.
-        "holm_family_size": 24,
-        "holm_families": len(scopes),
-        "primary_test": "wilcoxon signed-rank, Holm-adjusted within scope (24 tests/family); "
-                        "Shapiro-Wilk rejects normality in all 72 scopes so the t interval is "
-                        "descriptive",
+        #: Holm was applied once per (scope, family): 1 arm x 4 comparators x 4 readings = 16.
+        "holm_family_size": 16,
+        "holm_families": len(scopes) * len(FAMILIES),
+        "primary_test": "wilcoxon signed-rank, Holm-adjusted within (scope, comparator family) "
+                        "(16 tests/family); Shapiro-Wilk rejects normality in all scopes so the "
+                        "t interval is descriptive",
         "results": flat,
         "table": "\n".join(lines) + "\n",
         "caveats": [
@@ -241,7 +253,8 @@ def main():
             "one world has zero on-time tasks (slack_matched_rate), so messages_per_on_time is "
             "computed on 119/120 pairs there and the exclusion is printed",
             "byte_ratio is the mean of per-world ratios, not the ratio of the group totals",
-            "24 t tests: a raw p of 0.05 is not evidence at that level; read the Holm column",
+            "16 t tests per family: a raw p of 0.05 is not evidence at that level; read the Holm "
+            "column",
             "no seed replication exists, so the CI covers world-to-world variation only",
         ],
     }

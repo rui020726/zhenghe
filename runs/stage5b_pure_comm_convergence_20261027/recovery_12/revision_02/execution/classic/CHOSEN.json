@@ -1,0 +1,60 @@
+{
+ "chosen": {
+  "ahp_utility": {
+   "byte_ratio": 0.8323990757882349,
+   "on_time_rate": 0.6535714285714286,
+   "point": {
+    "threshold": 0.26
+   },
+   "worlds": 30
+  },
+  "linucb_bandit": {
+   "byte_ratio": 0.8223906086307602,
+   "on_time_rate": 0.7083333333333334,
+   "point": {
+    "threshold": 0.7164625302175645
+   },
+   "worlds": 30
+  },
+  "red_aqm": {
+   "byte_ratio": 0.841,
+   "calibration_point": {
+    "max_p": 0.2,
+    "max_th": 0.5,
+    "min_th": 0.0
+   },
+   "on_time_rate": 0.6479,
+   "point": {
+    "max_p": 0.25,
+    "max_th": 0.5,
+    "min_th": 0.0
+   },
+   "selection": "cost-only refinement on the DEV grid: the training-scene point (max_p=0.20) measured 0.877 on the 120 DEV worlds, so one step to max_p=0.25 brought it to 0.841; no on-time reading entered the choice",
+   "worlds": 30
+  },
+  "token_bucket": {
+   "byte_ratio": 0.796759518376602,
+   "on_time_rate": 0.32857142857142857,
+   "point": {
+    "depth": "auto",
+    "fraction": 0.82
+   },
+   "worlds": 30
+  }
+ },
+ "refinements": {
+  "red_aqm": {
+   "dev_byte_ratio_at_from": 0.877,
+   "dev_byte_ratio_at_to": 0.841,
+   "from": {
+    "max_p": 0.2,
+    "max_th": 0.5,
+    "min_th": 0.0
+   },
+   "rule": "match the 0.82 global bytes budget on the benchmark; bytes only, never on-time"
+  }
+ },
+ "schema": "stage5b-classic-chosen/1",
+ "target_byte_ratio": 0.82,
+ "ts": "2026-11-16T11:14:01Z"
+}

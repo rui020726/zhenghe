@@ -202,6 +202,12 @@ TRADITIONAL_ARMS = ("periodic_k5", "event_maxwait")
 #: the learned arm runs under; only the rule that picks which targets get those pages differs.
 BUDGET_SELECTOR_ARMS = ("fifo_budget", "slack_budget", "random_budget")
 
+#: The four named classical algorithms (policy layer only) plus the one-shot feature logger that
+#: builds the bandit baseline's training sample.  They wrap ``immediate`` exactly like the
+#: throttles, so no environment, relay or frozen file is touched.
+CLASSIC_ARMS = ("red_aqm", "token_bucket", "ahp_utility", "linucb_bandit")
+CLASSIC_LOG_ARMS = ("feature_log",)
+
 
 def build_throttle_policy(arm, immediate_pages, keep_probability, seed=0,
                           keep_by_cell=None, cell_label=None, matched_pages=None):
@@ -293,7 +299,7 @@ def eval_arm_kind(arm):
     parent round crashed precisely because a milestone arm was missing from this whitelist, so
     the name check is an exact set membership test that includes the declared arms.
     """
-    if arm in C.BASELINE_ARMS or arm in C.PACING_ARMS:
+    if arm in C.BASELINE_ARMS or arm in C.PACING_ARMS or arm in CLASSIC_ARMS:
         return "rule"
     # An exact set, not a suffix test: "half_trained" must fail instead of being dispatched.
     if arm in ("untrained", "T1_trained", "T2_trained") or arm in C.EVAL_LEARNING_ARMS:
@@ -320,11 +326,22 @@ def eval_action_seed(scene):
 def run_rule_world(layout, arm, scene, phase="pacing", cell=None,
                    immediate_pages=None, keep_probability=None, keep_by_cell=None,
                    matched_pages_by_cell=None, search_agents=None,
-                   delivery_probability=None, variant=None, cap=None):
+                   delivery_probability=None, variant=None, cap=None,
+                   classic_params=None, model_path=None):
     from . import scale_program, world
     # The real pre-world entrance must be independently bootstrap-safe in a fresh spawn.
     ensure_import_paths(layout)
-    if arm in BUDGET_SELECTOR_ARMS:
+    if arm in CLASSIC_ARMS or arm in CLASSIC_LOG_ARMS:
+        # Named classical algorithms at the policy layer: they wrap ``immediate`` and read only
+        # the dimensionless state, so only the admission/shaping rule differs from the baseline.
+        from . import classic_baselines
+        if cell is None:
+            raise ValueError("%s needs its (G, R, N) cell" % arm)
+        goals, robots, subscribers = (int(value) for value in cell)
+        policy = classic_baselines.build_classic_policy(
+            arm, goals=goals, robots=robots, subscribers=subscribers,
+            params=classic_params, model_path=model_path)
+    elif arm in BUDGET_SELECTOR_ARMS:
         # Experiment K: the same page ceiling, four different selectors. The cap is given in
         # pages and applies to the whole episode, exactly like the learned arm's SendCapPolicy.
         from integrated_sar.comm_policy import build_comm_policy

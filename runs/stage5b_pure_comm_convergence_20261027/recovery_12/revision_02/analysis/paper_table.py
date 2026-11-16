@@ -47,19 +47,25 @@ RULES = ("normal_immediate", "dedup_immediate", "always_hold")
 THROTTLES = ("fifo_cap_k1", "random_matched_rate", "slack_heuristic_cap",
              "slack_matched_rate")
 TRADITIONAL = ("periodic_k5", "event_maxwait")
+CLASSIC = ("red_aqm", "token_bucket", "ahp_utility", "linucb_bandit")
 #: Order in the printed table, and the efficiency key each label reads.
-#: The paper's table: nine non-learning baselines plus the one learned model. The other
-#: learned checkpoints (v4g/v4s/v4t/v4u) stay in the audit record but are not in this table.
+#: The paper's table: thirteen non-learning baselines (five of them named classical algorithms)
+#: plus the one learned model. The other learned checkpoints (v4g/v4s/v4t/v4u) stay in the audit
+#: record but are not in this table.
 ARM_ORDER = (
-    ("normal_immediate", "normal_immediate", "Immediate (全量广播基线)"),
-    ("dedup_immediate", "dedup_immediate", "Dedup (仅去重)"),
+    ("normal_immediate", "normal_immediate", "Flooding (全量广播)"),
+    ("dedup_immediate", "dedup_immediate", "Dedup-Flooding (仅去重)"),
     ("always_hold", "always_hold", "Always-Hold (从不发送)"),
-    ("periodic_k5", "periodic_k5", "Periodic-k5 (时间触发)"),
-    ("event_maxwait", "event_maxwait", "Event-MaxWait (事件 + 超时)"),
-    ("fifo_cap_k1", "fifo_cap_k1", "FIFO-Cap (仅配额)"),
-    ("slack_heuristic_cap", "slack_heuristic_cap", "Slack-Cap (时限启发式)"),
-    ("random_matched_rate", "random_matched_rate", "Random-Matched (同字节随机)"),
-    ("slack_matched_rate", "slack_matched_rate", "Slack-Matched (同字节时限)"),
+    ("periodic_k5", "periodic_k5", "TT-Periodic (定时触发)"),
+    ("event_maxwait", "event_maxwait", "ET-MaxWait (事件+超时)"),
+    ("fifo_cap_k1", "fifo_cap_k1", "FCFS-DropTail (fifo_cap)"),
+    ("slack_heuristic_cap", "slack_heuristic_cap", "EDF-Slack (slack_cap)"),
+    ("random_matched_rate", "random_matched_rate", "Random-Drop (同字节随机)"),
+    ("slack_matched_rate", "slack_matched_rate", "EDF-Matched (slack_matched)"),
+    ("red_aqm", "red_aqm", "RED-AQM"),
+    ("token_bucket", "token_bucket", "Token-Bucket"),
+    ("ahp_utility", "ahp_utility", "AHP-Utility"),
+    ("linucb_bandit", "linucb_bandit", "LinUCB-Bandit"),
     ("v4f@200", "v4f@200", "**本文方法 (Ours)**"),
 )
 #: Short names used as per-cell column headers in table B.
@@ -117,6 +123,22 @@ def load_learned(tag, episode):
     table = {}
     for row in payload.get("results") or []:
         if row.get("status") != "ok":
+            continue
+        key = (tuple(row["cell"]), int(row["scene"]))
+        table[key] = (int(row["on_time"]), int(row.get("generated_goals") or 0),
+                      int(row["spent_bytes"]), int(row["emissions"]))
+    return table
+
+
+def load_classic(arm):
+    """The four named classical arms on the same 15 cells x 8 scenes."""
+    path = BASE / "execution/baselines/classic_v1/BASELINES.json"
+    if not path.exists():
+        return None
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    table = {}
+    for row in payload.get("results") or []:
+        if row.get("status") != "ok" or row.get("arm") != arm:
             continue
         key = (tuple(row["cell"]), int(row["scene"]))
         table[key] = (int(row["on_time"]), int(row.get("generated_goals") or 0),
@@ -187,6 +209,9 @@ def main():
             return lambda cell, scene, k=key: grid.get((k, cell, scene))
         if key in throttle_arms:
             return lambda cell, scene, k=key: throttle.get((k, cell, scene))
+        if key in CLASSIC:
+            table = load_classic(key)
+            return None if table is None else (lambda cell, scene, t=table: t.get((cell, scene)))
         table = learned_tables.get(key)
         return None if table is None else (lambda cell, scene, t=table: t.get((cell, scene)))
 

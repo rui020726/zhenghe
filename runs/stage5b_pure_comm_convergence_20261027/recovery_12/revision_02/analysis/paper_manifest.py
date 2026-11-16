@@ -23,7 +23,9 @@ PAIRED = BASE / "execution/PAIRED_TESTS.json"
 PROTOCOL = BASE / "execution/PROTOCOL_METRICS.json"
 
 TABLES = (
-    ("execution/latex/table1_main_comparison.tex", "表 1：9 基线 + 本文方法，七项指标"),
+    ("execution/latex/table1_main_comparison.tex", "表 1：13 基线（含 4 个具名经典算法）+ 本文方法，七项指标"),
+    ("execution/latex/table3_orthogonal_comparison.tex",
+     "表 3：特征集 × 决策机制的正交对照"),
     ("execution/latex/table2_ablation_mechanism.tex",
      "表 2：本文方法自身的特征消融（上）与 #16 容量反事实（下）"),
 )
@@ -77,7 +79,7 @@ def main():
     add("# 论文交付清单（PAPER_READY_MANIFEST）")
     add("")
     add("**范围**：论文的图表与正文只展示一个学习模型——`v4f@200`（同一份权重，`cap=None`），"
-        "统一记作 **本文方法 (Ours)**；九个非学习基线照旧。`v4t / v4s / v4g / v4u / v4v` "
+        "统一记作 **本文方法 (Ours)**；十三个基线照旧（其中四个是具名经典算法，LinUCB-Bandit 是唯一的轻量学习基线，作为对照而非第二个“本文模型”）。`v4t / v4s / v4g / v4u / v4v` "
         "只存在于审计文档（`PAPER_EXPERIMENTS.md`、`EXTENDED_MECHANISM_EXPERIMENTS.md`、"
         "`PROTOCOL_METRICS_REPORT.md`），论文不引用这些代号。")
     add("")
@@ -92,7 +94,7 @@ def main():
     add("")
     add("表 1 的判据说明（与文件内脚注一致）：头条“按时达标格数”按**放宽判据**"
         "（逐格 `on_time ≥ ⌈0.95×Immediate⌉` 且全网字节比 `< 0.85`、浪费率 `< 0.10`）统计，"
-        "本文方法 12/15；脚注同时给出**严格双条件**（另需每格字节更少）的通过数 3/15 与九个基线的读数。")
+        "本文方法 12/15；脚注同时给出**严格双条件**（另需每格字节更少）的通过数 3/15 与十三个基线的读数。")
     add("")
 
     add("## 2　论文图")
@@ -119,8 +121,8 @@ def main():
     add("")
     paired = json.loads(PAIRED.read_text(encoding="utf-8"))
     rows = paired["results"]
-    add("配对检验：本文方法 对 四个对照，4 指标 × 3 场景组 = 48 项；"
-        "Wilcoxon 为主检验，Holm 在每组（16 项）内校正。下表取 `all(8)` 组：")
+    add("配对检验：本文方法 对 八个对照，4 指标 × 3 场景组 = 96 项，分两族（已登记基线 / "
+        "具名经典算法）；Wilcoxon 为主检验，Holm 在每族每组（16 项）内校正。下表取 `all(8)` 组：")
     add("")
     add("| 对照 | 指标 | 均值差 | 95% CI | Wilcoxon p | Holm p |")
     add("|---|---|---|---|---|---|")
@@ -162,7 +164,7 @@ def main():
 
     add("## 4　封板状态")
     add("")
-    add("- 门禁：`python -B -m unittest discover -s tests` → 106 项通过；")
+    add("- 门禁：`python -B -m unittest discover -s tests` → 112 项通过；")
     add("- 冻结件：`analysis/verify_pins.py` → 98/98，drift 0；")
     add("- 论文数据来源：`execution/PAPER_TABLE.md`（机读主表）、`execution/PROTOCOL_METRICS.json`、"
         "`execution/PAIRED_TESTS.json`、`execution/extended/EXTENDED.json`。")
