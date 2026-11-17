@@ -261,6 +261,10 @@ def main():
                    "LinUCB 阈值均冻结），只有 Token-Bucket 的速率按该格自身的 immediate 页面数"
                    "重算。因此本节读数是“迁移”，不是重新调参后的基线。")
     section.append("")
+    section.append("**图的口径**：图 19 按作者决定不画 LinUCB-Bandit，只画 Immediate / RED / "
+                   "Token / AHP / 本文方法；LinUCB 的逐档读数保留在本节表格与表 4 中，"
+                   "“LinUCB 与本文方法打平/更高”的结论不因图而消失。")
+    section.append("")
     section += lines
     section.append("### 迁移读数")
     section.append("")
@@ -334,6 +338,9 @@ def main():
                    "信道使用次数/世界 = Σ(发射数 × 订阅者数) / 世界数。左半为 G 扫描口径"
                    "（25 世界/档，N 随 (R,N) 对变化），右半为深档口径（27 世界/档，N=6）；"
                    "G=72 是两口径的重叠档，数值不同属正常，不可跨口径直接连线。")
+    success.append("")
+    success.append("**图的口径**：图 20 同样不画 LinUCB-Bandit（五臂）；其成功率与信道读数"
+                   "保留在下表，便于与图对照时补回第六臂。")
     success.append("")
     for key, title, pattern in (("q", "成功率（绝对）", "%.3f"),
                                 ("cu", "信道使用次数/世界", "%.1f")):

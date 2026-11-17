@@ -30,8 +30,10 @@ STEM = "fig19_scale_classical_comparison"
 
 G_GOALS = (48, 54, 60, 72)
 DEEP_GOALS = (72, 84, 96, 108, 120, 144)
-ORDER = ("normal_immediate", "red_aqm", "token_bucket", "ahp_utility", "linucb_bandit",
-         "v4f@200")
+# LinUCB-Bandit is deliberately not drawn (author decision, R81): its readings stay in
+# table 4 and in sections 9/10 of CLASSIC_ALGORITHM_COMPARISON.md, so the tie with Ours is
+# still on record even though the figures carry the other arms only.
+ORDER = ("normal_immediate", "red_aqm", "token_bucket", "ahp_utility", "v4f@200")
 STYLE = {
     "normal_immediate": dict(color="#636363", ls="-.", marker="^", mfc="white",
                              lw=1.1, ms=4.5, mew=1.0, zorder=3),

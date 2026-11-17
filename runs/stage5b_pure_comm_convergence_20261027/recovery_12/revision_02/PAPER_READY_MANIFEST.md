@@ -23,10 +23,10 @@
 | 图 4：效率—按时权衡（G=72 汇总） | `execution/figures/fig4_efficiency_pareto_all8.png`<br>`execution/figures/fig4_efficiency_pareto_all8.pdf` | `4b722d408788652c` |
 | 图 5：绝对按时完成率随 G | `execution/figures/fig5_absolute_on_time.png`<br>`execution/figures/fig5_absolute_on_time.pdf` | `6c891fd78d05fdec` |
 | 图 15：投递率 8 档鲁棒性 | `execution/figures/fig15_delivery_prob_sweep.png`<br>`execution/figures/fig15_delivery_prob_sweep.pdf` | `f2ab4bc7cdca46eb` |
-| 图 16：外加配额约束下的排序器对比 | `execution/figures/fig16_budget_spectrum_pareto.png`<br>`execution/figures/fig16_budget_spectrum_pareto.pdf` | `7468affc0e629660` |
+| 图 16：外加配额约束下的排序器对比 | `execution/figures/fig16_budget_spectrum_pareto.png`<br>`execution/figures/fig16_budget_spectrum_pareto.pdf` | `f6d116c49a5d75c6` |
 | 图 18：下游响应时延与有效吞吐 | `execution/figures/fig18_queueing_delay_and_goodput.png`<br>`execution/figures/fig18_queueing_delay_and_goodput.pdf` | `afdca8333c161974` |
-| 图 19：G ≥ 48 两套规模网格上经典四臂 vs 本文方法（按时与字节四联） | `execution/figures/fig19_scale_classical_comparison.png`<br>`execution/figures/fig19_scale_classical_comparison.pdf` | `21f118c6577abe19` |
-| 图 20：G = 24…108 成功率与信道使用次数/世界（两口径分列，六臂） | `execution/figures/fig20_success_and_channel_uses.png`<br>`execution/figures/fig20_success_and_channel_uses.pdf` | `3b948e65c16834a9` |
+| 图 19：G ≥ 48 两套规模网格上 RED/Token/AHP vs 本文方法（按时与字节四联；LinUCB 只入表与文档） | `execution/figures/fig19_scale_classical_comparison.png`<br>`execution/figures/fig19_scale_classical_comparison.pdf` | `68f05efffa20a7f4` |
+| 图 20：G = 24…108 成功率与信道使用次数/世界（两口径分列，五臂；LinUCB 只入表与文档） | `execution/figures/fig20_success_and_channel_uses.png`<br>`execution/figures/fig20_success_and_channel_uses.pdf` | `2002e476dc7fe0b0` |
 
 **不进入论文的图（内部审计）**：
 
