@@ -127,7 +127,7 @@
 - 图 `fig19_scale_classical_comparison`、表 `table4_scale_classical.tex`、
   `CLASSIC_ALGORITHM_COMPARISON.md` §9。
 - 再补 G=24/30/36/42 四档 400 世界后，`fig20_success_and_channel_uses` 给出 G=24…108 的
-  **绝对成功率**与**信道使用次数/世界**（五臂、两口径分列；LinUCB 只入表与文档）：G≤42 Ours 与 Immediate 成功率差
+  **绝对成功率**与**信道使用次数/世界**（五臂、单轴 G=24…108，72/84 间标口径切换；LinUCB 只入表与文档）：G≤42 Ours 与 Immediate 成功率差
   ≤0.010；G≥48 Ours 信道最低（G72 省 44 %、G108 省 57 %）但成功率低于 Immediate 与 LinUCB。
   全表 `CLASSIC_ALGORITHM_COMPARISON.md` §10。
 

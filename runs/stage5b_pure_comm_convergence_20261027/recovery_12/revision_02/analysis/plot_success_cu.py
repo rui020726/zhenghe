@@ -1,14 +1,16 @@
-"""Figure 20: absolute success rate and channel uses per world, G = 24..108.
+"""Figure 20: absolute success rate and channel uses per world on ONE G axis, 24..108.
 
-Two regimes, drawn as two columns because their world designs differ and must not be joined
-into one curve:
+The two world designs are joined on a single numeric axis because the paper asks for one
+curve per arm over the whole range: G = 24..72 comes from the G sweep (25 worlds per goal,
+N varies with the (R, N) pair) and G = 84..108 from the deep G x R x S grid (27 worlds per
+goal, N = 6).  The regime switch is drawn as a dotted vertical rule between 72 and 84 and
+labelled in both panels, so the join is visible rather than silent; G = 72 is taken from the
+sweep, whose scene rule matches the lower half of the range.
 
-* left  -- the G sweep (25 worlds per goal; N varies with the (R, N) pair), G = 24..72;
-* right -- the deep G x R x S grid (27 worlds per goal; N = 6), G = 72..108.
-
-Top row: success rate = on_time / generated_goals.  Bottom row: channel uses per world =
-sum(emissions x subscribers) / worlds.  Six arms: Immediate, the four named classical
-algorithms and Ours (deep red, solid, filled circle).
+Top panel: success rate = on_time / generated_goals.  Bottom panel: channel uses per world =
+sum(emissions x subscribers) / worlds.  Five arms: Immediate, RED-AQM, Token-Bucket,
+AHP-Utility and Ours (deep red, solid, filled circle).  LinUCB-Bandit stays out of the figure
+by author decision; its readings remain in table 4 and sections 9/10 of the comparison doc.
 
 Reads ``execution/classic/SCALE_RESULTS.json`` only.
 
@@ -37,13 +39,16 @@ IN = BASE / "execution/classic/SCALE_RESULTS.json"
 OUT = BASE / "execution/figures"
 STEM = "fig20_success_and_channel_uses"
 
-G_GOALS = (24, 30, 36, 42, 48, 54, 60, 72)
-DEEP_GOALS = (72, 84, 96, 108)
+SWEEP_GOALS = (24, 30, 36, 42, 48, 54, 60, 72)
+DEEP_GOALS = (84, 96, 108)
+GOALS = SWEEP_GOALS + DEEP_GOALS
+SWITCH = 78.0
 
 
-def series(table, grid, goals, arm, key):
+def series(table, arm, key):
     out = []
-    for goal in goals:
+    for goal in GOALS:
+        grid = "g_sweep" if goal <= 72 else "deep"
         record = (table[grid].get(str(goal)) or table[grid].get(goal) or {}).get(arm)
         out.append(np.nan if record is None or record.get(key) is None else record[key])
     return np.asarray(out, dtype="float64")
@@ -53,38 +58,40 @@ def main():
     require_fonts()
     configure()
     table = json.loads(IN.read_text(encoding="utf-8"))["table"]
-    figure, axes = plt.subplots(2, 2, figsize=(7.16, 4.7))
-    panels = (("g_sweep", G_GOALS, "q", "成功率（on-time / 生成目标）"),
-              ("deep", DEEP_GOALS, "q", "成功率（on-time / 生成目标）"),
-              ("g_sweep", G_GOALS, "cu", "信道使用次数 / 世界"),
-              ("deep", DEEP_GOALS, "cu", "信道使用次数 / 世界"))
-    titles = ("(a) G 扫描：成功率", "(b) 深档 G×R×S：成功率",
-              "(c) G 扫描：信道使用", "(d) 深档 G×R×S：信道使用")
+    figure, axes = plt.subplots(2, 1, figsize=(7.16, 5.3))
+    panels = (("q", "成功率（on-time / 生成目标）"),
+              ("cu", "信道使用次数 / 世界"))
     handles = []
-    for index, (grid, goals, key, ylabel) in enumerate(panels):
-        axis = axes[index // 2][index % 2]
+    for index, (key, ylabel) in enumerate(panels):
+        axis = axes[index]
         plotted = []
         for arm in ORDER:
-            values = series(table, grid, goals, arm, key)
+            values = series(table, arm, key)
             plotted.append(values)
-            line, = axis.plot(goals, values, label=LABEL[arm], **STYLE[arm])
+            line, = axis.plot(GOALS, values, label=LABEL[arm], **STYLE[arm])
             if index == 0:
                 handles.append(line)
         finite = np.concatenate([values[np.isfinite(values)] for values in plotted])
-        if finite.size:
-            low, high = float(finite.min()), float(finite.max())
-            span = max(high - low, 0.2)
-            axis.set_ylim(max(0.0, low - 0.12 * span), high + 0.20 * span)
+        low, high = float(finite.min()), float(finite.max())
+        span = max(high - low, 0.2)
+        top = high + 0.24 * span
+        axis.set_ylim(max(0.0, low - 0.10 * span), top)
+        axis.set_xlim(22, 110)
+        axis.set_xticks(list(GOALS))
         axis.set_xlabel("任务数 G")
         axis.set_ylabel(ylabel)
-        axis.set_xticks(list(goals))
-        axis.set_xlim(min(goals) - 2, max(goals) + 2)
-        axis.text(0.02, 0.97, titles[index], transform=axis.transAxes,
-                  ha="left", va="top", fontsize=8.5)
+        axis.axvline(SWITCH, color="#8A8A8A", lw=0.9, ls=":", zorder=1)
+        label_y = top - 0.05 * span
+        axis.text(SWITCH + 0.8, label_y, "口径切换", ha="left", va="top", fontsize=7.6,
+                  color="#5A5A5A")
+        axis.text(24, label_y, ("(a) " if index == 0 else "(b) ") + "G 扫描：25 世界/档",
+                  ha="left", va="top", fontsize=7.6, color="#5A5A5A")
+        axis.text(108, label_y, "深档：27 世界/档，N=6", ha="right", va="top", fontsize=7.6,
+                  color="#5A5A5A")
     figure.legend(handles=handles, labels=[LABEL[arm] for arm in ORDER],
-                  loc="upper center", ncol=3, bbox_to_anchor=(0.5, 1.02),
+                  loc="upper center", ncol=3, bbox_to_anchor=(0.5, 1.01),
                   frameon=True, fontsize=8.2)
-    figure.tight_layout(rect=(0, 0, 1, 0.94))
+    figure.tight_layout(rect=(0, 0, 1, 0.93))
     OUT.mkdir(parents=True, exist_ok=True)
     figure.savefig(OUT / (STEM + ".png"))
     figure.savefig(OUT / (STEM + ".pdf"))
