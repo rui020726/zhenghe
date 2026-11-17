@@ -43,7 +43,7 @@ FIGURES = (
     ("execution/figures/fig19_scale_classical_comparison",
      "图 19：G ≥ 48 两套规模网格上 RED/Token/AHP vs 本文方法（按时与字节四联；LinUCB 只入表与文档）"),
     ("execution/figures/fig20_success_and_channel_uses",
-     "图 20：G = 24…108 成功率与信道使用次数/世界（单轴拼接、口径切换处标注，五臂；LinUCB 只入表与文档）"),
+     "图 20：G = 24…108 成功率 / 信道使用 / 浪费率三联（单轴拼接、口径切换处标注，五臂；LinUCB 只入表与文档）"),
 )
 AUDIT_ONLY = (
     ("execution/figures/fig11_master_all_experiments", "三套实验分列总图（内部审计）"),

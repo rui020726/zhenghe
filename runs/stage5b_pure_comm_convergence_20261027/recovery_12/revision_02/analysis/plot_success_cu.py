@@ -7,8 +7,9 @@ goal, N = 6).  The regime switch is drawn as a dotted vertical rule between 72 a
 labelled in both panels, so the join is visible rather than silent; G = 72 is taken from the
 sweep, whose scene rule matches the lower half of the range.
 
-Top panel: success rate = on_time / generated_goals.  Bottom panel: channel uses per world =
-sum(emissions x subscribers) / worlds.  Five arms: Immediate, RED-AQM, Token-Bucket,
+Top panel: success rate = on_time / generated_goals.  Middle panel: channel uses per world =
+sum(emissions x subscribers) / worlds.  Bottom panel: broadcast waste = distinct broadcast
+targets that missed their deadline / distinct broadcast targets.  Five arms: Immediate, RED-AQM, Token-Bucket,
 AHP-Utility and Ours (deep red, solid, filled circle).  LinUCB-Bandit stays out of the figure
 by author decision; its readings remain in table 4 and sections 9/10 of the comparison doc.
 
@@ -58,9 +59,10 @@ def main():
     require_fonts()
     configure()
     table = json.loads(IN.read_text(encoding="utf-8"))["table"]
-    figure, axes = plt.subplots(2, 1, figsize=(7.16, 5.3))
+    figure, axes = plt.subplots(3, 1, figsize=(7.16, 7.6))
     panels = (("q", "成功率（on-time / 生成目标）"),
-              ("cu", "信道使用次数 / 世界"))
+              ("cu", "信道使用次数 / 世界"),
+              ("waste", "广播超时浪费率（未按时 / 被广播目标）"))
     handles = []
     for index, (key, ylabel) in enumerate(panels):
         axis = axes[index]
@@ -84,14 +86,14 @@ def main():
         label_y = top - 0.05 * span
         axis.text(SWITCH + 0.8, label_y, "口径切换", ha="left", va="top", fontsize=7.6,
                   color="#5A5A5A")
-        axis.text(24, label_y, ("(a) " if index == 0 else "(b) ") + "G 扫描：25 世界/档",
+        axis.text(24, label_y, "(" + "abc"[index] + ") G 扫描：25 世界/档",
                   ha="left", va="top", fontsize=7.6, color="#5A5A5A")
         axis.text(108, label_y, "深档：27 世界/档，N=6", ha="right", va="top", fontsize=7.6,
                   color="#5A5A5A")
     figure.legend(handles=handles, labels=[LABEL[arm] for arm in ORDER],
-                  loc="upper center", ncol=3, bbox_to_anchor=(0.5, 1.01),
+                  loc="upper center", ncol=3, bbox_to_anchor=(0.5, 1.005),
                   frameon=True, fontsize=8.2)
-    figure.tight_layout(rect=(0, 0, 1, 0.93))
+    figure.tight_layout(rect=(0, 0, 1, 0.955))
     OUT.mkdir(parents=True, exist_ok=True)
     figure.savefig(OUT / (STEM + ".png"))
     figure.savefig(OUT / (STEM + ".pdf"))

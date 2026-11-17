@@ -345,7 +345,8 @@ def main():
                    "保留在下表，便于与图对照时补回第六臂。")
     success.append("")
     for key, title, pattern in (("q", "成功率（绝对）", "%.3f"),
-                                ("cu", "信道使用次数/世界", "%.1f")):
+                                ("cu", "信道使用次数/世界", "%.1f"),
+                                ("waste", "广播超时浪费率", "%.3f")):
         success.append("### %s" % title)
         success.append("")
         success.append("| 方法 | " + " | ".join("G=%d" % g for g in G_GOALS)
@@ -360,7 +361,11 @@ def main():
                                  else pattern % record[key])
             success.append("| %s | %s |" % (LABEL[arm], " | ".join(cells)))
         success.append("")
-    success.append("图 `fig20_success_and_channel_uses`（四联：成功率 / 信道使用 × 两口径）。")
+    success.append("浪费率 = 被广播的不同目标中未在其时限内完成的比例（分母为被广播目标数，"
+                   "不是全部生成目标）；从不发送的臂没有该读数。")
+    success.append("")
+    success.append("图 `fig20_success_and_channel_uses`（单轴 G=24…108 三联：成功率 / "
+                   "信道使用 / 浪费率）。")
     success.append("<!-- success-section:end -->")
     text = doc.read_text(encoding="utf-8")
     block = "\n".join(success) + "\n"
