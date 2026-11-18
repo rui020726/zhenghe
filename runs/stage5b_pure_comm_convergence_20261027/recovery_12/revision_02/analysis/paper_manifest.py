@@ -30,6 +30,8 @@ TABLES = (
      "表 2：本文方法自身的特征消融（上）与 #16 容量反事实（下）"),
     ("execution/latex/table4_scale_classical.tex",
      "表 4：G ≥ 48 两套规模网格上经典四臂 vs 本文方法（工作点冻结迁移）"),
+    ("execution/latex/table5_waste_rate.tex",
+     "表 5：G ≥ 24 两套规模网格上的广播超时浪费率（六臂，含 LinUCB）"),
 )
 FIGURES = (
     ("execution/figures/fig1_g_scaling_efficiency", "图 1：G 扩展四联（字节/按时/消息/浪费）"),

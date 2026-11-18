@@ -708,7 +708,7 @@ RED 的字节比漂移最小（0.77–0.81）且大 G 下按时率回到 0.86–
 图 20 按作者要求把两段拼在**同一根 G 轴（24…108）**上（上：成功率，下：信道使用/世界），
 72 与 84 之间以点竖线标“口径切换”，G=72 取扫描值；跨口径的跳变是设计差异，不是模型变化。
 绝对成功率 = on_time / generated_goals；信道使用次数/世界 = Σ(发射 × 订阅者) / 世界数。
-全表见 `CLASSIC_ALGORITHM_COMPARISON.md` §10，图 `fig20_success_and_channel_uses`。
+全表见 `CLASSIC_ALGORITHM_COMPARISON.md` §10，图 `fig20_success_and_channel_uses`，LaTeX 表 `execution/latex/table5_waste_rate.tex`（浪费率，六臂含 LinUCB）。
 
 | 档位（口径） | 指标 | Immediate | RED | Token | AHP | LinUCB | Ours |
 |---|---|---|---|---|---|---|---|
