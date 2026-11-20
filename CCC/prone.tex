@@ -1,0 +1,98 @@
+% 信息素（逆向引导）机制的理论分析
+\section{信息素（逆向引导）机制的理论分析}
+\label{sec:pheromone_theory}
+
+本节针对多智能体协同探索/搜救任务，系统阐述一种“信息素（逆向引导）”机制的建模、基本性质与实验性检验准则。核心思想是以环境上可读写的标量场代替高频的显式通信，在保持系统稳定性的同时，抑制复访、推动前沿，从而提升唯一覆盖与目标发现效率。
+
+\subsection{机制与建模}
+设可行自由空间离散为栅格集合 $\mathcal{F}$，记 $\lvert\mathcal{F}\rvert = F$。在每个栅格 $x\in\mathcal{F}$ 定义信息素强度 $P_t(x)\in\mathbb{R}_{\ge 0}$，其随时间 $t$ 的更新为
+\begin{equation}
+\label{eq:update}
+P_{t+1}(x)=\min\left\{P_{\max},\,(1-\lambda)\,P_t(x)+\mathbf{1}\{x\in\mathcal{V}_t\}\right\},
+\end{equation}
+其中 $\lambda\in(0,1]$ 为蒸发率，$P_{\max}>0$ 为截断上界，$\mathcal{V}_t$ 是时刻 $t$ 被任一智能体“访问”的栅格集合。访问判据可按任务选定：i) 物理到达（代理占据该格）；ii) 感知覆盖（该格处于任一代理视场，包含遮挡处理）；iii) 置信覆盖（累计检测概率超阈值）。本文默认采用感知覆盖判据。
+
+为实现“逆向引导”，决策对高信息素区域施加惩罚。记候选动作集为 $\mathcal{A}$，动作 $a$ 导致的下一步栅格为 $x^+(a)$，则可定义一类 Gibbs 选择概率
+\begin{equation}
+\label{eq:policy}
+\pi_t(a)\propto \exp\big(-\beta\,\bar{P}_t(x^+(a))\big)\cdot \exp\big(+\eta\,R^{\text{task}}_t(a)\big),
+\end{equation}
+其中 $\beta>0$ 控制对信息素的“逆偏好”，$\bar{P}_t$ 为邻域平滑或窗口平均的 $P_t$，$\eta\ge 0$ 为任务奖励权重（如前沿/目标启发式），$R^{\text{task}}_t$ 为与任务相关的即时启发式。该设计使代理倾向于选择 $P$ 较低（即少访/久未访）区域。
+
+\paragraph{记忆尺度（半衰期）}
+在无访问扰动的情形下，$P$ 按几何级数衰减，其“记忆半衰期”可近似为
+\begin{equation}
+(1-\lambda)^h=\tfrac{1}{2}\quad\Rightarrow\quad h\approx \frac{\ln 2}{\lambda}\qquad(\lambda\ll 1).
+\end{equation}
+因此 $\lambda$ 直接刻画了系统对历史轨迹的记忆长度。
+
+\subsection{有界性与稳定性}
+由式\eqref{eq:update} 可见 $P_{t}(x)$ 一直受 $P_{\max}$ 上界约束，故对任意 $x$ 有 $0\le P_t(x)\le P_{\max}$。即便不设上界，当 $\lambda>0$ 时，对平稳平均访问频率 $f(x)\in[0,1]$，有
+\begin{equation}
+\mathbb{E}[P_{t+1}(x)]\approx (1-\lambda)\,\mathbb{E}[P_t(x)]+f(x)
+\quad\Rightarrow\quad
+\mathbb{E}[P_t(x)]\to P^*(x)\approx \frac{f(x)}{\lambda},
+\end{equation}
+从而 $P$ 在均值意义下收敛且有界。
+
+\subsection{复访抑制的负漂移性质}
+为度量整体“复访倾向”，定义势函数
+\begin{equation}
+\label{eq:potential}
+V_t \;=\; \sum_{x\in\mathcal{F}} g\big(P_t(x)\big),\qquad g(z)=z^2,
+\end{equation}
+其中 $g$ 为凸函数，使高 $P$ 区域对 $V_t$ 的贡献放大。$V_t$ 的演化包含两类效应：i) 蒸发使所有 $P$ 同比下降，倾向降低 $V_t$；ii) 访问对当前格 $P$ 增量为 $+1$，倾向抬升 $V_t$。若策略\eqref{eq:policy} 使“在高 $P$ 区域再次访问”的概率被充分抑制，则蒸发诱发的下降项在期望上压过访问诱发的上升项，得到如下结论。
+
+\paragraph{命题（期望负漂移）}
+存在参数区间 $(\lambda,\beta,\eta)$ 及常数 $\delta>0$，使得在满足基本可达与遍历性的温和条件下，
+\begin{equation}
+\label{eq:drift}
+\mathbb{E}\!\left[V_{t+1}-V_t\,\big|\,\mathcal{H}_t\right]\;\le\; -\delta \;+\; \mathcal{O}(\lambda),
+\end{equation}
+其中 $\mathcal{H}_t$ 为历史滤过。式\eqref{eq:drift} 表明 $V_t$ 呈期望负漂移（至噪声量级），对应到行为层面即“高 $P$ 区域被回避、复访减少”。其直接后果是唯一覆盖 $U(t)$ 增长更快、复访率更低。
+
+\subsection{覆盖推进与检测概率下界}
+记时刻 $t$ 的唯一覆盖比例
+\begin{equation}
+U(t)=\frac{1}{F}\,\big|\{x\in\mathcal{F}:\exists \tau\le t,\; x\in \mathcal{V}_\tau\}\big|,
+\qquad U_T\equiv U(T).
+\end{equation}
+令单位步的感知窗口面积为 $A_v$（例如离散半径 $v$ 时 $A_v=(2v+1)^2$）。在独立性与均匀性近似下，某个稀疏目标在 $T$ 步内被至少一次观测到的概率可得下界
+\begin{equation}
+\label{eq:hit-lb}
+\mathbb{P}\{\text{hit in }[1,T]\}\;\ge\; 1-\exp\!\left(-\,\kappa\,\frac{A_v\,\mathbb{E}[U_T]}{F}\right),
+\end{equation}
+其中 $\kappa\in(0,1]$ 为修正相关与重叠的经验系数。式\eqref{eq:hit-lb} 揭示了“感知窗口 $A_v$ 与唯一覆盖 $\mathbb{E}[U_T]$ 的乘法作用”。当 $v$ 降低导致 $A_v$ 变小时，只要逆向信息素显著提升 $\mathbb{E}[U_T]$，总体命中概率仍可维持在较高水平。
+
+\subsection{动态目标与时间标记的协同}
+对动态目标，单纯追求“只访问新格子”并非最优。为此可引入“时间标记”（staleness）$S_t(x)$ 表示自上次观测以来的时长，采用复合偏好
+\begin{equation}
+\text{score}_t(x) \;=\; -\alpha\,\bar{P}_t(x)\;+\;\beta\,S_t(x),
+\qquad \alpha,\beta>0.
+\end{equation}
+$\bar{P}_t$ 偏好新/久未访区域，$S_t$ 偏好“长时间未刷新”的区域，二者方向一致而互补：既推动前沿，又定期清扫旧区，从而压低“最长未刷新间隔”的分布尾部，提升对动态目标的再发现效率。
+
+\subsection{对通信受限的鲁棒性与隐式协同}
+式\eqref{eq:update}–\eqref{eq:policy} 仅依赖于环境共享的标量场 $P_t$ 及其局部可观测版本。即便显式消息在链路上出现丢包/延迟，智能体仍可通过对 $P$ 的读写实现“基于环境的协同”（stigmergy），在系统层面表现为：对带宽/时延/丢包等扰动的性能退化斜率较小；在 $v$ 受限时仍维持较好的覆盖效率（见式\eqref{eq:hit-lb} 的乘法耦合）。
+
+\subsection{实验性检验与指标}
+为验证上述性质，建议报告如下指标：
+\begin{itemize}
+    \item \textbf{复访率}：瞬时/窗口/累计复访率 $r(t)$；逆向信息素应显著降低复访率曲线水平。
+    \item \textbf{唯一覆盖}：$U(t)$ 曲线与 $t_{90}=\min\{t:U(t)\ge 0.9\}$；比较不同 $v$ 与是否使用信息素的差异。
+    \item \textbf{势函数/方差}：$V_t=\sum_x P_t(x)^2$ 或 $\mathrm{Var}[P_t(x)]$；验证期望负漂移或稳态更低水平。
+    \item \textbf{时鲜度}：最长未刷新间隔的分布（CDF/尾部概率），在“信息素+时间标记”下右尾应收缩。
+    \item \textbf{命中率下界对照}：估计经验系数 $\kappa$ 后，以式\eqref{eq:hit-lb} 与实测命中率进行散点/曲线对照。
+\end{itemize}
+
+\subsection{参数整定与工程标尺}
+\begin{itemize}
+    \item \textbf{蒸发率 $\lambda$}：控制记忆长度 $h\approx\ln 2/\lambda$。目标变化缓慢时取小 $\lambda$，变化快或需灵活性时取大 $\lambda$。
+    \item \textbf{上界 $P_{\max}$}：防止局部长期“污点化”，通常设为典型驻留次数的 $1$–$2$ 倍。
+    \item \textbf{权重 $\alpha,\beta$ 与 $\beta$（式\eqref{eq:policy}）}：感知半径 $v$ 降低时，可适度上调信息素/时间标记权重，或下调 $\lambda$，以提升 $\mathbb{E}[U_T]$ 对冲 $A_v$ 的下降。
+    \item \textbf{邻域宽度}：为获得稳定梯度，$\bar{P}_t$ 的平滑窗口应覆盖 $2$–$3$ 步可达邻域。
+\end{itemize}
+
+\paragraph{实现与复杂度} 机制仅涉及按式\eqref{eq:update} 的逐格更新与局部读取，计算与存储开销与 $\lvert\mathcal{F}\rvert$ 线性相关，适配大规模并行实现。
+
+\paragraph{小结} 逆向信息素在弱通信条件下提供了一种可解释、可控且稳定的隐式协同手段。其负漂移性质抑制复访、推动前沿；与时间标记结合可兼顾探索与刷新；在感知受限时，仍可经由提升 $\mathbb{E}[U_T]$ 维持较高目标发现概率。

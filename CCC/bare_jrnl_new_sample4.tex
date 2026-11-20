@@ -1,0 +1,451 @@
+\documentclass[lettersize,journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage{amssymb}   % 支持额外的符号，如箭头
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{cite}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+\usepackage{subfig} % Required for subfigures
+\usepackage{caption}
+% updated with editorial comments 8/9/2021
+\graphicspath{ {./images/} }
+\renewcommand{\figurename}{Fig.}
+\usepackage{booktabs}
+
+\begin{document}
+
+\title{PILOC: A Pheromone Inverse Guidance Mechanism and Local-Communication Framework for Dynamic Target Search of Multi-Agent in Unknown Environments}
+
+
+% The paper headers
+
+\IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+\maketitle
+\pagestyle{empty}  % no page number for the second and the later pages
+\thispagestyle{empty} % no page number for the first page
+
+\begin{abstract}
+Multi-Agent Search and Rescue (MASAR) is critical for disaster response and exploration tasks. However, dynamic targets and environmental uncertainties present major challenges to traditional methods. This paper proposes PILOC, a reinforcement learning framework that integrates Pheromone Inverse Guidance Mechanism and decentralized local communication strategy to enable efficient multi-agent coordination without global prior knowledge.
+PILOC embeds pheromone signals directly into the observation space, allowing agents to coordinate indirectly via environmental perception. A DRL-based local communication strategy further reduces communication overhead while enhancing scalability. 
+Experimental results confirm that the integration of the local communication strategy with the pheromone inverse guidance mechanism improves search efficiency, system robustness, and adaptability in discrete dynamic grid environments. The proposed PILOC framework outperforms several representative state-of-the-art approaches under specific constraints, demonstrating its potential in MASAR scenarios characterized by limited communication and target uncertainty.
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+Multi-Agent Reinforcement Learning, Search and Rescue (SAR), Pheromone Inverse Guidance, Local Communication, Partially Observable Environments, Dynamic Target Search, Decentralized Coordination.
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\IEEEPARstart{M}{ulti-agent} systems are crucial in search and rescue, exploration, and other complex tasks, particularly in dynamic, unknown environments. Traditional methods face challenges such as limited information transmission, high communication overhead, and low collaboration efficiency. Additionally, continuous communication is often impractical due to energy consumption and unstable links. Multi-Agent Reinforcement Learning (MARL) has emerged as a powerful tool for addressing these issues~\cite{bahrpeyma2022review,agrawal2021multi}, with notable advancements in areas like robotic swarm control~\cite{huang2020multi} and UAV formation control~\cite{yuling2023formation}. However, most research still focuses on static targets, leaving dynamic target search an open challenge.
+This study proposes a framework that integrates a Pheromone Inverse Guidance Mechanism with a distributed local communication strategy to improve multi-agent search for dynamic targets in unknown environments. Inspired by ant colony foraging, agents release and sense pheromones along their paths to avoid ineffective repetitive exploration and prioritize target areas, enhancing search efficiency.
+The contributions of this paper are:
+\begin{itemize}
+    \item We propose a dynamic pheromone updating model that adopts a reverse guidance strategy to reduce ineffective repetitive exploration and improve target localization efficiency.
+    \item A distributed local communication strategy that minimizes energy consumption and improves system scalability by limiting communication to nearby agents.
+    \item Comparisons with state-of-the-art MARL methods, demonstrating improvements in search efficiency and robustness, along with ablation studies to validate the contributions of each component.
+\end{itemize}
+
+The paper is structured as follows: Section 2 reviews related work on MARL; Section 3 presents the problem formulation and scenarios; Section 4 introduces the PILOC framework; Section 5 discusses experimental settings, comparative evaluations, ablation studies, communication range analysis, and scalability; and Section 6 concludes and outlines future directions.
+
+
+\section{Related Work}
+\IEEEpubidadjcol
+Multi-Agent Search and Rescue (MASAR) tasks require agents to autonomously explore unknown environments, construct environmental maps, and locate victims in real time~\cite{niroui2019deep}. Existing methods are generally categorized into goal-oriented and coverage-oriented approaches~\cite{de2023hierarchical}.
+
+Goal-oriented methods assume partial prior knowledge of target distributions and prioritize rapid localization. For example, Jamshidnejad et al. proposed a probabilistic path-planning strategy that guides agents to high-likelihood target zones~\cite{jamshidnejad2018adaptive}. Tang et al. introduced a distributed approach based on the Decentralized Partially Observable Markov Decision Process (Dec-POMDP) for dynamic target search~\cite{tang2007complete}. In contrast, coverage-oriented methods, such as frontier-based exploration~\cite{yamauchi1998frontier}, aim for exhaustive search but often suffer from inefficiencies in cluttered environments. Galceran and Carreras conducted a comprehensive survey on coverage strategies and highlighted their trade-offs in scalability and completeness~\cite{galceran2013survey}.
+
+Beyond exploration strategies, inter-agent communication is essential for effective coordination in multi-agent systems. Without communication, agents are prone to redundant actions and may fail to locate critical targets~\cite{sun2025multi, peter2021modern}. Communication strategies are closely tied to the system's control architecture, which can be broadly classified into centralized and decentralized paradigms. Centralized approaches, such as SCRIMP~\cite{wang2023scrimp}, rely on a global controller for decision-making and information aggregation. In contrast, decentralized frameworks allow agents to act based on local observations, enabling greater autonomy and scalability~\cite{dutta2021opportunistic}. Communication itself can be explicit—through direct message exchange—or implicit—via environmental cues and shared signals~\cite{farinelli2004multirobot, gielis2022critical}.
+
+However, explicit communication is often constrained in real-world deployments due to limited bandwidth, signal interference, and infrastructure damage in disaster scenarios~\cite{ghena2019challenge,drew2021multi}. These factors may lead to communication radius collapse, making global coordination infeasible. To mitigate this, Zhang and Lesser proposed a loss-aware communication prioritization method~\cite{zhang2013coordinating}, and follow-up studies have explored local communication strategies to improve scalability and resilience~\cite{grupen2020low}.
+
+Recent developments in Deep Reinforcement Learning (DRL) have further advanced MASAR by enabling agents to adapt to dynamic and partially observable environments. Approaches such as heterogeneous MARL~\cite{wakilpoor2020heterogeneous}, hierarchical graph neural networks~\cite{zhang2022h2gnn}, and macro-action-based DRL~\cite{tan2022deep} have demonstrated improvements in decentralized exploration and coordination. Many of these methods adopt the Centralized Training with Decentralized Execution (CTDE) paradigm, as seen in MAPPO and MADDPG, to balance learning efficiency with autonomy.
+
+Despite these advancements, MASAR systems still face challenges in ``double-unknown'' scenarios, where both the environment and target positions are dynamic and unknown. Traditional coverage-oriented methods typically rely on explicit frontier extraction, which incurs heavy computational overhead and assumes near-perfect communication. On the other hand, most existing communication-aware MARL models assume soft or continuous communication links, making them heavily susceptible to deadlocks or local oscillations when severe communication outages occur.
+
+To address these limitations, this study proposes a novel framework. The primary novelty of our approach lies in replacing explicit map-merging dependencies with a ``timestamp map layer'' and utilizing a ``biological pheromone inverse guidance mechanism''. This design implicitly decouples coordination from continuous communication requirements, allowing agents to maintain high search efficiency even under severe communication deterioration.
+
+\section{Problem Description}
+\subsection{Scene Description}
+We construct a search and rescue scenario on a two-dimensional discretized environment map, as shown in Fig.\ref{fig1}. The map is composed of gray and white areas, where the gray areas represent impassable regions, such as obstacles, out of bounds areas, and forbidden zones, while the white areas denote passable regions that provide a path selection space for SAR activities. To ensure the feasibility of SAR tasks, we only consider maps in which the passable areas are fully connected. The state of the mission environment is partially observable, meaning that complete information about the entire environment is not directly accessible.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.4\linewidth]{Fig.png}
+    \caption{Search and rescue scenario map}
+    \label{fig1}
+\end{figure}
+
+\subsection{Target model}
+We consider a dynamic target model with randomly moving search and rescue targets. The SAR scenario consists of multiple targets, denoted as \( G \), which are distributed across the passable area. The initial position of each target \( g_i \in G \) is randomly generated, and at each time step \( t \), target \( g_i \) randomly selects an action \( a_{g_i} \) from the action space \( A_g \). The probability of selecting each action is equal.
+
+\begin{equation}
+A_g = \{ \leftarrow, \uparrow, \rightarrow, \downarrow \}
+\end{equation}
+
+If target \( g_i \) collides with an obstacle after executing action \( a_{g_i} \), the action is re-selected until an action that does not result in a collision is chosen.
+\subsection{Agent Model}
+
+We assume that all agents are homogeneous, and there are \( U \) agents, where \( U \triangleq \{u = 1, 2, \dots, U\} \). Each agent can perceive its surroundings within a perception range \( v \) and communicate with other agents within a communication range \( c \). Agents exchange knowledge gained from their respective explorations, with detailed communication processes discussed in Subsection 4.4. The focus of this work is not on trajectory optimization but on optimizing the search and rescue strategy. To simplify the problem, we discretize the agent's action space into four directions, defined as \( A = \{ \leftarrow, \uparrow, \rightarrow, \downarrow \} \).
+
+Each agent starts randomly from a free cell in a passable area on the map. For each agent, the location of the target to be searched and the locations of other agents (in the absence of communication) are unknown. The goal of the search and rescue task is to locate all the targets within a specified time step.Specifically, a target is considered ``successfully located'' when it falls within an agent's $v \times v$ perception range (Line-of-Sight) without any obstacle occlusion. A grid cell is defined as ``explored'' once it is observed by any agent and recorded in its timestamp map.
+
+\section{Method}
+\subsection{Problem Modeling and Dec-POMDP Framework}
+
+We describe the MASAR problem in an unknown scenario as a Dec-POMDP, which is a generalization of the Markov Decision Process (MDP). A Dec-POMDP consists of an eight-tuple \( \langle N, S, A, O, \Omega, R, T, \gamma \rangle \), where:
+\begin{itemize}
+    \item \( N \) is the number of agents, which is usually greater than or equal to 2 in multi-agent systems;
+    \item \( S \) is the set of all state variables;
+    \item \( A = [A_1, A_2, \dots, A_N] \) is the space of joint actions \( a \), where \( A_i \) represents the set of localized actions \( a_i \) that can be taken by agent \( i \);
+    \item \( O = [O_1, O_2, \dots, O_N] \) is the set of observations;
+    \item \( \Omega(o, s', a) \sim P(o \mid s', a) \) denotes the probability of observing \( o \) in state \( s' \) after taking action \( a \);
+    \item \( R(s) \) is the reward function, which returns the immediate reward;
+    \item \( T(s, a, s') \sim P(s' \mid s, a) \) denotes the probability of transitioning from state \( s \) to state \( s' \) after taking action \( a \);
+    \item Finally, \( \gamma \in [0, 1] \) is the discount factor, which represents the importance attached to future returns.
+\end{itemize}
+
+A Dec-POMDP scenario can be described as follows: at each time step, the environment is in some state \( s \in S \). Agent \( i \) can only obtain local observations \( o_i \) and take actions \( a_i \) based on the local observations (or messages delivered by other agents) to change the environment's state from \( s \) to \( s' \) and receive a reward \( r \). The agent's goal is to learn the strategy \( \pi(a_i \mid o_i): O_i \times A_i \to [0, 1] \) in a finite time horizon \( T \) such that the discounted reward is maximized:
+
+\begin{equation}
+G = \sum_{k=0}^{T} \gamma^k r_k
+\end{equation}
+
+Since the state in a Dec-POMDP is not fully observable, the agent can only receive partial information about the environment. This generalization is more realistic than MDP, making Dec-POMDP a suitable framework for describing SAR tasks.
+
+\subsection{Observational Modeling and Input Representation}
+
+Based on the assumption that all agents are homogeneous, we use agent \( i \) as an example to explain the observation inputs. Each agent's observation consists of three maps: the obstacle map \( M_o \), the exploration map \( M_e \), and the pheromone observation map \( O_{\text{ph}} \), which are described as follows.
+
+\begin{figure}[!t]
+    \centering
+    \subfloat[]{%
+        \includegraphics[width=0.28\linewidth]{Fig2a.png}
+        \label{fig:2a}
+    }\hfill
+    \subfloat[]{%
+        \includegraphics[width=0.28\linewidth]{FIG2b.png}
+        \label{fig:2b}
+    }\hfill
+    \subfloat[]{%
+        \includegraphics[width=0.28\linewidth]{fig2c.png}
+        \label{fig:2c}
+    }
+    \caption{Agent observation inputs: (a) the obstacle map \( M_o \), (b) the exploration map \( M_e \), and (c) the pheromone observation map \( O_{\text{ph}} \), with the red box indicating the pheromone observed by the agent.}
+    \label{fig:fig2_all}
+\end{figure}
+
+\subsubsection*{Exploration Map \( M_o \)}
+In the obstacle map \( M_o \), four types of data are included, as shown in Fig. \ref{fig:2a}:
+\begin{itemize}
+    \item \textbf{Unsearched Area}: Gray areas in the obstacle map that may contain obstacles or passable regions.
+    \item \textbf{Obstacle Area}: Black areas in the obstacle map, indicating regions that contain obstacles and are impassable.
+    \item \textbf{Passable Area}: White areas in the obstacle map, indicating regions that do not contain obstacles and are passable.
+    \item \textbf{Historical Position Information}: The obstacle map includes the current position as well as the position information from the previous two time steps.
+\end{itemize}
+
+\subsubsection*{Exploration Map \( M_e \)}
+
+Since the target is movable, unlike static targets, it may appear in areas that have already been searched and rescued. The obstacle map does not address this issue, so we introduce the exploration map, as shown in Fig. \ref{fig:2b}.
+
+The exploration map \( M_e \) contains only two types of exploration information, along with historical position data:
+\begin{itemize}
+    \item \textbf{Unexplored Area}: Gray areas in the exploration map, indicating regions that have not been observed by the agent.
+    \item \textbf{Explored Area}: Regions that have been observed by the agent. Note that obstacles are not explicitly shown in the exploration map; it only records which areas have been observed. To indicate the time since the areas were last observed, a time-marking mechanism is introduced. The explored areas are assigned a value between [0, 0.3], which is updated at each time step. A smaller value indicates that the area was observed more recently, and this is represented as a lighter color in Fig. \ref{fig:2b}.
+    \item \textbf{Historical Position Information}: The exploration map contains the current position and the position information from the previous two time steps.
+\end{itemize}
+
+\subsubsection*{Pheromone Observation Map \( O_{\text{ph}} \)}
+
+To enhance the collaborative efficiency of multiple agents performing search and rescue tasks in unknown environments, we draw inspiration from the communication mechanism of ant colonies and incorporate the Pheromone Inverse Guidance Mechanism into the algorithm as an auxiliary tool.
+
+Each agent considers itself as the center and acquires the pheromone distribution within a fixed range, which forms its pheromone observation map \( O_{\text{ph}} \). Specifically, the size of the pheromone observation window is set to \( l \times l \), where each agent can perceive the current pheromone concentration at all grid points in the square area around itself, with side length \( l \), at each time step, as shown in Fig. \ref{fig:2c}. The pheromone observation map is used as one of the inputs to the neural network, along with the obstacle map and exploration map, for action generation. The specific pheromone mechanism is described in the next section.
+
+\subsection{Pheromone Inverse Guidance Mechanism}
+
+At each time step, the pheromone at the location where the agent is situated is updated, and the pheromone concentration \( P(x,y) \) depends on the time the agent stays at that location and the frequency of visits. To prevent infinite accumulation of pheromone, we set an upper limit for the pheromone concentration, denoted \( P_{\text{max}} \). The pheromone concentration decays gradually at a rate \( \lambda \) over time. The pheromone update rule is as follows:
+
+\begin{equation}
+P(x,y) = \begin{cases}
+P(x,y) + 1, & \text{Agent exists at this location} \\
+P(x,y), & \text{otherwise}
+\end{cases}
+\end{equation}
+
+If \( P(x,y) > P_{\text{max}} \) after updating, then \( P(x,y) = P_{\text{max}} \).
+
+The pheromone evaporation rule at each time step is as follows:
+
+\begin{equation}
+P(x,y) = P(x,y) \times (1 - \lambda)
+\end{equation}
+
+where \( \lambda \) is the evaporation rate. In this study, \( P_{\text{max}} \) is set to 10, and \( \lambda \) is set to 0.02. While the standard pheromone mechanism directs the agent toward regions that have been frequently visited, our approach works in the opposite direction by guiding the agent toward less frequently visited regions. The core idea of this mechanism is to prevent ineffective repeated exploration, thereby improving exploration efficiency. Based on this principle, we call it the Pheromone Inverse Guidance Mechanism.
+\subsection{Communication Strategy}
+Agents can communicate with each other, and when two or more agents are within the communication range \( c \), they will exchange knowledge gained from their explorations to update the obstacle and exploration maps. Assuming there are \( C \) agents communicating, the updated obstacle map \( M_o^{i' } \) of agent \( i \), after applying Equation\ref{eq:4} , is shown on the right side of Fig.\ref{fig3}:
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Fig3.png}
+    \caption{Schematic diagram of agent communication: the left side shows the exploration map update method, and the right side illustrates the obstacle map update method.}
+    \label{fig3}
+\end{figure}
+
+\begin{equation}
+M_o^{i' } = \bigcup_{j \in C} M_o^j  \quad \forall i \in C \tag{4}
+\label{eq:4}
+\end{equation}
+
+When updating the exploration map \( M_e^i \), the updated \( M_e^{i' } \) is obtained from Equation\ref{eq:5}, and the update effect is shown on the left side of Fig.\ref{fig3}:
+
+\begin{equation}
+M_e^{i' } = \bigcup_{j \in C} M_e^j  \quad \forall i \in C \tag{5}
+\label{eq:5}
+\end{equation}
+
+When agent \( i \) and agent \( j \) enter the communication range (indicated by the blue circle), the communication condition is met. Agents \( i \) and \( j \) independently construct their obstacle and exploration maps: \( M_o^i, M_e^i \) and \( M_o^j, M_e^j \), respectively, during the SAR process. Agent \( i \) receives the maps \( M_o^j, M_e^j \) from agent \( j \), and merges them with its own maps \( M_o^i, M_e^i \) to obtain the updated maps \( M_o^{i'}, M_e^{i' } \). Similarly, agent \( j \) synchronously merges the information from agent \( i \) to obtain \( M_o^{j'}, M_e^{j' } \).
+
+When updating the exploration map, due to the time-marking mechanism, it is possible for two agents to have different time markings for the same area. In such cases, the time marking with the smaller value is selected to update the map. This is because the time marking indicates the duration since the area was last explored and is independent of which agent explored it.
+To simulate restrictive communication conditions in real-world MASAR tasks, we introduce independent communication impairments during both the training and testing phases. Specifically, when agents enter the communication range, the message exchange is subject to pre-defined fixed probabilities for communication failure (e.g., 5\%), partial map data loss (e.g., 10\%), and transmission delay (e.g., 5\%). These impairment events are sampled independently from a uniform distribution at each time step to emulate stochastic network unreliability in disaster environments.
+
+
+\subsection{Neural Network Architecture Design}
+To process the input information from the three observation maps—namely, the obstacle map \( M_o \), the exploration map \( M_e \), and the pheromone observation map \( O_{\text{ph}} \)—we construct a neural network framework based on the Actor-Critic architecture. 
+As illustrated in Fig.\ref{fig4}, the network consists of four components: a convolutional module, a feature extraction module, an integration module, and an output layer.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Fig4.png}
+    \caption{(a) Overall network architecture with convolution, feature extraction, integration, and output modules. (b) Integration module using channel concatenation. (c) Actor–critic structure for action selection and value estimation.}
+    \label{fig4}
+\end{figure}
+
+
+For each input map, spatial features are progressively extracted through a series of convolution and pooling operations in the convolutional module. The resulting feature maps are reshaped and passed through a fully connected (FC) layer, which integrates and transforms the channel-wise features while capturing the inter-channel dependencies. The reshaped features are then transposed to adjust their dimensions and are further processed by another FC layer along the new axis to enrich the representation.
+
+The features extracted from all three maps are then fused via the integration module to form a unified and comprehensive feature representation. When the network functions as an actor, the output layer produces a probability distribution over the possible actions, from which an action is selected via probabilistic sampling. Conversely, when the network serves as a critic, the output layer computes the state value through a FC layer, providing a value estimate for the current state to guide decision-making.
+
+\subsection{Reward Shaping}
+To improve the agent’s ability to search for and rescue dynamic targets in unknown environments, we design the following reward function:
+
+\begin{equation}
+r = r_e + r_{re} - r_{co} + r_{ph} \tag{6}
+\end{equation}
+
+where:
+ \( r_e \) is the exploration reward. To encourage agents to explore unknown areas, we define \( n_e \) as the number of new passable grid cells discovered by the agent when transitioning from state \( s \) to \( s' \). The exploration reward is calculated as:
+
+\begin{equation}
+r_e = 0.5 \times n_e \tag{7}
+\end{equation}
+
+ \( r_{re} \) is the re-exploration reward. Since targets are dynamic and may reappear in areas already explored, we design this reward to incentivize agents to revisit previously explored regions. It is defined as:
+
+\begin{equation}
+r_{re} = 
+\begin{cases} 
+0.01 \sum\limits_{i=0}^{n} \left(1 + \frac{v_{m}}{0.3}\right) - 1, & \text{if target not found} \\
+0.1, & \text{if target found}
+\end{cases} \tag{8}
+\end{equation}
+
+
+where \( n \) is the number of passable grids within the agent's current field of view, and \( v _{m}\) is the time-marking value of each grid. Regions with higher time markings (indicating a longer duration since the last observation) are considered more valuable for re-exploration.
+
+ \( r_{co} \) represents the collision penalty. Each time an agent collides with an obstacle, a fixed penalty of \( 3 \) is applied to discourage such behavior.
+
+ \( r_{ph} \) is the pheromone reward, which promotes the agent’s use of the Pheromone Inverse Guidance Mechanism. Agents are encouraged to move toward areas with lower pheromone concentrations, thus improving search coverage. The pheromone reward is defined as:
+
+\begin{equation}
+r_{ph} = \alpha \frac{I_{\text{ph}}' - I_{\text{ph}}}{I_{\text{ph}}'} + \beta (I_{\text{ph}}' - I_{\text{ph}}) \tag{9}
+\end{equation}
+
+where \( I_{\text{ph}}' \) and \( I_{\text{ph}} \) are the pheromone concentrations in the perceptual range at the previous and current time steps, respectively. This formulation considers both relative and absolute changes to improve sensitivity to local variations while maintaining reward stability.In this study, we set $\alpha=0.1, \beta=0.1$.
+The reward coefficients defined above (e.g., the exploration weight of 0.5 and the pheromone weights $\alpha=0.1$, $\beta=0.1$) were determined through empirical tuning and preliminary experiments. We observed that excessively large exploration coefficients could cause agents to prioritize frontier exploration at the expense of obstacle avoidance and communication opportunities, while overly large pheromone penalties tended to lead to rigid dispersion and hinder teamwork. The selected values provide a reasonable trade-off, effectively encouraging active exploration while maintaining necessary agent coordination and mitigating ineffective repetitive movements.
+
+\subsection{Learning Method}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Fig5.png}
+    \caption{PILOC framework overview: agents generate actions based on local observations, with experiences used to train actor–critic networks under centralized training.}
+
+    \label{fig5}
+\end{figure}
+The performance of single-agent reinforcement learning (RL) algorithms often degrades in multi-agent environments due to the non-stationarity introduced by inter-agent interactions. Since each agent’s behavior depends not only on the environment but also on other agents, traditional RL methods struggle to converge. Therefore, it is essential to adopt MARL techniques under the Dec-POMDP framework.
+
+In this work, we utilize Multi-Agent Proximal Policy Optimization (MAPPO), an extension of the Proximal Policy Optimization (PPO) algorithm, which follows the CTDE paradigm. This allows agents to share global information during training for more efficient learning, while maintaining independent decision-making during execution—ideal for scenarios with limited communication or computational resources.
+
+PPO, a widely used actor-critic policy gradient method, improves training stability via a clipped surrogate objective that restricts drastic policy updates. The RL objective is to optimize a policy \( \pi^* \) to maximize the expected cumulative discounted return:
+
+\begin{equation}
+R_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1} \tag{10}
+\end{equation}
+The value function \( V^\pi(s_t) \) and the action-value function \( Q^\pi(s_t, a_t) \) are defined as:
+\begin{equation}
+V^\pi(s_t) = \mathbb{E}_\pi \left[ \sum_{k=0}^{\infty} \gamma^k r_{t+k+1} \mid s_t \right] \tag{11}
+\end{equation}
+\begin{equation}
+Q^\pi(s_t, a_t) = \mathbb{E}_\pi \left[ \sum_{k=0}^{\infty} \gamma^k r_{t+k+1} \mid s_t, a_t \right] \tag{12}
+\end{equation}
+The advantage function measures the relative benefit of an action:
+\begin{equation}
+A^\pi(s_t, a_t) = Q^\pi(s_t, a_t) - V^\pi(s_t) \tag{13}
+\end{equation}
+An empirical estimate of the advantage is:
+\begin{equation}
+\hat{A}_t = -V(s_t) + r_t + \gamma r_{t+1} + \dots + \gamma^{T-t} V(s_T) \tag{14}
+\end{equation}
+The PPO clipped objective for a single agent is:
+\begin{equation}
+L^{CLIP}(\theta) = \hat{\mathbb{E}}_t \left[ \min \left( r_t(\theta) \hat{A}_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon) \hat{A}_t \right) \right] \tag{15}
+\end{equation}
+
+where \( r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\text{old}}}(a_t \mid s_t)} \) is the probability ratio between new and old policies.
+In MAPPO, all homogeneous agents share a common policy network \( \pi_\theta \) and value network \( V_\phi \), promoting consistency and convergence. The multi-agent version of the policy loss becomes:
+
+\begin{multline}
+L^{\text{CLIP}}(\theta) = \frac{1}{BN} \sum_{i=1}^{B} \sum_{k=1}^{N} 
+\min \Big( r^{(k)}_{\theta,i} A^{(k)}_i, \\
+\text{clip}(r^{(k)}_{\theta,i}, 1-\epsilon, 1+\epsilon) A^{(k)}_i \Big) \tag{16}
+\end{multline}
+
+where \( B \) is the batch size, \( N \) is the number of agents, and \( A^{(k)}_i \) is the estimated advantage for agent \( k \) in sample \( i \).
+
+The corresponding clipped value loss is:
+
+\begin{multline}
+L^{\text{CLIP}}(\phi) = \frac{1}{BN} \sum_{i=1}^{B} \sum_{k=1}^{N} 
+\max \Big\{ 
+\left( V_\phi(s^{(k)}_i) - \hat{R}_i \right)^2, \\
+\left[ \text{clip} \left( V_\phi(s^{(k)}_i), V_{\text{old}}(s^{(k)}_i) \pm \epsilon \right) - \hat{R}_i \right]^2 
+\Big\} \tag{17}
+\end{multline}
+
+
+This setup ensures stable policy updates and efficient learning in multi-agent environments.The MAPPO framework presented in this paper is illustrated in Fig.\ref{fig5}.
+
+\subsection{Hybrid Decision Mechanism}
+The hybrid decision mechanism designed in this paper is enabled in the testing phase as a condition-triggered remediation strategy that combines neural networks with traditional search and rescue algorithms. During environment interaction, when agent \( i \) revisits its position more than 3 times within the last 10 time steps, the system determines that the agent is trapped in a localized area due to ineffective exploration. At this point, it switches from neural network-based decision making to a rule-based SAR algorithm for action generation.
+
+Specifically, the algorithm identifies the nearest unexplored grid cell \( p_i \) from the current location of agent \( i \). If all grid cells have already been explored, the system selects the nearest passable cell with the largest time-marking value as the new target, encouraging the agent to explore areas that have not been visited for a long time. The \( A^* \) algorithm is then employed to compute the optimal path from the current location to \( p_i \), and the agent follows this path to continue the exploration.
+
+This hybrid decision approach is inspired by prior works such as HMA-SAR \cite{cao2024hma}, where similar rule-based recovery strategies were adopted to avoid agents becoming trapped or performing suboptimal behaviors in completely unknown environments. Drawing on this idea, the proposed mechanism enhances robustness and exploration completeness, especially under dynamic target conditions.
+
+\section{Experiments}
+\subsection{Experimental Setting}
+The PILOC framework was trained and tested on the publicly available dataset~\cite{chen2019self}, which consists of 5663 grid world maps for training and 5218 for testing. Each grid map is sized \(60 \times 60\). The perception radius of each agent is set to 5.
+
+To improve learning stability and efficiency, a curriculum learning strategy was adopted during training. Specifically, the initial maximum number of time steps per episode \( N_s \) was set to 10, and a threshold \( M \) was used to determine the progress of learning. If the maximum return \( R_{\text{max}} \) did not improve for \( M \) consecutive training episodes, \( N_s \) was increased by 10. This process continued until \( N_s \) reached 260, at which point the training was terminated. This curriculum learning mechanism allowed the agent to learn from simple tasks to more complex ones progressively, which helped avoid instability in the early training stage and promoted better generalization in later stages.
+
+The entire training process was conducted on a desktop equipped with an Intel Core i7-10700 @ 2.90GHz (8-core) CPU and an NVIDIA GeForce RTX 3070 GPU.
+
+For evaluation, 250 scenarios were randomly selected from the test set. In each scenario, six dynamic targets and two agents were randomly initialized. The agents and targets move simultaneously at each time step. Targets do not collide with obstacles or cross boundaries. Agents share identical policy network parameters during both training and testing. The maximum number of steps per test episode is 250; if not all targets are found within this limit, the episode is considered a failure.
+
+\subsection{Comparison Experiments}
+To evaluate the effectiveness of the proposed PILOC model, we compare it with several baseline methods, including MASAC~\cite{lowe2017multi}, IPPO~\cite{de2020independent}, QMIX~\cite{rashid2020monotonic}, and the classical rule-based Frontier method~\cite{yamauchi1998frontier}. We define the following evaluation metrics:
+\begin{itemize}
+    \item \textbf{Success Rate (SR)}: The percentage of test episodes in which all targets are successfully located, indicating the overall success stability and robustness of the algorithm.
+    \item \textbf{Average Steps (AS)}: The average number of time steps required to complete the search task across 250 test maps, reflecting the efficiency of exploration and execution.
+    \item \textbf{Step Variance (SV)}: The variance of steps taken in successful rounds, representing the consistency of performance across different environments.
+    \item \textbf{Average Number of Targets Obtained (ANTO)}: The average number of dynamic targets found in each episode, including failed episodes, which reflects the agent’s partial task completion ability.
+\end{itemize}
+
+The quantitative results are shown in the table\ref{tab:performance_comparison}:
+\begin{table}[!t]
+\caption{Performance Comparison of Different Algorithms on the Dynamic Target Search and Rescue Task.}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Algorithm} & \textbf{SR} & \textbf{AS} & \textbf{SV} & \textbf{ANTO} \\
+\midrule
+PILOC    & 95.6\% & 129.08 & 2897.15 & 5.716 \\
+IPPO     & 87.2\% & 158.00 & 3190.97 & 5.148 \\
+MASAC    & 74.0\% & 174.80 & 2995.33 & 4.344 \\
+QMIX     & 62.8\% & 189.64 & 3232.90 & 5.400 \\
+Frontier & 18.4\% & 225.14 & 4948.43 & 3.820 \\
+\bottomrule
+\end{tabular}
+\label{tab:performance_comparison}
+\end{table}
+
+The experimental results demonstrate that PILOC significantly outperforms all baseline methods. It achieves the highest \textbf{SR} of 95.6\%, considerably surpassing IPPO (87.2\%), MASAC (74.0\%), QMIX (58.4\%), and Frontier (18.4\%). Additionally, PILOC has the lowest \textbf{AS} and highest \textbf{ANTO}, indicating superior efficiency in locating dynamic targets. The lowest \textbf{SV} also reflects its robustness and generalization across diverse SAR environments.
+
+\subsection{Ablation Experiments}
+To evaluate the individual contributions of the Pheromone Inverse Guidance Mechanism and the Local Communication Strategy, we conducted a series of ablation experiments under consistent curriculum training and test settings. Three experiment groups were designed as follows:
+\begin{itemize}
+    \item \textbf{PILOC-com-ph}: the baseline setting, where both the Pheromone Inverse Guidance Mechanism and local communication were removed;
+    \item \textbf{PILOC-ph}: local communication was enabled, but the Pheromone Inverse Guidance Mechanism was disabled;
+    \item \textbf{PILOC-com}: the Pheromone Inverse Guidance Mechanism was enabled, but local communication was disabled.
+\end{itemize}
+
+\begin{figure}[!t]
+    \centering
+    \subfloat[]{%
+        \includegraphics[width=0.45\linewidth]{ABl.png}
+        \label{fig:6a}
+    }\hfill
+    \subfloat[]{%
+        \includegraphics[width=0.45\linewidth]{Alb-b.png}
+        \label{fig:6b}
+    }
+    \caption{Ablation study results. (a) Comparison of task \textbf{SR} (red) and \textbf{AS} (blue) under different module configurations: PILOC-com-ph, PILOC-ph, PILOC-com, and the full model. (b) Heatmaps showing the agent observation frequency across the test environment; brighter areas indicate higher visitation.}
+    \label{fig:6}
+\end{figure}
+
+As illustrated in Fig.\ref{fig:6a} the baseline model PILOC-com-ph achieved the lowest \textbf{SR} (81.6\%) and the highest \textbf{AS} (170), indicating that without any collaborative mechanisms, agents are prone to inefficient behaviors such as redundant exploration and poor coverage. When the Local Communication Strategy is introduced (PILOC-ph), agents can share local map information to reduce duplicate exploration, resulting in a notable improvement in \textbf{SR} (88.8\%) and a reduction in \textbf{AS} (146.55). Similarly, enabling the Pheromone Inverse Guidance Mechanism (PILOC-com) without communication still allows agents to perform indirect coordination by observing pheromone concentration. This configuration yields a \textbf{SR} of 91.2\% and 139.28 \textbf{AS}, showing that the pheromone mechanism effectively guides agents toward unexplored regions and mitigates exploration redundancy.The complete model PILOC, which combines both mechanisms, demonstrates the best performance across all metrics, verifying the complementary and synergistic nature of the pheromone-based and communication-based strategies.\\
+Furthermore, as shown in Fig.\ref{fig:6b}, the corresponding exploration heatmaps highlight the spatial distribution of agent visits across the environment. The full model PILOC exhibits a more uniform coverage and fewer over-visited regions compared to other settings, which further confirms its superiority in promoting system-wide coordination and balanced space exploration.
+\subsection{Communication Experiments}
+To investigate the impact of communication range on the performance of multi-agent collaboration, we conducted a series of experiments to evaluate the \textbf{SR} and \textbf{AS} under varying communication distances. Specifically, we set four different communication radii: 3, 4, 5, and 6. For each setting, the model was trained and tested independently to collect the corresponding performance metrics, as illustrated in Fig. \ref{fig:7}.
+
+\begin{figure}[!t]
+    \centering
+    \subfloat[]{%
+        \includegraphics[width=0.45\linewidth]{comm.png}
+        \label{fig:7}%
+    }\hfil
+    \subfloat[]{%
+        \includegraphics[width=0.45\linewidth]{Sca.png}
+        \label{fig:8}%
+    }
+    \caption{Side-by-side comparison of scalability and communication range experiment results. (a) Communication range experiment and (b)Scalability experiment .}
+    \label{fig:combined}
+\end{figure}
+
+As shown in the results, the \textbf{SR} increases steadily with the expansion of the communication range, rising from 92.4\% to 96\%. Correspondingly, the \textbf{AS} generally decreases, although a slight increase is observed when the communication range reaches 6.
+
+This trend suggests that a larger communication range enhances information sharing and cooperative efficiency among agents. However, extending the communication range also leads to higher resource consumption, including energy usage, bandwidth load, and increased complexity of information processing. Therefore, maximizing the communication range is not always optimal. A balanced approach is needed to trade off between performance gains and resource overhead.
+
+Based on the experimental findings, a communication range of 5 was selected in this study, as it provides a favorable balance between task success rate and system cost-efficiency.
+
+\subsection{Study of Scalability}
+In addition, we conducted experiments to investigate the scalability of the PILOC model. Two evaluation metrics were selected: \textbf{SR} and \textbf{AS}. The experimental setup remains consistent with Section 5.1, with the only variable being the number of agents, which increased incrementally from 2 to 5.
+
+From the experimental results(as illustrated in Fig.\ref{fig:8}), it can be observed that as the number of agents increases,  \textbf{SR} steadily improves and \textbf{AS} decreases. Specifically, when the number of agents reaches 4, the \textbf{SR} achieves 100\%, and it remains at this level when the agent count is increased to 5. Meanwhile, \textbf{AS} decreases significantly from 123.51 to 59.01.
+
+These results demonstrate the excellent scalability of the PILOC framework. Even as the number of agents increases, the system maintains a high task completion rate and low search cost, highlighting its strong adaptability and potential for deployment in large-scale MASAR applications.
+
+\section{Conclusion}
+This paper presents PILOC, a reinforcement learning framework that integrates a Pheromone Inverse Guidance Mechanism and a decentralized local communication strategy for dynamic target search in unknown environments. Inspired by ant colony behavior, PILOC enables indirect coordination in communication-constrained settings while leveraging the CTDE paradigm for efficient learning and execution.
+
+Experimental results show that PILOC significantly outperforms state-of-the-art methods (e.g., MASAC, IPPO, QMIX) in terms of success rate, efficiency, and robustness. Ablation studies validate the individual and combined benefits of the pheromone and communication modules. Communication range experiments further reveal that moderate communication ranges offer a favorable balance between coordination efficiency and system cost. Scalability evaluations demonstrate that PILOC maintains strong performance as the number of agents increases, highlighting its potential for real-world MASAR applications.
+
+Future work will explore two directions: extending adaptability across diverse map scales, and incorporating heterogeneous agents with specialized roles to enhance performance in more complex environments. Additionally, we acknowledge that the current experiments are conducted under specific constraints, including discrete 2D grids, uniform random target motion, and independent communication impairments with fixed probabilities. Future research will focus on extending the framework to continuous spaces, non-uniform target dynamics, and more realistic wireless communication models to further validate its practical scalability in real-world scenarios.
+
+\bibliographystyle{IEEEtran}  % 选择一个文献样式（例如 IEEE, plain, acm 等）
+\bibliography{reference}      % reference 是你的 .bib 文件的文件名，不带扩展名
+
+\vfill
+
+\end{document}
+
+
