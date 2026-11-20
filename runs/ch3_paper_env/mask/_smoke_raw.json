@@ -1,0 +1,51 @@
+{
+  "environment": "修改6",
+  "checkpoint": "path_to_save_model_1\\shared_mappo_model_21_9232.pth",
+  "config": {
+    "rescue": false,
+    "action_mask": false,
+    "action_temperature": 1.0
+  },
+  "episodes": 2,
+  "max_steps": 250,
+  "seed_base": 2000000000,
+  "summary": {
+    "n": 2,
+    "SR": 1.0,
+    "AS": 155.0,
+    "SV": 3844.0,
+    "ANTO": 6.0,
+    "AS_success": 155.0,
+    "SV_success": 3844.0,
+    "coverage_final": 0.7110602576058225,
+    "coverage_auc": 0.46398969808922097,
+    "rescue_triggers_mean": 0.0,
+    "wall_time_s": 3.0
+  },
+  "per_episode": [
+    {
+      "episode": 0,
+      "map": "img_9099.png",
+      "seed": 2000000000,
+      "success": 1,
+      "steps": 217,
+      "goals": 6,
+      "coverage_final": 0.7854330708661418,
+      "coverage_auc": 0.4791719583439166,
+      "rescue_triggers": 0,
+      "rescue_steps": 0
+    },
+    {
+      "episode": 1,
+      "map": "img_6097.png",
+      "seed": 2000000001,
+      "success": 1,
+      "steps": 93,
+      "goals": 6,
+      "coverage_final": 0.6366874443455031,
+      "coverage_auc": 0.44880743783452537,
+      "rescue_triggers": 0,
+      "rescue_steps": 0
+    }
+  ]
+}
